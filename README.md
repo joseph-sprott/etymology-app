@@ -1,10 +1,20 @@
 # Etymology Analyzer
 
 Analyzes English text and reports what percentage of words come from each origin
-language — readable two ways via a toggle:
+language — readable **three ways** via a toggle:
 
-- **proximate** — the language English took the word from directly (`skill` → Norse)
-- **deepest** — the oldest traceable ancestor (`skill` → PIE)
+- **Direct Source** — the language English took the word from directly
+  (`skill` → Norse, `table` → French)
+- **Notable Influence** — the most distinctive language the word passed
+  through along the way (`coffee` → Turkic, the Ottoman Turkish leg that
+  both Direct Source [Germanic/Dutch] and Deepest Root [Semitic/Arabic] skip
+  past)
+- **Deepest Root** — the oldest traceable ancestor, naming the specific
+  reconstructed/attested form where the data supports it
+  (`skill` → Proto-Indo-European, `sky` → Proto-Germanic (from PIE))
+
+Plus a separate per-word **etymology tree** view showing every recorded
+branch, not just the one answer the percentage breakdown needs.
 
 ## Quick start
 
@@ -12,28 +22,41 @@ language — readable two ways via a toggle:
 from analyzer import analyze, format_report
 
 text = "They want to trust the skill of a husband who can take a knife."
-print(format_report(analyze(text, mode="proximate")))
-print(format_report(analyze(text, mode="deepest")))
+print(format_report(analyze(text, mode="direct")))
+print(format_report(analyze(text, mode="influence")))
+print(format_report(analyze(text, mode="root")))
+```
+
+Or run the local test UI:
+
+```bash
+python app.py    # then open http://localhost:5000
 ```
 
 ## Architecture
 
-Three layers, deliberately separated so the data source can change without
-touching anything downstream.
+Layers deliberately separated so the data source can change without touching
+anything downstream.
 
 | File | Role |
 |---|---|
-| `buckets.py` | ISO-code → origin bucket (for the `ety` backend) |
-| `buckets_wikt.py` | Language-name → origin bucket (for the Wiktionary backend) |
-| `resolver.py` | **The swap point.** Backends implement `resolve(word) -> Resolution` |
-| `analyzer.py` | Tokenize → resolve → aggregate percentages |
-| `convert_wikt.py` | Builds `wikt_words.json` from the etymology-db CSV |
+| `analyzer.py` | Tokenize text → resolve each word → aggregate percentages |
+| `resolver.py` | **The swap point.** Backends implement `resolve(word) -> Resolution`; `Resolution.view(mode)` renders `"direct"`/`"influence"`/`"root"` from one pass |
+| `buckets_wikt.py` | Language-name → origin bucket (Wiktionary backend) |
+| `buckets.py` | ISO-code → origin bucket (legacy `ety` fallback backend) |
+| `convert_wikt.py` | Rebuilds `wikt_words.json` from etymology-db's raw relation table (`etymology.parquet`) |
+| `corrections.py` | Manual overrides for confirmed bad entries, applied by `WiktionaryResolver` at load time |
+| `compounds.py` | Word→(part, part) allowlist for words that resolve to Unknown on their own but are verified compounds |
+| `build_etymology_trees.py` | Builds `etymology_trees.json` — a per-word nested tree (every branch preserved) for the etymology-tree UI |
+| `tree_corrections.py` | Manual overrides for the etymology-tree feature |
+| `fetch_reconstructions.py` | One-off enrichment pass against live Wiktionary's Reconstruction namespace to close the proto-language coverage gap |
+| `app.py` | Local Flask test UI (`localhost:5000`) — paragraph analyzer plus single-word etymology-tree lookup |
 
 ### Resolver stack
 
 `default_resolver()` returns `ChainResolver([WiktionaryResolver(), EtyResolver()])`.
 
-- **WiktionaryResolver** (primary) — 71,630 English words from etymology-db
+- **WiktionaryResolver** (primary) — ~72,700 English words from etymology-db
   (parsed Wiktionary). Correct proximate donors: `skill`→Norse, `table`→French.
 - **EtyResolver** (fallback) — Etymological Wordnet, used only for words
   Wiktionary lacks.
@@ -44,36 +67,28 @@ putting it in the list. The analyzer and any UI stay unchanged.
 ### Reading modes
 
 A `Resolution` holds the *whole* donor chain. `Resolution.view(mode)` renders it
-as proximate or deepest, so one analysis pass can be re-rendered both ways
-without re-resolving.
+as `"direct"`, `"influence"`, or `"root"`, so one analysis pass can be
+re-rendered all three ways without re-resolving.
 
 ## Regenerating the data
 
 ```bash
-python3 convert_wikt.py    # reads the etymology-db CSV -> wikt_words.json
+python3 convert_wikt.py    # reads etymology.parquet -> wikt_words.json
+python3 build_etymology_trees.py    # reads etymology.parquet -> etymology_trees.json
 ```
+
+Both read a local `etymology.parquet` (not included in this repo — ~140MB,
+sourced from [etymology-db](https://github.com/droher/etymology-db)) rather
+than anything fetched at runtime.
 
 ## Coverage
 
-On a sample paragraph: **81% of tokens classified** (up from ~44% with `ety`
-alone). Distribution across the full 71,630-word database:
-
-```
-Germanic 16021   French 13808   Latin 10862   Romance 6620
-Greek 3756   Slavic 2846   East Asian 2667   Semitic 2155
-Indo-Iranian 1953   Norse 1671   Celtic 1657   ... 
-```
+On a sample paragraph: **~98% of tokens classified** (up from ~44% with `ety`
+alone). ~72,700-word database.
 
 ## Known issues
 
-1. **Pass-through donors.** Words that entered English via French (`sugar`,
-   `algebra`, `orange`, `coffee`) bucket as French/Germanic under proximate
-   mode. Historically accurate, but hides the more interesting deeper origin.
-   ~1,192 words show this pattern. Design decision still open.
-2. **Chain ordering is approximate.** `DEPTH_RANK` in `convert_wikt.py` is a
-   coarse historical ranking, so some chains list ancestors out of true
-   chronological order (`candy`, `zero`, `sandal`).
-3. **`Other` bucket leakage.** Languages not yet mapped in `buckets_wikt.py`
-   appear as `Other` mid-chain. Adding them to `NAME_TO_BUCKET` fixes it.
-4. **Coverage is not total.** 71,630 words is what Wiktionary has explicit
-   etymology templates for; rarer words remain unresolved.
+The full, actively-maintained list of known issues and design decisions
+(including the one currently open — what to do with ~1,245 words that have
+no recorded ancestry beyond a coincidental PIE root citation) lives in
+`CLAUDE.md`, not duplicated here to avoid the two drifting apart.
