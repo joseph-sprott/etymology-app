@@ -1,17 +1,17 @@
 # Etymology Analyzer
 
 Analyzes English text and reports what percentage of words come from each origin
-language — readable **three ways** via a toggle:
+language — readable **three ways** via a toggle. One word shows all three at
+once: **`checkmate`**
 
-- **Direct Source** — the language English took the word from directly
-  (`skill` → Norse, `table` → French)
+- **Direct Source** — the language English took the word from directly:
+  **French** (Old French `eschec mat`)
 - **Notable Influence** — the most distinctive language the word passed
-  through along the way (`coffee` → Turkic, the Ottoman Turkish leg that
-  both Direct Source [Germanic/Dutch] and Deepest Root [Semitic/Arabic] skip
-  past)
+  through along the way, the leg both other views skip past: **Semitic**
+  (Arabic)
 - **Deepest Root** — the oldest traceable ancestor, naming the specific
-  reconstructed/attested form where the data supports it
-  (`skill` → Proto-Indo-European, `sky` → Proto-Germanic (from PIE))
+  attested form where the data supports it: **Indo-Iranian** (Persian —
+  from `shāh māt`, "the king is left helpless")
 
 Plus a separate per-word **etymology tree** view showing every recorded
 branch, not just the one answer the percentage breakdown needs.

@@ -2,7 +2,18 @@
 
 ## Working rules (read first — these come from Joe and are non-negotiable)
 
-1. **Just do it. Stop asking for approval.** Said once 2026-07-22, had to repeat it the same night — take it seriously. Make the call yourself (which approach, what to check, how to scope a fix, UI/design choices) and report what you did and why *after*, not before. Don't use a multiple-choice question tool for this — that's still an approval gate wearing a different UI. The only things worth interrupting Joe for: (a) a genuinely destructive/irreversible action outside this project folder (deleting something elsewhere, force-pushing, sending/publishing something externally), or (b) a real blocker — you don't have and can't get the information needed to proceed at all, verification included. Everything else: decide, do it, tell him afterward.
+1. **Just do it. Stop asking for approval.** Said once 2026-07-22, had to repeat it the same night — take it seriously. Make the call yourself (which approach, what to check, how to scope a fix, UI/design choices) and report what you did and why *after*, not before. Don't use a multiple-choice question tool for this — that's still an approval gate wearing a different UI.
+
+   **Refined 2026-07-24** (violated a third time: asked via a multiple-choice question tool for the new GitHub repo's visibility/scope/name when creating it — those were steps toward something Joe had already asked for, not a real fork in the road). The core rule: **never ask Joe to approve or perform a step that's simply needed to reach a place he's already asked for or approved.** Decide the mechanical stuff yourself (repo name, which file goes where, which library, UI/visual details, how to scope a fix) and report after.
+
+   **What DOES warrant asking him** (his own words, 2026-07-24):
+   - A **specific design choice** with a real, non-obvious tradeoff — not "which name" but something shaping the product, e.g. known issue #14's still-open (a)/(b)/(c) fork (stay strict "verified fact only" vs. add a flagged lower-confidence tier vs. find another data source) — that's a philosophy change, not an implementation detail.
+   - An **objective decision that isn't obvious** — a real fork where reasonable people could land differently and the "right" answer isn't derivable from what Joe's already said.
+   - Anything **you're genuinely unsure about or don't have full clarity on** — don't guess past a real gap in understanding just to avoid asking (this doesn't relax rule 2 below: verifying a fact yourself always beats asking Joe to look it up, and always beats guessing).
+
+   **What does NOT warrant asking**: routine/mechanical choices with an obvious sensible default (naming, scope-narrowing, which of several fine approaches); and — separately — needing Joe's own hands for something (e.g. `gh auth login`'s interactive browser step, something only his account/machine can do). That's not a decision to put to him as a question either: just tell him plainly, once, exactly what to run, and keep moving as soon as it's done.
+
+   Other things worth interrupting Joe for, unchanged: (a) a genuinely destructive/irreversible action outside this project folder (deleting something elsewhere, force-pushing, sending/publishing something externally), or (b) a real blocker — you don't have and can't get the information needed to proceed at all, verification included. Everything else: decide, do it, tell him afterward.
 2. **Do not guess or assume. Verify with real resources.** If you don't know a path, a fact, or an etymology, check it — don't ask Joe to look it up for you, and don't skip verification just because rule 1 says move fast. Verifying is not the same as asking permission.
 3. **Be honest about limitations and bugs.** Don't overclaim accuracy; flag imperfect results explicitly.
 
