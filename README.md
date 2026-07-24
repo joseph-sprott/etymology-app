@@ -56,7 +56,7 @@ anything downstream.
 
 `default_resolver()` returns `ChainResolver([WiktionaryResolver(), EtyResolver()])`.
 
-- **WiktionaryResolver** (primary) — ~72,700 English words from etymology-db
+- **WiktionaryResolver** (primary) — 213,123 English words from etymology-db
   (parsed Wiktionary). Correct proximate donors: `skill`→Norse, `table`→French.
 - **EtyResolver** (fallback) — Etymological Wordnet, used only for words
   Wiktionary lacks.
@@ -84,7 +84,7 @@ than anything fetched at runtime.
 ## Coverage
 
 On a sample paragraph: **~98% of tokens classified** (up from ~44% with `ety`
-alone). ~72,700-word database.
+alone). 213,123-word database.
 
 ## Known issues
 

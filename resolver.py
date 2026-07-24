@@ -261,8 +261,14 @@ class EtyResolver(Resolver):
 
 
 # Suffixes tried, longest/most-specific first, when a word isn't found as-is.
+# "al" added 2026-07-24 (Joe: "professional" read Unknown) -- covered by the
+# existing _stem_variants machinery with no special-casing needed, since it
+# always tries the unmodified stem too (professional -> "profession", exact
+# match; cultural -> "cultur" + the existing silent-e rule -> "culture").
+# "cy" is NOT added here -- see _stem_candidates below for why it needs its
+# own dedicated handling instead of going through the generic path.
 _SUFFIXES = ["ness", "ment", "tion", "sion", "able", "ible", "ful", "less",
-             "ing", "edly", "ed", "est", "er", "es", "ly", "y", "s"]
+             "ing", "edly", "ed", "est", "er", "es", "ly", "al", "y", "s"]
 
 
 def _is_consonant(ch: str) -> bool:
@@ -302,7 +308,43 @@ def _stem_candidates(word: str) -> List[str]:
                 if cand and cand != word and cand not in seen:
                     seen.add(cand)
                     out.append(cand)
+    for cand in _cy_candidates(word):
+        if cand not in seen:
+            seen.add(cand)
+            out.append(cand)
     return out
+
+
+# "-cy" needs its own rule, not the generic _stem_variants path: the noun-
+# forming suffix "-cy" doesn't just strip cleanly off an adjective, it
+# REPLACES a "-t"/"-te" ending (consistent -> consistency, private ->
+# privacy) -- a bare strip-and-retry (what "-y" already tries) leaves a stem
+# one letter short ("consistenc", not "consistent"). Added 2026-07-24 (Joe:
+# "consistency" read Unknown; verified its raw etymology-db data has ZERO
+# rows at all -- unlike "professional"/"mindset", no amount of convert_wikt.py
+# data-pipeline work can fix this specific word, since Wiktionary's own
+# snapshot here just doesn't have a page for it. "consistent" resolves fine,
+# so this closes the gap at the resolver layer instead, the same place
+# _IRREGULAR_FORMS already lives for a similar "no raw data, but a related
+# word already resolves" shape).
+#
+# Verified 2026-07-24 against the full set of missing "-cy" words in the raw
+# data (908 candidates, 141 would match) before shipping: a bare `len(word)
+# > 4` guard produces real false positives at SHORT stripped-stems --
+# "chancy" (unrelated to "chant"; it's "chance"+"-y") -> "chant", "spacy" ->
+# "spat", "trancy" -> "trant", "fleecy" -> "fleet", "stacy" -> "stat" were
+# all wrong. Every stripped stem of length >= 5 in that same scan was a
+# genuine match (patency->patent, urgency->urgent, accuracy->accurate,
+# self-sufficiency->self-sufficient, etc., 129 of the 141) -- so the length-5
+# floor is not an arbitrary safety margin, it's the exact line the real data
+# draws between the two.
+def _cy_candidates(word: str) -> List[str]:
+    if not word.endswith("cy"):
+        return []
+    stem = word[:-2]
+    if len(stem) < 5:
+        return []
+    return [stem + "t", stem + "te"]
 
 
 # Irregular past tense / past participle forms -- found 2026-07-23 (Joe:

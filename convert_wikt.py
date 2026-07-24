@@ -78,6 +78,7 @@ import pandas as pd
 
 sys.path.insert(0, ".")
 from buckets_wikt import bucket_for_name, ENGLISH_STAGE_NAMES, NAME_TO_BUCKET, BUCKET_ORDER
+from corrections import WORD_CORRECTIONS, HUB_EXCLUSIONS
 
 PARQUET_PATH = r"C:\Users\Josep\Desktop\Etymology Project\etymology.parquet"
 
@@ -440,6 +441,54 @@ def resolve_term(rows):
 _ROOT_POINTER_RELS = {"has_prefix_with_root", "has_confix",
                        "back-formation_from", "clipping_of"}
 
+# Same "exotic proximate + a real core family later in the chain" bug
+# signature CLAUDE.md known issue #6 (passes 5/6) used to find real same-
+# term_id sense collisions by hand (e.g. "increase" -> bogus Semitic). Reused
+# here as an automated SAFETY FILTER, added 2026-07-24 while widening
+# _patch_root_stubs/_extract_auto_compounds to no-entry terms: that widening
+# turns a handful of "hub" words (auto, tag, logy, poly, on, person, phase,
+# ...) into the inheritance source for dozens-to-hundreds of derived terms
+# each, so a PRE-EXISTING collision bug in one hub word (most were never
+# individually checked before, since nobody happened to look up "person" or
+# "phase" on their own) now gets amplified into every word that points to
+# it, instead of staying a one-off. Verified concretely for several: "tag"
+# (Aramaic "crown" sense colliding with the real Germanic "label" sense --
+# confirmed against live Wiktionary), "auto" (a circular clipping_of
+# autorickshaw -> derived_from Hindi edge outranking the real derived_from
+# Ancient Greek edge), "poly"/"logy" (their term_id only has an unrelated
+# sense recorded -- Latin plant name / Dutch "sluggish" adjective -- with no
+# ancestry data for the actual Greek-derived combining-form sense used in
+# compounds at all). A scan of just the top hub words turned up 256 more
+# with this exact shape (1,101 derived-term exposure) -- too many to hand-
+# verify individually, and this widening's whole point is to stop requiring
+# that. Rather than guess which are real bugs vs. genuinely complex but
+# correct chains (issue #6 pass 5 found some flagged words, like "date"/
+# "rose"/"mole", were genuinely correct on inspection), this conservatively
+# EXCLUDES any hub whose own chain has the signature from being used as an
+# inheritance source at all -- the derived word stays honestly Unknown
+# rather than risk inheriting a collision, per CLAUDE.md rule 2. A real fix
+# for any specific flagged hub word (like tag/auto/logy today) still belongs
+# in corrections.py, verified against live Wiktionary same as always.
+_CORE_FAMILIES_FOR_HUB_CHECK = {"Germanic", "Norse", "French", "Latin", "Greek",
+                                 "Romance (other)", "Celtic", "PIE"}
+
+
+def _is_reliable_root(key, entry):
+    # Explicit denylist first (corrections.py's HUB_EXCLUSIONS) -- catches
+    # hub words whose own answer is correct on its own terms but wrong for
+    # the sense derived words actually need (see HUB_EXCLUSIONS docstring
+    # for "logy"/"poly"), a shape the chain-signature heuristic below can't
+    # detect since these hubs' own chains don't look exotic at all.
+    if key in HUB_EXCLUSIONS:
+        return False
+    chain = entry.get("chain") or []
+    if not chain:
+        return True  # native-core placeholder entries carry no exotic risk
+    p = chain[0]
+    if p not in _CORE_FAMILIES_FOR_HUB_CHECK and any(b in _CORE_FAMILIES_FOR_HUB_CHECK for b in chain[1:]):
+        return False
+    return True
+
 
 def _patch_root_stubs(words, eng):
     """
@@ -466,12 +515,26 @@ def _patch_root_stubs(words, eng):
     one hop. Skips (leaves as resolver.py's Unknown fallback) whenever the
     root doesn't resolve to real data -- no guessing beyond what's recorded,
     per CLAUDE.md rule 2.
+
+    Widened 2026-07-24 (Joe: "professional" showed Unknown -- its raw data
+    has NO ancestry edge of any kind, only has_prefix_with_root -> "profession"
+    and has_suffix -> "al", so resolve_term() returned None and it never even
+    became a bare-root STUB in the first place -- it had no entry in `words`
+    at all). The original condition here only patched terms that already had
+    a thin has_root-derived stub, silently skipping this much larger sibling
+    population that has zero ancestry data AND zero has_root pointer, but
+    DOES have a real has_prefix_with_root/has_confix/back-formation_from/
+    clipping_of pointer to a root that resolves. That's the exact same "a
+    recorded native affix isn't itself a donor language, so inherit the
+    root's story" reasoning as the stub case -- the only thing different is
+    which (non-)answer resolve_term() happened to leave behind first, which
+    was never a meaningful trust signal. Verified against the raw data before
+    widening: of the missing "-al" words alone, 5,310 have a
+    has_prefix_with_root/has_confix pointer to an already-resolving root.
     """
     root_rows = eng[eng["reltype"].isin(_ROOT_POINTER_RELS)]
     candidates = {}
     for row in root_rows.itertuples():
-        if row.term not in words:
-            continue
         if pd.isna(row.related_lang) or row.related_lang != "English" or pd.isna(row.related_term):
             continue
         candidates.setdefault(row.term, []).append(row.related_term)
@@ -482,19 +545,34 @@ def _patch_root_stubs(words, eng):
         changed = False
         for term, roots in candidates.items():
             entry = words.get(term)
-            if entry is None or entry.get("prox_kind") != "root":
-                continue  # not a stub (already patched, or never was one)
+            if entry is not None and entry.get("prox_kind") != "root":
+                continue  # already resolved to a real (non-stub) entry
             for root_term in roots:
                 root_key = root_term.split("#")[0].strip()
-                root_entry = (words.get(root_key) or words.get(root_key.lower())
-                              or words.get(root_key.capitalize()))
+                # EXACT case only -- verified 2026-07-24 while widening this
+                # function to no-entry terms: a lower()/capitalize() fallback
+                # here reintroduces the exact "went"/"Went" bug shape known
+                # issue #12 already fixed at the resolver layer (a same-
+                # spelling-different-case coincidence, e.g. "forewent"'s
+                # pointer "went" falling back to the unrelated capitalized
+                # surname "Went", or "digraph"'s pointer "di" matching the
+                # name "Di") -- except THIS bulk pass has no per-word
+                # verification to catch it, unlike the resolver's irregular-
+                # form precedence check. A handful of genuine capitalized
+                # eponym roots (vandalize->Vandal, hertz->Hertz) are lost by
+                # requiring exact case, but that's the safer default per
+                # CLAUDE.md rule 2 -- not individually hand-verified at this
+                # scale, so no guessing.
+                root_entry = words.get(root_key)
                 if root_entry is None or root_entry.get("prox_kind") == "root":
                     continue  # root itself unresolved or still a stub
+                if not _is_reliable_root(root_key, root_entry):
+                    continue  # exotic-first-then-core signature, or an explicit HUB_EXCLUSIONS entry
                 words[term] = dict(root_entry)
                 patched += 1
                 changed = True
                 break
-    print(f"  patched {patched} bare-root stubs via has_prefix_with_root/has_confix/back-formation/clipping", file=sys.stderr)
+    print(f"  patched {patched} bare-root stubs and no-entry-at-all terms via has_prefix_with_root/has_confix/back-formation/clipping", file=sys.stderr)
 
 
 def _patch_foreign_root_stubs(words, eng):
@@ -522,14 +600,19 @@ def _patch_foreign_root_stubs(words, eng):
     # root). Bucket answer (the only correctness-critical part) is identical
     # either way when both point to the same language -- this only affects
     # which specific root_term gets displayed.
+    # Widened 2026-07-24 alongside _patch_root_stubs, same reasoning: a term
+    # with a directly-cited foreign root but ZERO ancestry data of its own
+    # (no entry in `words` at all, not just a has_root stub) deserves the
+    # same treatment -- the pointer's trustworthiness never depended on
+    # whether the term also happened to have a bare has_root edge.
     rel_priority = ["has_prefix_with_root", "has_confix", "has_affix", "has_prefix"]
     patched = 0
     for rel in rel_priority:
         rows = eng[eng["reltype"] == rel]
         for row in rows.itertuples():
             entry = words.get(row.term)
-            if entry is None or entry.get("prox_kind") != "root":
-                continue  # not a stub, or already patched by a higher-priority relation
+            if entry is not None and entry.get("prox_kind") != "root":
+                continue  # already resolved (real entry, or patched by a higher-priority relation)
             lang = row.related_lang
             if pd.isna(lang) or lang == "English" or lang in NON_DONOR_LANGS:
                 continue
@@ -571,19 +654,34 @@ def _extract_auto_compounds(words, eng):
         if not isinstance(term, str):
             return False
         key = term.split("#")[0].strip()
-        e = words.get(key) or words.get(key.lower()) or words.get(key.capitalize())
-        return e is not None and e.get("prox_kind") != "root"
+        # EXACT case only -- same "went"/"Went" collision risk as
+        # _patch_root_stubs, see its comment for the full reasoning. Also
+        # requires the part to be a reliable (non-collision-shaped) source,
+        # same _is_reliable_root filter and reasoning as _patch_root_stubs --
+        # a compound whose part is itself a hub-shaped collision (e.g. some
+        # part happens to be "on" or "person") shouldn't silently inherit
+        # that part's questionable chain into the compound's own display.
+        e = words.get(key)
+        return e is not None and e.get("prox_kind") != "root" and _is_reliable_root(key, e)
 
+    # Widened 2026-07-24 (Joe: "mindset" showed Unknown -- its raw data is a
+    # clean compound_of split into "mind"+"set", both already resolving, but
+    # "mindset" itself has NO ancestry edge of any kind, so it never got a
+    # stub entry for the original version of this function to find). Same
+    # reasoning as _patch_root_stubs's widening -- the split's
+    # trustworthiness never depended on the term also having a stub. `del`
+    # is now guarded since a no-entry term was never a key in `words`.
     auto_compounds = {}
     for term, group in rows.groupby("term"):
         entry = words.get(term)
-        if entry is None or entry.get("prox_kind") != "root":
-            continue
+        if entry is not None and entry.get("prox_kind") != "root":
+            continue  # already resolved to a real (non-stub) entry
         parts = [rt.split("#")[0].strip() for rt in group["related_term"] if pd.notna(rt)]
         if len(parts) < 2 or not all(resolves(p) for p in parts):
             continue
         auto_compounds[term] = parts
-        del words[term]
+        if term in words:
+            del words[term]
     print(f"  extracted {len(auto_compounds)} auto-detected compound/blend splits", file=sys.stderr)
     return auto_compounds
 
@@ -604,6 +702,19 @@ def main():
             words[term] = res
 
     print(f"  {n_terms} terms processed, {len(words)} resolved", file=sys.stderr)
+
+    # Apply corrections.py BEFORE the inheritance patches below, added
+    # 2026-07-24 alongside widening those patches to no-entry terms. A
+    # corrected hub word (e.g. "tag") needs to already be right by the time
+    # _patch_root_stubs runs, so a derived word pointing at it (e.g. "detag")
+    # inherits the CORRECTED story, not the raw (possibly collision-shaped)
+    # one -- previously WORD_CORRECTIONS was only applied later, at resolver.py
+    # runtime, which is too late for this bulk inheritance to see it. Also
+    # still applied at runtime as before (harmless, idempotent) so a direct
+    # lookup of a corrected word is never silently dependent on convert_wikt.py
+    # having been re-run most recently.
+    words.update(WORD_CORRECTIONS)
+
     _patch_root_stubs(words, eng)
     _patch_foreign_root_stubs(words, eng)
     auto_compounds = _extract_auto_compounds(words, eng)

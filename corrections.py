@@ -305,7 +305,69 @@ WORD_CORRECTIONS = {
     # rather than guessing one.
     "seen": {"p": "Germanic", "d": "Germanic", "chain": ["Germanic"], "prox_kind": "inherited",
              "root_lang": "Proto-Germanic", "root_term": "*sehwaną", "root_pie": False},
+
+    # Found 2026-07-24 while widening convert_wikt.py's stub-patching to
+    # cover no-entry-at-all terms (Joe: "professional"/"mindset" showing
+    # Unknown). That widening turns common short words into "hub" roots
+    # inherited by dozens-to-hundreds of derived terms (e.g. "detag" ->
+    # "tag"), so a pre-existing collision in the hub word now has much
+    # bigger blast radius. "tag"'s raw etymology-db data was ONLY the rare
+    # sense (Etymology 2 on Wiktionary: borrowed_from Aramaic תגא "crown",
+    # the decorative mark drawn over certain Hebrew letters) -- the common
+    # everyday sense (label/game/graffiti, Etymology 1: Middle English tagge,
+    # "probably of North Germanic origin" per Wiktionary's own hedge, cognate
+    # with Norwegian/Swedish/Icelandic tagg/tág) was never captured as its
+    # own ancestry edge in the source data at all. Verified directly against
+    # live Wiktionary before fixing. No PIE step stated for this sense, so
+    # root stays honestly at Middle English rather than guessing one.
+    "tag": {"p": "Germanic", "d": "Germanic", "chain": ["Germanic"], "prox_kind": "inherited",
+            "root_lang": "Middle English", "root_term": "tagge", "root_pie": False},
+
+    # Found alongside "tag" (same widening, same discovery method): "auto"'s
+    # raw data has a real derived_from Ancient Greek αὐτός edge (the correct
+    # answer for the "auto-" combining form used in words like "autopilot"/
+    # "autocide"), but ALSO a circular etymology-db artifact -- a
+    # clipping_of "autorickshaw" row nested with a derived_from Hindi
+    # ऑटो रिक्शा row -- where "autorickshaw" is itself a modern English
+    # compound (auto + rickshaw) that got borrowed INTO Hindi and is here
+    # cited backwards, as if the Hindi form were an ancestor of "auto"
+    # rather than a re-borrowing of it. The old depth-hint tiebreak sorted
+    # that Hindi edge (unlisted language, default tier 10) ahead of the real
+    # Ancient Greek edge (tier 14), making "auto" resolve Indo-Iranian
+    # instead of Greek. Verified against live Wiktionary (three legitimate
+    # senses -- clippings of "automatic"/"automobile"/Indian-English
+    # "autorickshaw" -- none of which trace to Hindi as an ancestor) before
+    # fixing. Chain stays the single verified hop; no further PIE
+    # connection recorded for αὐτός itself in this data.
+    "auto": {"p": "Greek", "d": "Greek", "chain": ["Greek"], "prox_kind": "derived",
+             "root_lang": "Ancient Greek", "root_term": "αὐτός", "root_pie": False},
 }
+
+# Hub words EXCLUDED from convert_wikt.py's root-inheritance patches
+# (_patch_root_stubs / _extract_auto_compounds), separate from WORD_CORRECTIONS
+# above -- these are cases where the term_id's OWN correct standalone answer
+# (left untouched here) is a genuinely different sense than the one derived
+# words actually need, so no single WORD_CORRECTIONS entry could serve both
+# purposes without being wrong for one of them. Verified against live
+# Wiktionary 2026-07-24 (found via the same hub-word audit as tag/auto
+# above):
+#   - "logy": the term_id's real, correct standalone answer is the Dutch-
+#     derived adjective ("sluggish, lethargic", from Dutch "log") -- that's
+#     genuinely correct for anyone looking up "logy" itself. But dozens of
+#     "-logy" derived words (the Greek-derived combining form, as in
+#     "biology") point to this SAME term_id for their root, and the source
+#     data has NO ancestry edge at all for that Greek sense under this
+#     term_id (only an `etymologically_related_to "-logy"` cross-reference,
+#     not real ancestry) -- there's nothing correct to inherit from here for
+#     that purpose.
+#   - "poly": similarly, the term_id's only real ancestry edge is an
+#     unrelated Latin botanical plant name (*polium*); the "poly-" (many)
+#     Greek combining form used by dozens of derived words has no ancestry
+#     data recorded under this term_id either.
+# Both left as honestly Unknown for the derived words that would otherwise
+# have inherited the wrong sense, per CLAUDE.md rule 2 -- no guessing at a
+# chain this term_id's own data doesn't support.
+HUB_EXCLUSIONS = {"logy", "poly"}
 
 # Checked for the Caribbean bucket and deliberately left alone: "limbo" (Joe's other
 # example) resolves to Latin currently -- that's the "in limbo" theological

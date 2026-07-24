@@ -39,4 +39,24 @@ TREE_CORRECTIONS = {
             ]},
         ]},
     ],
+
+    # "tag": matches corrections.py's "tag" entry -- etymology-db's raw data
+    # for this term_id only carried the rare Aramaic "crown" sense (a
+    # separate Wiktionary Etymology section), not the common label/game
+    # sense actually needed here. No further stage beyond Middle English is
+    # recorded for this sense on the live page (only cognates -- Norwegian/
+    # Swedish/Icelandic tagg/tág -- not ancestry), so honestly stops there
+    # rather than guessing a deeper Norse/Germanic form.
+    "tag": [
+        {"lang": "Middle English", "term": "tagge", "reltype": "inherited_from", "children": []},
+    ],
+
+    # "auto": matches corrections.py's "auto" entry -- the raw data's real
+    # derived_from Ancient Greek edge was outranked by a circular
+    # clipping_of "autorickshaw" -> derived_from Hindi artifact (see
+    # corrections.py for the full explanation). No further PIE connection
+    # recorded for αὐτός itself in this data.
+    "auto": [
+        {"lang": "Ancient Greek", "term": "αὐτός", "reltype": "derived_from", "children": []},
+    ],
 }

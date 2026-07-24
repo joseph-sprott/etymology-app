@@ -83,9 +83,12 @@ End goal: **every possible English word in the database.**
 - Python pipeline is complete and functional. Coverage on sample prose:
   **~98%** of tokens classified (up from ~81% before the 2026-07-23 pipeline
   rewrite, up from ~44% with the original data source).
-- Database: `wikt_words.json` — **72,732 English words** (plus a separate
-  **52-entry `auto_compounds` table**, see known issue #14) with resolved
-  proximate bucket, deepest bucket, and donor chain. Rebuilt 2026-07-23 by
+- Database: `wikt_words.json` — **213,123 English words** as of 2026-07-24
+  (was 72,732; see known issue #15 -- the 3x jump is the "no entry at all"
+  gap for derived words like `professional`/`mindset`, not new source data)
+  (plus a separate **21,857-entry `auto_compounds` table**, see known issues
+  #14/#15) with resolved proximate bucket, deepest bucket, and donor chain.
+  Rebuilt 2026-07-23 by
   `convert_wikt.py` directly from etymology-db's raw relation table (now
   present on this machine as `etymology.parquet` / `etymology.csv`, see
   Environment facts) — using the real per-word graph structure instead of a
@@ -1107,6 +1110,75 @@ Adding a data source = one new class with `resolve()`, added to the list in
       into `corrections.py` one word at a time, or a live etymonline-style
       scrape). **Not yet decided -- Joe's call, asked and awaiting answer**
       as of this entry.
+15. **"No entry at all" gap closed for derived words -- 2026-07-24.** Joe
+    caught `consistency`/`mindset`/`professional` reading Unknown on Direct
+    Source. Three different root causes, each needing its own fix:
+    - `consistency`: genuinely absent from etymology-db's snapshot (zero raw
+      rows at all) -- `consistent` resolves fine. Closed at the resolver
+      layer: `resolver.py`'s suffix-stemmer gained a dedicated `-cy` rule
+      (consistency -> consistent, urgency -> urgent, accuracy -> accurate),
+      restricted to stems >=5 characters after checking the full 908-word
+      "-cy" gap in the raw data directly -- that floor is the exact line
+      between 129 genuine hits and real false positives at shorter lengths
+      (`chancy` is "chance"+"-y", not related to "chant"; `spacy`/`stacy`/
+      `trancy`/`fleecy` were the same shape). Also added `-al` to the
+      stemmer (professional -> profession; covered by the existing silent-e
+      machinery, no new logic needed).
+    - `professional`/`mindset`: real Wiktionary structure exists
+      (`has_prefix_with_root profession`, `compound_of mind+set`) but
+      `convert_wikt.py`'s three stub-patching passes (`_patch_root_stubs`,
+      `_patch_foreign_root_stubs`, `_extract_auto_compounds`, issue #14)
+      only ever looked at terms that ALREADY had a thin has_root stub --
+      both words had NO entry at all (resolve_term returned None outright),
+      so they were silently skipped every time. Widened all three passes'
+      guard from "entry is a stub" to "entry is a stub OR doesn't exist".
+      **Database-wide effect: 213,123 resolved words, up from 72,732** (+164k
+      words closing this exact gap-shape database-wide, not just the 3
+      reported).
+    - That scale required real guardrails, found while verifying before
+      shipping (rule 2): (a) the root-word lookup previously fell back to
+      `.lower()`/`.capitalize()` on a miss -- reintroduced the exact "went"/
+      "Went" bug (issue #12) at new scale (`forewent` -> "went" ->
+      capitalized surname "Went"; `digraph`/`dimer` -> "di" -> the name
+      "Di"; `aldrin` -> the tree "alder" instead of chemist Kurt Alder) --
+      now requires exact case. (b) hub words used by many derived terms
+      (has_prefix_with_root targets like "auto", "tag", "on", "person",
+      "phase") turn a PRE-EXISTING one-off collision in the underlying
+      database into a much bigger blast radius, since dozens-to-hundreds of
+      derived words now inherit that hub's answer. Found and fixed two:
+      **`tag`** (etymology-db's data for this term_id only captured the
+      rare Aramaic "crown" sense, not the real Germanic "label" sense --
+      verified live, fixed in `corrections.py` + `tree_corrections.py`) and
+      **`auto`** (a circular `clipping_of autorickshaw` -> `derived_from
+      Hindi` artifact was outranking the real `derived_from Ancient Greek
+      αὐτός` edge -- same fix, both files). `corrections.py` is now applied
+      INSIDE `convert_wikt.py` before the three patches run (previously only
+      applied later, at `resolver.py` load time -- too late for a hub fix to
+      reach words that inherit from it, e.g. `detag`). A scan for the same
+      "exotic-family-first-then-core-family-later" signature CLAUDE.md's own
+      issue #6 passes 5/6 used to find these by hand turned up 256 more hub
+      words (1,101 derived-term exposure) -- too many to hand-verify one at
+      a time, so rather than guess, `_is_reliable_root()` now EXCLUDES any
+      hub whose own chain shows that signature from being used as an
+      inheritance source at all (derived word stays honestly Unknown). Also
+      added an explicit `HUB_EXCLUSIONS` denylist (`corrections.py`) for
+      `logy`/`poly` -- a shape the signature check can't catch, since each
+      term_id's own correct standalone answer (Dutch "sluggish" adjective;
+      Latin plant name) is genuinely correct on its own terms but is a
+      different sense than the "-logy"/"poly-" combining form dozens of
+      derived words actually need, and the source data has zero ancestry
+      info for that combining-form sense under either term_id at all.
+    - Full regression suite (all historically-verified test words from
+      Current State, all multi-sense-collision corrections including the two
+      new ones, the compound-display feature, the issue #14 stub guard) and
+      a live HTTP POST re-verified clean after regenerating both
+      `wikt_words.json` and `etymology_trees.json`. **Honest residual**:
+      the 256 excluded hub words themselves were not individually
+      hand-verified beyond the automated signature check -- most are
+      probably fine (issue #6 pass 5 found several flagged words were
+      genuinely correct on inspection, not bugs), but none were used as an
+      inheritance source this run, so no further coverage was gained OR
+      risked from them either way.
 
 ## Data pipeline notes
 
