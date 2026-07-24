@@ -1,0 +1,4957 @@
+{
+ "Proto-West Germanic:*bōk": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*kattu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*wintruz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*uzbugjaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*in": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*beuʀ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kuntǭ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*Audawardu": {
+  "found": false
+ },
+ "Proto-Germanic:*maistaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*Litъva": {
+  "found": false
+ },
+ "Proto-Germanic:*mōtijandz": {
+  "found": false
+ },
+ "Proto-Germanic:*twīsilō": {
+  "found": false
+ },
+ "Proto-Germanic:*brasō": {
+  "found": false
+ },
+ "Proto-West Germanic:*willjakwemō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*krēk": {
+  "found": false
+ },
+ "Proto-Slavic:*bělъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skutilaz": {
+  "found": false
+ },
+ "Proto-Germanic:*walhaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*grunduz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hēr": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*nēhwist": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*fimftô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*feurþō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sehstô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ahtudô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sebundô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*newundô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*tehundô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*iuwar": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*wundō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*wirsistaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kundijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hlahhjan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*midjanahts": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kastōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*panning": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*walhisk": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*daniskaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*þritehun": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*fedurtehun": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ainaliftô": {
+  "found": false
+ },
+ "Proto-Germanic:*twaliftô": {
+  "found": false
+ },
+ "Proto-Germanic:*sebuntehun": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*fimftehun": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*ab": {
+  "found": false
+ },
+ "Proto-Germanic:*sehstehun": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*newuntehun": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*fimf tigiwiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*fedwōr tigiwiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*þrīz tigiwiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sehs tigiwiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*twaintigiwiz": {
+  "found": false
+ },
+ "Proto-Germanic:*ahtōutēhundą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sebuntēhundą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*newuntēhundą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ahtōutehun": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*kneht": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*handu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*diurijaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hezōi": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*andijōndz": {
+  "found": false
+ },
+ "Proto-Germanic:*ainagaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*andaswarō": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*sunþrą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*westrą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hunag": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*manniz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*þat": {
+  "found": false
+ },
+ "Proto-Germanic:*kuningadōmaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bai": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*frumô": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Celtic:*mēnis": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*widus": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hol": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*tin": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*tailijaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*sālīg": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*fraluzanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*mili": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sukōną": {
+  "found": false
+ },
+ "Proto-Germanic:*bad-": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kūmalīkaz": {
+  "found": false
+ },
+ "Proto-Germanic:*biginnaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bedagô": {
+  "found": false
+ },
+ "Proto-Germanic:*handufullō": {
+  "found": false
+ },
+ "Proto-Germanic:*dragandz": {
+  "found": false
+ },
+ "Proto-Germanic:*fram": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*lōkōn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*himmai": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hār": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*snagilaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*kneu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*angil": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*mang-": {
+  "found": false
+ },
+ "Proto-Germanic:*slagiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*bitilō": {
+  "found": false
+ },
+ "Proto-West Germanic:*hą̄hil": {
+  "found": false
+ },
+ "Proto-West Germanic:*lanu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*wambu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hawi": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*agilō": {
+  "found": false
+ },
+ "Proto-Germanic:*wībą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*lamjaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*magaþ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hidrê": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*þadrê": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ilīkaz": {
+  "found": false
+ },
+ "Proto-Germanic:*uzrīsaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*boran": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bifallaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*binut": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*blōdijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*brukanaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*klingan": {
+  "found": false
+ },
+ "Proto-West Germanic:*dān": {
+  "found": false
+ },
+ "Proto-West Germanic:*etan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kutjaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*drunkanaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*fōlijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*flaug": {
+  "found": false
+ },
+ "Proto-Germanic:*gānaz": {
+  "found": false
+ },
+ "Proto-Germanic:*gegrō": {
+  "found": false
+ },
+ "Proto-Germanic:*habd-": {
+  "found": false
+ },
+ "Proto-Germanic:*drunkanōną": {
+  "found": false
+ },
+ "Proto-West Germanic:*knuttijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*laugnijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*missalaidijaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*skāp": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*airu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*þīn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*strakkjan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*laubô": {
+  "found": false
+ },
+ "Proto-West Germanic:*kuh-": {
+  "found": false
+ },
+ "Proto-West Germanic:*kāsī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*kaup": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*selba-": {
+  "found": false
+ },
+ "Proto-Germanic:*hwistlōną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*selbaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*þingą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*slāpan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hrungō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skainijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skutą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*stōþ": {
+  "found": false
+ },
+ "Proto-Germanic:*stulanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*stinganą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*strīdaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*strikan": {
+  "found": false
+ },
+ "Proto-West Germanic:*swaran": {
+  "found": false
+ },
+ "Proto-West Germanic:*natilu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*swullanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*swellaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*tēkanaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*swaipijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*taihtē": {
+  "found": false
+ },
+ "Proto-Germanic:*talid-": {
+  "found": false
+ },
+ "Proto-Germanic:*þeþrō": {
+  "found": false
+ },
+ "Proto-Germanic:*þrēanaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*andabindan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*andadōnaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*tredan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*andawindaną": {
+  "found": false
+ },
+ "Proto-Germanic:*andadōną": {
+  "found": false
+ },
+ "Proto-West Germanic:*understandan": {
+  "found": false
+ },
+ "Proto-Germanic:*karmiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*laiwarikǭ": {
+  "found": false
+ },
+ "Proto-West Germanic:*buhsā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bi-": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sunþrōnijaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*gait": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*nahtigalā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*titt-": {
+  "found": false
+ },
+ "Proto-West Germanic:*kiukīn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*wisulā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*jabu": {
+  "found": false
+ },
+ "Proto-West Germanic:*braid": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*brasnaz": {
+  "found": false
+ },
+ "Proto-Germanic:*rūhaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*smanþi": {
+  "found": false
+ },
+ "Proto-Germanic:*ferrai": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*rutāną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*manag": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sawwijaz": {
+  "found": false
+ },
+ "Proto-Germanic:*lunaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hebun": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*handlōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*bakku": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kalbaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*tūnijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*jainaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*milidauw": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*laskô": {
+  "found": false
+ },
+ "Proto-Germanic:*þūbǭ": {
+  "found": false
+ },
+ "Proto-Germanic:*hamjaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*pīpā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*maskā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*dankwaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*handulausaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*steupafadēr": {
+  "found": false
+ },
+ "Proto-West Germanic:*wāgu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kirnijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*steupamōdēr": {
+  "found": false
+ },
+ "Proto-Germanic:*stēliþō": {
+  "found": false
+ },
+ "Proto-Germanic:*hlankiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*angī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*dampaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hin-": {
+  "found": false
+ },
+ "Proto-Germanic:*mūsiz": {
+  "found": false
+ },
+ "Proto-Germanic:*kagô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*þankō": {
+  "found": false
+ },
+ "Proto-West Germanic:*batiʀō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*dunkiz": {
+  "found": false
+ },
+ "Proto-Germanic:*dagalīkaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*stōd": {
+  "found": false
+ },
+ "Proto-Slavic:*mosky": {
+  "found": false
+ },
+ "Proto-West Germanic:*damm": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*Skadinawjō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hugô": {
+  "found": false
+ },
+ "Proto-Germanic:*wannaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*halb": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*-anē": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*frijōndlīkaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*unhailagaz": {
+  "found": false
+ },
+ "Proto-Germanic:*weraldilīkaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*graib": {
+  "found": false
+ },
+ "Proto-West Germanic:*kussijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*harpā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*dūnom": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*garwijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*segl": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bēlą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*punōną": {
+  "found": false
+ },
+ "Proto-Germanic:*Rūmō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*tappô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*dubros": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*ahtudô tehundô": {
+  "found": false
+ },
+ "Proto-West Germanic:*bilaubijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*silubrasmiþaz": {
+  "found": false
+ },
+ "Proto-Germanic:*gulþasmiþaz": {
+  "found": false
+ },
+ "Proto-Germanic:*glasą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*daniz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Indo-Iranian:*bʰagás": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*langiþu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*wartā": {
+  "found": false
+ },
+ "Proto-West Germanic:*wakkjan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*āl": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*klaibrā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*brūdigumô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*steupasunuz": {
+  "found": false
+ },
+ "Proto-Germanic:*steupaduhtēr": {
+  "found": false
+ },
+ "Proto-Germanic:*luftuz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hwaitī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*prosěkъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*haisaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hampijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*graipisōn": {
+  "found": false
+ },
+ "Proto-Celtic:*srognā": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*jērǫ̂": {
+  "found": false
+ },
+ "Proto-Germanic:*kawǭ": {
+  "found": false
+ },
+ "Proto-Germanic:*haimaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*bisīg": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kutą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*prattugaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*managafalþaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*gaist": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*argaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*fuhsini": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*gaistijaną": {
+  "found": false
+ },
+ "Proto-Germanic:*laisistaz": {
+  "found": false
+ },
+ "Proto-Germanic:*put-": {
+  "found": false
+ },
+ "Proto-West Germanic:*þeub": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*raidaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*glanos": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*wanjaz": {
+  "found": false
+ },
+ "Proto-Germanic:*wagōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*topp": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*fanô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*wrankiz": {
+  "found": false
+ },
+ "Proto-Germanic:*batistaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sprekô": {
+  "found": false
+ },
+ "Proto-Germanic:*skēlō": {
+  "found": false
+ },
+ "Proto-Germanic:*dragǭ": {
+  "found": false
+ },
+ "Proto-Germanic:*rubbōną": {
+  "found": false
+ },
+ "Proto-West Germanic:*kopp": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*balkijaną": {
+  "found": false
+ },
+ "Proto-Germanic:*hauzijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*pāwô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*spreutaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*wrappaną": {
+  "found": false
+ },
+ "Proto-Germanic:*upp": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*snarhǭ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*snawwuz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*halbijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*furþōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hnajjōną": {
+  "found": false
+ },
+ "Proto-Germanic:*uz-": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*kambos": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hauhiþu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*bair": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bardǭ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ankulaz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*hrōfą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*snuttuz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*drauhnōną": {
+  "found": false
+ },
+ "Proto-Germanic:*drībandz": {
+  "found": false
+ },
+ "Proto-West Germanic:*folgēn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*snakkijaną": {
+  "found": false
+ },
+ "Proto-Germanic:*ūt-": {
+  "found": false
+ },
+ "Proto-West Germanic:*steurubord": {
+  "found": false
+ },
+ "Proto-West Germanic:*stamrōn": {
+  "found": false
+ },
+ "Proto-Germanic:*skillingaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*mahtīg": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*wrandijō": {
+  "found": false
+ },
+ "Proto-Germanic:*blōþagaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*slautô": {
+  "found": false
+ },
+ "Proto-Germanic:*ainalīkaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*forēhaubid": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*rustagaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*hailiþu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*smitanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*skuflō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*aikīnaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*til": {
+  "found": false
+ },
+ "Proto-Germanic:*bugja-": {
+  "found": false
+ },
+ "Proto-Germanic:*klambrōną": {
+  "found": false
+ },
+ "Proto-Germanic:*babô": {
+  "found": false
+ },
+ "Proto-Germanic:*habaisi": {
+  "found": false
+ },
+ "Proto-West Germanic:*hreud": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*nai": {
+  "found": false
+ },
+ "Proto-Slavic:*bobъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*bollā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*baraz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*fleus": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*frank": {
+  "found": false
+ },
+ "Proto-Germanic:*uzdaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*kukur": {
+  "found": false
+ },
+ "Proto-West Germanic:*hwelp": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*gaumaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*gatwǭ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*flahan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*werawulf": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*haidį̄": {
+  "found": false
+ },
+ "Proto-Germanic:*kewwandz": {
+  "found": false
+ },
+ "Proto-Germanic:*plakjō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*kukinā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*gawar": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*abuhaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hulwī": {
+  "found": false
+ },
+ "Proto-Germanic:*mōsijaną": {
+  "found": false
+ },
+ "Proto-Germanic:*nēhw": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*þiubiþu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*blēdrǭ": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*bōkijā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bakārijaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*beuhsam": {
+  "found": false
+ },
+ "Proto-Germanic:*wankilą": {
+  "found": false
+ },
+ "Proto-Germanic:*finkiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hnapp": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hērinna": {
+  "found": false
+ },
+ "Proto-Germanic:*hrōzijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*nautą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*sakku": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*gōdalīkaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skat-": {
+  "found": false
+ },
+ "Proto-Germanic:*fura-": {
+  "found": false
+ },
+ "Proto-Germanic:*gripjaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*waibijaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*diuriþu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*spik": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*fruþǭ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skamō": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*wristu": {
+  "found": false
+ },
+ "Proto-Germanic:*rīkiją": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*tūmōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hlaib": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*līną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Indo-Iranian:*áryas": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*plataz": {
+  "found": false
+ },
+ "Proto-Germanic:*bullǭ": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*þus": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*putōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*dirkinōn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*tunþskaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*būlijō": {
+  "found": false
+ },
+ "Proto-Germanic:*plōgaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*windilaz": {
+  "found": false
+ },
+ "Proto-Celtic:*kumbā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*metan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*fōdrą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*strakō": {
+  "found": false
+ },
+ "Proto-Germanic:*mangą": {
+  "found": false
+ },
+ "Proto-Germanic:*-anaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*taikijandz": {
+  "found": false
+ },
+ "Proto-West Germanic:*strau": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*galmi": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*knukil": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*lat": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*swalīkaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*mihstaz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*Hrōþiberht": {
+  "found": false
+ },
+ "Proto-West Germanic:*skaub": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*tvarogъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*katilaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*wirsizô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*Wido": {
+  "found": false
+ },
+ "Proto-Germanic:*lausaz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*dwerg": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hanapiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ufta": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*masuraz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*wrekaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*helpārī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*sihti": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*flunþrijǭ": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*werageld": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*laiþēn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*blīþisi": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*klokkos-": {
+  "found": false
+ },
+ "Proto-Germanic:*krafjaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*nikwis": {
+  "found": false
+ },
+ "Proto-Germanic:*bausuz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*blaskijaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*friundskapi": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*marisk": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*aliʀu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*nabugaiʀ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*baukn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*brandaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*karilaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*stukkaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*klott": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*krassjō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*krumpaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kweduz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*drepaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*afti": {
+  "found": false
+ },
+ "Proto-West Germanic:*ganat": {
+  "found": false
+ },
+ "Proto-Germanic:*hakulǭ": {
+  "found": false
+ },
+ "Proto-West Germanic:*hursti": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*luppǭ": {
+  "found": false
+ },
+ "Proto-Germanic:*nōpiz": {
+  "found": false
+ },
+ "Proto-Germanic:*uftō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*amslǭ": {
+  "found": false
+ },
+ "Proto-Germanic:*piþô": {
+  "found": false
+ },
+ "Proto-Germanic:*rūnō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*čižь": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sultijō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*snell": {
+  "found": false
+ },
+ "Proto-Germanic:*supô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*swankijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*taisilu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*tanþijaną": {
+  "found": false
+ },
+ "Proto-Germanic:*þrumą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*tindaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*walþu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*walô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*blaikaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*brōkiz": {
+  "found": false
+ },
+ "Proto-West Germanic:*bruki": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kraftagaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*krekō": {
+  "found": false
+ },
+ "Proto-Germanic:*kradulaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*deliz": {
+  "found": false
+ },
+ "Proto-Germanic:*flekka-": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kutan": {
+  "found": false
+ },
+ "Proto-Germanic:*grōtijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*harm": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hindrōną": {
+  "found": false
+ },
+ "Proto-Germanic:*insahtiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*knabō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*lutōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hlutą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*murgiþu": {
+  "found": false
+ },
+ "Proto-Germanic:*mundō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*nabją": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*pīkaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*regnagaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*rawwa-": {
+  "found": false
+ },
+ "Proto-Germanic:*sinkwaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*skrūdą": {
+  "found": false
+ },
+ "Proto-Germanic:*skimpijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*skeuh": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*slōgiþō": {
+  "found": false
+ },
+ "Proto-Germanic:*slihtaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*snakk-": {
+  "found": false
+ },
+ "Proto-West Germanic:*snīkan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*spannō": {
+  "found": false
+ },
+ "Proto-West Germanic:*stōdijō": {
+  "found": false
+ },
+ "Proto-Germanic:*swaþō": {
+  "found": false
+ },
+ "Proto-Germanic:*skamalausaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skrīkijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*tehunþô": {
+  "found": false
+ },
+ "Proto-West Germanic:*trandijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*twangijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*twekkōn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*unburanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*unsewanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*truzlą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ungalīkaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*witjalausaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*klamjaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*juwunþa": {
+  "found": false
+ },
+ "Proto-West Germanic:*weud": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*biwōpijan": {
+  "found": false
+ },
+ "Proto-Germanic:*-atjaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*wundrafull": {
+  "found": false
+ },
+ "Proto-Slavic:*tvьrdъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*aþulingaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*twinkōn": {
+  "found": false
+ },
+ "Proto-Germanic:*tuppijô": {
+  "found": false
+ },
+ "Proto-West Germanic:*skinu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*gēndz": {
+  "found": false
+ },
+ "Proto-West Germanic:*midiwintru": {
+  "found": false
+ },
+ "Proto-West Germanic:*midisumar": {
+  "found": false
+ },
+ "Proto-Germanic:*fleugandz": {
+  "found": false
+ },
+ "Proto-Germanic:*sprekandz": {
+  "found": false
+ },
+ "Proto-Germanic:*urtiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ēbanþs": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*haimalīk": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*brōþurlīkaz": {
+  "found": false
+ },
+ "Proto-Germanic:*fadurlīkaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*mōdērlīkaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*þārin": {
+  "found": false
+ },
+ "Proto-West Germanic:*taisijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*wurkijandz": {
+  "found": false
+ },
+ "Proto-Germanic:*kwankijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*biginnandz": {
+  "found": false
+ },
+ "Proto-Germanic:*jukjǭ": {
+  "found": false
+ },
+ "Proto-Slavic:*pormъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*plukkōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*skuldru": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*maisǭ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ala-": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*þankijandz": {
+  "found": false
+ },
+ "Proto-West Germanic:*grainōn": {
+  "found": false
+ },
+ "Proto-Germanic:*stunōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hugiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*westrōnijaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*furþą": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*nurþrōnijaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*karnos": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*kantos": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*warjamōdā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*þridjô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bisatjaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*Ixtis": {
+  "found": false
+ },
+ "Proto-Germanic:*skurtōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*slaiwiþō": {
+  "found": false
+ },
+ "Proto-Germanic:*dagōs": {
+  "found": false
+ },
+ "Proto-Germanic:*fraleusaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hangaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*īdal": {
+  "found": false
+ },
+ "Proto-Germanic:*habaiþi": {
+  "found": false
+ },
+ "Proto-Germanic:*berandz": {
+  "found": false
+ },
+ "Proto-Germanic:*þurstugaz": {
+  "found": false
+ },
+ "Proto-Germanic:*windigaz": {
+  "found": false
+ },
+ "Proto-Germanic:*saipǭ": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*bangilaz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*wisnōjaną": {
+  "found": false
+ },
+ "Proto-Germanic:*gaukaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*langizô": {
+  "found": false
+ },
+ "Proto-West Germanic:*bileugan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*krank": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hailingō": {
+  "found": false
+ },
+ "Proto-Germanic:*sluk-": {
+  "found": false
+ },
+ "Proto-Germanic:*breuþaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*morgan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*skappjandī": {
+  "found": false
+ },
+ "Proto-West Germanic:*spinnilu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hantijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*stalkungu": {
+  "found": false
+ },
+ "Proto-Germanic:*seldanē": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*gelunaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*wraiþiþu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*-fullaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*-skapi": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*-wīs": {
+  "found": false
+ },
+ "Proto-Germanic:*murgnagebō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*gudalausaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*landamarku": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*twikkijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*budilaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*rādāri": {
+  "found": false
+ },
+ "Proto-Germanic:*blinkaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hāring": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hreubaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*swall": {
+  "found": false
+ },
+ "Proto-West Germanic:*uʀdailī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*wilt": {
+  "found": false
+ },
+ "Proto-Germanic:*knudan-": {
+  "found": false
+ },
+ "Proto-West Germanic:*-nassī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*langōndz": {
+  "found": false
+ },
+ "Proto-Germanic:*būlǭ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*waknaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*ward-": {
+  "found": false
+ },
+ "Proto-Germanic:*wal-": {
+  "found": false
+ },
+ "Proto-Germanic:*gawją": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*warmiþu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*stuntaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*langijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*swarduz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*klainisōną": {
+  "found": false
+ },
+ "Proto-West Germanic:*watarīg": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*waikalīkaz": {
+  "found": false
+ },
+ "Proto-Germanic:*wōrīgaz": {
+  "found": false
+ },
+ "Proto-Germanic:*bitiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*taisan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*grub-": {
+  "found": false
+ },
+ "Proto-Germanic:*ūtlandiskaz": {
+  "found": false
+ },
+ "Proto-Germanic:*wanōndz": {
+  "found": false
+ },
+ "Proto-Germanic:*wēþlōną": {
+  "found": false
+ },
+ "Proto-West Germanic:*skīru": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hwattjastain": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hwerbaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hailasam": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*auʀahring": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*līkalīkaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*skamul": {
+  "found": false
+ },
+ "Proto-West Germanic:*skaft": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*twitwiʀōn": {
+  "found": false
+ },
+ "Proto-West Germanic:*galīkanassī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*wiþr": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*glintaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*treuwu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*Erknabalþ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*brigdil": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*skindulā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sundārijaz": {
+  "found": false
+ },
+ "Proto-Germanic:*sprēkalausaz": {
+  "found": false
+ },
+ "Proto-Germanic:*klus-": {
+  "found": false
+ },
+ "Proto-Germanic:*fedurþungaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*gōdnassī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*raimōną": {
+  "found": false
+ },
+ "Proto-Germanic:*bazafōts": {
+  "found": false
+ },
+ "Proto-West Germanic:*kaf": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*līkāndz": {
+  "found": false
+ },
+ "Proto-Germanic:*gatą": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*klukkwōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*brokkos": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*haim": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*smolōn": {
+  "found": false
+ },
+ "Proto-West Germanic:*untriuwī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*helpōlausaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*pett-": {
+  "found": false
+ },
+ "Proto-Germanic:*bi": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*twihō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*mapulaz": {
+  "found": false
+ },
+ "Proto-Germanic:*underniþer": {
+  "found": false
+ },
+ "Proto-Germanic:*kwaþ": {
+  "found": false
+ },
+ "Proto-Germanic:*haiduz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*haimawarda": {
+  "found": false
+ },
+ "Proto-Germanic:*hlaupaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*glāʀōn": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*salaz": {
+  "found": false
+ },
+ "Proto-Germanic:*stam-": {
+  "found": false
+ },
+ "Proto-Germanic:*klawō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skutungō": {
+  "found": false
+ },
+ "Proto-Germanic:*niþanē": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*strangizô": {
+  "found": false
+ },
+ "Proto-Germanic:*skrinkwaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*brōdijandz": {
+  "found": false
+ },
+ "Proto-Germanic:*blōþaraudaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*trumjaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*ārundī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kreupandz": {
+  "found": false
+ },
+ "Proto-Slavic:*xorvatъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sitjandz": {
+  "found": false
+ },
+ "Proto-Germanic:*raginą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*swait-": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*þrustlō": {
+  "found": false
+ },
+ "Proto-Germanic:*anguz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*berku": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*Aizarīkijaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*Gaut": {
+  "found": false
+ },
+ "Proto-Germanic:*Haimarīks": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*eut": {
+  "found": false
+ },
+ "Proto-Germanic:*krankaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*linþaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*magan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Italic:*Māwortis": {
+  "found": false
+ },
+ "Proto-West Germanic:*reudan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*Hrōþigaizaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hrod": {
+  "found": false
+ },
+ "Proto-West Germanic:*skaunī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sunnǭ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*wangaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*tōgāną": {
+  "found": false
+ },
+ "Proto-Germanic:*luką": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ambahtiją": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*siftijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skinōbainą": {
+  "found": false
+ },
+ "Proto-Germanic:*grasagrōniz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hankōną": {
+  "found": false
+ },
+ "Proto-Germanic:*klangijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*sukkos": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*pīk": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*andijalausaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hūsą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*harmalausaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*arg": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*waiʀd": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*smukōndz": {
+  "found": false
+ },
+ "Proto-Germanic:*nasją": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*audaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*limpaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*(j)azъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*rannijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skipōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*tanþlausaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*humalaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*kaʀi": {
+  "found": false
+ },
+ "Proto-Germanic:*smukkaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*brīw": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hatadaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*bōtu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*lētą": {
+  "found": false
+ },
+ "Proto-West Germanic:*klainiʀō": {
+  "found": false
+ },
+ "Proto-West Germanic:*haiþin": {
+  "found": false
+ },
+ "Proto-West Germanic:*haitan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*bauknōn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ubar-": {
+  "found": false
+ },
+ "Proto-Germanic:*strangistô": {
+  "found": false
+ },
+ "Proto-Germanic:*spōdigaz": {
+  "found": false
+ },
+ "Proto-Germanic:*slipraz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*smirwijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bisprekaną": {
+  "found": false
+ },
+ "Proto-Germanic:*bruþą": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*rawwō": {
+  "found": false
+ },
+ "Proto-Germanic:*tilą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*brāmil": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*mannlīkaz": {
+  "found": false
+ },
+ "Proto-Germanic:*gebō": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Celtic:*-ākos": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*þārat": {
+  "found": false
+ },
+ "Proto-Celtic:*Sabrinā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*Bogъdanъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*triwwiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*wankul": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*maþô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*stiltijǭ": {
+  "found": false
+ },
+ "Proto-Germanic:*sunder": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*brunstiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*strakkjandī": {
+  "found": false
+ },
+ "Proto-Celtic:*gulbā": {
+  "found": false
+ },
+ "Proto-Germanic:*surgafullaz": {
+  "found": false
+ },
+ "Proto-Celtic:*Gēstloberxtos": {
+  "found": false
+ },
+ "Proto-Germanic:*stainagaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*gangiją": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*unwitandz": {
+  "found": false
+ },
+ "Proto-West Germanic:*parruk": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*rād": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*untriuwiþu": {
+  "found": false
+ },
+ "Proto-Germanic:*webaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*būraz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*nana": {
+  "found": false
+ },
+ "Proto-West Germanic:*kaldanassī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*belkaną": {
+  "found": false
+ },
+ "Proto-Germanic:*bruzdaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*stuntijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*laiþsam": {
+  "found": false
+ },
+ "Proto-Germanic:*lindīnaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*mainu": {
+  "found": false
+ },
+ "Proto-West Germanic:*þornag": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bardidaz": {
+  "found": false
+ },
+ "Proto-Germanic:*kwemandz": {
+  "found": false
+ },
+ "Proto-Germanic:*hulmaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*fehtandz": {
+  "found": false
+ },
+ "Proto-West Germanic:*hūslaus": {
+  "found": false
+ },
+ "Proto-West Germanic:*lindu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*haguþorn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*laidijandz": {
+  "found": false
+ },
+ "Proto-Germanic:*walkandz": {
+  "found": false
+ },
+ "Proto-Germanic:*kubb-": {
+  "found": false
+ },
+ "Proto-West Germanic:*garwu": {
+  "found": false
+ },
+ "Proto-West Germanic:*skauwōndī": {
+  "found": false
+ },
+ "Proto-Germanic:*naudigaz": {
+  "found": false
+ },
+ "Proto-Germanic:*klinganą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*drupjaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*markungu": {
+  "found": false
+ },
+ "Proto-Germanic:*wundrą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*haglastainaz": {
+  "found": false
+ },
+ "Proto-Germanic:*Þeudarīks": {
+  "found": false
+ },
+ "Proto-Germanic:*Þeudōbalþaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*airist": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*fadērlausaz": {
+  "found": false
+ },
+ "Proto-Germanic:*mōdērlausaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*raikijandz": {
+  "found": false
+ },
+ "Proto-West Germanic:*dusīg": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*warō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*niwizô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*uberstapjaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*garu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*wēdiz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*īdalnassī": {
+  "found": false
+ },
+ "Proto-Germanic:*mōdagaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skamēnan": {
+  "found": false
+ },
+ "Proto-Germanic:*hrōþiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*halbiją": {
+  "found": false
+ },
+ "Proto-Germanic:*hanhaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kussijandz": {
+  "found": false
+ },
+ "Proto-Germanic:*staupilaz": {
+  "found": false
+ },
+ "Proto-Germanic:*þelą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*nistilōn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*uberfullaz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*khnauwjaz": {
+  "found": false
+ },
+ "Proto-Germanic:*-lingaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*slintaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*Ingwaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*akaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*starkulīka": {
+  "found": false
+ },
+ "Proto-Germanic:*smarōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*flutrōną": {
+  "found": false
+ },
+ "Proto-West Germanic:*kaupamann": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*fastuz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*andadōndz": {
+  "found": false
+ },
+ "Proto-Germanic:*gaizaz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*Hildiberhtaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*stiurik": {
+  "found": false
+ },
+ "Proto-Germanic:*irþīnaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*wimpilaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*stinkwandz": {
+  "found": false
+ },
+ "Proto-Slavic:* ": {
+  "found": false
+ },
+ "Proto-West Germanic:*-astrijā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*drinkārijaz": {
+  "found": false
+ },
+ "Proto-Germanic:*runilaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hrunþaz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*blēandz": {
+  "found": false
+ },
+ "Proto-Germanic:*hammō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*þweraną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ermunaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*gredaną": {
+  "found": false
+ },
+ "Proto-Germanic:*gutô": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*blokk": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*smiþjǭ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*lekaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*skībā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*staupo-": {
+  "found": false
+ },
+ "Proto-Germanic:*smurōną": {
+  "found": false
+ },
+ "Proto-Germanic:*klipjaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*knehtahaidu": {
+  "found": false
+ },
+ "Proto-West Germanic:*Hrōþiland": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kwimidi": {
+  "found": false
+ },
+ "Proto-Germanic:*skipą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*biwrōgijaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*gastihūs": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*linþiz": {
+  "found": false
+ },
+ "Proto-West Germanic:*Audamār": {
+  "found": false
+ },
+ "Proto-Germanic:*karlas wagnaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*frostag": {
+  "found": false
+ },
+ "Proto-Celtic:*lug": {
+  "found": false
+ },
+ "Proto-Germanic:*kaurijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*mistil": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hurnidaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*fas": {
+  "found": false
+ },
+ "Proto-West Germanic:*drankijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*walkōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*Alamanniz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sweltaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*krūsǭ": {
+  "found": false
+ },
+ "Proto-Germanic:*Gaizarīks": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hangōþi": {
+  "found": false
+ },
+ "Proto-Germanic:*sprut-": {
+  "found": false
+ },
+ "Proto-Germanic:*gawissaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skimarōną": {
+  "found": false
+ },
+ "Proto-Germanic:*Audawiniz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*biusi": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kiljǭ": {
+  "found": false
+ },
+ "Proto-Germanic:*sudanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*liþrīnaz": {
+  "found": false
+ },
+ "Proto-Germanic:*unnaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*spelkō": {
+  "found": false
+ },
+ "Proto-West Germanic:*hauhaland": {
+  "found": false
+ },
+ "Proto-West Germanic:*-uk": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*framaþiz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*Balþawini": {
+  "found": false
+ },
+ "Proto-Germanic:*triwwiþō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*Hrōþirīks": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*drangī": {
+  "found": false
+ },
+ "Proto-West Germanic:*beust": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*biobanā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*klakōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*jukkjandi": {
+  "found": false
+ },
+ "Proto-Germanic:*grundulausaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*nattjan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bardalausaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*regnadrupô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*klupjaną": {
+  "found": false
+ },
+ "Proto-Germanic:*Aþalafunsaz": {
+  "found": false
+ },
+ "Proto-Germanic:*Albigaizaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skarną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*maizô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*Gostislavъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ainaugidaz": {
+  "found": false
+ },
+ "Proto-Celtic:*kurukos": {
+  "found": false
+ },
+ "Proto-Germanic:*abahandijaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skītaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*saltan": {
+  "found": false
+ },
+ "Proto-West Germanic:*anti": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*furawarnōną": {
+  "found": false
+ },
+ "Proto-Germanic:*uzrēdaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*swerhô": {
+  "found": false
+ },
+ "Proto-Germanic:*dwīnaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*burilijaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*bīwurdī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*sundnassī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*berhtaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hailagadōmaz": {
+  "found": false
+ },
+ "Proto-Germanic:*wahsanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*wēpnalausaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*fuhtanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*klūtaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*snaiwhwīt": {
+  "found": false
+ },
+ "Proto-Germanic:*handuwerką": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*wībalīkaz": {
+  "found": false
+ },
+ "Proto-Germanic:*Raginawaldaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*preunaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hūʀijuling": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*anahandijaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*strīdandz": {
+  "found": false
+ },
+ "Proto-West Germanic:*haubidamann": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hūsalaukaz": {
+  "found": false
+ },
+ "Proto-Germanic:*drankijandz": {
+  "found": false
+ },
+ "Proto-Germanic:*bistandaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*bainalausaz": {
+  "found": false
+ },
+ "Proto-Germanic:*haglaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*wunungō": {
+  "found": false
+ },
+ "Proto-Celtic:*samos": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*sangijandī": {
+  "found": false
+ },
+ "Proto-Germanic:*sundīlausaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*pannā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*lūraną": {
+  "found": false
+ },
+ "Proto-Germanic:*grabanaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*haggju": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hrussą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*tīmô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*kāsijalubi": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*halp": {
+  "found": false
+ },
+ "Proto-Germanic:*hulpanaz": {
+  "found": false
+ },
+ "Proto-Indo-Iranian:*kŕ̥miš": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*fōtalausaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*amprō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*drūsijaną": {
+  "found": false
+ },
+ "Proto-Germanic:*smītandz": {
+  "found": false
+ },
+ "Proto-Germanic:*īhwaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*turb": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*maiþmaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hirdī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*sprangijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*fardōną": {
+  "found": false
+ },
+ "Proto-Celtic:*melinos": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*aþalaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*puddaz": {
+  "found": false
+ },
+ "Proto-Germanic:*haginjaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ūtdraganą": {
+  "found": false
+ },
+ "Proto-Germanic:*Hailawidiz": {
+  "found": false
+ },
+ "Proto-Germanic:*þūsundīfalþaz": {
+  "found": false
+ },
+ "Proto-Germanic:*sakalausaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*langasam": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*handijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*blīu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*warduz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*knuppô": {
+  "found": false
+ },
+ "Proto-Germanic:*burgz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*mump-": {
+  "found": false
+ },
+ "Proto-Germanic:*under": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*medumô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*habanaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*blak": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*missadōną": {
+  "found": false
+ },
+ "Proto-West Germanic:*selbawilljō": {
+  "found": false
+ },
+ "Proto-Germanic:*swēbaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*granō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*Austrǭ": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*watōrlausaz": {
+  "found": false
+ },
+ "Proto-Germanic:*wīh-": {
+  "found": false
+ },
+ "Proto-Germanic:*bankiz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*-as": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skapanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*rehtārijaz": {
+  "found": false
+ },
+ "Proto-Germanic:*rīpidi": {
+  "found": false
+ },
+ "Proto-West Germanic:*bakahūs": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*fastulīkē": {
+  "found": false
+ },
+ "Proto-Germanic:*fradōnaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*obarfallan": {
+  "found": false
+ },
+ "Proto-West Germanic:*wilkijan": {
+  "found": false
+ },
+ "Proto-Germanic:*maginą": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*Aþalberht": {
+  "found": false
+ },
+ "Proto-Germanic:*laiką": {
+  "found": false
+ },
+ "Proto-Germanic:*balgiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*snaupijaną": {
+  "found": false
+ },
+ "Proto-Germanic:*bilībaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*haitaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*inkwemaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*mīgan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*spilþijaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*twinilingaz": {
+  "found": false
+ },
+ "Proto-Germanic:*angijō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*triwīnaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Indo-Iranian:*Wr̥tragʰnás": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*bōkīn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*untīmô": {
+  "found": false
+ },
+ "Proto-Germanic:*nanþ-": {
+  "found": false
+ },
+ "Proto-West Germanic:*darjan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*tehun": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hūnaz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*biwindaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ansuz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*taubrą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*snigilaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*amal-": {
+  "found": false
+ },
+ "Proto-West Germanic:*farikōn": {
+  "found": false
+ },
+ "Proto-Germanic:*namnijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*uʀgōllju": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*wīnabaʀi": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*bars": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*birkīnaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bistelaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*jukkjan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*silubrīnaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*brōþerlaus": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*ahu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*halba-": {
+  "found": false
+ },
+ "Proto-Germanic:*hlaþǭ": {
+  "found": false
+ },
+ "Proto-Germanic:*-isōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*glasīn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*-kōn": {
+  "found": false
+ },
+ "Proto-Germanic:*skaftaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*serrā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*taiknōndz": {
+  "found": false
+ },
+ "Proto-Germanic:*handugripiz": {
+  "found": false
+ },
+ "Proto-Germanic:*unhailaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*grīs": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*jabai": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*snūtijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*wulfīn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*Hlūdahildiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*mēþą": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*anakwemaną": {
+  "found": false
+ },
+ "Proto-Germanic:*waist": {
+  "found": false
+ },
+ "Proto-Germanic:*fralētaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*gagin": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*wundralīk": {
+  "found": false
+ },
+ "Proto-Germanic:*bilaibijaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*drītaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*slad": {
+  "found": false
+ },
+ "Proto-Germanic:*finþizi": {
+  "found": false
+ },
+ "Proto-Germanic:*titrōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*stutjaną": {
+  "found": false
+ },
+ "Proto-Slavic:*proso": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skupinī": {
+  "found": false
+ },
+ "Proto-Germanic:*ribjōną": {
+  "found": false
+ },
+ "Proto-West Germanic:*walmi": {
+  "found": false
+ },
+ "Proto-West Germanic:*snidi": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*krakōn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*uber": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*eudarą": {
+  "found": false
+ },
+ "Proto-West Germanic:*þrukkijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*drabaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*mannlausaz": {
+  "found": false
+ },
+ "Proto-Germanic:*markō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*dangijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*mariswīn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*tadjaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*tebrekan": {
+  "found": false
+ },
+ "Proto-Slavic:*Perunъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*wai": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*delban": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*trundilaz": {
+  "found": false
+ },
+ "Proto-Germanic:*Batawjō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kōlaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*disanō": {
+  "found": false
+ },
+ "Proto-West Germanic:*flītan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*guldanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*frageldaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*staggijaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*muldawurpiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*brustanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*wakraz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*fiskaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*dagawerką": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*Vęťeslavъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bēganą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kwernōstainaz": {
+  "found": false
+ },
+ "Proto-Germanic:*būlijǭ": {
+  "found": false
+ },
+ "Proto-Germanic:*ainafalþaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*naglalaus": {
+  "found": false
+ },
+ "Proto-Germanic:*wrakō": {
+  "found": false
+ },
+ "Proto-Germanic:*ūtlandą": {
+  "found": false
+ },
+ "Proto-Germanic:*skeulǭ": {
+  "found": false
+ },
+ "Proto-Germanic:*frastandaną": {
+  "found": false
+ },
+ "Proto-Germanic:*fōrijaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*kafl": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*unswōtuz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*tebrestaną": {
+  "found": false
+ },
+ "Proto-Germanic:*tōdrībaną": {
+  "found": false
+ },
+ "Proto-Germanic:*tōkliubaną": {
+  "found": false
+ },
+ "Proto-Germanic:*tehawwaną": {
+  "found": false
+ },
+ "Proto-Germanic:*and-": {
+  "found": false
+ },
+ "Proto-Germanic:*spurjaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*umbi": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sturbanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*wiþrawardaz": {
+  "found": false
+ },
+ "Proto-Germanic:*twiz-": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*frahelaną": {
+  "found": false
+ },
+ "Proto-Germanic:*wunilīkaz": {
+  "found": false
+ },
+ "Proto-Germanic:*furþa": {
+  "found": false
+ },
+ "Proto-Germanic:*fur-": {
+  "found": false
+ },
+ "Proto-Germanic:*bisehwaną": {
+  "found": false
+ },
+ "Proto-Germanic:*frihtiz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*missa-": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Slavic:*voldь": {
+  "found": false
+ },
+ "Proto-West Germanic:*sīk": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*fradrīban": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*frafaraną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*frawanjaną": {
+  "found": false
+ },
+ "Proto-Germanic:*frawundōną": {
+  "found": false
+ },
+ "Proto-Germanic:*fratredaną": {
+  "found": false
+ },
+ "Proto-Germanic:*farswelganą": {
+  "found": false
+ },
+ "Proto-Celtic:*dubus": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*baumijā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*rainō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*strīdan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*arbī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*gnaganą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*faldanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*frakunþaz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*fra-": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*atgaiʀ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*aitrīgaz": {
+  "found": false
+ },
+ "Proto-Germanic:*balkōną": {
+  "found": false
+ },
+ "Proto-Germanic:*twifaldaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*biskīnaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bisitjaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*funsijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*segos": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bitūnijaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*rūmiþu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*plakkju": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*afstandaną": {
+  "found": false
+ },
+ "Proto-Celtic:*uɸo-": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*bisingwan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*oʀlag": {
+  "found": false
+ },
+ "Proto-Germanic:*germijaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*hīwarād": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*armiþu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*rīkijadōmaz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*ebna-": {
+  "found": false
+ },
+ "Proto-Germanic:*hrumpiljǭ": {
+  "found": false
+ },
+ "Proto-Germanic:*uzristiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*kuningarīkiją": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*frawjǭ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*kambijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*yalom": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bibāną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*unbalþaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*unlust": {
+  "found": false
+ },
+ "Proto-Germanic:*krakōną": {
+  "found": false
+ },
+ "Proto-West Germanic:*hruggjabain": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*augasalbā": {
+  "found": false
+ },
+ "Proto-West Germanic:*lāsu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*snupaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*gaduling": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*bidraganą": {
+  "found": false
+ },
+ "Proto-Germanic:*bistapjaną": {
+  "found": false
+ },
+ "Proto-Germanic:*unþankaz": {
+  "found": false
+ },
+ "Proto-Celtic:*uɸor-": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hārīn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*starablind": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*liþugaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*þurnīn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skuwwô": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*kuþō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hwōstāną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*ait(t)rīn": {
+  "found": false
+ },
+ "Proto-Germanic:*mēkijaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*brukilaz": {
+  "found": false
+ },
+ "Proto-West Germanic:*kisil": {
+  "found": false
+ },
+ "Proto-Germanic:*skarpaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*banki": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*mahtilausaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*biþakkjan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*unberandz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Celtic:*ɸlikkā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skupīnō": {
+  "found": false
+ },
+ "Proto-Germanic:*wiþiwindǭ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*unsēliz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*kolamaisā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*lambizō": {
+  "found": false
+ },
+ "Proto-West Germanic:*ādrā": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*warjaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*telgōn": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Italic:*djous": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*uzstandaną": {
+  "found": false
+ },
+ "Proto-Germanic:*bulukiną": {
+  "found": false
+ },
+ "Proto-West Germanic:*waig": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*wakanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*etunaz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*karmijaną": {
+  "found": false
+ },
+ "Proto-Germanic:*werþalīkaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*dōkijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*bidrīban": {
+  "found": false
+ },
+ "Proto-Germanic:*swipraz": {
+  "found": false
+ },
+ "Proto-Germanic:*farstelaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*furispilþijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*farspananą": {
+  "found": false
+ },
+ "Proto-Germanic:*swaipaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*fralaidijan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*regnaskūrō": {
+  "found": false
+ },
+ "Proto-Germanic:*bisagjaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*bigrīpan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*þwītaną": {
+  "found": false
+ },
+ "Proto-Germanic:*halbadaudaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*stinþ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*stainīnaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*frawerþaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*frawurkijaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*stilliþō": {
+  "found": false
+ },
+ "Proto-Germanic:*gaumijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*eburos": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*skabb": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*staþwō": {
+  "found": false
+ },
+ "Proto-Germanic:*līkahamô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*snaidijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*seldalīkaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*derbaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skūrō": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*hari": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*klīþô": {
+  "found": false
+ },
+ "Proto-Slavic:*pьňь": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*prikiz": {
+  "found": false
+ },
+ "Proto-West Germanic:*wiþrasakō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*wiþrawinnō": {
+  "found": false
+ },
+ "Proto-Germanic:*skaþulaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*biwandijaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*bibrekan": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*haubudawundō": {
+  "found": false
+ },
+ "Proto-West Germanic:*underkuning": {
+  "found": false
+ },
+ "Proto-Germanic:*farandz": {
+  "found": false
+ },
+ "Proto-West Germanic:*baru": {
+  "found": false
+ },
+ "Proto-Germanic:*nibilaz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*faldistōl": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*walhiskaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*gern": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Slavic:*Daďьbogъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*walkārī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hrōþi": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*brūnaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*galmaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skrik-": {
+  "found": false
+ },
+ "Proto-West Germanic:*welag": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*ansakaną": {
+  "found": false
+ },
+ "Proto-Germanic:*barniskaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*Wiljahelmaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*spannaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*staþą": {
+  "found": false
+ },
+ "Proto-Germanic:*glitinōną": {
+  "found": false
+ },
+ "Proto-Slavic:*lęděninъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*abalagjaną": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*wīkō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*kavъka": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*brōks": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*raisu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*knukkijaną": {
+  "found": false
+ },
+ "Proto-Germanic:*razdō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*handutam": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*unmahtiz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*andrādan": {
+  "found": false
+ },
+ "Proto-Celtic:*gyemos": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*vyšьjь": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*rōanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*swefaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*drōbuz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*hwerban": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*unwedrą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*harugaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hrōþsōną": {
+  "found": false
+ },
+ "Proto-Germanic:*lustusamaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*berô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*Hildirīks": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*tūdrijaną": {
+  "found": false
+ },
+ "Proto-West Germanic:*hurhwīg": {
+  "found": false
+ },
+ "Proto-Germanic:*ebnanahts": {
+  "found": false
+ },
+ "Proto-Celtic:*ouxselos": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*drōbalīkaz": {
+  "found": false
+ },
+ "Proto-Germanic:*karō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*þeudu": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*xъrvatъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*sъvolkъ": {
+  "found": false
+ },
+ "Proto-Germanic:*rustaz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-West Germanic:*god": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*pikkōną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*segaz": {
+  "found": true,
+  "deeper_lang": "Proto-Indo-European"
+ },
+ "Proto-Germanic:*gautaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*Hulþaberhtaz": {
+  "found": false
+ },
+ "Proto-Germanic:*taitaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*grimm": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*sokolъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*skʷiyat": {
+  "found": false
+ },
+ "Proto-West Germanic:*wīg": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*dolā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*rīks": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*hakô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*erpaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*Agihari": {
+  "found": false
+ },
+ "Proto-Germanic:*harduz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*xǫtь": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*kovačь": {
+  "found": false
+ },
+ "Proto-Celtic:*garwos": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*velьjь": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*Wiljamērijaz": {
+  "found": false
+ },
+ "Proto-Germanic:*heupǭ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*medvědь": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sundą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*porxъno": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*nefô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*makô": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*berht": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*kъrčьmařь": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*goraľь": {
+  "found": false
+ },
+ "Proto-Celtic:*klukā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*brām": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*knappō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*poľe": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*unbidjandz": {
+  "found": false
+ },
+ "Proto-Germanic:*brandaraidō": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*unþī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*furaquemandz": {
+  "found": false
+ },
+ "Proto-Germanic:*marikiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*dorgъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*landą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*stainaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*skaunizô": {
+  "found": false
+ },
+ "Proto-Germanic:*skaunistaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*dritanaz": {
+  "found": false
+ },
+ "Proto-Germanic:*leubalīka": {
+  "found": false
+ },
+ "Proto-Germanic:*Dagilingaz": {
+  "found": false
+ },
+ "Proto-Slavic:*šestъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*augapl": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*raginabalþ": {
+  "found": false
+ },
+ "Proto-Germanic:*skōgaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*Boudīkā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*tъkačь": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*barwaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*furaikwemaną": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*algiz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*wīnatrewą": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*mūsfallā": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*Hrōþiwulfaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*Hoghstepe": {
+  "found": false
+ },
+ "Proto-West Germanic:*sandakorn": {
+  "found": false
+ },
+ "Proto-Slavic:*kokotъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*ǫtroba": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-West Germanic:*skākārī": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*sykora": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Celtic:*din": {
+  "found": false
+ },
+ "Proto-West Germanic:*blakkjā": {
+  "found": false
+ },
+ "Proto-Germanic:*kuppaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*elhaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*sturmaz": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*Sъvarogъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*Mokošь": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*kъnorzъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Germanic:*balþ": {
+  "found": false
+ },
+ "Proto-Slavic:*kolovortъ": {
+  "found": true,
+  "deeper_lang": null
+ },
+ "Proto-Slavic:*jarъ": {
+  "found": true,
+  "deeper_lang": null
+ }
+}
