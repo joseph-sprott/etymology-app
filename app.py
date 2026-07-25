@@ -15,8 +15,22 @@ from analyzer import analyze, format_report
 from buckets import BUCKET_ORDER
 from buckets_wikt import bucket_for_name
 from convert_wikt import _depth_hint
+from resolver import default_resolver
 
 app = Flask(__name__)
+
+# Single shared resolver instance, added 2026-07-24 (Joe, all-caps: every
+# feature/function must use the SAME database -- no feature should have
+# access to word data another doesn't). Previously each `analyze()` call
+# built its own resolver from scratch (reloading wikt_words.json every
+# request), and the etymology-tree feature read ONLY etymology_trees.json
+# with no knowledge of compounds.py/auto_compounds at all -- so a compound
+# word like "mindset" correctly split in the analyzer but showed "No
+# recorded etymology data" in the tree. Both features now read through this
+# one instance: `analyze()` below is passed `resolver=RESOLVER` explicitly,
+# and `resolve_tree()` (below) consults it directly for compound splits
+# when a word isn't in TREES on its own.
+RESOLVER = default_resolver()
 
 # "Core" families for the Most Distinctive sort -- same set resolver.py's
 # _pick_influence uses to decide what counts as an unremarkable, expected
@@ -73,6 +87,107 @@ def _load_trees():
 
 
 TREES = _load_trees()
+
+
+def _lookup_tree_direct(word):
+    """Exact-case only: lowercase first (the common case), then as-typed.
+
+    Deliberately does NOT also try word.capitalize() here, unlike the rest
+    of this file's other case-fallback lookups -- found 2026-07-24 (Joe:
+    "ran" showed an unrelated Japanese loanword in the tree, even though the
+    analyzer correctly showed Norse). Root cause: this function used to try
+    capitalize() unconditionally, landing on "Ran"'s real-but-unrelated tree
+    before resolve_tree() below ever got a chance to check whether the
+    resolver would actually trust that match -- the EXACT same coincidental-
+    homograph risk `Resolution.case_fallback` now protects against in
+    resolver.py (issue #12's "went"/"Went" bug, widened today for "ran"), but
+    this second, independent case-fallback implementation didn't know about
+    that protection at all. Rather than re-teach this function the same
+    fragile judgment call, resolve_tree() now defers capitalize() to its own
+    final fallback, AFTER checking what the resolver itself actually trusts
+    (inherited_from/compound_parts) -- the same "one real source of truth,
+    not two implementations that can quietly drift" principle as the rest of
+    today's fix.
+    """
+    return TREES.get(word.lower()) or TREES.get(word)
+
+
+def resolve_tree(word, _depth=0):
+    """
+    Word -> tree dict (same {"lang", "term", "branches"} shape TREES itself
+    uses), falling back to real resolver data when the word has no raw-data
+    tree of its own. Added 2026-07-24 (Joe, all-caps: every feature must
+    pool from the SAME database -- there should be no way one feature has
+    word info another doesn't). etymology_trees.json is built straight from
+    raw ancestry rows with no awareness of compounds.py/auto_compounds, of
+    convert_wikt.py's has_prefix_with_root inheritance (issue #15), or of
+    resolver.py's own runtime irregular-form/stemming fallback -- so a word
+    fixed through ANY of those (mindset, professional, consistency, ...)
+    used to show "no recorded etymology data" here despite the analyzer
+    having a real answer.
+
+    Rather than re-implementing each of those mechanisms a second time (risking
+    a second copy that quietly drifts from what the analyzer actually does),
+    this asks RESOLVER -- the exact same instance analyze() uses below -- what
+    it actually did, via two general fields on Resolution that exist for
+    exactly this purpose:
+      - `inherited_from`: the OTHER word whose data actually produced the
+        answer, whenever it isn't a direct hit (covers data-layer inheritance
+        AND the resolver's own irregular/stemming retry -- see
+        Resolution.inherited_from's docstring). Recurses through this
+        function again for that word, so a multi-hop chain (a word inherited
+        from a word that was itself found via stemming) still resolves.
+      - `compound_parts`: unchanged from the original version of this
+        function -- builds one synthetic branch per part (a wrapper node
+        labeled with the part's own word, children = that part's own real
+        branches, found the same recursive way).
+      - Last resort: if the resolver has SOME real answer (a chain) but
+        neither of the above applies and still no tree was found anywhere
+        (e.g. convert_wikt.py's _patch_foreign_root_stubs, a direct foreign-
+        root citation with no English intermediate to recurse through),
+        synthesize a single-node tree from root_lang/root_term rather than
+        showing nothing for a word the analyzer really does have data for.
+    Any word the resolver can't really answer (a bare has_root stub, or a
+    genuine total miss) correctly still returns None here too -- same honest
+    "no data" the analyzer shows for those, not a fabricated tree.
+
+    `_depth` guards against runaway recursion on a pathological cycle (not
+    expected in practice, but defensive, matching build_etymology_trees.py's
+    own `seen_groups` guard for the same class of risk).
+    """
+    direct = _lookup_tree_direct(word)
+    if direct is not None or _depth > 5:
+        return direct
+    res = RESOLVER.resolve(word)
+    if res.inherited_from and res.inherited_from != word:
+        inherited = resolve_tree(res.inherited_from, _depth + 1)
+        if inherited:
+            return {"lang": "English", "term": word, "branches": inherited["branches"]}
+    if res.compound_parts:
+        branches = []
+        for part in res.compound_parts:
+            part_tree = resolve_tree(part.word, _depth + 1)
+            children = part_tree["branches"] if part_tree else []
+            branches.append({"lang": "English", "term": part.word,
+                              "reltype": "compound_of", "children": children})
+        return {"lang": "English", "term": word, "branches": branches}
+    if res.chain and res.root_lang:
+        # The resolver has a real answer here with no richer inherited_from/
+        # compound path (e.g. a bare-root stub like "vitamin", or a word
+        # that genuinely only exists capitalized, like "Paris" typed
+        # lowercase). For the latter shape, prefer that entry's own FULL
+        # tree over the flattened single-node fallback below -- reached only
+        # now, after confirming via `res` that the resolver itself would
+        # also trust an answer here, not tried unconditionally the way
+        # _lookup_tree_direct used to (see its docstring for why that was a
+        # bug for "ran").
+        cap_tree = TREES.get(word.capitalize())
+        if cap_tree is not None:
+            return cap_tree
+        node = {"lang": res.root_lang, "term": res.root_term,
+                "reltype": "derived_from", "children": []}
+        return {"lang": "English", "term": word, "branches": [node]}
+    return None
 
 
 def node_slug(node):
@@ -668,19 +783,14 @@ def index():
         tree_word = request.form.get("tree_word", "").strip()
         tree_view = request.form.get("tree_view", "list")
         if tree_word:
-            # Same case-fallback convention as WiktionaryResolver.resolve():
-            # lowercase first (the common case), then as-typed, then title
-            # case (for a word that only exists capitalized).
-            tree = (TREES.get(tree_word.lower())
-                    or TREES.get(tree_word)
-                    or TREES.get(tree_word.capitalize()))
+            tree = resolve_tree(tree_word)
     elif request.method == "POST":
         text = request.form.get("text", "")
         mode = request.form.get("mode", "direct")
         exclude_connectors = request.form.get("exclude_connectors") == "on"
         word_sort = request.form.get("word_sort", "input")
         if text.strip():
-            analysis = analyze(text, mode=mode, exclude_connectors=exclude_connectors)
+            analysis = analyze(text, resolver=RESOLVER, mode=mode, exclude_connectors=exclude_connectors)
             word_rows = sort_per_word(analysis.per_word, word_sort)
     return render_template_string(PAGE, text=text, mode=mode, analysis=analysis,
                                    exclude_connectors=exclude_connectors,

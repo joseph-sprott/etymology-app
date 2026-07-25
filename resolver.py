@@ -169,6 +169,46 @@ class Resolution:
     # that's itself a compound has its own parts spliced in directly, so a
     # 3-part word like "outdoorsman" shows 3 flat parts, not a nested tree).
     compound_parts: Optional[List["Resolution"]] = None
+    # Set when this Resolution came from WiktionaryResolver's lowercase-miss
+    # case-fallback (word.capitalize() or original-case, not a genuine exact-
+    # case hit). Added 2026-07-24 (Joe: "ran" resolved as an unrelated
+    # Japanese loanword). Same root shape as the "went"/"Went" bug (issue
+    # #12) -- a lowercase miss falling back to an unrelated capitalized
+    # homograph -- but that fix only covered the case where the fallback
+    # match was CHAINLESS (native-core); "Ran" (a real Japanese-related
+    # entry) has a genuine foreign chain, so the old check (`if r.chain and
+    # r.prox_kind != "root": return r`) trusted it immediately without ever
+    # reaching the irregular-form retry that would have found "ran"->"run".
+    # `case_fallback=True` lets ChainResolver.resolve() apply the exact same
+    # lower-trust treatment to ANY case-fallback match, chain or not.
+    case_fallback: bool = False
+    # The exact spelling recorded at `root_lang` (e.g. "*handuz"), when
+    # convert_wikt.py's data carries one -- was already computed there
+    # (used by fetch_reconstructions.py) but never threaded through this
+    # layer until now. Added 2026-07-24 alongside `inherited_from` (all-caps,
+    # Joe: every feature must pool from the same database) so any consumer
+    # of Resolution -- not just the bucket/chain pipeline -- can reach the
+    # same specific-spelling detail, e.g. app.py's resolve_tree() building a
+    # one-node tree branch for a word whose only data is a direct foreign-
+    # root citation (see convert_wikt.py's _patch_foreign_root_stubs).
+    root_term: Optional[str] = None
+    # The OTHER word whose data actually produced this Resolution's chain,
+    # whenever it isn't the input word's own direct entry -- set by
+    # WiktionaryResolver from convert_wikt.py's data-layer `inherited_from`
+    # field (e.g. "professional" inherited "profession"'s whole entry), AND
+    # by ChainResolver.resolve()'s own irregular-form/stemming retry (e.g.
+    # "consistency" answered via "consistent", found only at the resolver
+    # layer with no data-file backing at all). Added 2026-07-24 (Joe,
+    # all-caps: every feature must pool from the same database, full stop --
+    # not just today's two words). This is THE general mechanism: any
+    # feature that needs richer per-word data than a Resolution carries (the
+    # etymology tree today; anything added later) can call
+    # RESOLVER.resolve(word), check `.inherited_from`, and look up ITS data
+    # in whatever richer store it has -- instead of re-deriving "where did
+    # this word's real answer actually come from" with separate logic that
+    # could quietly drift from what the resolver itself decided. See
+    # app.py's resolve_tree() for the reference consumer.
+    inherited_from: Optional[str] = None
 
     def view(self, mode: str = "direct") -> ResolvedView:
         """Render this resolution at the "direct", "influence", or "root" level."""
@@ -446,8 +486,17 @@ class WiktionaryResolver(Resolver):
         e = self.words.get(word.lower())
         if e is None and word != word.lower():
             e = self.words.get(word)
+        # Only word.lower() and the as-typed original case count as a real,
+        # intentional match -- word.capitalize() is a genuine coincidental
+        # fallback (the word only exists spelled differently), so it's the
+        # one flagged as `case_fallback` below (see Resolution.case_fallback
+        # docstring for why: "Ran" the Japanese-related entry has a real
+        # chain, unlike "Went" the surname, so ChainResolver needs this flag
+        # to know to double-check rather than trust it immediately).
+        case_fallback = False
         if e is None:
             e = self.words.get(word.capitalize())
+            case_fallback = e is not None
         if e is None:
             return Resolution(word, [], None, None, self.name)
 
@@ -466,7 +515,7 @@ class WiktionaryResolver(Resolver):
             # label only if no stage was recorded at all (rare).
             native_stages = e.get("native_stages")
             stage_lang = native_stages[0][0] if native_stages else "English (native core)"
-            return Resolution(word, [], "eng", stage_lang, self.name)
+            return Resolution(word, [], "eng", stage_lang, self.name, case_fallback=case_fallback)
 
         # Trust `chain` itself as ground truth for "root" (chain[-1]), not the
         # separately-stored `d` field. Found 2026-07-22: they sometimes
@@ -490,7 +539,8 @@ class WiktionaryResolver(Resolver):
         ]
         return Resolution(word, chain, None, None, self.name,
                            root_lang=e.get("root_lang"), root_pie=e.get("root_pie", False),
-                           prox_kind=e.get("prox_kind"))
+                           prox_kind=e.get("prox_kind"), case_fallback=case_fallback,
+                           root_term=e.get("root_term"), inherited_from=e.get("inherited_from"))
 
 
 class ChainResolver(Resolver):
@@ -532,7 +582,7 @@ class ChainResolver(Resolver):
 
     def resolve(self, word: str) -> Resolution:
         r = self._try(word)
-        if r.chain and r.prox_kind != "root":
+        if r.chain and r.prox_kind != "root" and not r.case_fallback:
             return r  # a confirmed chain with a real donor edge is trustworthy immediately
         # Either no chain yet, or `r` is a bare has_root STUB (prox_kind ==
         # "root" -- the word's own raw entry has nothing but a root pointer,
@@ -558,20 +608,43 @@ class ChainResolver(Resolver):
         # trustworthy than a same-spelling-different-case coincidence or an
         # incomplete stub. Falls back to `r` unchanged if no candidate does
         # better.
+        #
+        # Widened 2026-07-24 (Joe: "ran" resolved as an unrelated Japanese
+        # loanword) -- the original "went" fix above only covered a case-
+        # fallback match that was CHAINLESS (a native-core surname). "Ran"
+        # (capitalized) has a genuine foreign chain (Japanese), so the FIRST
+        # check up top used to trust it immediately without ever reaching
+        # here. `Resolution.case_fallback` (set by WiktionaryResolver) now
+        # makes the first check skip ANY case-fallback match, chain or not,
+        # so it always reaches this retry loop -- same logic below, just
+        # reachable for a chain-having case-fallback match too now.
         for cand in _irregular_candidates(word.lower()) + _stem_candidates(word.lower()):
             r2 = self._try(cand)
             if r2.chain and r2.prox_kind != "root":
                 return Resolution(word, r2.chain, r2.english_stage_iso,
                                    r2.english_stage_lang, r2.source,
                                    root_lang=r2.root_lang, root_pie=r2.root_pie,
-                                   prox_kind=r2.prox_kind)
-            if not r.chain and r2.english_stage_iso is not None:
+                                   prox_kind=r2.prox_kind, root_term=r2.root_term,
+                                   # Propagate whichever word's data actually
+                                   # produced this answer -- `cand`'s own data
+                                   # if it's a direct hit, or reuse r2's own
+                                   # inherited_from if `cand` was ITSELF
+                                   # answered via inheritance, so the chain
+                                   # always points at the true underlying
+                                   # source, not just one hop back. See
+                                   # Resolution.inherited_from's docstring --
+                                   # this is what lets app.py's resolve_tree()
+                                   # find the SAME real data the analyzer used
+                                   # without re-deriving which candidate won.
+                                   inherited_from=r2.inherited_from or cand)
+            if (not r.chain or r.case_fallback) and r2.english_stage_iso is not None:
                 return Resolution(word, r2.chain, r2.english_stage_iso,
                                    r2.english_stage_lang, r2.source,
                                    root_lang=r2.root_lang, root_pie=r2.root_pie,
-                                   prox_kind=r2.prox_kind)
+                                   prox_kind=r2.prox_kind, root_term=r2.root_term,
+                                   inherited_from=r2.inherited_from or cand)
         if r.chain:
-            return r  # thin has_root stub, but the best answer we actually have
+            return r  # thin has_root stub or case-fallback match, but the best answer we actually have
         # Still nothing: try a known two-word compound split (compounds.py),
         # or an auto-detected one (convert_wikt.py's _extract_auto_compounds,
         # 2026-07-24 -- words whose only data was a bare PIE-root stub, but

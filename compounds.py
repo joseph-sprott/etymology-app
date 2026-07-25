@@ -49,6 +49,13 @@ COMPOUND_SPLITS = {
     # proofreadingservices.com list the other 735 entries came from, so it
     # never went through the extraction pipeline above. Added directly.
     'upside': ('up', 'side'),
+    # "meltdown" -- added 2026-07-24 (Joe: reads Unknown). Same "upside"
+    # shape: not on the curated list, and its raw etymology-db data is only
+    # an etymologically_related_to "melt down" hedge, not a real compound_of
+    # relation, so the automated pipeline can't discover it. Verified
+    # against live Wiktionary: "From melt (verb) + down (adverb), a
+    # deverbal from melt down (verb)."
+    'meltdown': ('melt', 'down'),
     'aftereffect': ('after', 'effect'),
     'anybody': ('any', 'body'),
     'anymore': ('any', 'more'),

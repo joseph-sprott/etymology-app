@@ -1179,6 +1179,98 @@ Adding a data source = one new class with `resolve()`, added to the list in
       genuinely correct on inspection, not bugs), but none were used as an
       inheritance source this run, so no further coverage was gained OR
       risked from them either way.
+16. **Every feature must pool from the same database -- structural fix,
+    2026-07-24.** Joe (all-caps, repeated, then again as an explicit end-of-
+    session goal): "there should be no way that one feature has access to
+    information about a word that another feature doesn't." Triggered by
+    testing issue #15: `professional`/`mindset`/`consistency` were fixed in
+    the analyzer but STILL showed "No recorded etymology data" in the
+    Etymology Tree, because neither fix mechanism (data-layer inheritance,
+    pure resolver-layer stemming) had any tree-side equivalent --
+    `tree_corrections.py` (issue #6/#12's per-word answer to this same
+    complaint) doesn't scale to a mechanism that touched ~164,000 words.
+    Same session also surfaced three more real bugs while testing:
+    - **`ran`** resolved as an unrelated Japanese loanword. Root cause: "ran"
+      has no entry of its own at all (verified against the raw parquet);
+      WiktionaryResolver's capitalize() fallback landed on "Ran" (a real,
+      unrelated Japanese-related entry with a genuine chain). The original
+      "went"/"Went" fix (issue #12) only protected a case-fallback match
+      that was CHAINLESS -- "Ran" has a real chain, so the old first-check
+      trusted it immediately without ever trying "ran"->"run" (already in
+      `_IRREGULAR_FORMS`). Fixed generally: `Resolution` gained
+      `case_fallback: bool`, set by `WiktionaryResolver` whenever a match
+      only succeeded via `.capitalize()`; `ChainResolver.resolve()`'s first
+      check now also requires `not r.case_fallback`, so ANY case-fallback
+      match (chain or not) reaches the irregular/stem retry loop first.
+    - **`meltdown`** showed Unknown -- raw data has only an
+      `etymologically_related_to "melt down"` hedge, not a real `compound_of`
+      relation, so no automated mechanism could find it. Verified against
+      live Wiktionary ("From melt (verb) + down (adverb)...") and hand-added
+      to `compounds.py`, same as `upside`.
+    - **`generate`** showed Unknown for Direct Source (the bare-has_root-stub
+      shape, issue #14) -- raw data has only hedged `etymologically_related_to`
+      mentions of Latin `generō`/`genus`, the same residual class issue #14
+      left open. Individually verified against live Wiktionary (an ordinary,
+      undisputed Latin derivation) and hand-fixed via `corrections.py` +
+      `tree_corrections.py`, same as `tag`/`auto` -- NOT a resolution of
+      issue #14's broader still-open 1,245-word policy question, just one
+      more individually-verified word out of that residual.
+
+    **The structural fix** (not a per-word patch): `resolver.py`'s
+    `Resolution` gained two general fields --
+    - `root_term`: the exact spelling at `root_lang` (was already computed
+      in `convert_wikt.py` for `fetch_reconstructions.py` but never threaded
+      through this layer).
+    - `inherited_from`: the OTHER word whose data actually produced this
+      answer, whenever it isn't the input word's own direct entry. Set by
+      (a) `convert_wikt.py`'s `_patch_root_stubs`, which now records which
+      root word it copied wholesale (e.g. `professional` -> `profession`),
+      and (b) `ChainResolver.resolve()`'s own irregular-form/stemming retry,
+      propagated through recursively (`inherited_from=r2.inherited_from or
+      cand`) so a multi-hop answer still points at the TRUE underlying
+      source, e.g. `consistency` -> `consistent` (found only at the resolver
+      layer, no data-file backing at all).
+
+    `app.py` gained a shared module-level `RESOLVER` instance (previously
+    every `analyze()` call built a fresh one from scratch, reloading the
+    ~14MB `wikt_words.json` every request) and a new `resolve_tree(word)`
+    function -- the reference consumer of `inherited_from`: when a word has
+    no tree of its own, it asks `RESOLVER.resolve(word)` what it actually
+    used and recurses to THAT word's tree (compound parts get one synthetic
+    wrapper branch per part, reusing the render_branch/build_diagram
+    machinery unchanged since the wrapper nodes are the exact same
+    `{"lang","term","branches"}` shape as any other tree node). A last-resort
+    single-node synthesis (from `root_lang`/`root_term`) covers the residual
+    case where the resolver has SOME real answer but no richer tree anywhere
+    to recurse into (e.g. `_patch_foreign_root_stubs` words, or bare-root
+    stubs like `vitamin`/`critical`, which now correctly show their real PIE
+    citation in the tree -- consistent with Deepest Root mode already doing
+    exactly that for the same words).
+
+    **Bug found and fixed the same session while verifying this**:
+    `_lookup_tree_direct` (the tree's own case-fallback lookup) had an
+    UNCONDITIONAL `.capitalize()` fallback with no awareness of the new
+    `case_fallback` protection above -- exactly the "second implementation
+    that quietly drifts" failure this whole fix exists to prevent. It
+    landed on "Ran"'s Japanese tree directly, bypassing `resolve_tree()`'s
+    `inherited_from` check entirely. Fixed by removing the independent
+    `.capitalize()` fallback from `_lookup_tree_direct` -- `resolve_tree()`
+    now only tries a capitalized entry AFTER confirming (via the resolver)
+    that no richer answer exists, at the same lower-trust tier the resolver
+    itself uses it.
+
+    **Honest residual, not solved by this fix**: an individual
+    `corrections.py` collision fix (like `tag`/`auto` above) still requires
+    a hand-maintained parallel `tree_corrections.py` entry -- `resolve_tree()`
+    checks `TREES` (which bakes in `tree_corrections.py`) BEFORE consulting
+    the resolver at all, so a future `corrections.py`-only fix without a
+    matching tree entry would still show stale/wrong raw tree data instead
+    of silently deferring to the corrected answer. This structural fix
+    closes the COVERAGE-mechanism gap (inheritance, stemming, compounds --
+    the actual reported problem, ~164k words) completely; it does not
+    (and structurally cannot, without losing real tree richness) fully
+    automate away the per-word hand-verification discipline for individual
+    collision corrections.
 
 ## Data pipeline notes
 

@@ -569,6 +569,15 @@ def _patch_root_stubs(words, eng):
                 if not _is_reliable_root(root_key, root_entry):
                     continue  # exotic-first-then-core signature, or an explicit HUB_EXCLUSIONS entry
                 words[term] = dict(root_entry)
+                # `inherited_from` -- added 2026-07-24 (Joe, all-caps: every
+                # feature must pool from the same database). Records WHICH
+                # term this entry's whole story was copied from, so any
+                # OTHER feature reading word data (the etymology tree today;
+                # anything added later) can look up the SAME root and derive
+                # a consistent answer, instead of only the bucket-chain
+                # pipeline knowing about this inheritance. See app.py's
+                # resolve_tree() for the tree feature's consumer of this.
+                words[term]["inherited_from"] = root_key
                 patched += 1
                 changed = True
                 break

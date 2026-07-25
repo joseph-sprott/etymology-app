@@ -59,4 +59,16 @@ TREE_CORRECTIONS = {
     "auto": [
         {"lang": "Ancient Greek", "term": "αὐτός", "reltype": "derived_from", "children": []},
     ],
+
+    # "generate": matches corrections.py's "generate" entry -- raw data only
+    # had a bare has_root PIE pointer plus two etymologically_related_to
+    # (hedge, not ancestry) mentions of Latin generō/genus. Hand-built from
+    # the live page's stated chain: generō <- genus <- PIE *ǵenh₁-.
+    "generate": [
+        {"lang": "Latin", "term": "generō", "reltype": "derived_from", "children": [
+            {"lang": "Latin", "term": "genus", "reltype": "derived_from", "children": [
+                {"lang": "Proto-Indo-European", "term": "*ǵenh₁-", "reltype": "has_root", "children": []},
+            ]},
+        ]},
+    ],
 }

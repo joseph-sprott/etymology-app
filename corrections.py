@@ -341,6 +341,22 @@ WORD_CORRECTIONS = {
     # connection recorded for αὐτός itself in this data.
     "auto": {"p": "Greek", "d": "Greek", "chain": ["Greek"], "prox_kind": "derived",
              "root_lang": "Ancient Greek", "root_term": "αὐτός", "root_pie": False},
+
+    # Found 2026-07-24 (Joe: "generate" read Unknown for Direct Source,
+    # PIE for Deepest Root -- the bare-has_root-stub shape, issue #14).
+    # Raw data has a real has_root -> PIE *ǵenh₁- pointer (correctly
+    # suppressed from Direct Source per issue #14's fix) plus two
+    # etymologically_related_to Latin mentions (generō, genus) -- a hedge,
+    # not asserted ancestry, so convert_wikt.py correctly didn't use them on
+    # its own (same category as the still-open 1,245-word residual in issue
+    # #14). Individually verified against live Wiktionary rather than left
+    # in that residual, since the real etymology here isn't actually in
+    # doubt: "From Latin generō ('beget, procreate, produce') + -ate...,
+    # from genus ('a kind, race, family')" -- ordinary, well-documented
+    # Latin derivation, plus "English terms derived from the PIE root
+    # *ǵenh₁-" confirming the same PIE root the raw data already had.
+    "generate": {"p": "Latin", "d": "PIE", "chain": ["Latin", "PIE"], "prox_kind": "derived",
+                 "root_lang": "Latin", "root_term": "genus", "root_pie": True},
 }
 
 # Hub words EXCLUDED from convert_wikt.py's root-inheritance patches
