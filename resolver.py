@@ -609,6 +609,76 @@ class WiktionaryResolver(Resolver):
                            root_term=e.get("root_term"), inherited_from=e.get("inherited_from"))
 
 
+class WiktextractResolver(Resolver):
+    """
+    Prototype Path C backend: kaikki.org's wiktextract JSONL extract, parsed
+    by convert_wiktextract.py into the exact same {p, d, chain, prox_kind,
+    root_lang, root_pie, root_term, chain_langs, native_stages} shape
+    WiktionaryResolver already reads -- see that class's docstring for what
+    each field means; the contract is identical, only the build pipeline
+    differs. Added 2026-07-24 after the prototype-phase coverage measurement
+    (CLAUDE.md) found wiktextract resolves real etymology data for roughly
+    half of a real corpus's still-Unknown words that etymology-db lacks
+    entirely, plus a near-doubling of total headword coverage.
+
+    Deliberately loaded FIRST in ChainResolver's backend list (see
+    default_resolver): a first-implementation-pass build (structured
+    inh/der/bor templates only -- no sense-splitting, no word-formation-
+    template inheritance-following yet, see convert_wiktextract.py's
+    docstring for exactly what's deferred) is not yet a full replacement for
+    WiktionaryResolver's more mature pipeline, but ChainResolver's existing
+    "first backend with a real chain wins, otherwise fall through" logic
+    (see `_try` below) already handles a backend that sometimes has nothing
+    -- this file just needs to exist and answer honestly (empty chain, no
+    English stage) when it doesn't know a word, which it does by construction
+    (same `words.get(...)` miss shape as WiktionaryResolver).
+
+    Applies WORD_CORRECTIONS the same way WiktionaryResolver does -- caught
+    2026-07-24 before this was wired into ChainResolver at top priority:
+    without this, a word with a hand-verified corrections.py override (die,
+    bull, tag, previous, ...) would have that override silently bypassed
+    whenever wiktextract's own (unverified, possibly wrong in the same or a
+    different way) chain answered first, defeating the whole point of those
+    corrections. HUB_EXCLUSIONS is NOT applied here -- it gates
+    convert_wikt.py's build-time inheritance-patching specifically, which
+    this phase-1 pipeline doesn't do yet (see module docstring).
+    """
+    name = "wiktextract"
+
+    def __init__(self, path: str = "wiktextract_words.json"):
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+        self.words = data["words"]
+        self.words.update(WORD_CORRECTIONS)
+
+    def resolve(self, word: str) -> Resolution:
+        e = self.words.get(word.lower())
+        case_fallback = False
+        if e is None and word != word.lower():
+            e = self.words.get(word)
+        if e is None:
+            e = self.words.get(word.capitalize())
+            case_fallback = e is not None
+        if e is None:
+            return Resolution(word, [], None, None, self.name)
+
+        chain_buckets = e.get("chain") or []
+        if not chain_buckets:
+            native_stages = e.get("native_stages")
+            stage_lang = native_stages[0][0] if native_stages else "English (native core)"
+            return Resolution(word, [], "eng", stage_lang, self.name, case_fallback=case_fallback)
+
+        chain_langs = e.get("chain_langs")
+        chain = [
+            ChainLink(b, b, b, specific_lang=(chain_langs[i] if chain_langs else None))
+            for i, b in enumerate(chain_buckets)
+        ]
+        return Resolution(word, chain, None, None, self.name,
+                           root_lang=e.get("root_lang"), root_pie=e.get("root_pie", False),
+                           prox_kind=e.get("prox_kind"), case_fallback=case_fallback,
+                           root_term=e.get("root_term"))
+
+
 class ChainResolver(Resolver):
     """
     Tries backends in priority order, returns the first that `resolved` True;
@@ -631,20 +701,39 @@ class ChainResolver(Resolver):
 
     def _try(self, word: str) -> Resolution:
         """One pass across all backends for a single surface form."""
+        # Widened 2026-07-24 (WiktextractResolver, now the top-priority
+        # backend): this used to trust the FIRST backend with ANY non-empty
+        # chain immediately, full stop -- fine when there was only one real
+        # data-rich backend ahead of EtyResolver's much weaker fallback, but
+        # now a thin prox_kind=="root" stub from wiktextract (a word whose
+        # ONLY evidence is a bare deepest-root pointer, no real donor edge of
+        # its own -- same shape as the "computer"/"vitamin" bug) could win
+        # here and permanently block WiktionaryResolver from ever being
+        # tried for that SAME word, even when it has perfectly good real
+        # data. Found via real regressions this exact change introduced
+        # ("react"/"eventually"/"smartphone" went from resolving correctly
+        # to Unknown): a stub is no longer trusted outright -- it's kept as
+        # a fallback candidate while later backends still get a chance to
+        # supply something real. Only genuinely empty results (no chain at
+        # all) fall through further, to `fallback`, unchanged from before.
+        best_stub = None
         fallback = None
         for backend in self.backends:
             r = backend.resolve(word)
-            # A backend wins outright if it found a real foreign donor chain.
             if r.chain:
-                return r
-            # A backend that positively identified the word as native core also
-            # wins -- that's a real answer, not a miss. Only a total lookup
-            # failure (no chain AND no English stage) falls through.
+                if r.prox_kind != "root":
+                    return r  # a real donor edge -- trustworthy immediately
+                if best_stub is None:
+                    best_stub = r
+                continue  # thin stub -- keep checking other backends first
+            # A backend that positively identified the word as native core
+            # wins -- that's a real answer, not a miss, and outranks any
+            # stub seen so far (a genuine identification beats a non-answer).
             if r.english_stage_iso is not None:
                 return r
             if fallback is None:
                 fallback = r
-        return fallback or Resolution(word, [], None, None, self.name)
+        return best_stub or fallback or Resolution(word, [], None, None, self.name)
 
     def resolve(self, word: str) -> Resolution:
         r = self._try(word)
@@ -681,7 +770,19 @@ class ChainResolver(Resolver):
         # genuinely good data of its own is untouched -- compounds.py's own
         # docstring is explicit that it should never override a word that
         # "resolves on its own," and that design intent still holds here.
-        prefer_compound = r.inherited_from is not None and word.lower() in COMPOUND_SPLITS
+        # Widened 2026-07-24 (WiktextractResolver): a bare prox_kind=="root"
+        # stub is ALSO not the word's own genuine resolution (it displays as
+        # Unknown for direct/influence regardless -- see Resolution.view()),
+        # so it shouldn't block a hand-verified compound split either, same
+        # reasoning as the inherited_from case above. Found via
+        # test_regression.py: "breakwater"/"headset"/"threadbare" (each a
+        # real compounds.py entry) now get a bare PIE-root-stub "chain" from
+        # wiktextract's data (a `root` template with no real inh/der/bor
+        # edge of their own) -- has_real_chain treats this as real enough to
+        # short-circuit past the compound fallback below, even though the
+        # word never actually resolves to anything but Unknown on its own.
+        prefer_compound = ((r.inherited_from is not None or r.prox_kind == "root")
+                            and word.lower() in COMPOUND_SPLITS)
         if has_real_chain and r.prox_kind != "root" and not r.case_fallback and not prefer_compound:
             return r  # a confirmed chain with a real donor edge is trustworthy immediately
         # Either no chain yet, or `r` is a bare has_root STUB (prox_kind ==
@@ -793,12 +894,17 @@ def default_resolver() -> Resolver:
     """
     The single place that decides the resolver stack.
 
-    Wiktionary (71k words, correct proximate donors) is tried first; `ety` is
-    kept as a fallback for anything Wiktionary lacks. If the Wiktionary data
-    file isn't present, we degrade gracefully to Path A alone.
+    Wiktextract (prototype, see WiktextractResolver) is tried first when its
+    data file is present -- richer per-word data (470k+ headwords vs 244k),
+    added 2026-07-24. WiktionaryResolver (etymology-db, more mature pipeline)
+    is next, `ety` last as the final fallback. Each stage degrades gracefully
+    if its data file isn't present.
     """
     backends: List[Resolver] = []
     here = os.path.dirname(os.path.abspath(__file__))
+    wiktextract_path = os.path.join(here, "wiktextract_words.json")
+    if os.path.exists(wiktextract_path):
+        backends.append(WiktextractResolver(wiktextract_path))
     wikt_path = os.path.join(here, "wikt_words.json")
     if os.path.exists(wikt_path):
         backends.append(WiktionaryResolver(wikt_path))

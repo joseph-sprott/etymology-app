@@ -8,6 +8,37 @@ change).
 
 ---
 
+## 2026-07-24 (later)
+
+**Created `etymology-parallel-sync`** — packages the backup-then-pull-then-
+diff-verify sequence used by hand earlier the same session when a parallel
+agent's worktree pushed `FUTURE_FEATURES_AND_RESOURCES.md` at a path that
+already existed locally, untracked. Left auto-invocable (unlike
+`etymology-commit-push`) since it only touches local repo state — fetch plus
+a `--ff-only` pull, never `--force`, always backs up before overwriting
+anything.
+
+Found and fixed a real bug in `sync_worktree_research.ps1` while testing it
+against the live repo (not just reading it back): `$ErrorActionPreference =
+"Stop"` at the top of the script combined with `git fetch`'s routine stderr
+output (e.g. "From https://...", printed even on success) caused PowerShell
+5.1 to promote that non-terminating stderr text into a terminating error and
+kill the script on a clean run. Fixed by dropping `$ErrorActionPreference =
+"Stop"` entirely and checking `$LASTEXITCODE` explicitly after each git
+command instead of relying on `$?` — same underlying pitfall already
+documented in this project's PowerShell environment notes, now also fixed in
+a script instead of just worked around inline each time.
+
+**Created `etymology-skill-audit`** — codifies the three-dimension checklist
+(visibility / deterministic-vs-non-deterministic / composability) Joe set
+verbatim earlier in the session, so it's applied consistently to every new
+skill going forward instead of being re-derived from memory each time.
+`scripts/list_skills.py` handles the deterministic discovery pass (enumerate
+skills, parse frontmatter, flag auto-invocable skills whose description
+mentions a high-risk verb without `disable-model-invocation` set); the
+skill's own body carries the judgment part (deciding whether a flag is real,
+applying the composability check, deciding what to extract).
+
 ## 2026-07-24
 
 **Created `etymology-coverage-scan`** — wraps `scripts/scan_unknown_words.py`

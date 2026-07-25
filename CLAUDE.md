@@ -99,8 +99,35 @@ End goal: **every possible English word in the database.**
   against the full regression suite + a live HTTP POST check before trusting
   it, every time.
 - Verified correct on key test words: `skill`→Norse, `table`→French,
-  `sky`→Norse, `egg`/`trust`/`anger`/`knife`/`they`/`them`/`law`→Norse,
+  `sky`→Norse, `egg`/`anger`/`knife`/`they`/`them`/`law`→Norse,
   `beef`/`government`/`justice`/`army`→French, `the`→Germanic (inherited).
+  (`trust` moved from Norse to Germanic 2026-07-24 -- see the wiktextract
+  entry below, a genuine scholarly correction, not a regression.)
+- **`wiktextract_words.json` — 109,216 English words with a genuine
+  structured donor/root chain**, added 2026-07-24 as a NEW top-priority
+  resolver (`WiktextractResolver`, layered ahead of `WiktionaryResolver` via
+  `ChainResolver`, never replacing it) parsed from kaikki.org's English
+  wiktextract JSONL extract (`convert_wiktextract.py`). Prototyped first
+  (per Joe's explicit decision) by measuring real impact against the same
+  347-paragraph corpus from issue #17: 105 -> 67 real-gap Unknown words on
+  that corpus (36% reduction), zero regressions, full 82-check regression
+  suite passing. Deliberately conservative in this first pass -- only counts
+  a word as having a real chain when it has an actual `inh`/`der`/`bor`
+  donor-template edge or root pointer of its own (excludes formation-only
+  templates like `suffix`/`affix`/`compound` and hedge-only ones like
+  `cog`/`doublet`, same "hedge relations aren't ancestry" principle as known
+  issue #14), which is why this number is smaller than the ~470k headwords
+  that have SOME etymology text -- most of the gap is words whose only
+  evidence is a word-formation template citing an English base word (e.g.
+  "teenager" citing "teenage"), left as documented future work since the
+  EXISTING resolver-layer stemmer already recovers many of these for free.
+  See `etymology_chain.py` (chain-assembly logic shared with
+  `convert_wikt.py`, extracted so both pipelines use one already-debugged
+  implementation) and `wiktextract_langs.py` (wiktextract's own language-
+  code system, empirically mapped from real frequency data, feeding into
+  the existing `buckets_wikt.py` taxonomy rather than a new one). Full
+  writeup of everything found and fixed during this build: see the commit
+  that introduced it.
 - A standalone demo page exists (`provenance-wiktionary.html`, 245-word
   embedded subset) — Joe has tested and likes it. Note: as of 2026-07-22 this
   file could not be located anywhere on disk (not in the project, Desktop, or

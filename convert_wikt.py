@@ -85,6 +85,7 @@ from corrections import WORD_CORRECTIONS, HUB_EXCLUSIONS
 # time, instead of only accepting an exact-string match against a cited
 # root. See _patch_root_stubs's docstring for why this was needed (issue #17).
 from resolver import _irregular_candidates, _stem_candidates
+from etymology_chain import build_chain
 
 PARQUET_PATH = r"C:\Users\Josep\Desktop\Etymology Project\etymology.parquet"
 
@@ -288,149 +289,18 @@ def resolve_term(rows):
             seen_stages.add(lang)
             english_stage_seq.append([lang, t])
 
-    if not foreign and not roots:
-        if has_english_stage:
-            out = {"p": "Germanic", "d": "Germanic", "chain": [], "prox_kind": "core"}
-            if english_stage_seq:
-                out["native_stages"] = english_stage_seq
-            return out
-        return None
-
-    chain = []
-    chain_langs = []  # parallel to `chain`: the specific language name behind each bucket
-    chain_terms = []  # parallel to `chain_langs`: the specific spelling recorded at that step
-    prox_kind = None
-    # Widened 2026-07-24 from the original `not foreign` condition. Found
-    # while wiring native_stages through to the resolver: `foreign` is NOT
-    # actually empty for most native words with a deep recorded lineage
-    # (e.g. "the"/"walk"/"what") -- their Proto-West-Germanic/Proto-Germanic
-    # steps are recorded as ordinary `inherited_from` edges in the SAME
-    # native group as their Middle English/Old English citations, so they
-    # land in `foreign` (only English-stage NAMES are filtered out, not
-    # Proto-Germanic-family ones) and used to silently claim chain_langs[0]
-    # ahead of the nearer, more relevant stage name. Checking foreign[0]'s
-    # reltype distinguishes this (continuing the SAME native inheritance
-    # thread) from a genuine foreign borrowing like "boss"'s Dutch/French
-    # edges (reltype "borrowed_from", never inherited_from) -- only the
-    # inherited-from case gets the native-stage prepend; a real borrowing
-    # still correctly falls through to the `foreign` loop below untouched.
-    if has_english_stage and (not foreign or foreign[0][0] in INHERIT_RELS):
-        # Purely native inheritance (no foreign borrowing/derivation step at
-        # all) but a deeper root is recorded beyond English (e.g. PIE) --
-        # native core, just deepening past Germanic instead of stopping
-        # there. Without this, a bare has_root pointer (e.g. "could"'s
-        # PIE *gneh3-) would wipe out the native-Germanic base entirely and
-        # report the word as if PIE were its *donor*, which it isn't.
-        chain.append("Germanic")
-        # Nearest recorded native stage name (e.g. "Middle English"), not
-        # just the generic "Germanic" bucket repeated -- added 2026-07-24,
-        # same fix as the native_stages field above. Falls back to the old
-        # generic placeholder only if no stage was actually recorded (rare).
-        if english_stage_seq:
-            chain_langs.append(english_stage_seq[0][0])
-            chain_terms.append(english_stage_seq[0][1])
-        else:
-            chain_langs.append("Germanic")
-            chain_terms.append(None)
-        prox_kind = "inherited"
-    for rt, lang, term in foreign:
-        b = bucket_for_name(lang)
-        if prox_kind is None:
-            prox_kind = _prox_kind_for(rt)
-        if b not in chain:
-            chain.append(b)
-            chain_langs.append(lang)
-            chain_terms.append(term)
-    for lang, term in roots:
-        b = bucket_for_name(lang)
-        if b not in chain:
-            chain.append(b)
-            chain_langs.append(lang)
-            chain_terms.append(term)
-    if not chain:
-        if has_english_stage:
-            return {"p": "Germanic", "d": "Germanic", "chain": [], "prox_kind": "core"}
-        return None
-    if prox_kind is None:
-        prox_kind = "root"
-
-    # PIE-terminal invariant, added 2026-07-23 (Joe: "with"/"low" showed an
-    # ATTESTED language -- Old Norse -- as the deepest point even though the
-    # word's own recorded data ALSO cites PIE, which is chronologically
-    # impossible: PIE, the deepest reconstructable ancestor in this entire
-    # system, can never be shallower than an attested language. Root cause is
-    # the same open problem as the "and" writeup (known issue #6) -- multiple
-    # senses sharing one term_id sometimes sort incoherently across each
-    # other -- and that's still not reliably fixable in general. But THIS
-    # specific consequence always holds regardless of which branch/sense
-    # produced the data, so it's enforced directly: if the "PIE" bucket
-    # appears anywhere but last, move it to the true end.
-    #
-    # REGRESSION caught and fixed same day: a first version of this moved
-    # EVERY proto-language-tagged bucket to the end, not just PIE. That broke
-    # "back", whose real native chain legitimately STARTS at a Proto-West-
-    # Germanic-tagged edge (Middle English -> Old English -> Proto-West
-    # Germanic -> Proto-Germanic -> PIE, one coherent lineage) -- demoting
-    # that whole bucket let an unrelated `borrowed_from French bac` edge
-    # (a different, rarer sense sharing the same term_id) jump into the
-    # Direct Source position instead. Scoping this to PIE specifically -- the
-    # one bucket that should truly never be non-terminal -- fixes low/with
-    # without touching legitimately-non-terminal proto-tagged buckets like
-    # Proto-Germanic/Proto-West-Germanic.
-    if "PIE" in chain and chain[-1] != "PIE":
-        triples = list(zip(chain, chain_langs, chain_terms))
-        non_pie = [t for t in triples if t[0] != "PIE"]
-        pie = [t for t in triples if t[0] == "PIE"]
-        chain = [t[0] for t in non_pie] + [t[0] for t in pie]
-        chain_langs = [t[1] for t in non_pie] + [t[1] for t in pie]
-        chain_terms = [t[2] for t in non_pie] + [t[2] for t in pie]
-
-    # `root_lang`/`root_term`/`root_pie`: the specific deepest attested-or-
-    # reconstructed name (and its exact recorded spelling) reached, plus
-    # whether that name itself goes on to connect to PIE. Added 2026-07-23
-    # for the "Deepest Root" mode redesign -- Joe wants level 3 to name the
-    # actual reconstructed form reached, not just the family bucket, e.g.
-    # "Proto-Germanic (from PIE)" instead of just "PIE". `root_term` (added
-    # same day, for Piece 2) is the exact spelling at that step, e.g.
-    # "*handuz" -- needed to look up the right Wiktionary Reconstruction
-    # page (fetch_reconstructions.py) when `root_pie` is False and root_lang
-    # is a proto-language, since the language name alone isn't enough to
-    # find the specific page. This only surfaces names ALREADY explicitly
-    # recorded in a word's own chain (e.g. `sky` cites "Proto-Germanic" and
-    # "Proto-Indo-European" as separate real edges) -- it does not infer an
-    # uncited intermediate step just because it's linguistically likely
-    # (that would be guessing, not verifying). Words without an explicitly-
-    # recorded proto-language step (e.g. "could", whose has_root PIE pointer
-    # has no intermediate name in its own data) fall back to the generic
-    # bucket name ("Germanic") with no root_term.
-    if chain[-1] == "PIE":
-        if len(chain_langs) >= 2:
-            root_lang, root_term = chain_langs[-2], chain_terms[-2]
-            root_pie = True
-        else:
-            root_lang, root_term = chain_langs[-1], chain_terms[-1]  # chain is PIE alone
-            root_pie = False
-    else:
-        root_lang, root_term = chain_langs[-1], chain_terms[-1]
-        root_pie = False
-
-    out = {"p": chain[0], "d": chain[-1], "chain": chain, "prox_kind": prox_kind,
-           "root_lang": root_lang, "root_pie": root_pie}
-    if root_term:
-        out["root_term"] = root_term
-    # `chain_langs`: the specific language name behind EVERY step of `chain`,
-    # not just the deepest (root_lang already covered that). Added 2026-07-23
-    # for the bar-graph drill-down feature (Joe: clicking "Germanic" should
-    # expand into per-language bars -- Dutch, German, native-inherited, etc.
-    # -- not just repeat the bucket name). Only stored when at least one
-    # entry differs from its own bucket name (i.e. carries real information);
-    # a native-core word's synthetic "Germanic" placeholder entry isn't
-    # worth persisting on its own.
-    if any(cl != b for cl, b in zip(chain_langs, chain)):
-        out["chain_langs"] = chain_langs
-    if english_stage_seq:
-        out["native_stages"] = english_stage_seq
-    return out
+    # The actual chain-assembly rules (PIE-terminal invariant, root_lang/
+    # root_term/root_pie derivation, the native-stage-vs-foreign-branch
+    # distinction) now live in etymology_chain.build_chain -- extracted
+    # 2026-07-24 so convert_wiktextract.py's build pipeline can share this
+    # exact, already-debugged logic instead of a second copy quietly
+    # drifting apart from this one. See that module for the full rationale
+    # of each rule (moved there verbatim, not lost). `foreign`'s raw
+    # reltype strings are normalized to the source-agnostic prox_kind
+    # vocabulary ("borrowed"/"derived"/"inherited") right here, at the one
+    # point in this file that still knows etymology-db's own reltype names.
+    foreign_normalized = [(_prox_kind_for(rt), lang, term) for (rt, lang, term) in foreign]
+    return build_chain(foreign_normalized, roots, has_english_stage, english_stage_seq)
 
 
 # Relation types that name an actual English root/base word a derived word
