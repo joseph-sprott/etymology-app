@@ -216,6 +216,151 @@ for word in NEW_COMPOUNDS:
     check(f"{word} splits into parts", bool(view.parts))
 
 print()
+print("=== Deepest Root must not credit a borrower with PIE descent (2026-07-25) ===")
+# Joe: "mile results as having a PIE root when I can't find one on wiktionary."
+# The PIE root turned out to be real (Wiktionary tags it via a root template,
+# not prose: Latin mille <- PIE *sem- "one"). The actual bug was WHICH language
+# got credited. convert_wiktextract.py sorted chain steps by convert_wikt.py's
+# _DEPTH_HINT tiers, but those describe depth WITHIN one lineage ("Old" stage
+# = 12, Classical = 14, proto = 15+) -- so comparing Latin (14) against
+# Proto-West Germanic (15) is meaningless, they're different branches. That
+# sort REVERSED Wiktionary's own correct order (mile: ME -> OE -> PWG ->
+# Latin), making PWG look deepest, so build_chain rendered "Proto-West
+# Germanic (from PIE)" -- false, since Wiktionary states *miliju is "a
+# borrowing of Latin milia" and so inherits nothing from PIE. Fixed by
+# restricting the sort to single-family chains (buckets_wikt.family_for_name).
+BORROWED_ROOTS = {"mile": "Latin", "street": "Latin", "Friday": "Latin"}
+for word, expect in BORROWED_ROOTS.items():
+    v = RESOLVER.resolve(word).view("root")
+    check(f"{word}: Deepest Root credits {expect}, not the Germanic borrower "
+          f"(got {v.depth_lang!r})",
+          bool(v.depth_lang) and v.depth_lang.startswith(expect))
+
+# Control: genuinely-inherited chains must KEEP their attribution. These are
+# single-family, so the depth sort still applies and is still correct.
+INHERITED_ROOTS = {"sky": "Proto-Germanic", "free": "Middle English"}
+for word, expect in INHERITED_ROOTS.items():
+    v = RESOLVER.resolve(word).view("root")
+    check(f"{word}: still credits {expect} (got {v.depth_lang!r})",
+          bool(v.depth_lang) and v.depth_lang.startswith(expect))
+
+# Control: cross-family chains whose recorded order was ALREADY correct must
+# be left alone -- the earlier version of this sort broke "checkmate" exactly
+# this way, and "table" is the case the sort was originally added for.
+check("table: direct source still French (single-family sort still applies)",
+      RESOLVER.resolve("table").view("direct").bucket == "French")
+check("checkmate: root still Indo-Iranian (cross-family order untouched)",
+      RESOLVER.resolve("checkmate").view("root").bucket == "Indo-Iranian")
+
+print()
+print("=== Tree and analyzer must agree (2026-07-25, the 'intrude' bug) ===")
+# Joe: "intrude doesn't show that it's from Latin when using word search. Why
+# are the two tools not agreeing?" The 2026-07-24 wiktextract migration gave
+# the ANALYZER a new top-priority backend, but etymology_trees.json is still
+# built from the etymology-db parquet alone -- so 1,736 words had a real
+# analyzer chain while Word Search showed only a bare PIE root pointer. Fixed
+# in app.resolve_tree by refusing to let a bare-root-stub tree short-circuit
+# the resolver-backed paths. This guards the whole class, not just "intrude":
+# if the analyzer names a specific donor language, the tree must mention it.
+try:
+    import app as app_module
+    app_module.RESOLVER = RESOLVER
+
+    def _langs_in(tree):
+        out = set()
+        def walk(n):
+            out.add(n["lang"])
+            for c in n["children"]:
+                walk(c)
+        for b in (tree or {}).get("branches") or []:
+            walk(b)
+        return out
+
+    AGREEMENT_WORDS = ["intrude", "species", "computer", "growth", "investment"]
+    for word in AGREEMENT_WORDS:
+        res = RESOLVER.resolve(word)
+        tree = app_module.resolve_tree(word)
+        donor = (res.chain[0].specific_lang or res.chain[0].lang) if res.chain else None
+        langs = _langs_in(tree)
+        check(f"{word}: tree mentions the analyzer's donor {donor!r} (tree has {sorted(langs)[:4]})",
+              bool(donor) and donor in langs)
+
+    # The stub must not win over a genuinely richer stored tree either --
+    # guard the opposite direction so the fix can't over-apply.
+    for word in ["sky", "coffee", "sandal"]:
+        stored = app_module._lookup_tree_direct(word)
+        served = app_module.resolve_tree(word)
+        check(f"{word}: rich stored tree still served verbatim",
+              stored is not None and served == stored)
+except ImportError as e:
+    check(f"could not import app.py to check tree/analyzer agreement ({e})", False)
+
+print()
+print("=== Tree: no duplicate orphan branches (2026-07-24) ===")
+# Joe: "sometimes there's a random PIE path that doesn't link to the main
+# link to the modern word... just feels incomplete." Root cause (verified
+# against the live data, not guessed): etymology-db records some ancestor
+# citations as EXTRA parentless rows duplicating a term the tree already
+# shows, and build_tree() -- correctly, per its own no-merging policy --
+# turns every parentless row into its own top-level branch. dedupe_branches
+# (build_etymology_trees.py) now drops a branch ONLY when it's a single
+# childless node exactly restating a (lang, term) already displayed.
+#
+# Both directions are checked below, because the FAILURE MODE OF THE FIX
+# would be over-deletion: a genuinely-new-but-stranded citation must
+# survive, since dropping it would silently lose real information.
+try:
+    import app as app_module
+    app_module.RESOLVER = RESOLVER
+
+    def _pairs_in(node, out):
+        out.append((node["lang"], node["term"]))
+        for c in node["children"]:
+            _pairs_in(c, out)
+
+    def _size(node):
+        return 1 + sum(_size(c) for c in node["children"])
+
+    # (a) No tree may show a bare orphan restating something already shown.
+    DEDUP_WORDS = ["sky", "sandal", "fruit"]
+    for word in DEDUP_WORDS:
+        tree = app_module.resolve_tree(word)
+        if tree is None:
+            check(f"{word}: tree exists to check for duplicate orphans", False)
+            continue
+        branches = tree["branches"]
+        elsewhere = []
+        for b in branches:
+            if _size(b) > 1:
+                _pairs_in(b, elsewhere)
+        orphans = [(b["lang"], b["term"]) for b in branches if _size(b) == 1]
+        dupes = [p for p in orphans if p in elsewhere or orphans.count(p) > 1]
+        check(f"{word}: no duplicate orphan branch (got {dupes})", not dupes)
+
+    # (b) Genuinely-new stranded citations must NOT have been deleted --
+    # these are deeper/different terms than anything their main chain
+    # reaches (religion's PIE *h₂leg-, coffee's Arabic triliteral root
+    # ق ه ي vs. the surface form قَهْوَة already in its chain).
+    PRESERVED = {"religion": "Proto-Indo-European", "coffee": "Arabic"}
+    for word, expect_lang in PRESERVED.items():
+        tree = app_module.resolve_tree(word)
+        if tree is None:
+            check(f"{word}: tree exists to check preservation", False)
+            continue
+        langs = [b["lang"] for b in tree["branches"] if _size(b) == 1]
+        check(f"{word}: genuinely-new stranded {expect_lang} citation preserved "
+              f"(single-node branches: {langs})",
+              expect_lang in langs)
+
+    # (c) The real, substantive chains must be untouched by the dedup.
+    sandal = app_module.resolve_tree("sandal")
+    check("sandal: all multi-node branches preserved (3 expected)",
+          sandal is not None
+          and sum(1 for b in sandal["branches"] if _size(b) > 1) == 3)
+except ImportError as e:
+    check(f"could not import app.py to check tree dedup ({e})", False)
+
+print()
 total = passed + len(failures)
 print(f"{passed}/{total} checks passed")
 if failures:

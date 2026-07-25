@@ -241,7 +241,13 @@ WORD_CORRECTIONS = {
     "zoo":  {"p": "Greek", "d": "Greek", "chain": ["Greek"], "prox_kind": "clipping"},  # clipping of "zoological garden" <- "zoology" <- Greek zoion + logia
     "plow": {"p": "Norse", "d": "Germanic", "chain": ["Norse", "Germanic"], "prox_kind": "inherited",
              "root_lang": "Proto-Germanic", "root_pie": False},  # American spelling of "plough" -- Wiktionary explicitly cross-references it as an alternative spelling; mirrors plough's own entry exactly
-    "selves": {"p": "Germanic", "d": "PIE", "chain": ["Germanic", "PIE"], "prox_kind": "inherited"},  # irregular f->v plural of "self" (cf. knife/knives, wolf/wolves) -- the resolver's suffix-stripping only undoes regular "-es", not this consonant alternation, so "selves" was missing even though "self" itself resolves fine; needed as the compound part for ourselves/themselves
+    # "selves" REMOVED 2026-07-25: it existed only because the resolver's
+    # suffix-stripping couldn't undo the f->v plural alternation (self ->
+    # selves), the same gap later generalized into a `_fv_candidates` rule.
+    # Both are now obsolete -- wiktextract records "selves" as a plural-tagged
+    # form of "self" outright (see inflections.py), and removal was verified
+    # by dry run first: "selves" still resolves Germanic, and ourselves/
+    # themselves still split into their component words correctly.
     # Other missing compound-part words checked and deliberately NOT added --
     # each is genuinely disputed/uncertain/unwritten on live Wiktionary itself,
     # so filling one in would be guessing, not verifying: "grid" (back-

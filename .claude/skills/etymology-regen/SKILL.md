@@ -45,15 +45,38 @@ do.
   inheritance patches run, as well as at `WiktionaryResolver` load time --
   see that resolver's docstring). Takes **~15-20 minutes**.
 - **`etymology_trees.json`** (via `python build_etymology_trees.py`) --
-  needed only if `tree_corrections.py` changed, OR a function
-  `build_etymology_trees.py` imports from `convert_wikt.py` changed (check
-  its import line: currently `ANCESTRY_RELS, ROOT_RELS, GROUP_MARKER_RELS,
-  NON_DONOR_LANGS, PARQUET_PATH, _depth_hint`). A `corrections.py`/
-  `compounds.py`-only change does NOT require this -- those aren't read by
-  the tree builder at all. Also takes **~15-20 minutes**.
+  needed if `build_etymology_trees.py` ITSELF changed, OR `tree_corrections.py`
+  changed, OR a function `build_etymology_trees.py` imports from
+  `convert_wikt.py` changed (check its import line: currently
+  `ANCESTRY_RELS, ROOT_RELS, GROUP_MARKER_RELS, NON_DONOR_LANGS,
+  PARQUET_PATH, _depth_hint`). A `corrections.py`/`compounds.py`-only change
+  does NOT require this -- those aren't read by the tree builder at all.
+  Also takes **~15-20 minutes**.
+  - **Before rebuilding, back up the current `etymology_trees.json`** (16MB,
+    a plain `Copy-Item` to a scratch path) whenever the change alters tree
+    STRUCTURE rather than just adding/fixing one word. The rebuild
+    overwrites in place, and having the previous file is what makes a real
+    before/after diff possible -- that diff is how the 2026-07-24 dedup
+    change proved it dropped only redundant branches and never lost a
+    multi-node branch or fabricated one. Without the baseline you can only
+    check that the new file looks reasonable, not that nothing regressed.
 
-Both scripts read the raw parquet fresh each run (~2 seconds) and do a full
-364,161-term pass -- there is no incremental/partial regen. Run each in the
+- **`inflections.json`** (via `python build_inflections.py`) -- needed if
+  `build_inflections.py` changed or the wiktextract dump was refreshed.
+  **~2-3 minutes.** Note this reads the **wiktextract JSONL dump**
+  (`Etymology Project\wiktextract_data\`), NOT the parquet. **Order matters:**
+  `convert_wikt.py` imports `inflection_candidates` and uses it at build time,
+  so `inflections.json` must exist and be current BEFORE regenerating
+  `wikt_words.json`, or the inheritance bridge (`unheard`->`hear`) silently
+  degrades.
+- **`word_info.json`** (via `python build_word_info.py`) -- definitions, part
+  of speech, cognates, doublets. **~5-8 minutes.** Reads BOTH the wiktextract
+  dump and the parquet, and scopes itself to words present in
+  `wikt_words.json`/`wiktextract_words.json` -- so regenerate it AFTER either
+  of those changes, or newly-added words will have no definition.
+
+The two etymology converters read the raw parquet fresh each run (~2 seconds)
+and do a full 364,161-term pass -- there is no incremental/partial regen. Run each in the
 background and poll rather than blocking, and don't assume a timeout under
 ~15 minutes means it hung. Deciding WHICH of the two to run is a judgment
 call based on what actually changed -- not scripted, since it depends on

@@ -84,7 +84,12 @@ from corrections import WORD_CORRECTIONS, HUB_EXCLUSIONS
 # can try the SAME candidate forms the resolver itself would try at query
 # time, instead of only accepting an exact-string match against a cited
 # root. See _patch_root_stubs's docstring for why this was needed (issue #17).
-from resolver import _irregular_candidates, _stem_candidates
+# `inflection_candidates` moved to its own module 2026-07-25 when the
+# hand-typed _IRREGULAR_FORMS table it used to wrap was replaced by real
+# wiktextract `forms` data -- imported from there rather than from resolver.py
+# so both sides keep sharing ONE implementation (see inflections.py).
+from resolver import _stem_candidates
+from inflections import inflection_candidates
 from etymology_chain import build_chain
 
 PARQUET_PATH = r"C:\Users\Josep\Desktop\Etymology Project\etymology.parquet"
@@ -440,9 +445,9 @@ def _patch_root_stubs(words, eng):
     suffix stemming ("explained" -> "explain"). Both were falling through
     even though the resolver itself could clearly answer them. Now falls
     back to the SAME candidate-generation the resolver uses at query time
-    (`_irregular_candidates` then `_stem_candidates`, imported from
-    resolver.py -- pure string functions, no circular dependency) when the
-    cited root isn't a literal key, so convert_wikt.py's build-time
+    (`inflection_candidates` from inflections.py, then `_stem_candidates`
+    from resolver.py -- pure string/lookup functions, no circular dependency)
+    when the cited root isn't a literal key, so convert_wikt.py's build-time
     inheritance and the resolver's query-time fallback cascade can no longer
     silently diverge on what counts as "resolvable."
     """
@@ -503,7 +508,7 @@ def _patch_root_stubs(words, eng):
                     # as above -- these candidate functions lowercase their
                     # input regardless, so this only ever matches a genuine
                     # lowercase entry, never a capitalize() coincidence.
-                    for cand in _irregular_candidates(root_key.lower()) + _stem_candidates(root_key.lower()):
+                    for cand in inflection_candidates(root_key.lower()) + _stem_candidates(root_key.lower()):
                         cand_entry = words.get(cand)
                         if cand_entry is not None and cand_entry.get("prox_kind") != "root":
                             root_entry, resolved_key = cand_entry, cand

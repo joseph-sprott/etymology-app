@@ -103,6 +103,33 @@ End goal: **every possible English word in the database.**
   `beef`/`government`/`justice`/`army`→French, `the`→Germanic (inherited).
   (`trust` moved from Norse to Germanic 2026-07-24 -- see the wiktextract
   entry below, a genuine scholarly correction, not a regression.)
+- **`inflections.json` — 663,494 inflected forms** (2026-07-25). Replaced
+  `resolver.py`'s hand-typed `_IRREGULAR_FORMS` (189 entries, whose own
+  comment admitted it covered "~100 of English's ~200" irregular verbs), the
+  `_fv_candidates` wolf/wolves rule, and the `"selves"` hand-patch in
+  `corrections.py` -- 89 lines of hand-maintained code deleted, not extended.
+  Built by `build_inflections.py` from wiktextract's tagged `forms` field;
+  read via `inflections.py`, shared by BOTH resolver.py (query time) and
+  convert_wikt.py (build time) so the two can't diverge. **Scope limit, load-
+  bearing:** `forms` records INFLECTION only (plural/past/participle/
+  comparative/superlative), never DERIVATION -- so `_SUFFIXES`/
+  `_stem_variants`/`_cy_candidates` stay and still handle -ness/-ment/-tion/
+  -able/-ly/-al/-cy. Honest measurement: on the 347-paragraph corpus this
+  fixed only 2 words (67 -> 65 real-gap), because the wiktextract migration
+  the day before had already fixed most inflection failures. Its real value
+  is ending the find-a-gap-hand-add-an-entry treadmill dictionary-wide.
+- **`word_info.json` — 278,131 words** with definition, part of speech,
+  cognates and doublets (2026-07-25; 278,034 definitions, 12,147 with
+  cognates, 8,084 with doublets, 34.9MB). Built by `build_word_info.py` from
+  the wiktextract dump UNIONED with etymology-db's `cognate_of`/`doublet_with`
+  rows -- both sources were already on disk and read by nothing. Cognates and
+  doublets are SIBLING relations and are deliberately kept OUT of the lineage
+  chain (a cognate is not an ancestor); the `ANCESTRY_RELS` filter is
+  untouched. Scoped to words present in the etymology databases: all 1.38M
+  glosses would be ~165MB, too heavy to load at startup for a tooltip.
+  Language names for cognates are harvested from the dump's own
+  `translations`/`descendants` code+name pairs rather than hand-listed --
+  that cut unnamed codes from 437 to 70 with no table to maintain.
 - **`wiktextract_words.json` — 109,216 English words with a genuine
   structured donor/root chain**, added 2026-07-24 as a NEW top-priority
   resolver (`WiktextractResolver`, layered ahead of `WiktionaryResolver` via

@@ -8,6 +8,64 @@ change).
 
 ---
 
+## 2026-07-25
+
+**Updated `etymology-regen`** — its "which file needs rebuilding" list didn't
+mention `inflections.json` or `word_info.json`, both added today, nor
+`build_inflections.py`/`build_word_info.py` as triggers. Added them with their
+real runtimes and the fact that they read the wiktextract dump rather than the
+parquet (a different input from every other build step, so the existing
+"reads the raw parquet fresh each run" note was actively misleading for these
+two). Also recorded that `convert_wikt.py` now depends on `inflections.json`
+existing at build time, so the two must be regenerated in order.
+
+**Updated `etymology-fix-word`** — added a "both tools must agree at runtime"
+verification step, prompted by Joe's report that "intrude" showed Latin in the
+analyzer but not in Word Search. The skill already said to edit BOTH
+`corrections.py` and `tree_corrections.py`, but that's necessary-not-
+sufficient: the two features read different stores, so a word can diverge
+without either file being wrong (here, the tree builder had no knowledge of
+the wiktextract backend added the day before — 1,736 words affected, no test
+caught it). The new step gives the exact two commands to compare and, more
+importantly, says that a mismatch of this shape is STRUCTURAL and must not be
+papered over with a per-word `tree_corrections.py` entry, which would hide the
+whole class behind one word.
+
+**Fixed a real flaw in `etymology-skill-audit`'s own `list_skills.py`** — it
+reported `scripts: (none)` for `etymology-fix-word` and
+`etymology-coverage-scan`, which was wrong and actively misleading: both have
+had `check_word.py`/`check_raw_data.py` since they were written, kept at the
+project root because that's this project's convention for a script two or
+more skills share. A future session trusting "(none)" would rebuild tooling
+that already exists — precisely the duplication the composability dimension
+exists to catch, produced by the audit tool itself. Now scans each SKILL.md
+for referenced project-root scripts and reports them on a `shared:` line.
+
+**Discipline note (no skill change):** the `etymology-fix-word` skill's
+methodology held up again — the "dry-run before deleting" habit it encodes
+caught a real error today. The plan called for deleting 6 "redundant" plural
+entries from `compounds.py`; simulating the deletion first showed 4 of them
+(`foothills`, `downsides`, `earlobes`, `crossroads`) would regress to Unknown,
+because the resolver's retry loop calls `_try()` (backends only) and never
+consults the compound table. Deleting them on the plan's say-so would have
+shipped a silent regression that no existing test covered.
+
+## 2026-07-24 (tree dedup pass)
+
+**Updated `etymology-regen`** — found a real gap while using it for the tree
+duplicate-branch fix: its "which file needs rebuilding" list named
+`tree_corrections.py` and `convert_wikt.py`-imported functions as triggers
+for `build_etymology_trees.py`, but never the obvious third case — a change
+to `build_etymology_trees.py` ITSELF, which is exactly what that task was.
+Added it, plus a new sub-point telling the agent to BACK UP the existing
+16MB `etymology_trees.json` before any structure-altering rebuild: the
+rebuild overwrites in place, and the before/after diff is the only thing
+that can actually prove a structural change didn't silently drop or
+fabricate branches (it's what verified the dedup change dropped exactly
+1,487 redundant branches and zero multi-node ones). Learned by doing it —
+the backup was taken by instinct on this task and turned out to be the
+load-bearing piece of the verification.
+
 ## 2026-07-24 (later)
 
 **Created `etymology-parallel-sync`** — packages the backup-then-pull-then-

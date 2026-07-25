@@ -16,6 +16,8 @@ from buckets import BUCKET_ORDER
 from buckets_wikt import bucket_for_name
 from convert_wikt import _depth_hint
 from resolver import default_resolver
+import inflections
+import word_info
 
 app = Flask(__name__)
 
@@ -39,35 +41,115 @@ _CORE_FAMILIES = {"Germanic", "Norse", "French", "Latin", "Greek",
                    "Romance (other)", "Celtic", "PIE"}
 
 
-def sort_per_word(per_word, word_sort):
+def build_word_card(word):
+    """
+    Everything the hover card shows for one word: part of speech, definition,
+    and its direct lineage. Added 2026-07-25 (Joe: hovering a word should give
+    its definition/type, a mini lineage, and a way to search it).
+
+    Lineage comes from the Resolution's OWN already-computed chain
+    (`chain_langs` where available, else the bucket names), NOT from
+    resolve_tree(). That's deliberate: resolve_tree costs a resolver hit per
+    miss and returns the full multi-branch structure, which is far more than a
+    tooltip needs and far too slow to do for every word in a pasted text.
+    Reading the chain keeps the card in lockstep with the bar-graph answer the
+    analyzer already gave for that same word -- one database, one answer, per
+    this module's RESOLVER note above.
+
+    Returns None when there's nothing worth showing, so the template can skip
+    the card entirely rather than render an empty box.
+    """
+    rec = word_info.lookup(word)
+    res = RESOLVER.resolve(word)
+
+    # An inflected form ("wolves", "hidden") has no dictionary entry of its
+    # own -- Wiktionary defines the base word. Fall back to it so hovering an
+    # inflected word still shows a definition, labelled with the base so the
+    # card never implies the definition belongs to the surface form.
+    base = None
+    if rec is None or not (rec.get("gloss") or rec.get("pos")):
+        candidate = inflections.base_form(word) or res.inherited_from
+        if candidate and candidate.lower() != word.lower():
+            base_rec = word_info.lookup(candidate)
+            if base_rec and (base_rec.get("gloss") or base_rec.get("pos")):
+                rec, base = base_rec, candidate
+
+    lineage = []
+    if res.chain:
+        langs = [link.specific_lang or link.lang for link in res.chain]
+        seen = set()
+        for lang, link in zip(langs, res.chain):
+            if lang and lang not in seen:
+                seen.add(lang)
+                lineage.append({"lang": lang, "bucket": link.bucket})
+    elif res.english_stage_lang:
+        lineage.append({"lang": res.english_stage_lang, "bucket": "Germanic"})
+
+    pos = ", ".join(rec["pos"]) if rec and rec.get("pos") else None
+    gloss = rec.get("gloss") if rec else None
+    if not (pos or gloss or lineage):
+        return None
+    return {"pos": pos, "gloss": gloss, "lineage": lineage,
+            "defined_by": base, "inherited_from": res.inherited_from}
+
+
+def _dedupe_keep_order(per_word):
+    """
+    Collapse repeated words to one row each, carrying an occurrence count and
+    keeping first-appearance order. Extracted 2026-07-25 from the "frequency"
+    branch below so the new collapse-duplicates toggle reuses the exact same
+    counting rather than growing a second, subtly-different implementation.
+    """
+    counts = Counter(w.word for w in per_word)
+    first_seen = {}
+    for w in per_word:
+        first_seen.setdefault(w.word, w)
+    return counts, first_seen
+
+
+def sort_per_word(per_word, word_sort, collapse_duplicates=False):
     """
     Returns a list of (ResolvedView, count_or_None) pairs for the "Per word"
     section, added 2026-07-23 (Joe: filter the per-word results by language
     group, input order, "and a couple other interesting filters"). Display-
     only -- doesn't touch Analysis/per_word itself (input order stays the
     source of truth for the percentage breakdown).
+
+    `collapse_duplicates` (2026-07-25, Joe: "toggle off duplicated words in
+    the main search function") shows each unique word once with an occurrence
+    count. Also display-only, and deliberately so: a word used 10 times really
+    is 10 tokens of its language in that text, so deduping the STATS would
+    silently change what the tool measures from "share of this text" to
+    "share of this vocabulary". Those are both legitimate views, but the
+    second is a different feature and shouldn't arrive disguised as a display
+    toggle. "frequency" sort already implies collapsing, so it's unaffected.
     """
+    if word_sort == "frequency":
+        # Dedupe repeated words, most-repeated first -- most useful on long
+        # texts/whole books where the same word appears many times. Already
+        # collapsing by definition, so the toggle is a no-op here.
+        counts, first_seen = _dedupe_keep_order(per_word)
+        return [(first_seen[word], count) for word, count in counts.most_common()]
+
+    counts = None
+    if collapse_duplicates:
+        counts, first_seen = _dedupe_keep_order(per_word)
+        per_word = list(first_seen.values())
+
     if word_sort == "language":
         order = {b: i for i, b in enumerate(BUCKET_ORDER)}
         rows = sorted(per_word, key=lambda w: (order.get(w.bucket, 999), w.word))
-        return [(w, None) for w in rows]
-    if word_sort == "alpha":
-        return [(w, None) for w in sorted(per_word, key=lambda w: w.word)]
-    if word_sort == "distinctive":
+    elif word_sort == "alpha":
+        rows = sorted(per_word, key=lambda w: w.word)
+    elif word_sort == "distinctive":
         # Rarest/most unexpected origins first -- surfaces the interesting
         # loanwords in a text instead of burying them under the Germanic/
         # French/Latin majority.
         rows = sorted(per_word, key=lambda w: (w.bucket in _CORE_FAMILIES, w.word))
-        return [(w, None) for w in rows]
-    if word_sort == "frequency":
-        # Dedupe repeated words, most-repeated first -- most useful on long
-        # texts/whole books where the same word appears many times.
-        counts = Counter(w.word for w in per_word)
-        first_seen = {}
-        for w in per_word:
-            first_seen.setdefault(w.word, w)
-        return [(first_seen[word], count) for word, count in counts.most_common()]
-    return [(w, None) for w in per_word]  # "input" (default): unchanged order
+    else:
+        rows = per_word  # "input" (default): unchanged order
+
+    return [(w, counts[w.word] if counts else None) for w in rows]
 
 # Etymology-tree feature, 2026-07-23 (Joe: "I really like the etymology tree
 # that Wiktionary provides"). Loaded from etymology_trees.json
@@ -110,6 +192,72 @@ def _lookup_tree_direct(word):
     today's fix.
     """
     return TREES.get(word.lower()) or TREES.get(word)
+
+
+# A stored tree whose every branch is a bare, childless `has_root` pointer
+# isn't really a lineage -- it's the tree-side equivalent of the resolver's
+# `prox_kind == "root"` stub (see Resolution.prox_kind), and the same rule
+# applies: never let a stub outrank a real answer.
+_ROOT_ONLY_RELS = {"has_root"}
+
+
+def _is_bare_root_tree(tree):
+    branches = (tree or {}).get("branches") or []
+    if not branches:
+        return True
+    return all(not b.get("children") and b.get("reltype") in _ROOT_ONLY_RELS
+               for b in branches)
+
+
+def _tree_from_chain(word, res, stub=None):
+    """
+    Build a nested lineage tree from the resolver's OWN chain.
+
+    Added 2026-07-25 (Joe: "intrude doesn't show that it's from Latin when
+    using word search. Why are the two tools not agreeing?"). Root cause: the
+    2026-07-24 wiktextract migration added a new top-priority resolver backend
+    for the ANALYZER, but etymology_trees.json is still built by
+    build_etymology_trees.py from the etymology-db parquet alone. So for any
+    word wiktextract knows better -- 1,736 of them, measured, including
+    computer/growth/investment/species -- the analyzer had a real chain while
+    Word Search showed only whatever bare PIE root pointer the older data had.
+    Two features, two databases: exactly what this project's standing "every
+    feature must pool from the same database" rule forbids, and the same
+    failure shape as known issue #16.
+
+    Rather than teach the tree builder about wiktextract (a second, parallel
+    tree pipeline that could drift from the resolver all over again), this
+    reads the answer the shared RESOLVER already computed -- the same
+    principle resolve_tree() already applies for inherited_from/compound_parts.
+
+    Terms per step are recovered where available: the discarded stub's own
+    nodes supply the deepest reconstructed form (e.g. PIE *trewd-), and
+    root_lang/root_term supply the attested one (Latin intrudere). Steps with
+    no recorded spelling render as language-only nodes rather than inventing
+    a form.
+    """
+    if not res.chain:
+        return None
+    terms = {}
+    for b in (stub or {}).get("branches") or []:
+        if b.get("term") and b.get("lang"):
+            terms.setdefault(b["lang"], b["term"])
+    if res.root_lang and res.root_term:
+        terms.setdefault(res.root_lang, res.root_term)
+
+    langs = []
+    for link in res.chain:
+        lang = link.specific_lang or link.lang
+        if lang and lang not in langs:
+            langs.append(lang)
+    if not langs:
+        return None
+
+    node = None
+    for lang in reversed(langs):  # deepest first, nesting outward
+        node = {"lang": lang, "term": terms.get(lang), "reltype": "derived_from",
+                "children": [node] if node else []}
+    return {"lang": "English", "term": word, "branches": [node]}
 
 
 def resolve_tree(word, _depth=0):
@@ -156,7 +304,12 @@ def resolve_tree(word, _depth=0):
     own `seen_groups` guard for the same class of risk).
     """
     direct = _lookup_tree_direct(word)
-    if direct is not None or _depth > 5:
+    # A real stored tree still wins outright, unchanged. But a bare-root-stub
+    # tree no longer short-circuits the resolver-backed paths below -- see
+    # _is_bare_root_tree / _tree_from_chain (2026-07-25, the "intrude" bug).
+    if direct is not None and not _is_bare_root_tree(direct):
+        return direct
+    if _depth > 5:
         return direct
     res = RESOLVER.resolve(word)
     if res.inherited_from and res.inherited_from != word:
@@ -184,10 +337,20 @@ def resolve_tree(word, _depth=0):
         cap_tree = TREES.get(word.capitalize())
         if cap_tree is not None:
             return cap_tree
+        # Prefer the full chain over a single flattened node whenever the
+        # resolver has a real (non-stub) one -- this is what actually fixes
+        # the "intrude shows PIE but not Latin" class. Falls through to the
+        # original single-node synthesis when the chain is only a bare stub.
+        if res.prox_kind != "root":
+            built = _tree_from_chain(word, res, direct)
+            if built is not None:
+                return built
         node = {"lang": res.root_lang, "term": res.root_term,
                 "reltype": "derived_from", "children": []}
         return {"lang": "English", "term": word, "branches": [node]}
-    return None
+    # Nothing better found. Return the thin stored stub if we had one -- it's
+    # real (if incomplete) recorded data, and better than claiming no data.
+    return direct
 
 
 def node_slug(node):
@@ -623,9 +786,85 @@ PAGE = """
     .tree-view-toggle { margin-left: 1rem; font-size: 0.9rem; color: var(--text-secondary); }
     .tree-view-toggle label { margin-right: 0.5rem; }
     .tree-diagram { max-width: 100%; height: auto; display: block; margin-top: 0.5rem; }
+
+    /* Hover cards (2026-07-25). Pure CSS -- this app has no JavaScript, by
+       design (see the <details> drill-down and the server-computed SVG
+       diagram). Card markup is pre-rendered inside each word tag and simply
+       revealed on hover/focus-within, so it also works for keyboard users
+       tabbing through the word links. */
+    .hint { font-size: 0.85rem; color: var(--text-secondary); margin: 0.2rem 0 0.5rem; }
+    .word-tag.has-card { position: relative; }
+    .word-link { color: inherit; text-decoration: none; border-bottom: 1px dotted var(--text-secondary); }
+    .word-link:hover { border-bottom-style: solid; }
+    .word-card {
+      display: none; position: absolute; left: 0; top: 100%; z-index: 40;
+      min-width: 15rem; max-width: 22rem; margin-top: 0.3rem;
+      padding: 0.5rem 0.65rem; border-radius: 5px;
+      background: var(--surface); border: 1px solid var(--track-bg);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.16);
+      font-size: 0.85rem; line-height: 1.35; white-space: normal; text-align: left;
+      cursor: default;
+    }
+    .word-tag.has-card:hover .word-card,
+    .word-tag.has-card:focus-within .word-card { display: block; }
+    /* Flip to the right edge for tags near the end of a line, so the card
+       doesn't run off-screen. Pure-CSS approximation of edge detection. */
+    .words .word-tag.has-card:nth-child(n) .word-card { left: 0; right: auto; }
+    .wc-head { display: block; font-weight: 600; }
+    .wc-pos { margin-left: 0.4rem; font-weight: 400; font-style: italic; color: var(--text-secondary); }
+    .wc-gloss { display: block; margin-top: 0.25rem; color: var(--text-secondary); }
+    .wc-lineage { display: block; margin-top: 0.4rem; }
+    .wc-step {
+      display: inline-block; margin: 0.1rem 0; padding: 0.02rem 0.35rem;
+      background: var(--surface-2); border-left: 3px solid var(--c-muted); border-radius: 3px;
+    }
+    .wc-arrow { color: var(--text-secondary); margin: 0 0.15rem; }
+    .wc-note { display: block; margin-top: 0.35rem; font-style: italic; color: var(--text-secondary); }
+    .wc-cta { display: block; margin-top: 0.4rem; font-size: 0.8rem; color: var(--text-secondary); }
+
+    /* Word Search: cognates & doublets */
+    .rel-section { margin-top: 1.1rem; }
+    .rel-section h4 { margin: 0 0 0.15rem; font-size: 1rem; }
+    .rel-explain { font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 0.45rem; max-width: 46rem; }
+    .rel-list { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+    .rel-item {
+      display: inline-block; padding: 0.08rem 0.5rem; border-radius: 3px;
+      background: var(--surface-2); border-left: 4px solid var(--c-muted); font-size: 0.9rem;
+    }
+    .rel-lang { color: var(--text-secondary); margin-right: 0.35rem; font-size: 0.85rem; }
+    .rel-empty { font-size: 0.9rem; color: var(--text-secondary); font-style: italic; }
+    .rel-more { font-size: 0.85rem; color: var(--text-secondary); }
+    .search-meta { font-size: 0.9rem; color: var(--text-secondary); margin: 0.1rem 0 0.6rem; }
+    .search-pos { font-style: italic; }
   </style>
 </head>
 <body>
+  {# Hover card for one analyzed word: part of speech, definition, and its
+     direct lineage. Content is pre-rendered server-side and revealed by a
+     pure-CSS :hover rule -- no JavaScript anywhere, consistent with the
+     <details> drill-down and the server-computed SVG diagram. #}
+  {% macro word_card(word, note=None) %}
+    {%- set card = word_cards.get(word) -%}
+    {%- if card or note %}
+    <span class="word-card">
+      <span class="wc-head">{{ word }}{% if card and card.pos %}<span class="wc-pos">{{ card.pos }}</span>{% endif %}</span>
+      {%- if card and card.defined_by %}<span class="wc-note">defined under &ldquo;{{ card.defined_by }}&rdquo;</span>{% endif %}
+      {%- if card and card.gloss %}<span class="wc-gloss">{{ card.gloss }}</span>{% endif %}
+      {%- if card and card.lineage %}
+      <span class="wc-lineage">
+        {%- for step in card.lineage %}
+        <span class="wc-step" style="border-left-color: var(--c-{{ bucket_slug(step.bucket) }})">{{ step.lang }}</span>
+        {%- if not loop.last %}<span class="wc-arrow">&larr;</span>{% endif %}
+        {%- endfor %}
+      </span>
+      {%- endif %}
+      {%- if card and card.inherited_from %}<span class="wc-note">via {{ card.inherited_from }}</span>{% endif %}
+      {%- if note %}<span class="wc-note">{{ note }}</span>{% endif %}
+      <span class="wc-cta">click to search &rarr;</span>
+    </span>
+    {%- endif %}
+  {% endmacro %}
+
   <h1>Etymology Analyzer</h1>
   <form method="post">
     <input type="hidden" name="form" value="analyze">
@@ -640,6 +879,11 @@ PAGE = """
     <div class="mode-toggle">
       <label><input type="checkbox" name="exclude_connectors" {{ 'checked' if exclude_connectors else '' }}>
         Exclude connector words (a, the, to, of, and, ...)</label>
+    </div>
+    <div class="mode-toggle">
+      <label><input type="checkbox" name="collapse_duplicates" {{ 'checked' if collapse_duplicates else '' }}>
+        Collapse duplicate words (show each word once, with a count)</label>
+      <span class="hint">Affects the word list below only &mdash; percentages still count every occurrence.</span>
     </div>
     <div class="mode-toggle">
       <label>Per-word order:
@@ -691,23 +935,25 @@ PAGE = """
   {% endfor %}
 
   <h3>Per word</h3>
+  <p class="hint">Hover any word for its definition and lineage &middot; click to open it in Word Search</p>
   <div class="words">
     {% for w, count in word_rows %}
       {% if w.parts %}
-      <span class="word-tag compound" title="not in our database on its own -- shown as its two component words">
-        <span class="compound-word">{{ w.word }}</span>{% if count %} <span class="word-count">&times;{{ count }}</span>{% endif %} &rarr;
+      <span class="word-tag compound has-card">
+        <a class="word-link" href="/?word={{ w.word|urlencode }}" target="_blank" rel="noopener"><span class="compound-word">{{ w.word }}</span></a>{% if count %} <span class="word-count">&times;{{ count }}</span>{% endif %} &rarr;
         {%- for p in w.parts %}
         <span class="compound-part" style="border-left-color: var(--c-{{ root_slug(p, analysis.mode) }})">{{ p.word }}
           {%- if analysis.mode == 'root' and p.depth_lang and p.depth_lang != p.bucket %} {{ p.depth_lang }}
           {%- else %} {{ p.bucket }}
           {%- endif %}</span>{% if not loop.last %}<span class="compound-plus">+</span>{% endif %}
         {%- endfor %}
+        {{ word_card(w.word, "not in our database on its own -- shown as its component words") }}
       </span>
       {% else %}
-      <span class="word-tag{{ ' unknown' if w.bucket == 'Unknown' else '' }}" style="border-left-color: var(--c-{{ root_slug(w, analysis.mode) }})">{{ w.word }}{% if count %} <span class="word-count">&times;{{ count }}</span>{% endif %} &rarr;
+      <span class="word-tag has-card{{ ' unknown' if w.bucket == 'Unknown' else '' }}" style="border-left-color: var(--c-{{ root_slug(w, analysis.mode) }})"><a class="word-link" href="/?word={{ w.word|urlencode }}" target="_blank" rel="noopener">{{ w.word }}</a>{% if count %} <span class="word-count">&times;{{ count }}</span>{% endif %} &rarr;
         {%- if analysis.mode == 'root' and w.depth_lang and w.depth_lang != w.bucket %} {{ w.depth_lang }}
         {%- else %} {{ w.bucket }}
-        {%- endif %}</span>
+        {%- endif %}{{ word_card(w.word) }}</span>
       {% endif %}
     {% endfor %}
   </div>
@@ -727,17 +973,24 @@ PAGE = """
   {% endmacro %}
 
   <div class="tree-lookup">
-    <h3>Etymology tree</h3>
+    <h3>Word search</h3>
     <form method="post">
       <input type="hidden" name="form" value="tree">
-      <input type="text" name="tree_word" placeholder="Look up a word..." value="{{ tree_word }}">
-      <button type="submit">Show tree</button>
+      <input type="text" name="tree_word" placeholder="Search a word..." value="{{ tree_word }}">
+      <button type="submit">Search</button>
       <span class="tree-view-toggle">
         <label><input type="radio" name="tree_view" value="list" {{ 'checked' if tree_view == 'list' else '' }}> List</label>
         <label><input type="radio" name="tree_view" value="diagram" {{ 'checked' if tree_view == 'diagram' else '' }}> Diagram</label>
       </span>
     </form>
     {% if tree_word %}
+      {% if info and (info.pos or info.gloss) %}
+      <p class="search-meta">
+        {%- if info.pos %}<span class="search-pos">{{ info.pos|join(', ') }}</span>{% endif %}
+        {%- if info.pos and info.gloss %} &middot; {% endif %}
+        {%- if info.gloss %}{{ info.gloss }}{% endif %}
+      </p>
+      {% endif %}
       {% if tree %}
         {% if tree_view == 'diagram' %}
           {% set d = build_diagram(tree) %}
@@ -761,6 +1014,42 @@ PAGE = """
       {% else %}
       <p class="tree-error">No recorded etymology data for "{{ tree_word }}".</p>
       {% endif %}
+
+      {# Cognates and doublets. These are SIBLING relations, deliberately kept
+         out of the lineage tree above (a cognate is not an ancestor) -- see
+         build_word_info.py. Both sections always render when a word was
+         searched, with an explicit empty state, so "we have nothing" is
+         distinguishable from "this feature didn't load". #}
+      <div class="rel-section">
+        <h4>Cognates</h4>
+        <p class="rel-explain">A <strong>cognate</strong> is a word in another language descended from the same ancestor &mdash; related by shared descent, not borrowed from one another. English <em>shirt</em> and German <em>Sch&uuml;rze</em> both come down from the same Germanic root.</p>
+        {% if info and info.cognates %}
+        <div class="rel-list">
+          {% for lang, term in info.cognates[:40] %}
+          <span class="rel-item" style="border-left-color: var(--c-{{ bucket_slug(bucket_for_name(lang)) }})"><span class="rel-lang">{{ lang }}</span>{{ term }}</span>
+          {% endfor %}
+        </div>
+        {% if info.cognates|length > 40 %}
+        <p class="rel-more">&hellip; and {{ info.cognates|length - 40 }} more.</p>
+        {% endif %}
+        {% else %}
+        <p class="rel-empty">No cognates recorded for "{{ tree_word }}".</p>
+        {% endif %}
+      </div>
+
+      <div class="rel-section">
+        <h4>Doublets</h4>
+        <p class="rel-explain">A <strong>doublet</strong> is another word in <em>the same</em> language that traces back to the same root, but arrived by a different route and drifted apart in meaning &mdash; like <em>travel</em> and <em>travail</em>, or <em>shirt</em> and <em>skirt</em>.</p>
+        {% if info and info.doublets %}
+        <div class="rel-list">
+          {% for term in info.doublets[:40] %}
+          <a class="rel-item" href="/?word={{ term|urlencode }}">{{ term }}</a>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="rel-empty">No doublets recorded for "{{ tree_word }}".</p>
+        {% endif %}
+      </div>
     {% endif %}
   </div>
 </body>
@@ -773,32 +1062,59 @@ def index():
     text = ""
     mode = "direct"
     exclude_connectors = False
+    collapse_duplicates = False
     word_sort = "input"
     analysis = None
     word_rows = []
     tree_word = ""
     tree = None
     tree_view = "list"
+    info = None
     if request.method == "POST" and request.form.get("form") == "tree":
         tree_word = request.form.get("tree_word", "").strip()
         tree_view = request.form.get("tree_view", "list")
-        if tree_word:
-            tree = resolve_tree(tree_word)
     elif request.method == "POST":
         text = request.form.get("text", "")
         mode = request.form.get("mode", "direct")
         exclude_connectors = request.form.get("exclude_connectors") == "on"
+        collapse_duplicates = request.form.get("collapse_duplicates") == "on"
         word_sort = request.form.get("word_sort", "input")
         if text.strip():
             analysis = analyze(text, resolver=RESOLVER, mode=mode, exclude_connectors=exclude_connectors)
-            word_rows = sort_per_word(analysis.per_word, word_sort)
+            word_rows = sort_per_word(analysis.per_word, word_sort,
+                                       collapse_duplicates=collapse_duplicates)
+    else:
+        # GET with ?word=... -- added 2026-07-25 so an analyzed word can be a
+        # real clickable link into Word Search (opened in a new tab, so the
+        # paragraph analysis in the original tab survives). Before this, a GET
+        # matched neither POST branch and silently rendered an empty page.
+        tree_word = request.args.get("word", "").strip()
+        tree_view = request.args.get("tree_view", "list")
+
+    if tree_word:
+        tree = resolve_tree(tree_word)
+        info = word_info.lookup(tree_word)
+
+    # Per-word definition/lineage for the hover cards, precomputed here for
+    # the UNIQUE words only. Deliberately not done inside the Jinja loop: a
+    # long text repeats words many times, and resolve()/resolve_tree() each
+    # cost real work per call.
+    word_cards = {}
+    if analysis is not None:
+        for view in analysis.per_word:
+            for v in ([view] + list(view.parts or [])):
+                if v.word not in word_cards:
+                    word_cards[v.word] = build_word_card(v.word)
+
     return render_template_string(PAGE, text=text, mode=mode, analysis=analysis,
                                    exclude_connectors=exclude_connectors,
+                                   collapse_duplicates=collapse_duplicates,
                                    word_sort=word_sort, word_rows=word_rows,
                                    tree_word=tree_word, tree=tree, tree_view=tree_view,
+                                   info=info, word_cards=word_cards,
                                    bucket_slug=bucket_slug, root_slug=root_slug,
                                    node_slug=node_slug, bucket_breakdown=bucket_language_breakdown,
-                                   build_diagram=build_diagram)
+                                   build_diagram=build_diagram, bucket_for_name=bucket_for_name)
 
 
 if __name__ == "__main__":

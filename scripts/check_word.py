@@ -32,7 +32,21 @@ def main():
             detail = " + ".join(f"{p.word}={p.bucket}" for p in v.parts)
             print(f"{mode:10s} -> split: {detail}")
         else:
-            print(f"{mode:10s} -> {v.bucket:14s} | {v.specific_lang or v.depth_lang}")
+            # Print `depth_lang` -- what the UI actually renders -- and add
+            # `specific_lang` only when it says something different. Fixed
+            # 2026-07-25: this used to print `specific_lang or depth_lang`,
+            # so specific_lang always won and Deepest Root's whole point (the
+            # "Latin (from PIE)" style label built from root_lang/root_pie)
+            # was invisible. That's precisely the field you're checking when
+            # investigating a wrong root, so the script was hiding the
+            # evidence -- it reported "Proto-Indo-European" for `mile` both
+            # before AND after a fix that genuinely changed the answer to
+            # "Latin (from PIE)".
+            label = v.depth_lang or v.specific_lang or "-"
+            extra = ""
+            if v.specific_lang and v.specific_lang != v.depth_lang:
+                extra = f"   (donor: {v.specific_lang})"
+            print(f"{mode:10s} -> {v.bucket:14s} | {label}{extra}")
 
 
 if __name__ == "__main__":

@@ -58,6 +58,7 @@ import sys
 sys.path.insert(0, ".")
 from etymology_chain import build_chain
 from wiktextract_langs import name_for_wikt_code, bucket_for_wikt_code, EXCLUDED_CODES
+from buckets_wikt import family_for_name
 # Reused, not reinvented (composability): convert_wikt.py's own depth-hint
 # table, already tuned to break ties between untied donor languages by real
 # chronological tier (modern/Middle/Old/Classical/proto, per family).
@@ -166,19 +167,32 @@ def parse_entry(entry: dict):
     # test_regression.py: "table"'s raw data lists `{{der|en|la|tabula}}`
     # BEFORE `{{der|en|fro|table}}`, even though French is the real, more
     # recent direct donor and Latin the deeper one. A stable sort by
-    # convert_wikt.py's own depth-hint tiers fixes that -- but ONLY when
-    # EVERY language in this chain has a known tier. Found the hard way
-    # (regenerated once, broke "checkmate"): that table's `_depth_hint`
-    # defaults an UNLISTED language to tier 10 ("modern"), which silently
-    # outranked "Old French"'s real tier-12 entry once Arabic/Classical
-    # Persian (both unlisted -- the table is Western-Europe-centric,
-    # built for etymology-db's narrower tie-break needs) got treated as
-    # "shallower" than French, even though checkmate's real, ALREADY-correct
-    # file order is French -> Arabic -> Persian. Reordering is only trusted
-    # when it can be done with COMPLETE information; an incomplete table
-    # defaults to leaving file order alone, which is right far more often
-    # than a guessed tier for a language the table was never taught about.
-    if all(lang in _DEPTH_HINT for _, lang, _ in foreign):
+    # convert_wikt.py's own depth-hint tiers fixes that -- but only under
+    # TWO conditions, each learned by breaking something:
+    #
+    # 1. Every language must have a known tier. `_depth_hint` defaults an
+    #    UNLISTED language to 10 ("modern"), which silently outranked "Old
+    #    French"'s real tier-12 entry once Arabic/Classical Persian (both
+    #    unlisted) were treated as shallower than French -- breaking
+    #    "checkmate", whose file order was already correct.
+    #
+    # 2. Every language must be in the SAME FAMILY. Added 2026-07-25 after
+    #    Joe asked why "mile" claimed a PIE root: those tiers describe depth
+    #    WITHIN a lineage ("Old" stage = 12, Classical = 14, proto = 15+), so
+    #    comparing Latin (14) against Proto-West Germanic (15) is meaningless
+    #    -- they're different branches, not different depths. Wiktionary's own
+    #    order for "mile" is Middle English -> Old English -> Proto-West
+    #    Germanic -> Latin, i.e. correct; this sort was REVERSING the last two
+    #    and making Proto-West Germanic look like the deepest step. That in
+    #    turn made `build_chain` credit "Proto-West Germanic (from PIE)" when
+    #    PWG *miliju is, per Wiktionary, "a borrowing of Latin milia" -- it
+    #    doesn't inherit from PIE at all. Same damage in street/Friday/
+    #    Saturday/Sunday/Monday. Restricting the sort to single-family chains
+    #    fixes those while KEEPING the "table" fix (Latin and Old French are
+    #    both Italic, so their tiers really are comparable).
+    families = {family_for_name(lang) for _, lang, _ in foreign}
+    families.discard(None)
+    if len(families) <= 1 and all(lang in _DEPTH_HINT for _, lang, _ in foreign):
         foreign.sort(key=lambda item: _DEPTH_HINT[item[1]])
 
     return build_chain(foreign, roots, has_english_stage, english_stage_seq)

@@ -41,12 +41,24 @@ def find_skills(skills_root):
         fm = parse_frontmatter(text)
         scripts_dir = os.path.join(skill_dir, "scripts")
         scripts = sorted(os.listdir(scripts_dir)) if os.path.isdir(scripts_dir) else []
+        # A skill can also USE shared scripts kept at the project root
+        # (scripts/check_word.py etc.), which is this project's convention
+        # when two or more skills need the same tool -- see the composability
+        # dimension. Reporting only skill-local scripts made those skills look
+        # tool-less (fixed 2026-07-25 after this script reported "(none)" for
+        # etymology-fix-word, which has had check_word.py/check_raw_data.py
+        # since the day it was written). A future reader trusting that would
+        # rebuild tooling that already exists -- the exact duplication this
+        # audit is supposed to catch.
+        shared = sorted(set(re.findall(r"scripts[\\/]([A-Za-z0-9_.-]+\.(?:py|ps1))", text)))
+        shared = [s for s in shared if s not in scripts]
         skills.append({
             "dir": name,
             "name": fm.get("name", name),
             "description": fm.get("description", ""),
             "disable_model_invocation": fm.get("disable-model-invocation", "false"),
             "scripts": scripts,
+            "shared_scripts": shared,
         })
     return skills
 
@@ -66,7 +78,9 @@ def main():
         auto = s["disable_model_invocation"].lower() != "true"
         print(f"- {s['name']} (dir: {s['dir']})")
         print(f"    auto-invocable: {auto}")
-        print(f"    scripts: {', '.join(s['scripts']) if s['scripts'] else '(none)'}")
+        print(f"    scripts: {', '.join(s['scripts']) if s['scripts'] else '(none of its own)'}")
+        if s["shared_scripts"]:
+            print(f"    shared:  {', '.join(s['shared_scripts'])}  (project-root scripts/)")
         if auto and RISKY_VERBS.search(s["description"]):
             verb = RISKY_VERBS.search(s["description"]).group(1)
             flags.append((s["name"], verb))

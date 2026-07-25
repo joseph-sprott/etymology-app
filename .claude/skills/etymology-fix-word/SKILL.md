@@ -135,6 +135,26 @@ mechanism (see that function's docstring in `app.py` for the full "why").
   `TREE_CORRECTIONS` into `etymology_trees.json` at build time, it isn't
   read live. Don't report a tree fix as verified until that regen has
   actually run. See the `etymology-regen` skill for how to run it safely.
+- **Always check BOTH tools agree at runtime, not just that both files were
+  edited.** Added 2026-07-25 after Joe reported "intrude doesn't show that
+  it's from Latin when using word search -- why are the two tools not
+  agreeing?". Editing both files is necessary but NOT sufficient: the two
+  features read different stores, and a word can diverge without either file
+  being wrong. In that case `etymology_trees.json` held a bare `has_root` PIE
+  pointer for "intrude" while the analyzer had a full Latin chain from a
+  newer backend the tree builder knows nothing about -- 1,736 words were
+  affected and no test caught it. Run:
+
+  ```powershell
+  python scripts\check_word.py WORD          # what the analyzer says
+  python -c "import app, json; print(json.dumps(app.resolve_tree('WORD'), ensure_ascii=False))"
+  ```
+
+  and confirm the donor language the analyzer names actually appears in the
+  tree. If it doesn't, the bug is structural (one feature can't see data the
+  other can) -- fix that, don't paper over it with a per-word
+  `tree_corrections.py` entry, which would hide the class behind one word.
+  `test_regression.py`'s "Tree and analyzer must agree" section guards this.
 - If the fix looks like it could affect more than just this one word (e.g.
   it points at a root/pattern many other words might share), that's a
   bigger design decision than this skill covers -- flag it rather than

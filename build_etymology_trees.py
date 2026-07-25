@@ -124,6 +124,69 @@ def _thread_from_row(row, children_by_group):
     return _nest(nodes + roots)
 
 
+def _branch_size(node):
+    """Total node count in a branch (1 for a bare, childless head node)."""
+    return 1 + sum(_branch_size(c) for c in node["children"])
+
+
+def _collect_pairs(node, out):
+    """Add every (lang, term) pair appearing anywhere in `node`'s subtree."""
+    out.add((node["lang"], node["term"]))
+    for c in node["children"]:
+        _collect_pairs(c, out)
+
+
+def dedupe_branches(branches):
+    """
+    Drop a top-level branch ONLY when it is a single, childless node whose
+    exact (lang, term) pair is ALREADY shown elsewhere in the same tree --
+    either inside a real multi-node branch, or in an earlier-kept orphan.
+
+    Added 2026-07-24 (Joe: "sometimes there's a random PIE path that doesn't
+    link to the main link to the modern word... just feels incomplete").
+    Diagnosed against the live etymology_trees.json rather than guessed:
+    `sky`'s real chain (Old Norse ský -> Proto-Germanic *skiwją -> PIE
+    *(s)kewH-) is complete and correct, but the SAME PIE term *(s)kewH-
+    also surfaces TWICE MORE as free-floating single-node branches, because
+    etymology-db's raw data records those as extra parentless rows (one
+    `has_root`, one redundant `derived_from`) that build_tree() -- correctly,
+    per its own docstring -- turns into their own top-level branches.
+    `sandal`'s already-documented "redundant bare edge" and `fruit`'s third
+    branch are the same shape.
+
+    This is deliberately NOT the branch-merging heuristic that was tried and
+    reverted twice before (see build_tree's docstring: backwards PIE nesting
+    for `and`, falsely fused alternate theories for `sandal`). It never
+    merges, re-nests, reorders, or alters ANY branch, and never touches a
+    multi-node branch at all -- those may be genuine alternate theories
+    (`sandal`) or a real independent second derivation (`fruit`'s Old
+    French -> Latin fructus). It only removes a bare restatement of a fact
+    the tree already displays, so it cannot fabricate a relationship or lose
+    real information.
+
+    Genuinely-new-but-structurally-stranded citations are explicitly
+    PRESERVED, since they are not duplicates: `religion`'s orphan PIE root
+    *h₂leg- is deeper than anything its main Latin chain reaches, and
+    `coffee`'s orphan Arabic ق ه ي is a different (triliteral root) term
+    from the قَهْوَة already in its chain. Both survive this pass untouched.
+    """
+    substantive_pairs = set()
+    for b in branches:
+        if _branch_size(b) > 1:
+            _collect_pairs(b, substantive_pairs)
+
+    kept = []
+    seen_orphan_pairs = set()
+    for b in branches:
+        if _branch_size(b) == 1:
+            pair = (b["lang"], b["term"])
+            if pair in substantive_pairs or pair in seen_orphan_pairs:
+                continue  # exact restatement of something already shown
+            seen_orphan_pairs.add(pair)
+        kept.append(b)
+    return kept
+
+
 def build_tree(term, rows):
     """
     Builds the branch list for one term_id.
@@ -161,6 +224,11 @@ def build_tree(term, rows):
             branches.append(thread)
     if not branches:
         return None
+    # Drop bare restatements of something the tree already shows (see
+    # dedupe_branches). Runs BEFORE the sort below purely for tidiness --
+    # dedupe preserves relative order and the sort is stable, so the two are
+    # independent either way.
+    branches = dedupe_branches(branches)
     # Order branches shallowest-first by their own head node's language --
     # added 2026-07-23 (Joe: a shallower stage like Middle English should
     # never render after a deeper one like Old English). This ONLY reorders
@@ -197,8 +265,14 @@ def main():
     # wikt_words.json/corrections.py (the analyzer) AND here. Applied last so
     # an override always wins over whatever (possibly wrong, possibly
     # entirely missing) raw data produced.
+    # Deduped the same way as raw-data trees (see dedupe_branches) purely as
+    # a consistency safety net -- hand-verified corrections shouldn't contain
+    # a bare restatement of their own content, so this is expected to be a
+    # no-op on every current entry, but it costs nothing and means no tree in
+    # the output file can ever carry a duplicate orphan regardless of source.
     for term, branches in TREE_CORRECTIONS.items():
-        trees[term] = {"lang": "English", "term": term, "branches": branches}
+        trees[term] = {"lang": "English", "term": term,
+                       "branches": dedupe_branches(branches)}
 
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         json.dump(trees, f, ensure_ascii=False)

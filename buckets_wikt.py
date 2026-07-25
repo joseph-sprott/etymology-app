@@ -147,5 +147,38 @@ BUCKET_ORDER = [
 ]
 
 
+# Which broad lineage each bucket belongs to. Added 2026-07-25 for chain
+# ORDERING only -- not for display, and deliberately coarser than the buckets
+# themselves. convert_wikt.py's `_DEPTH_HINT` assigns tiers like "Old-period
+# stage = 12", "Classical = 14", "proto-language = 15+", but those tiers are
+# only meaningful WITHIN one lineage: comparing Latin (14) against Proto-West
+# Germanic (15) says nothing real, because they sit on different branches of
+# the tree, not different depths of the same branch. Sorting across families
+# on those numbers silently rewrites correct data -- it is exactly what broke
+# `mile`/`street`/`Friday` (see convert_wiktextract.py's ordering guard).
+BUCKET_FAMILY = {
+    "Germanic": "germanic", "Norse": "germanic",
+    "Latin": "italic", "French": "italic", "Romance (other)": "italic",
+    "Greek": "hellenic",
+    "Celtic": "celtic",
+    "Slavic": "slavic",
+    "Indo-Iranian": "indo-iranian", "Iranian": "indo-iranian",
+    "Semitic": "semitic",
+    "Turkic": "turkic",
+    "East Asian": "east-asian",
+    "Austronesian": "austronesian",
+    "Indigenous American": "amerind",
+    "Caribbean": "caribbean",
+    "Afro-Asiatic (other)": "afro-asiatic",
+    "African (other)": "african",
+    "PIE": "pie",
+}
+
+
 def bucket_for_name(name: str) -> str:
     return NAME_TO_BUCKET.get(name, "Other")
+
+
+def family_for_name(name: str):
+    """Broad lineage for a language name, or None if unclassified."""
+    return BUCKET_FAMILY.get(bucket_for_name(name))

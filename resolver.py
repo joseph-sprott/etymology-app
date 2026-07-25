@@ -47,6 +47,11 @@ import ety
 from buckets import bucket_for, APPROXIMATE_BUCKETS
 from corrections import WORD_CORRECTIONS
 from compounds import COMPOUND_SPLITS
+# Data-driven inflected-form -> base-word lookup (2026-07-25), replacing the
+# hand-typed _IRREGULAR_FORMS table that used to live in this file. Shared
+# with convert_wikt.py's build-time inheritance patching so query time and
+# build time can never disagree about what's resolvable -- see inflections.py.
+from inflections import inflection_candidates
 
 # ISO codes that are stages of English itself, not foreign donors.
 ENGLISH_STAGES = {"ang", "enm", "eng"}
@@ -352,10 +357,6 @@ def _stem_candidates(word: str) -> List[str]:
         if cand not in seen:
             seen.add(cand)
             out.append(cand)
-    for cand in _fv_candidates(word):
-        if cand not in seen:
-            seen.add(cand)
-            out.append(cand)
     return out
 
 
@@ -391,121 +392,29 @@ def _cy_candidates(word: str) -> List[str]:
     return [stem + "t", stem + "te"]
 
 
-# "-ves" plurals with an f/v consonant shift (wolf->wolves, knife->knives,
-# shelf->shelves) -- added 2026-07-24 (issue #17, the 347-paragraph coverage
-# scan: "wolves" read Unknown despite "wolf" resolving fine; same shape
-# already hand-patched once as a one-off for "self"->"selves" in
-# corrections.py rather than generalized). No length floor needed here,
-# unlike _cy_candidates -- the collision risk is a different shape entirely.
-# "-cy" needed a floor because stripping it left an AMBIGUOUS short stem that
-# could coincidentally match an unrelated real word (chancy -> chant).
-# "-ves" doesn't have that problem: regular f-ending plurals are spelled
-# "-fs" (roofs, chiefs, beliefs), never "-ves" -- the two suffixes don't
-# overlap, so this rule can never even fire on a word that doesn't undergo
-# the alternation. The remaining risk (a word that ends in "-ves" for an
-# unrelated reason, e.g. "gives"/"lives" as ordinary "-e"+"s" verb forms, not
-# f/v plurals) is already handled by candidate ORDER: the regular "-es"/"-s"
-# suffix rules above run first and already correctly resolve "lives"->"live"
-# before this function's candidates are even appended, verified directly
-# against the raw data before shipping (16 real "-ves" gaps checked; the
-# only hits were "myselves"/"theirselves"/"thyselves", harmless non-standard
-# variants of "selves").
-def _fv_candidates(word: str) -> List[str]:
-    if not word.endswith("ves") or len(word) < 4:
-        return []
-    stem = word[:-3]
-    return [stem + "f", stem + "fe"]
+# NOTE (2026-07-25): `_fv_candidates` -- a hand-written rule for "-ves"
+# plurals with an f/v consonant shift (wolf->wolves, knife->knives) -- used to
+# live here, and before that the same shape was hand-patched one word at a
+# time in corrections.py ("self"->"selves"). Both are gone: wiktextract
+# records `wolves` as a `plural`-tagged form of `wolf` outright, so this is
+# now real data rather than an inferred spelling rule. See inflections.py.
+# NOTE (2026-07-25): `_IRREGULAR_FORMS` -- a hand-typed table of 189 irregular
+# forms (held->hold, hid->hide, ...) -- and its `_irregular_candidates()`
+# accessor used to live here. Both are gone, replaced by real tagged data:
+# see inflections.py / build_inflections.py. The table's own comment admitted
+# it covered only "~100 of English's ~200" irregular verbs and was "not
+# exhaustive", and every gap in it surfaced as a common word reading Unknown
+# (hid/meant/got/snuck/laid were each found that way, one coverage scan at a
+# time). Wiktionary records these outright -- 663,494 inflected forms -- so
+# `inflection_candidates()` now answers from data instead of a hand list.
+#
+# What did NOT move: the derivational stemmer below/above (_SUFFIXES,
+# _stem_variants, _cy_candidates). Wiktionary's `forms` field records
+# INFLECTION (plural/past/participle/comparative/superlative) only, never
+# derivation, so -ness/-ment/-tion/-able/-ly/-al/-cy still need real rules.
+# Deleting those would regress `critical` (-al -> critic), `professional`
+# (-al -> profession) and `consistency` (-cy -> consistent).
 
-
-# Irregular past tense / past participle forms -- found 2026-07-23 (Joe:
-# "held", "became" read Unknown). Suffix-stripping can never reach these:
-# "held" doesn't end in "-ed" (hold -> held is a vowel change, not a suffix),
-# so no rule in _SUFFIXES/_stem_variants would ever propose "hold" as a
-# candidate. This is a fundamentally different gap from regular inflection
-# (issue #8) -- English has a closed, well-known set of irregular verbs, not
-# a spelling-rule problem, so a direct lookup table is the right fix rather
-# than a cleverer stemmer. Not exhaustive (English has ~200); covers the
-# common ones likely in everyday prose. Safe to extend -- lookup only fires
-# after the exact surface form misses everywhere, so a word that already
-# resolves correctly on its own is never affected by being listed here too.
-_IRREGULAR_FORMS = {
-    "held": "hold", "became": "become", "began": "begin", "begun": "begin",
-    "went": "go", "gone": "go", "came": "come", "did": "do", "done": "do",
-    "gave": "give", "given": "give", "took": "take", "taken": "take",
-    "made": "make", "saw": "see", "seen": "see", "knew": "know", "known": "know",
-    "thought": "think", "brought": "bring", "bought": "buy", "caught": "catch",
-    "taught": "teach", "sought": "seek", "fought": "fight",
-    "wrote": "write", "written": "write", "spoke": "speak", "spoken": "speak",
-    "broke": "break", "broken": "break", "chose": "choose", "chosen": "choose",
-    "drove": "drive", "driven": "drive", "rode": "ride", "ridden": "ride",
-    "rose": "rise", "risen": "rise", "fell": "fall", "fallen": "fall",
-    "grew": "grow", "grown": "grow", "flew": "fly", "flown": "fly",
-    "drew": "draw", "drawn": "draw", "threw": "throw", "thrown": "throw",
-    "blew": "blow", "blown": "blow", "wore": "wear", "worn": "wear",
-    "tore": "tear", "torn": "tear", "swore": "swear", "sworn": "swear",
-    "bore": "bear", "born": "bear", "borne": "bear",
-    "stole": "steal", "stolen": "steal", "froze": "freeze", "frozen": "freeze",
-    "sang": "sing", "sung": "sing", "sank": "sink", "sunk": "sink",
-    "rang": "ring", "rung": "ring", "swam": "swim", "swum": "swim",
-    "ran": "run", "drank": "drink", "drunk": "drink", "ate": "eat", "eaten": "eat",
-    "felt": "feel", "kept": "keep", "slept": "sleep", "left": "leave",
-    "lost": "lose", "met": "meet", "sent": "send", "spent": "spend",
-    "built": "build", "sold": "sell", "told": "tell", "found": "find",
-    "bound": "bind", "stood": "stand", "understood": "understand", "won": "win",
-    "wound": "wind", "hung": "hang", "shot": "shoot", "shone": "shine",
-    "struck": "strike", "stuck": "stick", "read": "read", "led": "lead",
-    "bled": "bleed", "fed": "feed", "bent": "bend", "lent": "lend", "sat": "sit",
-    "shook": "shake", "shaken": "shake", "wept": "weep", "swept": "sweep",
-    "crept": "creep", "slid": "slide",
-    # Added 2026-07-23 while building the compound-word split feature: these
-    # showed up as the missing half of otherwise-clean compound splits
-    # (dugout -> dug+out, downtrodden -> down+trodden, purebred -> pure+bred,
-    # frostbitten -> frost+bitten) -- same gap shape as the original
-    # held/became fix, just a few forms the first pass didn't cover.
-    "dug": "dig", "trod": "tread", "trodden": "tread",
-    "bred": "breed", "bitten": "bite",
-    # Added 2026-07-24 (Joe: run 347 real paragraphs through the analyzer,
-    # find everything that shouldn't be Unknown). This table's own docstring
-    # already admitted it wasn't exhaustive ("covers ~100 of English's
-    # ~200") -- this scan is what finally quantified the gap: "hid", "meant",
-    # "got"/"gotten", "woke"/"awoke", "swung", "spun", "stung", "sped",
-    # "snuck", "laid" all showed up as real, common, everyday words reading
-    # Unknown, each for this exact reason. "heard" was found the same way
-    # but indirectly -- it's what "unheard" needs as its cited root (see
-    # convert_wikt.py's widened _patch_root_stubs, issue #17), not something
-    # that appeared as Unknown on its own in this scan (it's caught earlier
-    # by a different mechanism first). Rest of this batch: not individually
-    # confirmed by this specific scan, but the same well-known closed set of
-    # common English irregular verbs, added together rather than piecemeal
-    # the next time each one happens to show up in someone's paragraph.
-    "bit": "bite", "hid": "hide", "hidden": "hide", "meant": "mean",
-    "got": "get", "gotten": "get", "woke": "wake", "woken": "wake",
-    "awoke": "wake", "awoken": "wake", "swung": "swing", "spun": "spin",
-    "stung": "sting", "sped": "speed", "snuck": "sneak", "laid": "lay",
-    "lain": "lie", "paid": "pay", "heard": "hear", "dealt": "deal",
-    "fled": "flee", "arose": "arise", "arisen": "arise", "spat": "spit",
-    "wrung": "wring", "forgot": "forget", "forgotten": "forget",
-    "forgave": "forgive", "forgiven": "forgive", "forbade": "forbid",
-    "forbidden": "forbid", "foresaw": "foresee", "foreseen": "foresee",
-    "undid": "undo", "undone": "undo", "underwent": "undergo",
-    "undergone": "undergo", "withdrew": "withdraw", "withdrawn": "withdraw",
-    "withstood": "withstand", "mistook": "mistake", "mistaken": "mistake",
-    "overtook": "overtake", "overtaken": "overtake", "undertook": "undertake",
-    "undertaken": "undertake", "overcame": "overcome", "oversaw": "oversee",
-    "overseen": "oversee", "slew": "slay", "slain": "slay",
-    "forsook": "forsake", "forsaken": "forsake",
-    "strung": "string", "flung": "fling", "clung": "cling", "slung": "sling",
-    "sprang": "spring", "sprung": "spring", "shrank": "shrink",
-    "shrunk": "shrink", "stank": "stink", "stunk": "stink", "dove": "dive",
-    "ground": "grind", "swollen": "swell", "proven": "prove",
-    "shown": "show", "sewn": "sew", "sawn": "saw", "mown": "mow",
-    "sown": "sow",
-}
-
-
-def _irregular_candidates(word: str) -> List[str]:
-    base = _IRREGULAR_FORMS.get(word)
-    return [base] if base and base != word else []
 
 
 class WiktionaryResolver(Resolver):
@@ -819,7 +728,7 @@ class ChainResolver(Resolver):
         # makes the first check skip ANY case-fallback match, chain or not,
         # so it always reaches this retry loop -- same logic below, just
         # reachable for a chain-having case-fallback match too now.
-        for cand in _irregular_candidates(word.lower()) + _stem_candidates(word.lower()):
+        for cand in inflection_candidates(word.lower()) + _stem_candidates(word.lower()):
             r2 = self._try(cand)
             if r2.chain and r2.prox_kind != "root":
                 # A retry-loop match is BY CONSTRUCTION never the word's own
