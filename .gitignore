@@ -1,4 +1,8 @@
 __pycache__/
 *.pyc
-.claude/
+# Machine-specific Claude Code session state -- NOT .claude/ wholesale,
+# since .claude/skills/ holds real, version-controlled project assets
+# (added 2026-07-24: etymology-fix-word, etymology-regen).
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
 .html
