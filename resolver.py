@@ -352,6 +352,10 @@ def _stem_candidates(word: str) -> List[str]:
         if cand not in seen:
             seen.add(cand)
             out.append(cand)
+    for cand in _fv_candidates(word):
+        if cand not in seen:
+            seen.add(cand)
+            out.append(cand)
     return out
 
 
@@ -385,6 +389,32 @@ def _cy_candidates(word: str) -> List[str]:
     if len(stem) < 5:
         return []
     return [stem + "t", stem + "te"]
+
+
+# "-ves" plurals with an f/v consonant shift (wolf->wolves, knife->knives,
+# shelf->shelves) -- added 2026-07-24 (issue #17, the 347-paragraph coverage
+# scan: "wolves" read Unknown despite "wolf" resolving fine; same shape
+# already hand-patched once as a one-off for "self"->"selves" in
+# corrections.py rather than generalized). No length floor needed here,
+# unlike _cy_candidates -- the collision risk is a different shape entirely.
+# "-cy" needed a floor because stripping it left an AMBIGUOUS short stem that
+# could coincidentally match an unrelated real word (chancy -> chant).
+# "-ves" doesn't have that problem: regular f-ending plurals are spelled
+# "-fs" (roofs, chiefs, beliefs), never "-ves" -- the two suffixes don't
+# overlap, so this rule can never even fire on a word that doesn't undergo
+# the alternation. The remaining risk (a word that ends in "-ves" for an
+# unrelated reason, e.g. "gives"/"lives" as ordinary "-e"+"s" verb forms, not
+# f/v plurals) is already handled by candidate ORDER: the regular "-es"/"-s"
+# suffix rules above run first and already correctly resolve "lives"->"live"
+# before this function's candidates are even appended, verified directly
+# against the raw data before shipping (16 real "-ves" gaps checked; the
+# only hits were "myselves"/"theirselves"/"thyselves", harmless non-standard
+# variants of "selves").
+def _fv_candidates(word: str) -> List[str]:
+    if not word.endswith("ves") or len(word) < 4:
+        return []
+    stem = word[:-3]
+    return [stem + "f", stem + "fe"]
 
 
 # Irregular past tense / past participle forms -- found 2026-07-23 (Joe:
@@ -434,6 +464,42 @@ _IRREGULAR_FORMS = {
     # held/became fix, just a few forms the first pass didn't cover.
     "dug": "dig", "trod": "tread", "trodden": "tread",
     "bred": "breed", "bitten": "bite",
+    # Added 2026-07-24 (Joe: run 347 real paragraphs through the analyzer,
+    # find everything that shouldn't be Unknown). This table's own docstring
+    # already admitted it wasn't exhaustive ("covers ~100 of English's
+    # ~200") -- this scan is what finally quantified the gap: "hid", "meant",
+    # "got"/"gotten", "woke"/"awoke", "swung", "spun", "stung", "sped",
+    # "snuck", "laid" all showed up as real, common, everyday words reading
+    # Unknown, each for this exact reason. "heard" was found the same way
+    # but indirectly -- it's what "unheard" needs as its cited root (see
+    # convert_wikt.py's widened _patch_root_stubs, issue #17), not something
+    # that appeared as Unknown on its own in this scan (it's caught earlier
+    # by a different mechanism first). Rest of this batch: not individually
+    # confirmed by this specific scan, but the same well-known closed set of
+    # common English irregular verbs, added together rather than piecemeal
+    # the next time each one happens to show up in someone's paragraph.
+    "bit": "bite", "hid": "hide", "hidden": "hide", "meant": "mean",
+    "got": "get", "gotten": "get", "woke": "wake", "woken": "wake",
+    "awoke": "wake", "awoken": "wake", "swung": "swing", "spun": "spin",
+    "stung": "sting", "sped": "speed", "snuck": "sneak", "laid": "lay",
+    "lain": "lie", "paid": "pay", "heard": "hear", "dealt": "deal",
+    "fled": "flee", "arose": "arise", "arisen": "arise", "spat": "spit",
+    "wrung": "wring", "forgot": "forget", "forgotten": "forget",
+    "forgave": "forgive", "forgiven": "forgive", "forbade": "forbid",
+    "forbidden": "forbid", "foresaw": "foresee", "foreseen": "foresee",
+    "undid": "undo", "undone": "undo", "underwent": "undergo",
+    "undergone": "undergo", "withdrew": "withdraw", "withdrawn": "withdraw",
+    "withstood": "withstand", "mistook": "mistake", "mistaken": "mistake",
+    "overtook": "overtake", "overtaken": "overtake", "undertook": "undertake",
+    "undertaken": "undertake", "overcame": "overcome", "oversaw": "oversee",
+    "overseen": "oversee", "slew": "slay", "slain": "slay",
+    "forsook": "forsake", "forsaken": "forsake",
+    "strung": "string", "flung": "fling", "clung": "cling", "slung": "sling",
+    "sprang": "spring", "sprung": "spring", "shrank": "shrink",
+    "shrunk": "shrink", "stank": "stink", "stunk": "stink", "dove": "dive",
+    "ground": "grind", "swollen": "swell", "proven": "prove",
+    "shown": "show", "sewn": "sew", "sawn": "saw", "mown": "mow",
+    "sown": "sow",
 }
 
 
@@ -582,7 +648,41 @@ class ChainResolver(Resolver):
 
     def resolve(self, word: str) -> Resolution:
         r = self._try(word)
-        if r.chain and r.prox_kind != "root" and not r.case_fallback:
+        # A chain whose only entries are bucket "Unknown" was never a real
+        # answer -- found 2026-07-24 (issue #17) while auditing ALL 743
+        # compounds.py entries after widening convert_wikt.py's inheritance
+        # patches: "bathrobe"/"bathtub"/"bluebird" (none touched by today's
+        # data changes) regressed from a working compound split to flatly
+        # Unknown. Root cause, unrelated to today's widening: EtyResolver
+        # (the fallback Path-A backend) can return a chain citing an ISO
+        # code `buckets.py` doesn't map, producing `bucket_for(iso) ==
+        # "Unknown"` -- `_try()`'s "any non-empty chain wins" check then
+        # trusted this non-answer immediately, permanently blocking the
+        # compound-split fallback below from ever being reached. Treating it
+        # as equivalent to no chain lets those words fall through correctly.
+        # Checks chain[0] specifically (not "any entry"): that's the one
+        # Direct Source mode actually reads. Narrowed to this 2026-07-24
+        # after finding "taxicab" (1 of the 743 compounds.py entries) has an
+        # EtyResolver chain that mixes Unknown with real buckets in an
+        # undeduped order -- an `any()` check called it "real" while Direct
+        # Source mode still displayed the Unknown entry sitting at position 0.
+        has_real_chain = bool(r.chain) and r.chain[0].bucket != "Unknown"
+        # Hand-verified compounds.py wins over an AUTO-INHERITED chain
+        # specifically -- also found 2026-07-24, auditing the same 743
+        # entries: widening convert_wikt.py's inheritance patches gave 147 of
+        # them a real chain for the first time, but for a genuine two-
+        # content-word compound (e.g. "mountainside" -- verified live as
+        # "mountain" + "side", both independently meaningful), silently
+        # inheriting just ONE part's whole story and dropping the other is a
+        # worse, less complete answer than the hand-verified split, even
+        # though it isn't factually WRONG. Scoped narrowly to
+        # `inherited_from` being set (this ISN'T the word's own directly-
+        # recorded data, just borrowed from elsewhere) so a word with
+        # genuinely good data of its own is untouched -- compounds.py's own
+        # docstring is explicit that it should never override a word that
+        # "resolves on its own," and that design intent still holds here.
+        prefer_compound = r.inherited_from is not None and word.lower() in COMPOUND_SPLITS
+        if has_real_chain and r.prox_kind != "root" and not r.case_fallback and not prefer_compound:
             return r  # a confirmed chain with a real donor edge is trustworthy immediately
         # Either no chain yet, or `r` is a bare has_root STUB (prox_kind ==
         # "root" -- the word's own raw entry has nothing but a root pointer,
@@ -621,6 +721,19 @@ class ChainResolver(Resolver):
         for cand in _irregular_candidates(word.lower()) + _stem_candidates(word.lower()):
             r2 = self._try(cand)
             if r2.chain and r2.prox_kind != "root":
+                # A retry-loop match is BY CONSTRUCTION never the word's own
+                # direct data (`cand` is always a different surface form,
+                # reached only because the word's own lookup already failed)
+                # -- so the same `prefer_compound` reasoning above applies
+                # unconditionally here too, added 2026-07-24 (issue #17):
+                # "outdoors" only resolves this way (stemming to "outdoor",
+                # which itself inherits from "door"), so the top-of-function
+                # `prefer_compound` (computed from the word's OWN `_try()`
+                # result, empty here) never saw it. Checked directly here
+                # instead of trying to thread one shared flag through both
+                # shapes.
+                if word.lower() in COMPOUND_SPLITS:
+                    break
                 return Resolution(word, r2.chain, r2.english_stage_iso,
                                    r2.english_stage_lang, r2.source,
                                    root_lang=r2.root_lang, root_pie=r2.root_pie,
@@ -638,14 +751,18 @@ class ChainResolver(Resolver):
                                    # without re-deriving which candidate won.
                                    inherited_from=r2.inherited_from or cand)
             if (not r.chain or r.case_fallback) and r2.english_stage_iso is not None:
+                if word.lower() in COMPOUND_SPLITS:
+                    break
                 return Resolution(word, r2.chain, r2.english_stage_iso,
                                    r2.english_stage_lang, r2.source,
                                    root_lang=r2.root_lang, root_pie=r2.root_pie,
                                    prox_kind=r2.prox_kind, root_term=r2.root_term,
                                    inherited_from=r2.inherited_from or cand)
-        if r.chain:
+        if has_real_chain and not prefer_compound:
             return r  # thin has_root stub or case-fallback match, but the best answer we actually have
-        # Still nothing: try a known two-word compound split (compounds.py),
+        # Still nothing (or a hand-verified compound was preferred over an
+        # auto-inherited chain, see `prefer_compound` above): try a known
+        # two-word compound split (compounds.py),
         # or an auto-detected one (convert_wikt.py's _extract_auto_compounds,
         # 2026-07-24 -- words whose only data was a bare PIE-root stub, but
         # whose raw entry ALSO recorded a compound_of/blend_of split into

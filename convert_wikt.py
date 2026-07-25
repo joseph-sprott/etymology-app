@@ -79,6 +79,12 @@ import pandas as pd
 sys.path.insert(0, ".")
 from buckets_wikt import bucket_for_name, ENGLISH_STAGE_NAMES, NAME_TO_BUCKET, BUCKET_ORDER
 from corrections import WORD_CORRECTIONS, HUB_EXCLUSIONS
+# Pure string-transformation helpers only (no dependency on a live resolver
+# or the words dict) -- imported 2026-07-24 so the inheritance patches below
+# can try the SAME candidate forms the resolver itself would try at query
+# time, instead of only accepting an exact-string match against a cited
+# root. See _patch_root_stubs's docstring for why this was needed (issue #17).
+from resolver import _irregular_candidates, _stem_candidates
 
 PARQUET_PATH = r"C:\Users\Josep\Desktop\Etymology Project\etymology.parquet"
 
@@ -441,6 +447,28 @@ def resolve_term(rows):
 _ROOT_POINTER_RELS = {"has_prefix_with_root", "has_confix",
                        "back-formation_from", "clipping_of"}
 
+# Lower-priority than _ROOT_POINTER_RELS above -- added 2026-07-24 (issue
+# #17, the 347-paragraph coverage scan). "unusual" showed Unknown despite
+# "usual" resolving fine on its own: its raw data uses plain `has_affix`
+# rather than `has_prefix_with_root` (two rows -- one naming the bound
+# affix itself, "un-", which will never resolve as a word; one naming the
+# real root, "usual"). `has_affix` is deliberately kept OUT of
+# _ROOT_POINTER_RELS proper and only consulted after it, mirroring
+# _patch_foreign_root_stubs's existing priority-ordering reasoning: it's
+# less precise (can hand back a bare fragment instead of a real stem), so a
+# higher-priority relation should win whenever both exist for the same word.
+_LOW_PRIORITY_ROOT_POINTER_RELS = {"has_affix"}
+
+
+def _root_candidates_by_term(eng, reltypes):
+    rows = eng[eng["reltype"].isin(reltypes)]
+    candidates = {}
+    for row in rows.itertuples():
+        if pd.isna(row.related_lang) or row.related_lang != "English" or pd.isna(row.related_term):
+            continue
+        candidates.setdefault(row.term, []).append(row.related_term)
+    return candidates
+
 # Same "exotic proximate + a real core family later in the chain" bug
 # signature CLAUDE.md known issue #6 (passes 5/6) used to find real same-
 # term_id sense collisions by hand (e.g. "increase" -> bogus Semitic). Reused
@@ -531,13 +559,30 @@ def _patch_root_stubs(words, eng):
     was never a meaningful trust signal. Verified against the raw data before
     widening: of the missing "-al" words alone, 5,310 have a
     has_prefix_with_root/has_confix pointer to an already-resolving root.
+
+    Widened again 2026-07-24 (issue #17, the 347-paragraph coverage scan):
+    the root-lookup below used to require the cited root to be an EXACT key
+    in `words` -- but "unheard" cites "heard" (has_prefix_with_root), and
+    "heard" has zero raw ancestry data of its own (only resolvable via
+    resolver.py's _IRREGULAR_FORMS, a resolver-layer mechanism this
+    build-time pass never consulted); "unexplained" cites "explained", which
+    has zero raw data either but resolves fine at query time via ordinary
+    suffix stemming ("explained" -> "explain"). Both were falling through
+    even though the resolver itself could clearly answer them. Now falls
+    back to the SAME candidate-generation the resolver uses at query time
+    (`_irregular_candidates` then `_stem_candidates`, imported from
+    resolver.py -- pure string functions, no circular dependency) when the
+    cited root isn't a literal key, so convert_wikt.py's build-time
+    inheritance and the resolver's query-time fallback cascade can no longer
+    silently diverge on what counts as "resolvable."
     """
-    root_rows = eng[eng["reltype"].isin(_ROOT_POINTER_RELS)]
+    high = _root_candidates_by_term(eng, _ROOT_POINTER_RELS)
+    low = _root_candidates_by_term(eng, _LOW_PRIORITY_ROOT_POINTER_RELS)
     candidates = {}
-    for row in root_rows.itertuples():
-        if pd.isna(row.related_lang) or row.related_lang != "English" or pd.isna(row.related_term):
-            continue
-        candidates.setdefault(row.term, []).append(row.related_term)
+    for term in set(high) | set(low):
+        # High-priority relation's candidates always come first in the list,
+        # so a real stem wins over a same-word's own noisier has_affix rows.
+        candidates[term] = high.get(term, []) + low.get(term, [])
 
     patched = 0
     changed = True
@@ -549,6 +594,21 @@ def _patch_root_stubs(words, eng):
                 continue  # already resolved to a real (non-stub) entry
             for root_term in roots:
                 root_key = root_term.split("#")[0].strip()
+                # Skip bound-morpheme fragments -- verified 2026-07-24 while
+                # widening candidate sources to include has_affix (issue
+                # #17): "unusual"'s has_affix rows name BOTH "un-" (the bound
+                # prefix itself) and "usual" (the real root), and "un-" turned
+                # out to have its own (wrong -- Latin "unus", unrelated to the
+                # negative prefix) entry in the data, so it was winning as
+                # the first-tried candidate and inheriting a bogus answer
+                # into "unusual" instead of ever trying "usual". Checked the
+                # scale directly: 26,967 has_affix rows across the whole
+                # dataset point at a bound-morpheme-shaped term ("-ite",
+                # "-o-", "-er", "un-", "-ing", ...) -- Wiktionary/etymology-db's
+                # own convention marks these with a leading or trailing
+                # hyphen, so filtering on that is a real signal, not a guess.
+                if root_key.startswith("-") or root_key.endswith("-"):
+                    continue
                 # EXACT case only -- verified 2026-07-24 while widening this
                 # function to no-entry terms: a lower()/capitalize() fallback
                 # here reintroduces the exact "went"/"Went" bug shape known
@@ -564,9 +624,23 @@ def _patch_root_stubs(words, eng):
                 # CLAUDE.md rule 2 -- not individually hand-verified at this
                 # scale, so no guessing.
                 root_entry = words.get(root_key)
+                resolved_key = root_key
+                if root_entry is None:
+                    # The cited root isn't a literal key -- try the SAME
+                    # candidates the resolver tries at query time (irregular
+                    # forms first, then regular suffix stemming), added
+                    # 2026-07-24 (issue #17). Exact case only, same reasoning
+                    # as above -- these candidate functions lowercase their
+                    # input regardless, so this only ever matches a genuine
+                    # lowercase entry, never a capitalize() coincidence.
+                    for cand in _irregular_candidates(root_key.lower()) + _stem_candidates(root_key.lower()):
+                        cand_entry = words.get(cand)
+                        if cand_entry is not None and cand_entry.get("prox_kind") != "root":
+                            root_entry, resolved_key = cand_entry, cand
+                            break
                 if root_entry is None or root_entry.get("prox_kind") == "root":
                     continue  # root itself unresolved or still a stub
-                if not _is_reliable_root(root_key, root_entry):
+                if not _is_reliable_root(resolved_key, root_entry):
                     continue  # exotic-first-then-core signature, or an explicit HUB_EXCLUSIONS entry
                 words[term] = dict(root_entry)
                 # `inherited_from` -- added 2026-07-24 (Joe, all-caps: every
@@ -577,7 +651,12 @@ def _patch_root_stubs(words, eng):
                 # a consistent answer, instead of only the bucket-chain
                 # pipeline knowing about this inheritance. See app.py's
                 # resolve_tree() for the tree feature's consumer of this.
-                words[term]["inherited_from"] = root_key
+                # Uses `resolved_key` (the word that ACTUALLY had the data),
+                # not `root_key` (what was literally cited) -- when they
+                # differ (e.g. "explained" cited, "explain" actually
+                # resolved), pointing at the real source is what lets
+                # resolve_tree() successfully recurse to a real tree.
+                words[term]["inherited_from"] = resolved_key
                 patched += 1
                 changed = True
                 break

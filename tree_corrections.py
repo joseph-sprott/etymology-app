@@ -71,4 +71,99 @@ TREE_CORRECTIONS = {
             ]},
         ]},
     ],
+
+    # The following ten all match corrections.py's 2026-07-24 entries (issue
+    # #17, the 347-paragraph coverage scan) -- see that file for the full
+    # per-word verification notes. Chains here mirror corrections.py's
+    # root_lang/root_term exactly.
+
+    "previous": [
+        {"lang": "Latin", "term": "praevius", "reltype": "derived_from", "children": []},
+    ],
+
+    # "mom": inherits mama's own already-correct tree (same reasoning as
+    # corrections.py's "mom" entry).
+    "mom": [
+        {"lang": "Middle English", "term": "mome", "reltype": "inherited_from", "children": [
+            {"lang": "Old English", "term": "*mōme", "reltype": "inherited_from", "children": [
+                {"lang": "Proto-West Germanic", "term": "*mōmā", "reltype": "derived_from", "children": [
+                    {"lang": "Proto-Germanic", "term": "*mōmǭ", "reltype": "derived_from", "children": [
+                        {"lang": "Proto-Indo-European", "term": "*méh₂-méh₂", "reltype": "derived_from", "children": []},
+                    ]},
+                ]},
+            ]},
+        ]},
+    ],
+
+    # "package": inherits pack's own already-correct tree.
+    "package": [
+        {"lang": "Middle English", "term": "pak", "reltype": "inherited_from", "children": [
+            {"lang": "Old English", "term": "pæcca", "reltype": "inherited_from", "children": []},
+        ]},
+        {"lang": "Middle Dutch", "term": "pak", "reltype": "derived_from", "children": [
+            {"lang": "Proto-Germanic", "term": "*pakkô", "reltype": "derived_from", "children": []},
+        ]},
+    ],
+
+    "incident": [
+        {"lang": "Middle French", "term": "incident", "reltype": "borrowed_from", "children": [
+            {"lang": "Latin", "term": "incidēns", "reltype": "derived_from", "children": [
+                {"lang": "Latin", "term": "incidō", "reltype": "derived_from", "children": [
+                    {"lang": "Latin", "term": "cadō", "reltype": "derived_from", "children": [
+                        {"lang": "Proto-Indo-European", "term": "*ḱh₂d-", "reltype": "has_root", "children": []},
+                    ]},
+                ]},
+            ]},
+        ]},
+    ],
+
+    "expert": [
+        {"lang": "Old French", "term": "expert", "reltype": "borrowed_from", "children": [
+            {"lang": "Latin", "term": "expertus", "reltype": "derived_from", "children": [
+                {"lang": "Latin", "term": "experior", "reltype": "derived_from", "children": []},
+            ]},
+        ]},
+    ],
+
+    "metaphor": [
+        {"lang": "Middle French", "term": "métaphore", "reltype": "borrowed_from", "children": [
+            {"lang": "Latin", "term": "metaphora", "reltype": "derived_from", "children": [
+                {"lang": "Ancient Greek", "term": "μεταφορά", "reltype": "derived_from", "children": [
+                    {"lang": "Ancient Greek", "term": "μεταφέρω", "reltype": "derived_from", "children": []},
+                ]},
+            ]},
+        ]},
+    ],
+
+    "adult": [
+        {"lang": "French", "term": "adulte", "reltype": "borrowed_from", "children": [
+            {"lang": "Latin", "term": "adultus", "reltype": "derived_from", "children": [
+                {"lang": "Latin", "term": "adolescō", "reltype": "derived_from", "children": []},
+            ]},
+        ]},
+    ],
+
+    "puppy": [
+        {"lang": "Old French", "term": "poupée", "reltype": "borrowed_from", "children": []},
+    ],
+
+    "presence": [
+        {"lang": "Old French", "term": "presence", "reltype": "borrowed_from", "children": [
+            {"lang": "Latin", "term": "praesentia", "reltype": "derived_from", "children": [
+                {"lang": "Latin", "term": "praesentem", "reltype": "derived_from", "children": []},
+            ]},
+        ]},
+    ],
+
+    # "familiar": no French/Anglo-Norman intermediate stage is named on the
+    # live page -- Middle English borrows directly from Latin.
+    "familiar": [
+        {"lang": "Middle English", "term": "familiar", "reltype": "borrowed_from", "children": [
+            {"lang": "Latin", "term": "familiāris", "reltype": "derived_from", "children": []},
+        ]},
+    ],
+
+    "unless": [
+        {"lang": "Middle English", "term": "unlesse", "reltype": "inherited_from", "children": []},
+    ],
 }

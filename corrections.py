@@ -357,6 +357,110 @@ WORD_CORRECTIONS = {
     # *ǵenh₁-" confirming the same PIE root the raw data already had.
     "generate": {"p": "Latin", "d": "PIE", "chain": ["Latin", "PIE"], "prox_kind": "derived",
                  "root_lang": "Latin", "root_term": "genus", "root_pie": True},
+
+    # Found 2026-07-24 (Joe: run 347 real paragraphs through the analyzer,
+    # find everything that shouldn't be Unknown -- issue #17). Ten words
+    # individually hand-verified against live Wiktionary, each a genuinely
+    # DIFFERENT gap shape than a mechanical fix could close on its own:
+
+    # "previous": absent from the raw parquet entirely (zero rows, same
+    # shape as "consistency" -- not rare, just missing). Live Wiktionary:
+    # "From Latin praevius." No further PIE connection stated.
+    "previous": {"p": "Latin", "d": "Latin", "chain": ["Latin"], "prox_kind": "derived",
+                 "root_lang": "Latin", "root_term": "praevius", "root_pie": False},
+
+    # "mom": also absent entirely. Live Wiktionary: "Clipping of momma."
+    # "momma" itself only has a HEDGE relation to "mama" in the raw data
+    # (etymologically_related_to, not real ancestry), so the automated
+    # pipeline correctly can't inherit through it on its own -- but "mama"
+    # DOES have a real, already-verified chain in this project's own data
+    # (Middle English mome <- Old English *mome <- Proto-West Germanic
+    # *moma <- Proto-Germanic <- PIE *meh2-meh2, tagged is_onomatopoeic).
+    # "mom" being a clipping of a word closely tied to "mama" is a
+    # well-established, verifiable claim (matches this project's existing
+    # "zoo" clipping precedent), not a guess -- inherits mama's exact
+    # already-resolved chain.
+    "mom": {"p": "Germanic", "d": "PIE", "chain": ["Germanic", "PIE"], "prox_kind": "derived",
+            "root_lang": "Proto-West Germanic", "root_term": "*mōmā", "root_pie": True},
+
+    # "package": also absent entirely. Live Wiktionary: "Equivalent to pack
+    # + -age. Possibly influenced by Anglo-Latin paccagium or Old French
+    # pacquage" -- the "possibly influenced by" is a hedge Wiktionary itself
+    # doesn't commit to, so this inherits "pack"'s own already-resolved
+    # chain (the part of the etymology actually asserted, not hedged) rather
+    # than claiming an unconfirmed French/Latin connection.
+    "package": {"p": "Germanic", "d": "Germanic", "chain": ["Germanic"], "prox_kind": "derived",
+                "root_lang": "Middle Dutch", "root_term": "pak", "root_pie": False},
+
+    # "incident": bare has_root PIE stub in the raw data (issue #14 shape).
+    # Live Wiktionary: "from Middle French incident, from Latin incidens...
+    # from in- + -cido, the combining form of cado ('to fall')," explicitly
+    # categorized under PIE root *keh2d-.
+    "incident": {"p": "French", "d": "PIE", "chain": ["French", "Latin", "PIE"], "prox_kind": "borrowed",
+                 "root_lang": "Latin", "root_term": "cadō", "root_pie": True},
+
+    # "expert": same bare-stub shape. Live Wiktionary: "Inherited from Middle
+    # English expert, derived from Old French expert, espert, from Latin
+    # expertus... from ex- + *-perior." PIE root (*per-) appears only in the
+    # page's CATEGORY tags, not the main etymology prose -- per this
+    # project's standing rule (only surface a PIE connection when the word's
+    # own recorded chain states it explicitly, never inferred from a
+    # category tag), root_pie stays False here.
+    "expert": {"p": "French", "d": "Latin", "chain": ["French", "Latin"], "prox_kind": "borrowed",
+               "root_lang": "Latin", "root_term": "expertus", "root_pie": False},
+
+    # "metaphor": same bare-stub shape. Live Wiktionary: "From Middle French
+    # metaphore, from Latin metaphora, from Ancient Greek metaphora, from
+    # metaphero ('to transfer')." PIE root (*bher-) again only in category
+    # tags, not the main prose -- root_pie False for the same reason as
+    # "expert".
+    "metaphor": {"p": "French", "d": "Greek", "chain": ["French", "Latin", "Greek"], "prox_kind": "borrowed",
+                 "root_lang": "Ancient Greek", "root_term": "μεταφορά", "root_pie": False},
+
+    # "adult": same bare-stub shape. Live Wiktionary: "From French adulte,
+    # from Latin adultus... perfect passive participle of adolesco." PIE
+    # roots again only in category tags (*h2el-, *h2ed-), not main prose --
+    # root_pie False, same reasoning as "expert"/"metaphor".
+    "adult": {"p": "French", "d": "Latin", "chain": ["French", "Latin"], "prox_kind": "borrowed",
+              "root_lang": "Latin", "root_term": "adultus", "root_pie": False},
+
+    # "puppy": same bare-stub shape. Live Wiktionary: "From earlier puppie
+    # ('a woman's pet dog'), of uncertain origin, but probably from Middle
+    # English *puppee, *poupee, from Old French poupee, popee ('a doll;
+    # puppet')." Wiktionary's own hedge ("of uncertain origin, but
+    # probably") is softer than a flat assertion, but still the
+    # best-documented path stated on the page, not a guess of our own.
+    "puppy": {"p": "French", "d": "French", "chain": ["French"], "prox_kind": "borrowed",
+              "root_lang": "Old French", "root_term": "poupée", "root_pie": False},
+
+    # "presence": raw data has ONLY etymologically_related_to (hedge, not
+    # ancestry) rows -- no entry at all in `words`. Live Wiktionary: "Through
+    # Old French presence, from Latin praesentia."
+    "presence": {"p": "French", "d": "Latin", "chain": ["French", "Latin"], "prox_kind": "derived",
+                 "root_lang": "Latin", "root_term": "praesentia", "root_pie": False},
+
+    # "familiar": bare has_root PIE stub. Live Wiktionary: "Middle English
+    # familiar, familier, from Latin familiaris" -- no French/Anglo-Norman
+    # intermediate stage named. The page's PIE tree (*dheh1-) is explicitly
+    # labeled as belonging to the PORTUGUESE section of the same page, not
+    # English -- confirmed by reading the actual page structure, not
+    # assumed, and root_pie is False here specifically because of that
+    # mislabeling risk. Fixing this also fixes "unfamiliar" for free (it
+    # cites "familiar" as its root via has_prefix_with_root, and
+    # corrections.py is applied before the inheritance patches run).
+    "familiar": {"p": "Latin", "d": "Latin", "chain": ["Latin"], "prox_kind": "borrowed",
+                 "root_lang": "Latin", "root_term": "familiāris", "root_pie": False},
+
+    # "unless": absent entirely, and -- verified before assuming otherwise --
+    # NOT actually a live "un" + "less" compound despite the spelling.  Live
+    # Wiktionary: "From Middle English unlesse, earlier on lesse (modern on
+    # + less)... The quality of negation in the word and the lack of stress
+    # changed on to un-." A single native English-internal formation, not a
+    # borrowing and not a transparent modern compound (compounds.py would be
+    # the wrong mechanism -- it would literally fabricate the folk etymology
+    # this correction exists to avoid).
+    "unless": {"p": "Germanic", "d": "Germanic", "chain": ["Germanic"], "prox_kind": "inherited",
+               "root_lang": "Middle English", "root_term": "unlesse", "root_pie": False},
 }
 
 # Hub words EXCLUDED from convert_wikt.py's root-inheritance patches

@@ -5,4 +5,5 @@ __pycache__/
 # (added 2026-07-24: etymology-fix-word, etymology-regen).
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+.claude/worktrees/
 .html

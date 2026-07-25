@@ -128,6 +128,65 @@ except ImportError as e:
     check(f"could not import app.py to check tree consistency ({e})", False)
 
 print()
+print("=== Issue #17: 347-paragraph coverage scan fixes (2026-07-24) ===")
+IRREGULAR_FORMS_FIXED = ["hidden", "meant", "got", "gotten", "woke", "swung",
+                         "spun", "stung", "sped", "snuck", "laid", "heard"]
+for word in IRREGULAR_FORMS_FIXED:
+    got = bucket(word)
+    check(f"{word} -> resolved, not Unknown (got {got})", got != "Unknown")
+
+FV_PLURALS = {"wolves": "wolf", "knives": "knife", "shelves": "shelf"}
+for plural, singular in FV_PLURALS.items():
+    pb, sb = bucket(plural), bucket(singular)
+    check(f"{plural} -> matches {singular}'s bucket (got {pb} vs {sb})",
+          pb == sb and pb != "Unknown")
+
+UN_PREFIX_BRIDGE = {"unheard": "hear", "unexplained": "explain", "unusual": "usual",
+                    "unfamiliar": "familiar"}
+for word, root in UN_PREFIX_BRIDGE.items():
+    wb, rb = bucket(word), bucket(root)
+    check(f"{word} -> matches {root}'s bucket via inheritance bridge (got {wb} vs {rb})",
+          wb == rb and wb != "Unknown")
+# Note: "unusual matching usual's bucket" above already proves it isn't
+# wrongly inheriting from the bound morpheme "un-" (which resolves to a
+# totally different, unrelated chain -- see convert_wikt.py's bound-
+# morpheme filter, issue #17) -- a separate assertion here would be redundant.
+
+HAND_VERIFIED = {
+    "previous": "Latin", "mom": "Germanic", "package": "Germanic",
+    "incident": "French", "expert": "French", "metaphor": "French",
+    "adult": "French", "puppy": "French", "presence": "French",
+    "familiar": "Latin", "unless": "Germanic",
+}
+for word, expected in HAND_VERIFIED.items():
+    got = bucket(word)
+    check(f"{word} -> {expected} (got {got})", got == expected)
+
+print()
+print("=== Hand-verified compounds.py must never be silently bypassed ===")
+# Found 2026-07-24 auditing ALL 743 compounds.py entries after widening
+# convert_wikt.py's inheritance patches: 147 entries started resolving via
+# an auto-inherited chain instead of their hand-verified split (worse,
+# less-complete answers, e.g. "mountainside" losing "side" entirely), and 3
+# (bathrobe/bathtub/bluebird) regressed all the way to Unknown via an
+# unrelated pre-existing bug (EtyResolver citing an ISO code with no bucket
+# mapping, chain=["Unknown"], which used to block the compound fallback
+# from ever being reached). Both fixed generally in resolver.py -- this
+# checks the ENTIRE compounds.py table, not just a sample, since the whole
+# point is that this must hold for all 743, not just the ones spot-checked
+# today.
+from compounds import COMPOUND_SPLITS
+bypassed = [w for w in COMPOUND_SPLITS if not RESOLVER.resolve(w).view("direct").parts]
+check(f"all {len(COMPOUND_SPLITS)} compounds.py entries still show their split (0 bypassed, got {len(bypassed)}: {bypassed[:10]})",
+      len(bypassed) == 0)
+
+NEW_COMPOUNDS = ["mountainside", "faraway", "foothill", "foothills",
+                  "downside", "downsides", "earlobe", "earlobes"]
+for word in NEW_COMPOUNDS:
+    view = RESOLVER.resolve(word).view("direct")
+    check(f"{word} splits into parts", bool(view.parts))
+
+print()
 total = passed + len(failures)
 print(f"{passed}/{total} checks passed")
 if failures:

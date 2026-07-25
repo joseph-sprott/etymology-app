@@ -83,11 +83,11 @@ End goal: **every possible English word in the database.**
 - Python pipeline is complete and functional. Coverage on sample prose:
   **~98%** of tokens classified (up from ~81% before the 2026-07-23 pipeline
   rewrite, up from ~44% with the original data source).
-- Database: `wikt_words.json` — **213,123 English words** as of 2026-07-24
-  (was 72,732; see known issue #15 -- the 3x jump is the "no entry at all"
-  gap for derived words like `professional`/`mindset`, not new source data)
-  (plus a separate **21,857-entry `auto_compounds` table**, see known issues
-  #14/#15) with resolved proximate bucket, deepest bucket, and donor chain.
+- Database: `wikt_words.json` — **244,094 English words** as of 2026-07-24
+  (was 72,732 before issue #15's "no entry at all" widening; further widened
+  by issue #17's `has_affix` + irregular/stem-bridge fixes) (plus a separate
+  **~22,300-entry `auto_compounds` table**, see known issues #14/#15/#17)
+  with resolved proximate bucket, deepest bucket, and donor chain.
   Rebuilt 2026-07-23 by
   `convert_wikt.py` directly from etymology-db's raw relation table (now
   present on this machine as `etymology.parquet` / `etymology.csv`, see
@@ -1271,6 +1271,126 @@ Adding a data source = one new class with `resolve()`, added to the list in
     (and structurally cannot, without losing real tree richness) fully
     automate away the per-word hand-verification discipline for individual
     collision corrections.
+17. **Large-scale coverage audit -- 2026-07-24.** Joe: run real paragraphs
+    through the analyzer at scale, find every common word that shouldn't be
+    Unknown, diagnose the aggregate pattern(s), then fix the patterns rather
+    than whack-a-moling individual words. Full methodology, findings, and
+    the fix plan were reported to and approved by Joe before any code
+    changed (including a mid-course model-switch attempt that didn't
+    succeed -- proceeded under Sonnet 5 per his explicit go-ahead).
+
+    **Corpus**: `randomwordgenerator.com/paragraph.php` turned out to be
+    JavaScript-only (no server-rendered text); traced its compiled JS to a
+    fixed, static bank of 347 real paragraphs (`json/paragraphs.json`) and
+    processed all 347 once (strictly more thorough than repeated sampling
+    from the same fixed pool). New tooling: `scripts/scan_unknown_words.py`
+    (deterministic corpus scanner, flags likely-proper-nouns as a hint via a
+    capitalized-mid-sentence heuristic, never an auto-filter) and the
+    `etymology-coverage-scan` skill.
+
+    **Diagnosis**: 191 unique Unknown words across 347 paragraphs, 156 real
+    (non-proper-noun) candidates, sorting into six confirmed root causes:
+    - **(A) `_IRREGULAR_FORMS` incomplete**: covered ~100 of English's ~200
+      common irregular verbs. `hid`, `meant`, `got`/`gotten`, `woke`/`awoke`,
+      `swung`, `spun`, `stung`, `sped`, `snuck`, `laid`, `heard`, and ~80
+      more added (189 entries total now).
+    - **(A2) Data-layer inheritance never tried the resolver's own fallback
+      cascade** on a cited root: `hidden` cites root `hid`, which has zero
+      raw data of its own and needs the resolver's irregular-form table to
+      resolve -- but `convert_wikt.py`'s inheritance patch only checked for
+      an exact key match, so this and `unheard`->`hear`,
+      `unexplained`->`explain` (regular stemming) all fell through even
+      though the resolver could clearly answer them once asked the right
+      way. Fixed by importing `_irregular_candidates`/`_stem_candidates`
+      (pure functions, no circular dependency) into `convert_wikt.py` and
+      trying them when an exact-key lookup fails.
+    - **(A3) `has_affix` widening + a real bug caught while verifying it**:
+      widening `_ROOT_POINTER_RELS` to include `has_affix` (lower priority
+      than `has_prefix_with_root`) caught `unusual`-shaped words (two
+      `has_affix` rows: the bound affix itself and the real root). Caught
+      before shipping: `unusual` was inheriting from the bound-morpheme
+      fragment `"un-"` itself (which has its own, apparently WRONG, entry --
+      Latin `ūnus` "one," unrelated to the negative prefix) instead of
+      `"usual"`, because `"un-"` happened to resolve and got tried first.
+      Checked the scale directly: 26,967 `has_affix` rows across the whole
+      dataset point at a bound-morpheme-shaped term. Fixed generally by
+      skipping any candidate starting or ending in `-` (Wiktionary/
+      etymology-db's own convention for marking a bound affix, not a guess).
+    - **(B) No f/v plural-alternation rule**: `wolf`/`wolves`,
+      `knife`/`knives`, `shelf`/`shelves` -- same shape already hand-patched
+      once for `self`/`selves` in `corrections.py` rather than generalized.
+      Verified empirically against all 16 real target pairs plus every
+      regular `-fs` plural (roofs/chiefs/beliefs/...) before shipping --
+      the two suffixes never overlap, so the collision risk that forced a
+      length floor on the earlier `-cy` rule doesn't apply here.
+    - **(C) Bare-root-PIE stubs / hedge-only relations**: `incident`,
+      `expert`, `metaphor`, `adult`, `puppy`, `presence` -- literally the
+      same still-open 1,245-word residual from known issue #14. Joe's
+      decision on the standing a/b/c question (asked fresh, given this
+      scan's concrete evidence of scale): **(c), pursue a different data
+      source for the remainder** -- NOT a blanket lower-confidence-tier
+      policy change. Scoped today to hand-verifying the specific words this
+      scan surfaced (matching the `generate`/`tag`/`auto` pattern), not
+      solving the full 1,245-word class.
+    - **(D) Common words entirely absent from the raw snapshot**:
+      `previous`, `mom`, `package` -- not rare words, updates the earlier
+      assumption that coverage gaps are mostly rare-word territory.
+    - **(E) Missing compounds**: `mountainside`, `faraway`, `foothill(s)`,
+      `downside(s)`, `earlobe(s)` -- all verified live, both parts already
+      resolving on their own.
+
+    Eleven words hand-verified against live Wiktionary and added to
+    `corrections.py` + `tree_corrections.py` together (categories C/D):
+    `previous`, `mom` (inherits `mama`'s own already-correct PIE-connected
+    chain -- `momma` only has a hedge relation to `mama`, but a clipping
+    being closely tied to a word with real data is a verifiable claim, not
+    a guess, matching the existing `zoo` clipping precedent), `package`
+    (inherits `pack`'s chain rather than the "possibly influenced by"
+    French/Latin hedge Wiktionary itself doesn't commit to), `incident`,
+    `expert`, `metaphor`, `adult`, `puppy`, `presence`, `familiar` (fixing
+    this one also fixes `unfamiliar` for free via the existing
+    corrections-applied-before-patches ordering), and `unless` (verified to
+    NOT actually be a live `un`+`less` compound despite appearances -- a
+    single Middle English-internal sound-change formation; compounds.py
+    would have fabricated a folk etymology here).
+
+    **Two more real bugs found and fixed while auditing the results, not
+    guessed at**: `_is_reliable_root`/case-fallback-shaped bugs are now a
+    known FAMILY, not a one-off -- checked the ENTIRE 743-entry
+    `compounds.py` table after shipping (A2/A3), not just a sample:
+    - **147 of 743** hand-verified compounds started resolving via an
+      auto-inherited chain instead of their split -- not factually wrong,
+      but a worse, less-complete answer for a genuine two-content-word
+      compound (e.g. `mountainside` silently losing `side` and showing only
+      `mountain`'s story). Fixed in `resolver.py`: a hand-verified
+      `compounds.py` split now wins over an answer whose `inherited_from`
+      is set (i.e., not the word's own genuine directly-recorded data) --
+      scoped narrowly so a word with real data of its own is untouched,
+      preserving `compounds.py`'s own documented design intent.
+    - **3 of 743** (`bathrobe`/`bathtub`/`bluebird`) had regressed all the
+      way to Unknown -- a PRE-EXISTING bug, unrelated to today's widening:
+      `EtyResolver` can cite an ISO code `buckets.py` doesn't map
+      (`bucket_for(iso) == "Unknown"`), and `_try()`'s "any non-empty chain
+      wins" check trusted that non-answer immediately, permanently blocking
+      the compound fallback. Fixed by checking `chain[0]`'s bucket
+      specifically (not "any entry" -- `taxicab` has a real chain mixed
+      with an Unknown entry, still needed the narrower check to land
+      correctly) rather than raw chain truthiness. `test_regression.py`
+      gained a check against the FULL 743-entry table, not a sample, since
+      the whole point is this must hold for all of them.
+
+    **Result**: 191 -> 139 unique Unknown words, 156 -> 105 real-gap
+    candidates across the same 347-paragraph corpus (a single unchanged
+    measurement, re-run after the fix) -- roughly a 30% reduction in one
+    pass, via 6 structural/generalizable fixes plus 11 individually
+    hand-verified words, not per-word patching. `wikt_words.json`: 213,132
+    -> 244,094 words. Full regression suite (82 checks, including the new
+    full-`compounds.py`-table check) passes. Honest residual: 105 words
+    remain, mostly scattered without as strong a shared pattern as the six
+    found here (`past`, `favorite`/`favourite`-shaped American-spelling
+    variants, a narrow source-data mojibake artifact in 2 of 347
+    paragraphs) -- not chased further this pass, consistent with "fix the
+    pattern, not every word."
 
 ## Data pipeline notes
 

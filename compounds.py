@@ -56,6 +56,25 @@ COMPOUND_SPLITS = {
     # against live Wiktionary: "From melt (verb) + down (adverb), a
     # deverbal from melt down (verb)."
     'meltdown': ('melt', 'down'),
+    # Added 2026-07-24 (issue #17, the 347-paragraph coverage scan). All
+    # four verified against live Wiktionary's own etymology section (not
+    # just plausible-looking): "mountainside" ("From mountain + side"),
+    # "faraway" ("Univerbation of far + away"), "foothill"/"foothills"
+    # ("From foot + hill"), "downside"/"downsides" ("Compound of down +
+    # side"). "earlobe"/"earlobes" has no explicit etymology section on
+    # Wiktionary (only "Alternative form of ear lobe"), but is self-evidently
+    # transparent (the lobe of the ear, no semantic shift) -- same bar
+    # "bagpipe"-shaped entries in the original curated-list sweep were held
+    # to. Singular+plural added together where both showed up as real gaps
+    # rather than just the one form the scan happened to catch.
+    'mountainside': ('mountain', 'side'),
+    'faraway': ('far', 'away'),
+    'foothill': ('foot', 'hill'),
+    'foothills': ('foot', 'hills'),
+    'downside': ('down', 'side'),
+    'downsides': ('down', 'sides'),
+    'earlobe': ('ear', 'lobe'),
+    'earlobes': ('ear', 'lobes'),
     'aftereffect': ('after', 'effect'),
     'anybody': ('any', 'body'),
     'anymore': ('any', 'more'),
