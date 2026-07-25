@@ -246,6 +246,103 @@ has been tried before.
 
 ---
 
+## Etymology resources for OTHER (non-English) languages
+
+Added 2026-07-24 at Joe's request — researched separately from the English-
+focused pass above. Two use cases: (a) cross-checking what a donor language's
+*own* etymological tradition says about a word (feeds #5's English-word vs.
+modern-donor-language-form comparison), and (b) a resource bank in case the
+project ever expands to analyze non-English text's own etymology, not just
+English's.
+
+### [CORE-adjacent] Multilingual Wiktionary extraction (best fit for cross-checking donor languages)
+
+- **kaikki.org non-English editions** — https://github.com/tatuylonen/wiktextract
+  Confirmed: kaikki.org doesn't only host the English-Wiktionary-edition
+  extraction the project already uses — it also separately extracts **other
+  Wiktionary language editions in their own right** (French, German, Spanish,
+  Russian, Chinese, Japanese, Italian, Portuguese, Dutch, Polish, Greek,
+  Czech, Korean, Turkish, Indonesian, Malay, Thai, Vietnamese, Kurdish),
+  downloadable as `{lang}-extract.jsonl.gz` at
+  `kaikki.org/dictionary/rawdata.html`. **Caveat: these non-English extractors
+  are newer and explicitly flagged by the maintainer as works-in-progress**
+  (per GitHub discussion) — etymology-field completeness per language isn't
+  verified, would need spot-checking before relying on it.
+- **serasset/dbnary** — https://github.com/serasset/dbnary (canonical repo on
+  GitLab, this is a GitHub mirror) — MIT, actively updated (last push
+  2026-07-24). **Stronger, more mature alternative for this exact need.**
+  Extracts **26 Wiktionary language editions** into RDF (OntoLex-Lemon
+  vocabulary), purpose-built and published academically (Semantic Web
+  Journal, 2016) specifically for cross-language etymology/translation
+  relations. Likely the best single source for "what does French's/German's/
+  Russian's own Wiktionary edition say about this word," without needing a
+  separate wiktextract-style parser per language.
+- **Wikidata Lexemes** — not a GitHub repo, but worth noting: Wikidata's
+  Lexeme/Form/Sense model includes a derivation/etymology property spanning
+  mostly Indo-European plus some Samic, Malay, and Interlingua entries,
+  queryable live via SPARQL against the public Wikidata endpoint.
+
+### Per-language dedicated etymological dictionaries (digitized, open)
+
+| Language | Repo | What it actually is | License | Activity |
+|---|---|---|---|---|
+| Russian | `tamila-krashtan/vasmer` | Full digitized Vasmer/Fasmer *Etymological Dictionary of Russian* (public domain original), OCR-corrected | None declared | Abandoned (2020) |
+| Latin | `PerseusDL/lexica` + forks (`IohannesArnold/lewis-short-json`, `CIRCSE/LewisShort`) | Full Lewis & Short *Latin-English Dictionary* (1879, public domain), XML/TEI/JSON/RDF | CC-BY-SA-4.0 | Perseus active (2026-05); JSON fork stale (2016) |
+| Latin | `CIRCSE/EtymologicalDictionaryLatin` | RDF *links* into de Vaan's dictionary (Brill-copyrighted) — metadata only, not the text | NOASSERTION | Low (2022) |
+| Sanskrit | `sanskrit-lexicon/MWS` (org: `sanskrit-lexicon`) | Full digitized Monier-Williams Sanskrit-English Dictionary (1899, public domain), SLP1-encoded, includes etymological notes/cognates | CC-BY-SA-4.0 | Very active |
+| Sanskrit | `hrishikeshrt/PyCDSL` | Python client for the Cologne Digital Sanskrit Lexicon (MW + others) | NOASSERTION | Semi-active (2022) |
+| Old Norse | `stscoundrel/cleasby-vigfusson-dictionary` (+ Rust/Python/Next.js ports) | Full Cleasby & Vigfusson Old Norse-English Dictionary (public domain, 35,000+ entries), structured JSON | MIT | Active (2024-09) |
+| Chinese | `skishore/makemeahanzi` | Explicit **etymology field** per character (pictographic/ideographic/pictophonetic type, decomposition, phonetic/semantic components), ~9,000 characters | NOASSERTION ("free, open-source" per README — verify before commercial use) | Very active |
+| Chinese/Japanese | `mifunetoshiro/kanjium` | Readings/frequency/meanings — no etymology narrative, supplementary only | NOASSERTION | Active |
+| Arabic | `CAMeL-Lab/camel_tools` | Morphological analyzer outputting triliteral **roots**/derivational patterns — not an etymology narrative, but useful root-extraction tooling to feed a Semitic root structure | MIT | Active |
+
+**Confirmed absent (checked directly, not just unsearched) — copyright-restricted, no open GitHub dataset exists:**
+German (Kluge — De Gruyter), Greek (Beekes — Brill), Spanish (Corominas —
+Gredos), Semitic broadly (Militarev & Kogan), Proto-Slavic (ESSJa — StarLing
+web-query only, not downloadable), dedicated Japanese kanji-etymology
+narrative, dedicated Hebrew root-etymology dataset, French (CNRTL/TLFi —
+existing GitHub projects are live-scraping UIs against the website, not
+redistributable datasets). For all of these, the practical path is the
+Wiktionary/DBnary route above, not a dedicated dictionary dataset.
+
+### Broad multilingual cognate databases beyond Indo-European
+
+The `lexibank` org (already known for IE coverage via `iecor`/`asjp`) also
+hosts real **cognate-coded** (not just wordlist) datasets for some non-IE
+families:
+- **lexibank/sagartst** — Sino-Tibetan, 50 varieties/250 concepts/12,180
+  lexemes/8,711 cognates in 1,652 sets, CC-BY-4.0.
+- **lexibank/uralex** — Uralic, 27 varieties/313 concepts/9,751 cognates in
+  3,792 sets, includes loanword annotation, CC-BY-4.0, active (2026-02).
+- **lexibank/savelyevturkic** — Turkic family structural/cognate data.
+- No lexibank dataset with true cognate-set coverage (vs. plain wordlist) was
+  found for Afro-Asiatic/Semitic, Niger-Congo, or Austronesian specifically.
+
+**StarLing (Starostin's database)** — confirmed to hold real etymological/
+cognate data for Altaic, Sino-Tibetan, and Semitic families, comparable to
+what was asked about, but **not distributed as an open GitHub dataset** —
+only queryable via starlingdb.org's CGI interface or downloadable as
+Windows-native `.dbf` files, not JSON/CSV/CLDF. A community DBF reader exists
+(`rhaver/Starling-cs`) but doesn't rehost the data itself. Real data, not
+open-source-distributable.
+
+### Bottom line for this section
+
+- **Cross-checking a donor language's own etymology (feature #5):** use
+  `serasset/dbnary` first (mature, 26 editions, etymology-purpose-built);
+  fall back to kaikki.org's `{lang}-extract.jsonl.gz` for languages DBnary
+  doesn't cover, with spot-checking since those extractors are newer.
+- **If ever expanding to analyze non-English text's own etymology:** the
+  genuinely strong, ready-to-use, non-Wiktionary-dependent resources are
+  Sanskrit (`sanskrit-lexicon/MWS`), Old Norse (`stscoundrel/cleasby-
+  vigfusson-dictionary`), Chinese character etymology (`skishore/
+  makemeahanzi`), and Russian (`tamila-krashtan/vasmer`, needs cleanup).
+  German, Greek, Spanish, and Semitic-broad etymology all remain
+  copyright-blocked with no open substitute found — Wiktionary/DBnary
+  coverage of those languages is the fallback, not a dedicated dictionary.
+
+---
+
 ## Priority order if any of this is ever acted on
 
 1. **wiktextract / kaikki.org** — strict superset of `etymology-db`, closes
