@@ -1,7 +1,20 @@
 ---
 name: etymology-regen
 description: This skill should be used when code changes to convert_wikt.py, build_etymology_trees.py, resolver.py's data-consuming logic, corrections.py, compounds.py, or tree_corrections.py need to be applied to the live Etymology Analyzer data (e.g. "regenerate the database", "rebuild wikt_words.json", "run the pipeline again", "apply this fix to the data"), or after such a change when confirming nothing broke.
+disable-model-invocation: true
 ---
+
+<!--
+disable-model-invocation is set deliberately (2026-07-24 skill audit).
+This isn't a literal deploy/commit/send-message action, but it carries the
+same real-resource risk: a full run is a 30-70 minute unattended operation
+(two ~15-20 min full-database regenerations plus verification) that also
+kills and restarts a live server process. If Claude auto-triggered this on
+a request that didn't actually need it, that's a large, hard-to-notice
+waste, not a quick mistake to undo. User must invoke this explicitly
+(`/etymology-regen`) rather than Claude deciding on its own that a regen is
+warranted.
+-->
 
 # Regenerating the Etymology Analyzer database
 
@@ -42,7 +55,9 @@ do.
 Both scripts read the raw parquet fresh each run (~2 seconds) and do a full
 364,161-term pass -- there is no incremental/partial regen. Run each in the
 background and poll rather than blocking, and don't assume a timeout under
-~15 minutes means it hung.
+~15 minutes means it hung. Deciding WHICH of the two to run is a judgment
+call based on what actually changed -- not scripted, since it depends on
+reading the diff.
 
 ```powershell
 cd "C:\Users\Josep\Desktop\Etymology Project\etymology-app"
@@ -56,49 +71,60 @@ python build_etymology_trees.py 2>&1 # background, ~15-20 min, only if needed
 python test_regression.py
 ```
 
-This is a plain script (no pytest dependency) covering the historical
-verified-word suite, known multi-sense-collision corrections, the
-compound-display feature, the case-fallback guard, the bare-root-stub guard,
-and tree/analyzer consistency. It prints PASS/FAIL per check and exits
-non-zero on any failure -- do not proceed to restarting the server if
-anything fails. Investigate failures before continuing; a regen that
-regresses a previously-fixed word means something in the change was too
-broad (see `CLAUDE.md`'s known issues for examples of this happening and
-how it was caught, e.g. the `_is_reliable_root` safety filter).
+Plain script (no pytest dependency) covering the historical verified-word
+suite, known multi-sense-collision corrections, the compound-display
+feature, the case-fallback guard, the bare-root-stub guard, and
+tree/analyzer consistency. Prints PASS/FAIL per check and exits non-zero on
+any failure -- do not proceed to restarting the server if anything fails.
+Investigate failures before continuing; a regen that regresses a
+previously-fixed word means something in the change was too broad (see
+`CLAUDE.md`'s known issues for examples of this happening and how it was
+caught, e.g. the `_is_reliable_root` safety filter).
+
+For a quick pre-check on a single word without running the full suite,
+`scripts\check_word.py` (project root, shared with the `etymology-fix-word`
+skill) gives the same answer faster.
 
 ## 3. Restart the local Flask dev server
 
-Port 5000 has a documented Windows quirk: a stale socket entry can report
-LISTENING for several seconds after the owning process is actually dead.
-Don't loop waiting for the port to report free -- confirm the PID is dead,
-then start the new process directly.
-
 ```powershell
-$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-Get-NetTCPConnection -LocalPort 5000 -ErrorAction SilentlyContinue | Select-Object OwningProcess
+powershell -File .claude\skills\etymology-regen\scripts\stop_dev_server.ps1
 ```
 
-Stop that PID (`Stop-Process -Id <pid> -Force`), confirm it's gone
-(`Get-Process -Id <pid>` should error), then start fresh in the background:
+Deterministic -- finds whatever's genuinely `Listen`-ing on port 5000, stops
+it, and confirms the port is actually free before reporting success. Filters
+out two Windows table-entry artifacts confirmed while writing this script
+(not just documented, actually reproduced): a stale `Listen` row can outlive
+its already-dead owning process for several seconds, and an unrelated
+`TimeWait` row can report `OwningProcess = 0` (the System Idle Process,
+never a real server) -- neither should be treated as "still running."
+
+Then start fresh in the background (this step stays a direct background
+tool invocation, not a bundled script, so the harness can track it as a
+long-running process rather than a fire-and-forget daemon):
 
 ```powershell
 cd "C:\Users\Josep\Desktop\Etymology Project\etymology-app"
 python app.py   # background
 ```
 
-Werkzeug's debug-mode reloader spawns a child process -- if a single
-`Stop-Process` doesn't fully free the port, re-check
-`Get-NetTCPConnection` for whatever PID it now reports rather than assuming
-the original parent PID is the only one involved.
-
 ## 4. Live end-to-end check
 
-Don't declare the regen done on the regression script alone -- do one real
-HTTP round-trip against the word(s) the change was actually about:
-
 ```powershell
-Invoke-WebRequest -Uri "http://localhost:5000/" -Method Post -Body @{form="analyze"; text="the word(s) in question"; mode="direct"; word_sort="input"} -UseBasicParsing
+powershell -File .claude\skills\etymology-regen\scripts\http_smoke_test.ps1 -Word "WORD"
 ```
 
-Confirm a 200 status and that the per-word output shows the expected
-bucket/split before reporting the change as verified.
+Deterministic mechanics (POST, status check, response parsing); the one
+judgment call left is WHICH word to pass -- use whatever word the change was
+actually about. Don't declare the regen done on the regression script alone;
+this is the real HTTP round-trip through Flask and the templates, not just
+the resolver layer.
+
+## Additional resources
+
+- `.claude\skills\etymology-regen\scripts\stop_dev_server.ps1` -- step 3.
+- `.claude\skills\etymology-regen\scripts\http_smoke_test.ps1 -Word <word>` -- step 4.
+- `scripts\check_word.py` (project root -- shared with the `etymology-fix-word`
+  skill, not duplicated here) -- optional fast single-word pre-check,
+  referenced in step 2. All paths above are relative to the project root
+  (`C:\Users\Josep\Desktop\Etymology Project\etymology-app`).

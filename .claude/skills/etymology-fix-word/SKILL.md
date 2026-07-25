@@ -14,34 +14,29 @@ this sequence.
 
 ## 1. Reproduce the current answer
 
-Run the resolver directly (fast, no server needed) to see what the app
-actually returns today, across all three modes:
+Run the shared check script (deterministic, no need to hand-write this):
 
-```python
-from resolver import default_resolver
-r = default_resolver()
-res = r.resolve("WORD")
-for mode in ("direct", "influence", "root"):
-    v = res.view(mode)
-    print(mode, "->", v.bucket, "|", v.specific_lang or v.depth_lang, "| parts:", v.parts)
+```
+python scripts\check_word.py WORD
 ```
 
-If `v.parts` is set, the word is already resolving via a compound split --
-the fix (if any is needed) belongs in step 4's compound branch, not
-`corrections.py`.
+Prints the bucket for all three modes (direct/influence/root), or `split:
+part=bucket + part=bucket` if the word already resolves via a compound
+split -- if so, the fix (if any is needed) belongs in step 4's compound
+branch, not `corrections.py`.
 
 ## 2. Diagnose against the raw source data
 
 Never guess why a word is wrong -- check what Wiktionary's own data actually
-says. Query the raw relation table directly:
+says:
 
-```python
-import pandas as pd
-df = pd.read_parquet(r"C:\Users\Josep\Desktop\Etymology Project\etymology.parquet")
-eng = df[df["lang"] == "English"]
-rows = eng[eng["term"] == "WORD"]
-print(rows[["reltype", "related_lang", "related_term", "group_tag", "parent_tag", "parent_position"]].to_string())
 ```
+python scripts\check_raw_data.py WORD
+```
+
+Prints every raw relation row for that term (`reltype`, `related_lang`,
+`related_term`, `group_tag`, `parent_tag`, `parent_position`), or says
+plainly if the term has no raw entry at all.
 
 Three shapes have accounted for every bug found in this project so far --
 check which one this is before deciding a fix:
@@ -50,12 +45,10 @@ check which one this is before deciding a fix:
   sharing the same spelling (e.g. `tag`'s common "label" sense vs. an obscure
   Aramaic "crown" sense; `die`/`bull`/`and`/`low` are the same shape). Look
   for a row set that clearly doesn't match the sense the user means.
-- **Case-fallback homograph**: the word has NO lowercase entry at all, and
-  `WiktionaryResolver` silently fell back to an unrelated capitalized entry
-  (e.g. `ran` -> `Ran`, a Japanese-related entry; historically `went` ->
-  `Went`, a surname). Confirm by checking whether `rows` above is empty --
-  if so, check `words.get(word.capitalize())` in `wikt_words.json` for what
-  it actually matched.
+- **Case-fallback homograph**: the word has NO lowercase entry at all
+  (`check_raw_data.py` says so), and `WiktionaryResolver` silently fell back
+  to an unrelated capitalized entry (e.g. `ran` -> `Ran`, a Japanese-related
+  entry; historically `went` -> `Went`, a surname).
 - **Hedge-only relation**: the only rows present are `etymologically_related_to`
   (or `cognate_of`/`doublet_with`) -- these are NOT real ancestry, just a
   "see also" hint (e.g. `meltdown`'s only row is `etymologically_related_to
@@ -135,8 +128,8 @@ mechanism (see that function's docstring in `app.py` for the full "why").
 
 - `corrections.py`/`compounds.py`/`HUB_EXCLUSIONS` changes take effect
   immediately (`WiktionaryResolver` applies them at load time) -- just
-  re-run step 1's snippet to confirm the analyzer now shows the right
-  answer. No regeneration needed.
+  re-run `python scripts\check_word.py WORD` to confirm the analyzer now
+  shows the right answer. No regeneration needed.
 - `tree_corrections.py` changes do NOT take effect until
   `build_etymology_trees.py` is re-run (~15-20 minutes) -- that file bakes
   `TREE_CORRECTIONS` into `etymology_trees.json` at build time, it isn't
@@ -146,3 +139,10 @@ mechanism (see that function's docstring in `app.py` for the full "why").
   it points at a root/pattern many other words might share), that's a
   bigger design decision than this skill covers -- flag it rather than
   silently expanding scope.
+
+## Additional resources
+
+- `scripts/check_word.py` (project root, shared with the `etymology-regen`
+  skill) -- deterministic resolver check, steps 1 and 6.
+- `scripts/check_raw_data.py` (project root, shared) -- deterministic raw
+  parquet row dump, step 2.
