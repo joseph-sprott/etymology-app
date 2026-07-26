@@ -56,6 +56,14 @@ PANEL = {
     # compute + -er, with a PIE root on `compute`. That root made the walk
     # look finished, so the bars said PIE while the tree showed French.
     "computer":  "French",
+    # Split into stem + suffix, so half the word's weight went to the affix:
+    # `beautiful` lost half to `ful` (resolves to nothing -> Unknown) and
+    # `darkness` half to `ness` (a real word, a headland). The donor below was
+    # right the whole time -- test_regression.py guards the half that wasn't.
+    "beautiful": "Old French",
+    # Native descent; "Proto-West Germanic" counts as the donor here for the
+    # same reason `went` does -- it is simply the deepest non-English stage.
+    "darkness":  "Proto-West Germanic",
 }
 
 

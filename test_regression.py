@@ -216,6 +216,33 @@ for word in NEW_COMPOUNDS:
     check(f"{word} splits into parts", bool(view.parts))
 
 print()
+print("=== A derivational suffix is not a component word (2026-07-26) ===")
+# Found by testing localhost after the etymology.db rework: the dump's
+# formation templates list affixes alongside real components, so `beautiful`
+# split into `beauty` + `ful` and `darkness` into `dark` + `ness`. Each half
+# carries half the word's weight in the bar chart, so `ful` (which resolves to
+# nothing) pushed weight into Unknown, and `ness` -- a real word, a headland --
+# pushed it into an unrelated word's bucket. 36% of the derived words sampled
+# carried an explicitly hyphenated affix part.
+#
+# The guard is "no parts", not a bucket, because the bucket was never wrong:
+# every one of these words resolved to the right family the whole time, which
+# is exactly why nothing caught it.
+for word in ["beautiful", "darkness", "government", "quickly", "happiness",
+             "careful", "abacination"]:
+    view = RESOLVER.resolve(word).view("direct")
+    parts = [p.word for p in (view.parts or [])]
+    check(f"{word} is one word, not stem + affix (got {parts})", not view.parts)
+
+# The other half of the same rule: a real two-word compound must KEEP its
+# split. `craftsman` is recorded `crafts` + `-man` -- hyphenated, but `man` is
+# a word, and two earlier versions of the affix rule broke 263 and then 134 of
+# these before this one held.
+for word in ["craftsman", "businesswoman", "basketball", "mountainside"]:
+    view = RESOLVER.resolve(word).view("direct")
+    check(f"{word} still splits into component words", bool(view.parts))
+
+print()
 print("=== Deepest Root must not credit a borrower with PIE descent (2026-07-25) ===")
 # Joe: "mile results as having a PIE root when I can't find one on wiktionary."
 # The PIE root turned out to be real (Wiktionary tags it via a root template,

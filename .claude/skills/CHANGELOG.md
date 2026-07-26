@@ -8,6 +8,41 @@ change).
 
 ---
 
+## 2026-07-26 (handoff edits, applied 2026-07-26)
+
+Two edits queued at the end of the etymology.db rework session and blocked
+only by background-session isolation. Applied from `HANDOFF.md` verbatim
+except where noted.
+
+**Updated `etymology-fix-word`** — found by running the `etymology-skill-audit`
+checklist: a **composability** gap. `scripts/verify.py`'s known-word panel is
+the natural home for every word-level fix, but only `etymology-regen`
+referenced it, so a word fixed via this skill would never enter the panel and
+the next regression would find it the hard way. New step 5 ("Lock the fix in")
+documents the `PANEL` dict and its three value shapes (a donor language,
+`None` for must-stay-native, `"*"` for any-foreign-donor), and states the
+convention that earns the panel its keep: every entry is a bug that ACTUALLY
+occurred. The old steps 5/6 renumbered to 6/7. Step 6 (the tree-entry rule)
+also gained a scope caveat at the top: it now applies only to a legacy
+`corrections.py` fix — a word answered from `etymology.db` reads the same rows
+through `etymology_db.py` for both the analyzer and the tree, so there is
+nothing to mirror.
+
+**Updated `CLAUDE.md`** (not a skill, logged here because it was the other half
+of the same handoff) — added a "READ THIS FIRST" section immediately above
+"Current state", because CLAUDE.md still presented `convert_wikt.py` /
+`wikt_words.json` as the live pipeline; a session following it would rebuild
+files nothing reads first, the same trap already fixed in `etymology-regen`.
+Inserted, not replaced — the existing history is valuable and is now marked
+historical rather than deleted. The Architecture table gained the five modules
+the rework added. One deviation from the handoff text: it ended with "See
+known issue #18 for what changed and why", but CLAUDE.md's known issues stop
+at #17 and commit `8711878` didn't touch CLAUDE.md, so #18 does not exist —
+pointed the reader at that commit instead rather than leave a dangling
+reference.
+
+---
+
 ## 2026-07-26 (later)
 
 **New `scripts/verify.py` + `scripts/build.ps1`, wired into `etymology-regen`.**

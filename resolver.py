@@ -601,6 +601,19 @@ class WiktextractResolver(Resolver):
                            root_term=e.get("root_term"))
 
 
+# Derivational suffixes the wiktextract dump records WITHOUT their hyphen, so
+# they arrive looking like ordinary component words. Taken from the 30 most
+# common hyphen-less final formation parts in `etymology.db` (a real frequency
+# scan, not recall), keeping only those that are never a free-standing word in
+# a compound. `man`/`ship`/`head`/`like` appear in that scan too and are
+# deliberately absent -- see `DbResolver._is_bound_affix` for why.
+_BOUND_SUFFIXES = frozenset("""
+    er ly ize ise ist ic ism ity ive ous ness less able ible ally al ful
+    ment ation ization ite ess ee eth est ed ing ish y age ant ent ance ence
+    ory ary ion ian ify ial
+""".split())
+
+
 class DbResolver(Resolver):
     """
     Path C backend: etymology.db, via etymology_db.py.
@@ -626,9 +639,75 @@ class DbResolver(Resolver):
         import etymology_db
         self._db = etymology_db.get(path) if path else etymology_db.get()
         self._english = etymology_db.ENGLISH_STAGES
+        self._affix_cache: dict = {}
 
     def resolve(self, word: str) -> Resolution:
         return self._resolve(word, 0)
+
+    def _is_bound_affix(self, term: str, is_last: bool = False) -> bool:
+        """
+        Is this formation part a bound morpheme (`-ness`) rather than a word?
+
+        A component chip and a percentage share are claims about a WORD. The
+        dump's formation templates list affixes alongside real components, so
+        without this `darkness` splits into `dark` + `ness` -- and `ness` is a
+        real word (a headland), so half of `darkness` was being counted under
+        that unrelated word's bucket. `beautiful` lost half its weight to
+        `ful`, which resolves to nothing at all.
+
+        Two signals, no guessing:
+          1. Wiktionary's own convention: a leading or trailing hyphen marks
+             a bound affix. Covers `-ness`/`-ly`/`a-`.
+          2. The dump drops that hyphen inconsistently -- `beautiful` records
+             `ful`, `government` records `ment`. `_BOUND_SUFFIXES` names those
+             hyphen-less spellings, and only in FINAL position.
+
+        Two weaker rules were tried against the 742-entry `compounds.py` table
+        first and rejected by measurement, not by taste:
+
+          "`-term` exists as an entry, any position" cost 263 splits -- `up-`,
+          `back-`, `over-` and `after-` are real prefixes AND real first
+          components, so `upside`/`backdrop`/`background` broke.
+
+          The same test in final position only still cost 134, because
+          Wiktionary also carries `-ball`, `-woman`, `-work` and `-man`
+          suffix entries; `basketball` and `businesswoman` are not affixed
+          forms. Existence of a hyphenated entry simply does not separate the
+          two cases.
+
+        So `_BOUND_SUFFIXES` is a curated list, taken from the 30 most common
+        hyphen-less final parts in the database rather than from memory. The
+        genuinely ambiguous members of that list -- `man`, `ship`, `head`,
+        `like` -- are deliberately LEFT OUT and still count as components:
+        they are real words in real compounds (`craftsman`, `friendship`), and
+        the cost of treating the suffix sense as a component is one Germanic
+        half counted under Germanic, whereas dropping them would cost real
+        splits. The template name that would settle every case (`suffix` vs
+        `compound`) is collapsed to `formed_from` at build time and is not in
+        the database -- recovering it is a build-time change, not a lookup one.
+
+        The whole word keeps its own answer either way: `parts` is display and
+        weight-splitting only, and `lineage()` still walks the formation to
+        build the chain, so dropping a part costs richness, never coverage.
+        """
+        bare = term.strip("-")
+        if not bare:
+            return True
+        if is_last and bare in _BOUND_SUFFIXES:
+            return True
+        # A hyphen says Wiktionary FORMATTED this as an affix, which is not the
+        # same as saying it isn't a word: `craftsman` is recorded `crafts` +
+        # `-man`, and `-ware`/`-parent`/`-woman` are the same shape. Dropping
+        # every hyphenated part cost 76 hand-verified splits. So a hyphenated
+        # part only fails here when the bare spelling isn't a word either --
+        # `-ful` -> `ful` resolves to nothing, `-man` -> `man` resolves fine.
+        if term != bare:
+            cached = self._affix_cache.get(bare)
+            if cached is None:
+                cached = self._db.entry(bare) is None
+                self._affix_cache[bare] = cached
+            return cached
+        return False
 
     def _resolve(self, word: str, depth: int) -> Resolution:
         entry = self._db.entry(word)
@@ -667,8 +746,14 @@ class DbResolver(Resolver):
         if depth == 0 and entry.primary:
             terms = [c.term for c in entry.primary.head.children
                      if c.rel == "formed_from" and c.term]
+            terms = [t for i, t in enumerate(terms)
+                     if not self._is_bound_affix(t, is_last=(i == len(terms) - 1))]
             if len(terms) >= 2:
-                parts = [self._resolve(t, depth + 1) for t in terms]
+                # Show the chip as the WORD. A surviving part is one whose bare
+                # spelling is a real entry (that is what got it past the affix
+                # check), so `crafts` + `-man` should read "man", not "-man".
+                parts = [self._resolve(t.strip("-") or t, depth + 1)
+                         for t in terms]
 
         line = self._db.lineage(entry)
         # A ROOT IS NOT A DONOR. `trust` runs English -> Middle English ->

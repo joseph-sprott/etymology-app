@@ -10,6 +10,7 @@ import json
 import os
 import sys
 from collections import Counter
+from urllib.parse import quote
 
 from flask import Flask, render_template_string, request
 
@@ -477,6 +478,97 @@ def node_slug(node):
     as the rest of the app (English stages already map to Germanic via
     buckets_wikt.py, no special-casing needed here)."""
     return bucket_slug(bucket_for_name(node["lang"]))
+
+
+# What a reconstructed root MEANS, for the hover tooltip Joe asked for
+# 2026-07-26 ("hover over a PIE root and see what that root means -- gidʰ-
+# means kid/goatling/little goat"). Built by build_root_glosses.py from
+# Wiktionary's own template arguments; see that module for why the meaning
+# can't come from the database (`ety_node.gloss` is empty for all 12,996 root
+# nodes) and why it is never inferred from the descendant word.
+#
+# Missing file is a normal state, not an error: the app runs fine without it
+# and simply shows no tooltip, exactly like a word with no definition.
+_ROOT_GLOSSES = None
+_ROOT_GLOSS_FOLD = None
+
+
+def _load_root_glosses():
+    global _ROOT_GLOSSES, _ROOT_GLOSS_FOLD
+    if _ROOT_GLOSSES is not None:
+        return
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        "root_glosses.json")
+    try:
+        with open(path, encoding="utf-8") as fh:
+            _ROOT_GLOSSES = json.load(fh)
+    except Exception as exc:
+        print(f"root_glosses.json unavailable ({exc}); root tooltips off",
+              file=sys.stderr)
+        _ROOT_GLOSSES = {}
+    # Citation styles differ over the TRAILING hyphen that marks a bound root
+    # (`*gʰaid-` vs `*gʰaid`), so fold that -- and only where the result is
+    # unambiguous, since two roots collapsing to one spelling would show a
+    # meaning belonging to the other.
+    #
+    # The LEADING hyphen is never folded. It marks a suffix, which is a
+    # different lexical item, not a different way of writing the same one:
+    # folding both ends matched Proto-West-Germanic `*frī` ("free") to the
+    # suffix `-frī` and captioned the root of `free` as "-free".
+    folded = {}
+    for key in _ROOT_GLOSSES:
+        folded.setdefault(key.rstrip("-").casefold(), []).append(key)
+    _ROOT_GLOSS_FOLD = {k: v[0] for k, v in folded.items() if len(v) == 1}
+
+
+def root_gloss(term):
+    """
+    The recorded meaning of a reconstructed form, or None.
+
+    Returns the most frequently attested wording plus any alternative wordings
+    Wiktionary's own entries use, so the card can show that a reconstruction's
+    meaning is a range rather than a single settled definition.
+    """
+    if not term:
+        return None
+    _load_root_glosses()
+    key = term.lstrip("*").strip()
+    rec = _ROOT_GLOSSES.get(key)
+    if rec is None:
+        alt = _ROOT_GLOSS_FOLD.get(key.rstrip("-").casefold())
+        rec = _ROOT_GLOSSES.get(alt) if alt else None
+    return rec
+
+
+def is_reconstructed(term):
+    """Wiktionary's own convention: a leading asterisk marks a form that is
+    reconstructed rather than attested, and those live under a different
+    namespace on the site."""
+    return bool(term) and term.startswith("*")
+
+
+def wiktionary_url(term, lang=None):
+    """
+    Link to the Wiktionary page for a term (Joe, 2026-07-26 -- "a link to the
+    Wiktionary page whenever you look up a word", for spot-checking answers
+    against the source).
+
+    Reconstructed forms are not ordinary entries: `*gʰaidos` lives at
+    `Reconstruction:Proto-Indo-European/gʰaidos`. Without the language name
+    that page cannot be addressed at all, so those link to the site's search
+    instead of to a URL that would 404.
+    """
+    if not term:
+        return None
+    term = term.strip()
+    if is_reconstructed(term):
+        form = term.lstrip("*")
+        if not lang:
+            return ("https://en.wiktionary.org/w/index.php?search="
+                    + quote(form))
+        return ("https://en.wiktionary.org/wiki/Reconstruction:"
+                + quote(lang.replace(" ", "_")) + "/" + quote(form))
+    return "https://en.wiktionary.org/wiki/" + quote(term)
 
 
 # Free-floating tree diagram (task 2026-07-23): Joe wants a "free floating"
@@ -991,6 +1083,33 @@ PAGE = """
     .wc-arrow { color: var(--text-secondary); margin: 0 0.15rem; }
     .wc-note { display: block; margin-top: 0.35rem; font-style: italic; color: var(--text-secondary); }
     .wc-cta { display: block; margin-top: 0.4rem; font-size: 0.8rem; color: var(--text-secondary); }
+    .wc-links { display: block; margin-top: 0.4rem; font-size: 0.8rem; }
+    .wc-wikt { color: var(--text-secondary); text-decoration: none; border-bottom: 1px dotted var(--text-secondary); }
+    .wc-wikt:hover { border-bottom-style: solid; }
+
+    /* Reconstructed-root meaning, shown on hover over a starred form in the
+       tree (Joe 2026-07-26). Same pure-CSS pattern as .word-card above --
+       pre-rendered server-side, revealed by :hover/:focus-within, no JS. */
+    .tree-node.has-root-gloss { position: relative; }
+    .tree-node.has-root-gloss .tree-term { border-bottom: 1px dashed var(--text-secondary); }
+    .root-card {
+      display: none; position: absolute; left: 0; top: 100%; z-index: 45;
+      min-width: 14rem; max-width: 24rem; margin-top: 0.3rem;
+      padding: 0.5rem 0.65rem; border-radius: 5px;
+      background: var(--surface); border: 1px solid var(--track-bg);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.16);
+      font-size: 0.85rem; line-height: 1.35; white-space: normal; text-align: left;
+      font-style: normal; cursor: default;
+    }
+    .tree-node.has-root-gloss:hover .root-card,
+    .tree-node.has-root-gloss:focus-within .root-card { display: block; }
+    .rc-head { display: block; font-weight: 600; font-style: italic; }
+    .rc-lang { margin-left: 0.4rem; font-weight: 400; font-style: normal;
+               font-variant: small-caps; letter-spacing: 0.03em; color: var(--text-secondary); }
+    .rc-gloss { display: block; margin-top: 0.25rem; }
+    .rc-also { display: block; margin-top: 0.3rem; color: var(--text-secondary); }
+    .rc-src { display: block; margin-top: 0.35rem; font-size: 0.78rem; font-style: italic;
+              color: var(--text-secondary); }
 
     /* Word Search: cognates & doublets */
     .rel-section { margin-top: 1.1rem; }
@@ -1033,6 +1152,10 @@ PAGE = """
       {%- if card and card.inherited_from %}<span class="wc-note">via {{ card.inherited_from }}</span>{% endif %}
       {%- if note %}<span class="wc-note">{{ note }}</span>{% endif %}
       <span class="wc-cta">click to search &rarr;</span>
+      {#- Straight to the source, for checking an answer against Wiktionary
+          itself. Links the word the definition actually belongs to, so an
+          inflected form points at the entry that has the content. #}
+      <span class="wc-links"><a class="wc-wikt" href="{{ wiktionary_url((card.defined_by if card and card.defined_by else word)) }}" target="_blank" rel="noopener">Wiktionary &#8599;</a></span>
     </span>
     {%- endif %}
   {% endmacro %}
@@ -1132,9 +1255,18 @@ PAGE = """
   {% endif %}
 
   {% macro render_branch(node) %}
+  {%- set rg = root_gloss(node.term) if is_reconstructed(node.term) else None %}
   <li>
-    <span class="tree-node" style="border-left-color: var(--c-{{ node_slug(node) }})">
-      <span class="tree-lang">{{ node.lang }}</span>{% if node.term %}<span class="tree-term">{{ node.term }}</span>{% endif %}
+    <span class="tree-node{{ ' has-root-gloss' if rg else '' }}" style="border-left-color: var(--c-{{ node_slug(node) }})">
+      <span class="tree-lang">{{ node.lang }}</span>{% if node.term %}<a class="tree-term" href="{{ wiktionary_url(node.term, node.lang) }}" target="_blank" rel="noopener">{{ node.term }}</a>{% endif %}
+      {%- if rg %}
+      <span class="root-card">
+        <span class="rc-head">{{ node.term }}<span class="rc-lang">{{ node.lang }}</span></span>
+        <span class="rc-gloss">&ldquo;{{ rg.gloss }}&rdquo;</span>
+        {%- if rg.also %}<span class="rc-also">also glossed: {{ rg.also|join('; ') }}</span>{% endif %}
+        <span class="rc-src">as glossed in {{ rg.count }} Wiktionary {{ 'entry' if rg.count == 1 else 'entries' }} citing this form</span>
+      </span>
+      {%- endif %}
     </span>
     {% if node.children %}
     <ul>
@@ -1163,6 +1295,9 @@ PAGE = """
         {%- if info.gloss %}{{ info.gloss }}{% endif %}
       </p>
       {% endif %}
+      {# The source, one click away -- every answer on this page should be
+         checkable against the page it was derived from. #}
+      <p class="search-meta"><a class="wc-wikt" href="{{ wiktionary_url(tree_word) }}" target="_blank" rel="noopener">&ldquo;{{ tree_word }}&rdquo; on Wiktionary &#8599;</a></p>
       {% if tree %}
         {% if tree_view == 'diagram' %}
           {% set d = build_diagram(tree) %}
@@ -1172,9 +1307,17 @@ PAGE = """
             <line x1="{{ e.x1 }}" y1="{{ e.y1 }}" x2="{{ e.x2 }}" y2="{{ e.y2 }}" stroke="var(--track-bg)" stroke-width="2" />
             {% endfor %}
             {% for n in d.nodes %}
-            <rect x="{{ n.x }}" y="{{ n.y }}" width="{{ n.w }}" height="{{ n.h }}" rx="6" fill="var(--surface-2)" stroke="{{ n.color }}" stroke-width="3" />
-            <text x="{{ n.x + 10 }}" y="{{ n.y + 16 }}" font-size="11" fill="var(--text-secondary)">{{ n.lang }}</text>
-            <text x="{{ n.x + 10 }}" y="{{ n.y + 31 }}" font-size="12" font-style="italic" fill="var(--text-primary)">{{ n.term or '' }}{% if n.term2 %} / {{ n.term2 }}{% endif %}</text>
+            {#- The list view reveals a styled card on hover; inside SVG the
+                equivalent is a <title> child, which browsers show as a native
+                tooltip. Same data, same source, rendered the way each medium
+                supports. #}
+            {%- set rg = root_gloss(n.term) if is_reconstructed(n.term) else None %}
+            <g>
+              {%- if rg %}<title>{{ n.term }} &mdash; "{{ rg.gloss }}"</title>{% endif %}
+              <rect x="{{ n.x }}" y="{{ n.y }}" width="{{ n.w }}" height="{{ n.h }}" rx="6" fill="var(--surface-2)" stroke="{{ n.color }}" stroke-width="3" />
+              <text x="{{ n.x + 10 }}" y="{{ n.y + 16 }}" font-size="11" fill="var(--text-secondary)">{{ n.lang }}</text>
+              <text x="{{ n.x + 10 }}" y="{{ n.y + 31 }}" font-size="12" font-style="italic" fill="var(--text-primary)">{{ n.term or '' }}{% if n.term2 %} / {{ n.term2 }}{% endif %}{% if rg %} <tspan font-size="10" font-style="normal" fill="var(--text-secondary)">&#9432;</tspan>{% endif %}</text>
+            </g>
             {% endfor %}
           </svg>
           {% endif %}
@@ -1286,7 +1429,9 @@ def index():
                                    info=info, word_cards=word_cards,
                                    bucket_slug=bucket_slug, root_slug=root_slug,
                                    node_slug=node_slug, bucket_breakdown=bucket_language_breakdown,
-                                   build_diagram=build_diagram, bucket_for_name=bucket_for_name)
+                                   build_diagram=build_diagram, bucket_for_name=bucket_for_name,
+                                   wiktionary_url=wiktionary_url, root_gloss=root_gloss,
+                                   is_reconstructed=is_reconstructed)
 
 
 if __name__ == "__main__":

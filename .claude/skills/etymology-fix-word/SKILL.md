@@ -122,7 +122,35 @@ content, the raw-data root cause) -- every existing entry in both files
 follows this convention, and it's what lets a future fix understand why the
 override exists instead of assuming it's stale.
 
-## 5. Always add the matching tree entry -- never skip this
+## 5. Lock the fix in: add the word to the verification panel
+
+**Do this for every word-level fix, before moving on.** `scripts/verify.py`
+carries a `PANEL` dict where each entry is a word that was once wrong, with
+the bug named in a comment:
+
+    "wolves":  "Proto-West Germanic",   # resolved to the surname Wolf
+    "ran":     "Old Norse",             # resolved to the Hebrew given name Ran
+    "trust":   None,                    # native: PIE is a root, not a donor
+    "bagpipe": "*",                     # "*" = must reach SOME foreign donor
+
+The value is the donor language that must appear, `None` for a word that must
+stay native, or `"*"` for "any foreign donor" when the point is only that the
+lookup reaches something. Then `python scripts\verify.py` re-checks every past
+fix in ~40 seconds.
+
+This is what keeps the panel worth running: it becomes a list of things that
+have ACTUALLY gone wrong, not a list of words someone found interesting. Four
+separate bugs during the 2026-07-26 rework were the same lowercase-key
+collision between a common word and a capitalised homograph -- each one only
+became visible because the previous one was in the panel.
+
+## 6. Always add the matching tree entry -- never skip this
+
+**Only needed for a legacy `corrections.py` fix.** If the word's answer comes
+from `etymology.db` (the normal case now -- check the `resolved to:` line in
+step 1), the tree and the analyzer read the SAME rows through
+`etymology_db.py` and cannot disagree; there is nothing to mirror. The rest of
+this section applies to the legacy file-backed path.
 
 This project has an explicit, repeatedly-stated rule: every feature that
 surfaces word-level data must show the same answer. A `corrections.py`-only
@@ -147,7 +175,7 @@ falls back to the resolver's compound-split data automatically for any word
 without its own tree, via the `RESOLVER.resolve(word).compound_parts`
 mechanism (see that function's docstring in `app.py` for the full "why").
 
-## 6. Verify, and know what's verified vs. not yet
+## 7. Verify, and know what's verified vs. not yet
 
 - `corrections.py`/`compounds.py`/`HUB_EXCLUSIONS` changes take effect
   immediately (`WiktionaryResolver` applies them at load time) -- just
@@ -186,6 +214,6 @@ mechanism (see that function's docstring in `app.py` for the full "why").
 ## Additional resources
 
 - `scripts/check_word.py` (project root, shared with the `etymology-regen`
-  skill) -- deterministic resolver check, steps 1 and 6.
+  skill) -- deterministic resolver check, steps 1 and 7.
 - `scripts/check_raw_data.py` (project root, shared) -- deterministic raw
   parquet row dump, step 2.

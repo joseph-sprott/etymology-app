@@ -78,6 +78,34 @@ features — expanded from two to three on 2026-07-22, see known issue #1):
 
 End goal: **every possible English word in the database.**
 
+## READ THIS FIRST — the data layer was replaced 2026-07-26
+
+`etymology.db` (SQLite) is now the canonical per-word store, read through
+`etymology_db.py` — **the only module that opens it**. Both the paragraph
+analyzer (`resolver.DbResolver`) and the Word Search tree (`app._tree_from_db`)
+read it, which is what finally makes them structurally unable to disagree.
+
+Everything below this section that describes `convert_wikt.py` /
+`wikt_words.json` / `etymology_trees.json` as **the** pipeline is now
+**historical**. Those files still exist and are still consulted, but only as
+lower-priority gap-fillers beneath the database (~151 words per 150,000 that
+exist in etymology-db or Etymological Wordnet but not in the wiktextract
+dump). They are no longer where a word's answer normally comes from.
+
+Read `etymology_schema.sql` for the table design and the reasoning behind each
+table. See known issue #18 for what changed and why, and #19 for the one real
+regression it introduced (derivational suffixes counted as component words).
+
+    python scripts/verify.py            # is the database good? ~40s, 4 lines out
+    powershell -File scripts/build.ps1  # rebuild + verify, ~10 min
+
+`ETYMOLOGY_DB=0` disables the new layer entirely and falls back to the old
+file-backed stack — use it to isolate whether a problem is in the database.
+
+**Still true and still load-bearing**: rules 1–3 above; "cognates/doublets are
+siblings, not ancestors"; corrections must propagate to every feature; verify
+against real sources rather than guessing.
+
 ## Current state (working, tested)
 
 - Python pipeline is complete and functional. Coverage on sample prose:
@@ -184,6 +212,11 @@ End goal: **every possible English word in the database.**
 | `build_etymology_trees.py` | Builds `etymology_trees.json` — a per-word NESTED tree (every branch preserved), separate from `wikt_words.json`'s deliberately-flattened `chain`. Added 2026-07-23 for the etymology-tree UI feature |
 | `compounds.py` | `COMPOUND_SPLITS` word→(part1, part2) allowlist for words that resolve to Unknown on their own but are verified two-word compounds (736 words). Consulted only as `ChainResolver.resolve()`'s last fallback — see known issue #11. `ChainResolver` also consults `wikt_words.json`'s auto-detected `auto_compounds` table alongside it (issue #14) — same fallback mechanism, but that data is machine-extracted from Wiktionary's own `compound_of`/`blend_of` tags, not individually hand-verified like these 736 |
 | `app.py` | Throwaway local Flask test UI (`localhost:5000`) — not the planned backend. Now also serves a single-word etymology-tree lookup (`TREES`/`node_slug`) and renders compound-split words as linked component chips, alongside the paragraph analyzer |
+| `etymology_db.py` | **The only module that opens `etymology.db`.** `entry()` = one indexed lookup, no branching. `lineage()` follows formation parts into their own words |
+| `build_etymology_db.py` | Builds `etymology.db` from the wiktextract dump. Atomic: writes `.new`, checkpoints, swaps |
+| `wiktextract_shapes.py` | The four parsers (donor chain, formation fork, `ety`/`etymon` DSL, root pointer) |
+| `languages.py` / `languages.csv` | 111 curated languages with era data. `era_start` IS the depth ordering |
+| `scripts/verify.py` | One command: invariants + legacy suite + known-word panel + tree/analyzer agreement, four lines out |
 
 Adding a data source = one new class with `resolve()`, added to the list in
 `default_resolver()`. Analyzer and UI never change.
@@ -1445,6 +1478,75 @@ Adding a data source = one new class with `resolve()`, added to the list in
     variants, a narrow source-data mojibake artifact in 2 of 347
     paragraphs) -- not chased further this pass, consistent with "fix the
     pattern, not every word."
+18. **The single word database (`etymology.db`) -- 2026-07-26.** The data
+    layer was replaced wholesale; see the READ THIS FIRST section at the top
+    of this file for what to run and what is now historical, and commit
+    `8711878` for the build itself. Deliberately left failing: 7 legacy-suite
+    answer differences (`tag`, `auto`, `movie`, `critical`, `package`, `free`,
+    and the `muskrat`/`peacemaker` compounds) -- these are answer judgment
+    calls for Joe, not shape failures, and editing the expectations to match
+    the code would have destroyed the evidence.
+19. **Derivational suffixes counted as component words -- found and fixed
+    2026-07-26.** Joe reported localhost "feels broken" after the rework. It
+    was, in a way that no test caught and that reads as ordinary output: the
+    dump's formation templates list affixes next to real components, and
+    `DbResolver` treated every one as a component. `beautiful` split into
+    `beauty` + `ful` and `darkness` into `dark` + `ness`. Because
+    `analyzer.py` splits a compound's weight evenly across its parts, each
+    such word gave away HALF its weight -- to `Unknown` where the affix
+    resolves to nothing (`ful`), or, worse, to an unrelated real word's
+    bucket where it does (`ness` is a headland; `ment` and `age` are real
+    entries too). Every percentage in the app was skewed, and the per-word
+    bucket stayed correct throughout, which is exactly why nothing flagged
+    it. 36% of the derived words in a 60,000-headword sample carried an
+    explicitly hyphenated affix part, plus the hyphen-less ones the dump
+    records without their hyphen.
+    Fixed in `resolver.py` (`DbResolver._is_bound_affix`), at the single
+    place `parts` is derived. Two simpler rules were tried FIRST and rejected
+    by measuring against the 742-entry `compounds.py` table, not by taste:
+    "a `-term` entry exists, any position" broke 263 hand-verified splits
+    (`up-`/`back-`/`over-` are real prefixes AND real first components), and
+    the same test in final position only still broke 134 (Wiktionary carries
+    `-ball`, `-woman`, `-work`, `-man` suffix entries). The rule that held:
+    a curated `_BOUND_SUFFIXES` list (taken from the 30 most common
+    hyphen-less final parts in the database, ambiguous members like
+    `man`/`ship`/`head`/`like` deliberately excluded) plus "a hyphenated part
+    only fails when its bare spelling isn't a word either" -- `-man` -> `man`
+    resolves, `-ful` -> `ful` does not. Back to the exact baseline failures,
+    zero new ones. `test_regression.py` gained 11 checks covering both
+    directions (derived words must NOT split, real compounds must), since
+    the bucket-level checks that already existed could never have caught it.
+    **The general lesson**: the affix-vs-component distinction is real in the
+    dump (`{{suffix}}` vs `{{compound}}`) and is COLLAPSED to `formed_from`
+    at build time. The durable fix is to keep it at build time; everything
+    above is a lookup-layer reconstruction of information the builder threw
+    away, and it will stay approximate until the builder stops throwing it
+    away.
+20. **Wiktionary links + PIE root meanings -- 2026-07-26.** Two features Joe
+    asked for.
+    - **Link to the source.** Every hover card in the analyzer and the Word
+      Search result now link the Wiktionary page (`wiktionary_url` in
+      `app.py`). An inflected form links the entry that actually holds the
+      content (`wolves` -> `wolf`), and a reconstructed form links its
+      `Reconstruction:<Language>/<form>` page rather than a URL that would
+      404 -- with a fallback to site search when the language is unknown,
+      since that page cannot be addressed without it.
+    - **What a root MEANS, on hover.** `ety_node.gloss` is empty for all
+      12,996 root nodes, so the meaning had to come from somewhere:
+      `build_root_glosses.py` harvests it from Wiktionary's own `t=`/`gloss=`
+      template arguments across the dump (~5 min, writes `root_glosses.json`,
+      5,636 forms). Never inferred from the descendant word's definition.
+      Coverage is **53.2% of distinct root forms but 77.6% weighted by how
+      often each root is actually cited** -- common roots are far more likely
+      to be glossed, so the hover hits far more often than the flat number
+      suggests. Shown as a CSS hover card in the list view and an SVG
+      `<title>` in the diagram, matching the existing no-JavaScript pattern.
+      Two accuracy fixes made during the build, both caught by checking
+      output rather than assuming: `tr=` was being read as a meaning (it is a
+      transliteration) and is now excluded; and the lookup's hyphen-folding
+      matched the root `*frī` to the SUFFIX `-frī`, captioning the root of
+      `free` as "-free". Only the TRAILING hyphen is folded now -- a leading
+      hyphen marks a different lexical item, not a spelling variant.
 
 ## Data pipeline notes
 
