@@ -42,9 +42,11 @@ from typing import Optional, List
 import json
 import os
 import re
+import sys
 
 import ety
 from buckets import bucket_for, APPROXIMATE_BUCKETS
+from buckets_wikt import bucket_for_name
 from corrections import WORD_CORRECTIONS
 from compounds import COMPOUND_SPLITS
 # Data-driven inflected-form -> base-word lookup (2026-07-25), replacing the
@@ -217,8 +219,18 @@ class Resolution:
 
     def view(self, mode: str = "direct") -> ResolvedView:
         """Render this resolution at the "direct", "influence", or "root" level."""
-        if self.compound_parts:
-            sub_views = [p.view(mode) for p in self.compound_parts]
+        # Component chips are DISPLAY; they no longer decide the bucket.
+        #
+        # Before, having components at all forced bucket="Compound", which
+        # hid every compound's real donor languages inside one catch-all bar.
+        # Now the "Compound" bucket is used only when the word has NO history
+        # of its own -- the original case, where the components genuinely ARE
+        # the only answer. When the word does have a chain, that chain sets
+        # the bucket and the components ride along for the word list to draw.
+        # (Joe, 2026-07-26: show the pieces, keep the accurate bars.)
+        sub_views = ([p.view(mode) for p in self.compound_parts]
+                     if self.compound_parts else None)
+        if sub_views and not self.chain and self.english_stage_iso is None:
             resolved = any(v.resolved for v in sub_views)
             return ResolvedView(self.word, "Compound", None, None, resolved, self.source, parts=sub_views)
         if self.chain:
@@ -259,7 +271,7 @@ class Resolution:
                 depth_lang = f"{self.root_lang} (from PIE)" if self.root_pie else self.root_lang
             return ResolvedView(
                 self.word, link.bucket, link.iso, depth_lang, True, self.source,
-                specific_lang=link.specific_lang,
+                specific_lang=link.specific_lang, parts=sub_views,
             )
         # No foreign donor: fall back to English-stage approximation (Path A).
         # Same answer at every level -- a word that never left English has no
@@ -269,9 +281,10 @@ class Resolution:
             return ResolvedView(
                 self.word, bucket, self.english_stage_iso,
                 self.english_stage_lang, bucket not in APPROXIMATE_BUCKETS,
-                self.source,
+                self.source, parts=sub_views,
             )
-        return ResolvedView(self.word, "Unknown", None, None, False, self.source)
+        return ResolvedView(self.word, "Unknown", None, None, False, self.source,
+                            parts=sub_views)
 
 
 class Resolver:
@@ -588,6 +601,118 @@ class WiktextractResolver(Resolver):
                            root_term=e.get("root_term"))
 
 
+class DbResolver(Resolver):
+    """
+    Path C backend: etymology.db, via etymology_db.py.
+
+    This is the one that ends the divergence. Every other backend on this
+    stack answers from its OWN file with its OWN case policy and its OWN
+    fallbacks, which is why the paragraph analyzer and the Word Search could
+    disagree eleven different ways about the same word. This one asks the
+    shared access layer, and the Word Search renders the SAME `Entry` object
+    that produced this Resolution -- so there is no second derivation left to
+    drift.
+
+    It deliberately owns no lookup logic. Case folding, inflected forms,
+    stemming and compound splits were all resolved at BUILD time into
+    `surface_form`, so `entry()` is one indexed query with no branching.
+    `compound_parts` is likewise never set: `lineage()` already follows a
+    formation into its components, so a compound arrives as an ordinary
+    chain instead of a special case the caller has to know about.
+    """
+    name = "db"
+
+    def __init__(self, path: Optional[str] = None):
+        import etymology_db
+        self._db = etymology_db.get(path) if path else etymology_db.get()
+        self._english = etymology_db.ENGLISH_STAGES
+
+    def resolve(self, word: str) -> Resolution:
+        return self._resolve(word, 0)
+
+    def _resolve(self, word: str, depth: int) -> Resolution:
+        entry = self._db.entry(word)
+        # No tree means NO ANSWER -- never a native-core claim. `entry` exists
+        # whenever a surface form points here, but a database that is still
+        # building (or was built without its tree cache) has rows with no
+        # etymology attached. Falling through to the native-core branch there
+        # made every word report "English (native core)", and because
+        # ChainResolver treats a native-core identification as a real answer,
+        # it also blocked every legacy backend behind it. A miss must look
+        # like a miss.
+        if entry is None or not entry.etymologies:
+            return Resolution(word, [], None, None, self.name)
+
+        # The word we actually answered from, when it isn't the typed one.
+        inherited = (entry.headword if not entry.is_exact else None)
+        case_fallback = entry.match_kind == "case"
+
+        # A stub is a word whose ONLY ancestor is a dotted root pointer. The
+        # citation is real but it is not a donor, so `prox_kind="root"` makes
+        # view() report Unknown for direct/influence exactly as it already
+        # does for the old data's bare-root stubs -- while Deepest Root still
+        # shows the root, which is the honest split.
+        prox_kind = "root" if entry.status == "stub" else None
+
+        # Components, for the word list to draw as chips. Only one level deep:
+        # these exist to SHOW what a compound is made of, and a part's own
+        # parts would be noise. The depth guard also stops `x = x + y` style
+        # self-reference from recursing.
+        # Decided by STRUCTURE, not by the shape label. A tree built from the
+        # `ety` template is tagged shape="rendered" whether it describes a
+        # chain or a formation, so gating on shape in ("fork","mixed") missed
+        # 142 real compounds -- `mountainside`, `armchair`, `mindset` all have
+        # their components right there as formed_from children.
+        parts = None
+        if depth == 0 and entry.primary:
+            terms = [c.term for c in entry.primary.head.children
+                     if c.rel == "formed_from" and c.term]
+            if len(terms) >= 2:
+                parts = [self._resolve(t, depth + 1) for t in terms]
+
+        line = self._db.lineage(entry)
+        # A ROOT IS NOT A DONOR. `trust` runs English -> Middle English ->
+        # Old English -> PIE *deru-: its only foreign node is a reconstructed
+        # root, so the honest direct-source answer is "native Germanic", not
+        # "PIE". Counting the root as a donor is the same false claim as
+        # drawing `mile`'s Middle-English-to-PIE edge, just in the bar chart
+        # instead of the tree.
+        foreign = [n for n in line[1:]
+                   if n.lang not in self._english and n.rel != "root"]
+        if not foreign:
+            # Deepest English stage actually reached -- NOT line[-1], which
+            # may be the root we just excluded.
+            stages = [n for n in line if n.lang in self._english]
+            stage = stages[-1].lang if len(stages) > 1 else "English (native core)"
+            return Resolution(word, [], "eng", stage, self.name,
+                               case_fallback=case_fallback,
+                               inherited_from=inherited,
+                               compound_parts=parts)
+
+        chain = [ChainLink(bucket_for_name(n.lang), bucket_for_name(n.lang),
+                            bucket_for_name(n.lang), specific_lang=n.lang)
+                 for n in foreign]
+
+        # Deepest Root names the deepest ATTESTED-or-reconstructed language
+        # and flags separately whether it goes on to PIE -- so a Germanic word
+        # reads "Proto-Germanic (from PIE)" rather than collapsing to a bare
+        # "PIE" that says nothing about which branch it came down. Preserves
+        # the 2026-07-23 design; PIE is in the chain either way.
+        deepest = foreign[-1]
+        non_pie = [n for n in foreign if not _is_pie(n.lang)]
+        root_pie = bool(non_pie) and _is_pie(deepest.lang)
+        root_node = non_pie[-1] if root_pie else deepest
+        return Resolution(word, chain, None, None, self.name,
+                           root_lang=root_node.lang, root_pie=root_pie,
+                           prox_kind=prox_kind, case_fallback=case_fallback,
+                           root_term=root_node.term, inherited_from=inherited,
+                           compound_parts=parts)
+
+
+def _is_pie(lang: str) -> bool:
+    return lang in ("Proto-Indo-European", "PIE")
+
+
 class ChainResolver(Resolver):
     """
     Tries backends in priority order, returns the first that `resolved` True;
@@ -803,14 +928,27 @@ def default_resolver() -> Resolver:
     """
     The single place that decides the resolver stack.
 
-    Wiktextract (prototype, see WiktextractResolver) is tried first when its
-    data file is present -- richer per-word data (470k+ headwords vs 244k),
-    added 2026-07-24. WiktionaryResolver (etymology-db, more mature pipeline)
-    is next, `ety` last as the final fallback. Each stage degrades gracefully
-    if its data file isn't present.
+    DbResolver (etymology.db) is tried first when the database is present:
+    it is the only backend the Word Search also reads, so any word it answers
+    is answered identically in both features -- which is the whole point of
+    the 2026-07-25 rework. The older file-backed backends stay BELOW it as
+    gap-fillers, because ~151 words per 150,000 exist in etymology-db or
+    Etymological Wordnet but not in the wiktextract dump. They can only add
+    coverage where the database has none; they can never override it.
+
+    Set ETYMOLOGY_DB=0 in the environment to drop back to the old stack.
+
+    Each stage degrades gracefully if its data file isn't present.
     """
     backends: List[Resolver] = []
     here = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(here, "etymology.db")
+    if os.path.exists(db_path) and os.environ.get("ETYMOLOGY_DB") != "0":
+        try:
+            backends.append(DbResolver())
+        except Exception as exc:      # a half-built db must not break the app
+            print(f"DbResolver unavailable ({exc}); using file backends",
+                  file=sys.stderr)
     wiktextract_path = os.path.join(here, "wiktextract_words.json")
     if os.path.exists(wiktextract_path):
         backends.append(WiktextractResolver(wiktextract_path))

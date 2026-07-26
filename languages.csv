@@ -1,0 +1,112 @@
+name,wikt_code,bucket,family,era_start,era_end,era_label,era_certain,is_proto,is_english_stage,source
+English,en,Germanic,germanic,1500,9999,1500–present,1,0,1,Modern English
+Middle English,enm,Germanic,germanic,1150,1500,c. 1150–1500,1,0,1,Middle English
+Old English,ang,Germanic,germanic,450,1150,c. 450–1150,1,0,1,Old English
+Scots,sco,Germanic,germanic,1400,9999,c. 1400–present,1,0,1,Scots language
+Proto-West Germanic,gmw-pro,Germanic,germanic,200,500,c. 200–500 CE,0,1,0,Proto-West Germanic (undated on Wikipedia; bracketed between Proto-Germanic and Old English)
+Proto-Germanic,gem-pro,Germanic,germanic,-500,200,c. 500 BCE–200 CE,1,1,0,Proto-Germanic language
+German,de,Germanic,germanic,1500,9999,1500–present,1,0,0,German language
+Middle High German,gmh,Germanic,germanic,1050,1350,c. 1050–1350,1,0,0,Middle High German
+Old High German,goh,Germanic,germanic,750,1050,c. 750–1050,1,0,0,Old High German
+Low German,nds,Germanic,germanic,1600,9999,1600–present,1,0,0,Low German
+Middle Low German,gml,Germanic,germanic,1100,1600,c. 1100–1600,1,0,0,Middle Low German
+Old Saxon,osx,Germanic,germanic,800,1100,c. 800–1100,1,0,0,Old Saxon
+Dutch,nl,Germanic,germanic,1500,9999,1500–present,1,0,0,Dutch language
+Middle Dutch,dum,Germanic,germanic,1150,1500,c. 1150–1500,1,0,0,Middle Dutch
+Old Dutch,odt,Germanic,germanic,500,1150,c. 500–1150,1,0,0,Old Dutch
+Afrikaans,af,Germanic,germanic,1700,9999,1700–present,1,0,0,Afrikaans
+West Frisian,fy,Germanic,germanic,1550,9999,1550–present,1,0,0,West Frisian
+Old Frisian,ofs,Germanic,germanic,1150,1550,c. 1150–1550,1,0,0,Old Frisian
+Frankish,frk,Germanic,germanic,400,900,c. 400–900,0,0,0,Frankish language
+Gothic,got,Germanic,germanic,300,700,c. 300–700,1,0,0,Gothic language
+Yiddish,yi,Germanic,germanic,1100,9999,c. 1100–present,1,0,0,Yiddish
+Old Norse,non,Norse,germanic,700,1350,c. 700–1350,1,0,0,Old Norse
+Icelandic,is,Norse,germanic,1550,9999,1550–present,1,0,0,Icelandic
+Swedish,sv,Norse,germanic,1500,9999,1500–present,1,0,0,Swedish language
+Danish,da,Norse,germanic,1500,9999,1500–present,1,0,0,Danish language
+Norwegian,no,Norse,germanic,1500,9999,1500–present,1,0,0,Norwegian language
+Faroese,fo,Norse,germanic,1500,9999,1500–present,1,0,0,Faroese
+Latin,la,Latin,italic,-75,300,c. 75 BCE–300 CE (Classical),1,0,0,Latin
+Old Latin,itc-ola,Latin,italic,-700,-75,c. 700–75 BCE,1,0,0,Old Latin
+Vulgar Latin,la-vul,Latin,italic,100,700,c. 100–700,1,0,0,Vulgar Latin
+Late Latin,la-lat,Latin,italic,200,700,c. 200–700,1,0,0,Late Latin
+Medieval Latin,la-med,Latin,italic,700,1500,c. 700–1500,1,0,0,Medieval Latin
+Ecclesiastical Latin,la-ecc,Latin,italic,300,9999,c. 300–present,1,0,0,Ecclesiastical Latin
+New Latin,la-new,Latin,italic,1500,9999,1500–present,1,0,0,New Latin
+Proto-Italic,itc-pro,Latin,italic,-1500,-700,c. 1500–700 BCE,0,1,0,Proto-Italic language
+French,fr,French,italic,1600,9999,1600–present,1,0,0,French language
+Middle French,frm,French,italic,1340,1611,c. 1340–1611,1,0,0,Middle French
+Old French,fro,French,italic,800,1340,c. 800–1340,1,0,0,Old French
+Anglo-Norman,xno,French,italic,1066,1500,c. 1066–1500,1,0,0,Anglo-Norman language
+Old Northern French,fro-nor,French,italic,900,1300,c. 900–1300,0,0,0,Old Northern French
+Norman,nrf,French,italic,1500,9999,1500–present,1,0,0,Norman language
+Italian,it,Romance (other),italic,1300,9999,c. 1300–present,1,0,0,Italian language
+Spanish,es,Romance (other),italic,1200,9999,c. 1200–present,1,0,0,Spanish language
+Old Spanish,osp,Romance (other),italic,900,1500,c. 900–1500,1,0,0,Old Spanish
+Portuguese,pt,Romance (other),italic,1300,9999,c. 1300–present,1,0,0,Portuguese language
+Romanian,ro,Romance (other),italic,1500,9999,1500–present,1,0,0,Romanian language
+Catalan,ca,Romance (other),italic,1100,9999,c. 1100–present,1,0,0,Catalan language
+Occitan,oc,Romance (other),italic,1500,9999,1500–present,1,0,0,Occitan language
+Old Occitan,pro,Romance (other),italic,800,1500,c. 800–1500,1,0,0,Old Occitan
+Sicilian,scn,Romance (other),italic,1200,9999,c. 1200–present,1,0,0,Sicilian language
+Galician,gl,Romance (other),italic,1200,9999,c. 1200–present,1,0,0,Galician language
+Ancient Greek,grc,Greek,hellenic,-800,-300,c. 800–300 BCE,1,0,0,Ancient Greek
+Koine Greek,grc-koi,Greek,hellenic,-300,300,c. 300 BCE–300 CE,1,0,0,Koine Greek
+Byzantine Greek,gkm,Greek,hellenic,600,1450,c. 600–1450,1,0,0,Medieval Greek
+Greek,el,Greek,hellenic,1500,9999,1500–present,1,0,0,Modern Greek
+Mycenaean Greek,gmy,Greek,hellenic,-1450,-1200,c. 1450–1200 BCE,1,0,0,Mycenaean Greek
+Irish,ga,Celtic,celtic,1200,9999,c. 1200–present,1,0,0,Irish language
+Middle Irish,mga,Celtic,celtic,900,1200,c. 900–1200,1,0,0,Middle Irish
+Old Irish,sga,Celtic,celtic,600,900,c. 600–900,1,0,0,Old Irish
+Scottish Gaelic,gd,Celtic,celtic,1200,9999,c. 1200–present,1,0,0,Scottish Gaelic
+Welsh,cy,Celtic,celtic,1100,9999,c. 1100–present,1,0,0,Welsh language
+Breton,br,Celtic,celtic,800,9999,c. 800–present,1,0,0,Breton language
+Cornish,kw,Celtic,celtic,800,9999,c. 800–present,1,0,0,Cornish language
+Gaulish,cel-gau,Celtic,celtic,-500,500,c. 500 BCE–500 CE,1,0,0,Gaulish
+Proto-Celtic,cel-pro,Celtic,celtic,-1300,-800,c. 1300–800 BCE,0,1,0,Proto-Celtic
+Russian,ru,Slavic,slavic,1700,9999,1700–present,1,0,0,Russian language
+Ukrainian,uk,Slavic,slavic,1700,9999,1700–present,1,0,0,Ukrainian language
+Polish,pl,Slavic,slavic,1500,9999,1500–present,1,0,0,Polish language
+Czech,cs,Slavic,slavic,1500,9999,1500–present,1,0,0,Czech language
+Serbo-Croatian,sh,Slavic,slavic,1500,9999,1500–present,1,0,0,Serbo-Croatian
+Old Church Slavonic,cu,Slavic,slavic,850,1100,c. 850–1100,1,0,0,Old Church Slavonic
+Proto-Slavic,sla-pro,Slavic,slavic,-500,600,c. 500 BCE–600 CE,0,1,0,Proto-Slavic
+Sanskrit,sa,Indo-Iranian,indo-iranian,-1500,-300,c. 1500–300 BCE,1,0,0,Sanskrit
+Prakrit,pra,Indo-Iranian,indo-iranian,-300,700,c. 300 BCE–700 CE,1,0,0,Prakrit
+Hindi,hi,Indo-Iranian,indo-iranian,1800,9999,1800–present,1,0,0,Hindi
+Urdu,ur,Indo-Iranian,indo-iranian,1800,9999,1800–present,1,0,0,Urdu
+Bengali,bn,Indo-Iranian,indo-iranian,1500,9999,1500–present,1,0,0,Bengali language
+Punjabi,pa,Indo-Iranian,indo-iranian,1500,9999,1500–present,1,0,0,Punjabi language
+Persian,fa,Indo-Iranian,indo-iranian,900,9999,c. 900–present,1,0,0,Persian language
+Classical Persian,fa-cls,Indo-Iranian,indo-iranian,900,1500,c. 900–1500,1,0,0,Classical Persian
+Old Persian,peo,Indo-Iranian,indo-iranian,-600,-300,c. 600–300 BCE,1,0,0,Old Persian
+Pahlavi,pal,Indo-Iranian,indo-iranian,200,900,c. 200–900,1,0,0,Middle Persian
+Avestan,ae,Indo-Iranian,indo-iranian,-1200,-500,c. 1200–500 BCE,0,0,0,Avestan
+Proto-Indo-Iranian,iir-pro,Indo-Iranian,indo-iranian,-2500,-1500,c. 2500–1500 BCE,0,1,0,Proto-Indo-Iranian
+Armenian,hy,Indo-Iranian,indo-iranian,1600,9999,1600–present,1,0,0,Armenian language
+Tamil,ta,Indo-Iranian,indo-iranian,-300,9999,c. 300 BCE–present,1,0,0,Tamil language
+Arabic,ar,Semitic,semitic,600,9999,c. 600–present,1,0,0,Arabic
+Hebrew,he,Semitic,semitic,1880,9999,1880–present (Modern),1,0,0,Modern Hebrew
+Biblical Hebrew,hbo,Semitic,semitic,-1000,-200,c. 1000–200 BCE,1,0,0,Biblical Hebrew
+Aramaic,arc,Semitic,semitic,-900,700,c. 900 BCE–700 CE,1,0,0,Aramaic
+Akkadian,akk,Semitic,semitic,-2500,-500,c. 2500–500 BCE,1,0,0,Akkadian language
+Turkish,tr,Turkic,turkic,1900,9999,1900–present,1,0,0,Turkish language
+Ottoman Turkish,ota,Turkic,turkic,1300,1928,c. 1300–1928,1,0,0,Ottoman Turkish
+Uyghur,ug,Turkic,turkic,1500,9999,1500–present,1,0,0,Uyghur language
+Japanese,ja,East Asian,east-asian,800,9999,c. 800–present,1,0,0,Japanese language
+Mandarin,cmn,East Asian,east-asian,1300,9999,c. 1300–present,1,0,0,Mandarin Chinese
+Chinese,zh,East Asian,east-asian,-1200,9999,c. 1200 BCE–present,1,0,0,Chinese language
+Middle Chinese,ltc,East Asian,east-asian,400,1200,c. 400–1200,1,0,0,Middle Chinese
+Old Chinese,och,East Asian,east-asian,-1200,-200,c. 1200–200 BCE,1,0,0,Old Chinese
+Cantonese,yue,East Asian,east-asian,1500,9999,1500–present,1,0,0,Cantonese
+Hokkien,nan-hbl,East Asian,east-asian,1300,9999,c. 1300–present,1,0,0,Hokkien
+Korean,ko,East Asian,east-asian,1400,9999,c. 1400–present,1,0,0,Korean language
+Vietnamese,vi,East Asian,east-asian,1500,9999,1500–present,1,0,0,Vietnamese language
+Thai,th,East Asian,east-asian,1300,9999,c. 1300–present,1,0,0,Thai language
+Burmese,my,East Asian,east-asian,1100,9999,c. 1100–present,1,0,0,Burmese language
+Malay,ms,Austronesian,austronesian,1300,9999,c. 1300–present,1,0,0,Malay language
+Tagalog,tl,Austronesian,austronesian,1500,9999,1500–present,1,0,0,Tagalog language
+Hawaiian,haw,Austronesian,austronesian,1200,9999,c. 1200–present,1,0,0,Hawaiian language
+Maori,mi,Austronesian,austronesian,1300,9999,c. 1300–present,1,0,0,Māori language
+Egyptian,egy,Afro-Asiatic (other),afro-asiatic,-3000,1000,c. 3000 BCE–1000 CE,1,0,0,Egyptian language
+Proto-Indo-European,ine-pro,PIE,pie,-4500,-2500,c. 4500–2500 BCE,0,1,0,Proto-Indo-European language (Wikipedia: dating contested; other estimates run a thousand-plus years later)

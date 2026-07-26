@@ -8,6 +8,82 @@ change).
 
 ---
 
+## 2026-07-26 (later)
+
+**New `scripts/verify.py` + `scripts/build.ps1`, wired into `etymology-regen`.**
+Joe called this out directly, and he was right: the build-verify-diagnose loop
+ran TEN times during the rework and was hand-assembled every time, dumping
+several screens of output on each pass. That is slow, expensive (every stats
+block stays in context permanently), and exactly the repeating pattern I am
+supposed to turn into a script without being asked.
+
+- `verify.py` runs invariants + legacy suite + a known-word panel + the
+  tree/analyzer containment check, and prints FOUR lines plus detail only for
+  failures. It replaced three separate commands and roughly a screen of output
+  per run with a summary. It earned its keep on first run by catching that
+  `went` still resolved to the Japanese board game ç¢.
+- The known-word panel is the durable part: each entry records a bug that
+  actually occurred, so the panel is a list of things that have gone wrong
+  rather than a list of words someone liked. Convention: add a word whenever
+  a word-level bug is fixed.
+- `build.ps1` encodes the traps that each cost a full ten-minute build --
+  detached launch (tool calls die at the 10-minute cap), CIM process lookup
+  (`Get-Process python` finds nothing), stale `.new` cleanup, and the blocked-
+  swap message.
+
+**Lesson worth keeping:** the trigger for writing a script is the SECOND time
+a multi-step sequence is typed, not the tenth. I noticed the repetition each
+time and kept going anyway because each individual run felt cheap.
+
+---
+
+## 2026-07-26
+
+**Rewrote `etymology-regen`** — it had become actively harmful, not merely
+stale. It documented `convert_wikt.py` / `build_etymology_trees.py` as THE
+pipeline; after the etymology.db rework those build gap-filler files the app
+consults second. A session following it would have spent ~40 minutes
+rebuilding 16MB of JSON nothing reads and never touched the real database.
+Rewritten around `build_etymology_db.py`, with the legacy files demoted to a
+clearly-labelled gap-filler section. Encoded the operational traps that cost
+real time during the rework, none of which are guessable from the code:
+stop the app before building (the atomic swap cannot replace a file a process
+holds open); `Get-Process python` finds nothing because the Store build
+reports as `python3.13`; run the build detached because background tool calls
+cap at 10 minutes and killed one at 9:50; never read `cur.lastrowid` after
+`INSERT OR IGNORE` without checking `rowcount == 1`; lowercase-keyed dicts
+over `word` rows silently select the proper-noun homograph.
+
+**Updated `etymology-coverage-scan`** — two of its documented gap categories
+were made obsolete by the rework and would have sent a future session hunting
+for already-fixed bugs: the hand-maintained `_IRREGULAR_FORMS` table is
+deleted (inflections are now 361,995 tagged forms + 1,117,563 generated ones
+materialized into `surface_form`), and the wolf/wolves f/v shift it named as
+an open gap is covered. Also drew the line between this skill and
+`scripts/compare_db.py`: coverage-scan answers "what are we still missing",
+compare_db answers "did this change make anything worse". They had been
+blurring together.
+
+**Updated `etymology-fix-word`** + **new `scripts/check_db_word.py`** — step 1
+pointed at the legacy parquet. The new script prints the three views that
+matter side by side (raw dump templates / stored tree / what each feature
+shows), because the same ad-hoc diagnostic was hand-written three times during
+one session, which is the signal to make it a script. The skill's opening now
+states the pattern those investigations shared: the bug is nearly always in
+the step BETWEEN the dump, the builder and the lookup, not inside any one of
+them — `mile` was a builder bug, `father` a dump-reading bug, `wolves` a
+lookup bug whose tree and chain were both perfectly correct.
+
+**Discovery problem worth recording:** these skills live in
+`etymology-app/.claude/skills/`, but a session whose working directory is the
+parent (`Etymology Project/`) or a sibling never registers them — `Skill`
+reports "Unknown skill" and they are invisible for the whole session. That is
+why none fired during the rework despite several being applicable. Worth
+either launching sessions from `etymology-app/` or promoting these to the user
+scope.
+
+---
+
 ## 2026-07-25
 
 **Updated `etymology-regen`** — its "which file needs rebuilding" list didn't

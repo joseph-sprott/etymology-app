@@ -7,3 +7,15 @@ __pycache__/
 .claude/scheduled_tasks.lock
 .claude/worktrees/
 .html
+# Scratch output from scripts/prototype_tree.py -- regenerate, don't commit.
+prototype_output.txt
+# The canonical word database: ~300MB and fully rebuildable from
+# build_etymology_db.py. Committing it would make diffs meaningless and
+# pushes painful (GitHub already warns about wikt_words.json at 59MB).
+# Use `python build_etymology_db.py --sample 20000` for a dev copy in minutes.
+etymology.db
+etymology.db-wal
+etymology.db-shm
+# Scratch file the build writes to before swapping it into place -- present
+# only mid-build, or left behind when the swap is blocked by a running app.py.
+etymology.db.new

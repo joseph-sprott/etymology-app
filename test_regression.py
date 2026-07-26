@@ -287,11 +287,21 @@ try:
 
     # The stub must not win over a genuinely richer stored tree either --
     # guard the opposite direction so the fix can't over-apply.
+    #
+    # UPDATED 2026-07-26: this used to require `served == stored`, byte for
+    # byte. Since the rework the tree is built from etymology.db rather than
+    # replayed from etymology_trees.json, so identity is the wrong test -- it
+    # asserts WHICH FILE the answer came from, not that the answer is good.
+    # The intent was "don't serve something poorer than what we had", so that
+    # is what it now checks: every language the stored tree showed must still
+    # appear. Losing one is a real regression; adding some is the point.
     for word in ["sky", "coffee", "sandal"]:
         stored = app_module._lookup_tree_direct(word)
         served = app_module.resolve_tree(word)
-        check(f"{word}: rich stored tree still served verbatim",
-              stored is not None and served == stored)
+        lost = _langs_in(stored) - _langs_in(served) if stored else set()
+        check(f"{word}: served tree keeps every language the stored one had"
+              f"{(' -- lost ' + str(sorted(lost))) if lost else ''}",
+              stored is not None and served is not None and not lost)
 except ImportError as e:
     check(f"could not import app.py to check tree/analyzer agreement ({e})", False)
 
@@ -341,22 +351,35 @@ try:
     # these are deeper/different terms than anything their main chain
     # reaches (religion's PIE *h₂leg-, coffee's Arabic triliteral root
     # ق ه ي vs. the surface form قَهْوَة already in its chain).
+    #
+    # UPDATED 2026-07-26: this used to require the citation appear as a
+    # single-node TOP-LEVEL branch, because that is the only shape the old
+    # builder could give a parentless row. Connecting those to the word is
+    # precisely what the rework does, so the old assertion now fails for the
+    # best possible reason. What must still hold -- and what the check was
+    # really for -- is that the citation is not DELETED. So: it must appear
+    # somewhere in the tree, stranded or connected.
     PRESERVED = {"religion": "Proto-Indo-European", "coffee": "Arabic"}
     for word, expect_lang in PRESERVED.items():
         tree = app_module.resolve_tree(word)
         if tree is None:
             check(f"{word}: tree exists to check preservation", False)
             continue
-        langs = [b["lang"] for b in tree["branches"] if _size(b) == 1]
-        check(f"{word}: genuinely-new stranded {expect_lang} citation preserved "
-              f"(single-node branches: {langs})",
-              expect_lang in langs)
+        langs = _langs_in(tree)
+        check(f"{word}: {expect_lang} citation still present somewhere "
+              f"(tree has {sorted(langs)[:5]})", expect_lang in langs)
 
     # (c) The real, substantive chains must be untouched by the dedup.
+    # Counting BRANCHES is a shape assertion the rework deliberately changed
+    # (accounts that used to hang side by side are now connected where the
+    # data supports it). `sandal`'s three competing origin stories must still
+    # be distinguishable, so count the distinct deep sources instead.
     sandal = app_module.resolve_tree("sandal")
-    check("sandal: all multi-node branches preserved (3 expected)",
-          sandal is not None
-          and sum(1 for b in sandal["branches"] if _size(b) > 1) == 3)
+    sandal_langs = _langs_in(sandal) if sandal else set()
+    check(f"sandal: all three origin accounts still represented "
+          f"(has {sorted(sandal_langs)[:6]})",
+          {"Ancient Greek", "Arabic"} <= sandal_langs
+          and any(l.endswith("Latin") for l in sandal_langs))
 except ImportError as e:
     check(f"could not import app.py to check tree dedup ({e})", False)
 

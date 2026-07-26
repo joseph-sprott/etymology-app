@@ -14,7 +14,30 @@ this sequence.
 
 ## 1. Reproduce the current answer
 
-Run the shared check script (deterministic, no need to hand-write this):
+Since the 2026-07-26 rework the canonical store is `etymology.db`, so start
+here -- it prints, side by side, what the dump gave us, what the builder made
+of it, and what each feature will show:
+
+```
+python scripts\check_db_word.py WORD
+python scripts\check_db_word.py WORD --raw    # + the dump's own templates
+```
+
+Read it in that order, because **the bug is nearly always in the step BETWEEN
+two of those, not inside any one of them**. Every tree bug found so far had
+this shape:
+
+- `mile` -- templates fine, tree drew Middle English -> PIE with Latin
+  floating beside it (builder step).
+- `father` -- templates named ONE step; the rest of the chain was only in the
+  rendered text, so the tree was a 2-node stub (dump-reading step).
+- `wolves` -- tree and chain both fine, but the word resolved to the surname
+  `Wolf` instead of `wolf` (lookup step). **Always check the `resolved to:`
+  line first** -- a wrong headword makes every other line correct-but-
+  irrelevant, which is exactly why it hid for so long.
+
+Then the legacy view, still worth running because the file backends remain as
+gap-fillers and the two can disagree:
 
 ```
 python scripts\check_word.py WORD

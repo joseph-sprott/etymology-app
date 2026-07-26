@@ -7,6 +7,8 @@ Run: python app.py
 Then open http://localhost:5000
 """
 import json
+import os
+import sys
 from collections import Counter
 
 from flask import Flask, render_template_string, request
@@ -33,6 +35,24 @@ app = Flask(__name__)
 # and `resolve_tree()` (below) consults it directly for compound splits
 # when a word isn't in TREES on its own.
 RESOLVER = default_resolver()
+
+# The shared word database, when it has been built. Held here so the TREE and
+# the ANALYZER read the same rows: RESOLVER's DbResolver backend and
+# _tree_from_db() below both go through etymology_db, which is the only module
+# that opens the file. None means "not built yet" and every path degrades to
+# the older per-feature stores.
+# ETYMOLOGY_DB=0 disables it for BOTH paths (resolver and tree), which is what
+# scripts/compare_db.py relies on to measure the legacy stack honestly.
+if os.environ.get("ETYMOLOGY_DB") == "0":
+    _DB = None
+else:
+    try:
+        import etymology_db as _etymology_db
+        _DB = _etymology_db.get()
+    except Exception as _db_exc:      # not built, or mid-rebuild
+        print(f"etymology.db unavailable ({_db_exc}); using legacy stores",
+              file=sys.stderr)
+        _DB = None
 
 # "Core" families for the Most Distinctive sort -- same set resolver.py's
 # _pick_influence uses to decide what counts as an unremarkable, expected
@@ -209,6 +229,97 @@ def _is_bare_root_tree(tree):
                for b in branches)
 
 
+# etymology_db's relation names -> the reltype vocabulary this module and the
+# stored trees already speak, so the renderer and _is_bare_root_tree need no
+# changes to accept a database-backed tree.
+_DB_RELTYPE = {"inherited": "inherited_from", "borrowed": "borrowed_from",
+               "derived": "derived_from", "calque": "calqued_from",
+               "root": "has_root", "formed_from": "compound_of"}
+
+
+def _tree_from_db(word):
+    """
+    The word's tree straight from etymology.db, or None.
+
+    THIS is what closes the gap the rework exists for. Every other path in
+    resolve_tree() derives the tree from a DIFFERENT store than the analyzer
+    reads, which is how `intrude` came to show a Latin donor in one feature
+    and not the other. Here the tree and the analyzer's chain are two readings
+    of ONE `Etymology` object: the analyzer walks it with spine()/lineage(),
+    the renderer walks the same nodes. They cannot disagree, because there is
+    no second derivation left to disagree with.
+    """
+    if _DB is None:
+        return None
+    entry = _DB.entry(word)
+    if entry is None or not entry.primary:
+        return None
+
+    def node(n, depth, seen):
+        children = [node(c, depth, seen) for c in n.children]
+        # A component is a POINTER to another word, whose history lives on
+        # that word's row. Expanding it here is what keeps the tree and the
+        # analyzer telling the same story: lineage() already follows `pipe`
+        # to Latin for `bagpipe`, so a tree that stopped at "English pipe"
+        # would show a Germanic-looking word beside a bar chart saying Latin
+        # -- the exact split-brain this rework exists to remove.
+        # "No children" means no DONOR children -- a bare root pointer must
+        # not count as expansion. `computer`'s `compute` carries a PIE root,
+        # which made it look already-expanded and hid its French ancestry.
+        has_donor_child = any(c.rel != "root" for c in n.children)
+        if (n.rel == "formed_from" and n.term and not has_donor_child
+                and depth < 4 and n.term.lower() not in seen):
+            sub = _DB.entry(n.term)
+            if sub is not None and sub.primary:
+                expanded = [node(c, depth + 1, seen | {n.term.lower()})
+                            for c in sub.primary.head.children]
+                if expanded:
+                    # Keep the root alongside the newly-found ancestry.
+                    children = expanded + [c for c in children
+                                            if c["reltype"] == "has_root"]
+        return {"lang": n.lang, "term": n.term,
+                "reltype": _DB_RELTYPE.get(n.rel, n.rel),
+                # Carried through for the timeline work: 'related' renders as
+                # a dotted edge and is never counted as descent.
+                "certainty": n.certainty,
+                "children": children}
+
+    # EVERY etymology, not just the primary one. `bow` the weapon and `bow` the
+    # bend are different histories, and `sandal` has three competing accounts;
+    # rendering only slot 1 silently hid the rest, which the regression suite
+    # caught as "sandal: all multi-node branches preserved (3 expected)".
+    # Separate etymologies appearing as separate top-level branches is the
+    # existing contract of this shape -- the no-floating-nodes rule is about
+    # nodes WITHIN one etymology, and each of these is connected to the head.
+    head = entry.primary.head
+    seen = {(head.term or word).lower()}
+    branches = []
+    placed = set()          # (lang, term) already drawn somewhere
+
+    def record(n):
+        placed.add((n["lang"], n["term"]))
+        for c in n["children"]:
+            record(c)
+
+    for ety in entry.etymologies:
+        for child in ety.head.children:
+            drawn = node(child, 0, seen)
+            # Skip a childless branch whose node is ALREADY in the diagram.
+            # `sandal` keeps a bare `Arabic صَنْدَل` etymology alongside a
+            # fuller account that contains the same term mid-chain; drawing
+            # both puts a redundant orphan box next to the real lineage, which
+            # is the clutter the 2026-07-24 dedup pass removed. A branch with
+            # children is never skipped -- that would drop a real account.
+            if not drawn["children"] and (drawn["lang"], drawn["term"]) in placed:
+                continue
+            record(drawn)
+            branches.append(drawn)
+    if not branches:
+        return None
+    return {"lang": head.lang, "term": head.term or word,
+            "branches": branches}
+
+
 def _tree_from_chain(word, res, stub=None):
     """
     Build a nested lineage tree from the resolver's OWN chain.
@@ -303,6 +414,14 @@ def resolve_tree(word, _depth=0):
     expected in practice, but defensive, matching build_etymology_trees.py's
     own `seen_groups` guard for the same class of risk).
     """
+    # The database first: it is the only store the analyzer also reads, so a
+    # word it can answer is answered identically in both features. Everything
+    # below is the legacy cascade, kept as a gap-filler for words the dump
+    # doesn't cover -- it can add coverage, never override.
+    from_db = _tree_from_db(word)
+    if from_db is not None and not _is_bare_root_tree(from_db):
+        return from_db
+
     direct = _lookup_tree_direct(word)
     # A real stored tree still wins outright, unchanged. But a bare-root-stub
     # tree no longer short-circuits the resolver-backed paths below -- see
@@ -656,11 +775,26 @@ PAGE = """
   <title>Etymology Analyzer</title>
   <style>
     :root {
-      --surface: #fcfcfb;
-      --surface-2: #f2f1ed;
-      --text-primary: #0b0b0b;
-      --text-secondary: #52514e;
-      --track-bg: #e1e0d9;
+      /* Dictionary/wiki typography (2026-07-26, Joe: "more in line with a
+         dictionary look, etymonline is a good example ... nothing too
+         crazy"). Serif for READING -- headwords, definitions, the foreign
+         terms in a lineage. Sans for CHROME -- buttons, inputs, percentage
+         bars, anything that is an instrument rather than an entry. Keeping
+         those two jobs on different faces is most of what makes a reference
+         page read like one; the rest is whitespace and hairlines.
+         Every --c-* bucket colour below is deliberately UNCHANGED: they are
+         load-bearing (validated hue/lightness steps, see BUCKET_SLUGS) and
+         a restyle is no reason to disturb them. */
+      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+               Georgia, Cambria, "Times New Roman", serif;
+      --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --rule: #ddd8c9;          /* hairlines under headings */
+      --accent: #7a3323;        /* muted oxblood, for links only */
+      --surface: #fbf9f3;       /* warm paper, was near-white */
+      --surface-2: #f2eee2;
+      --text-primary: #16150f;
+      --text-secondary: #56534a;
+      --track-bg: #e2ddcd;
       --c-germanic: #2a78d6;
       --c-norse: #eb6834;
       --c-french: #1baf7a;
@@ -691,11 +825,13 @@ PAGE = """
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --surface: #1a1a19;
-        --surface-2: #242422;
-        --text-primary: #ffffff;
-        --text-secondary: #c3c2b7;
-        --track-bg: #2c2c2a;
+        --rule: #38362f;
+        --accent: #d99277;
+        --surface: #171613;
+        --surface-2: #221f1a;
+        --text-primary: #f4f1e8;
+        --text-secondary: #b8b4a6;
+        --track-bg: #302c25;
         --c-germanic: #3987e5;
         --c-norse: #d95926;
         --c-french: #199e70;
@@ -719,12 +855,41 @@ PAGE = """
         --c-proto-indo-iranian: #61a5ad;
       }
     }
-    body { font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem;
-           background: var(--surface); color: var(--text-primary); }
-    textarea { width: 100%; height: 160px; font-family: inherit; font-size: 1rem;
-               background: var(--surface-2); color: var(--text-primary); border: 1px solid var(--track-bg); }
-    .mode-toggle { margin: 0.75rem 0; }
-    button { padding: 0.5rem 1.25rem; font-size: 1rem; }
+    body { font-family: var(--serif); font-size: 1.02rem; line-height: 1.62;
+           max-width: 860px; margin: 2.5rem auto 4rem; padding: 0 1.25rem;
+           background: var(--surface); color: var(--text-primary);
+           -webkit-font-smoothing: antialiased; }
+
+    /* Masthead: a headword over a hairline, the way a dictionary entry opens.
+       The rule does the work -- no banner, no box. */
+    h1 { font-size: 1.95rem; font-weight: 600; letter-spacing: -0.01em;
+         margin: 0 0 0.5rem; padding-bottom: 0.55rem;
+         border-bottom: 2px solid var(--rule); }
+    h2 { font-size: 1.3rem; font-weight: 600; margin: 2.2rem 0 0.7rem;
+         padding-bottom: 0.3rem; border-bottom: 1px solid var(--rule); }
+    h3 { font-size: 1.08rem; font-weight: 600; margin: 1.4rem 0 0.4rem; }
+    a { color: var(--accent); text-underline-offset: 2px; }
+    p { max-width: 64ch; }
+
+    /* Instruments stay sans: a control that looks like prose invites being
+       read as prose. Everything the user READS is serif; everything they
+       OPERATE is not. */
+    textarea, input, button, select,
+    .stats, .hint, .bar-label, .bar-pct, .sub-bar-label, .sub-bar-pct,
+    .word-count, .rel-more, .search-meta, .wc-cta, .tree-view-toggle {
+      font-family: var(--sans);
+    }
+    textarea { width: 100%; height: 170px; font-size: 0.97rem; line-height: 1.5;
+               padding: 0.7rem 0.8rem; border-radius: 3px;
+               background: var(--surface-2); color: var(--text-primary);
+               border: 1px solid var(--track-bg); }
+    textarea:focus, input[type=text]:focus {
+               outline: 2px solid var(--accent); outline-offset: 1px; }
+    .mode-toggle { margin: 0.85rem 0; font-size: 0.9rem; }
+    button { padding: 0.5rem 1.35rem; font-size: 0.95rem; border-radius: 3px;
+             border: 1px solid var(--rule); background: var(--surface-2);
+             color: var(--text-primary); cursor: pointer; }
+    button:hover { border-color: var(--accent); color: var(--accent); }
     .bar-row { display: flex; align-items: center; gap: 0.5rem; margin: 0.3rem 0; }
     .bar-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
     .bar-label { width: 150px; color: var(--text-primary); }
@@ -778,9 +943,14 @@ PAGE = """
     .tree-branches ul { list-style: none; margin: 0.15rem 0 0 1.1rem; padding: 0;
                          border-left: 1px dashed var(--track-bg); padding-left: 0.9rem; }
     .tree-branches li { margin: 0.15rem 0; }
-    .tree-node { display: inline-block; padding: 0.05rem 0.5rem; border-radius: 3px;
-                 background: var(--surface-2); border-left: 4px solid var(--c-muted); font-size: 0.9rem; }
-    .tree-node .tree-lang { color: var(--text-secondary); }
+    .tree-node { display: inline-block; padding: 0.08rem 0.5rem; border-radius: 3px;
+                 background: var(--surface-2); border-left: 4px solid var(--c-muted); font-size: 0.94rem; }
+    /* Reference-work conventions: the LANGUAGE is a label (small caps, muted,
+       letterspaced) and the TERM is a cited foreign form (italic). Same
+       distinction etymonline and print dictionaries draw, and it means a
+       lineage reads as citation rather than as a list of tags. */
+    .tree-node .tree-lang { color: var(--text-secondary); font-variant: small-caps;
+                            letter-spacing: 0.03em; font-size: 0.92em; }
     .tree-node .tree-term { font-style: italic; margin-left: 0.35rem; }
     .tree-error { color: var(--text-secondary); font-size: 0.9rem; }
     .tree-view-toggle { margin-left: 1rem; font-size: 0.9rem; color: var(--text-secondary); }
@@ -831,7 +1001,9 @@ PAGE = """
       display: inline-block; padding: 0.08rem 0.5rem; border-radius: 3px;
       background: var(--surface-2); border-left: 4px solid var(--c-muted); font-size: 0.9rem;
     }
-    .rel-lang { color: var(--text-secondary); margin-right: 0.35rem; font-size: 0.85rem; }
+    .rel-item { font-style: italic; }
+    .rel-lang { color: var(--text-secondary); margin-right: 0.35rem; font-size: 0.85rem;
+                font-style: normal; font-variant: small-caps; letter-spacing: 0.03em; }
     .rel-empty { font-size: 0.9rem; color: var(--text-secondary); font-style: italic; }
     .rel-more { font-size: 0.85rem; color: var(--text-secondary); }
     .search-meta { font-size: 0.9rem; color: var(--text-secondary); margin: 0.1rem 0 0.6rem; }
@@ -947,7 +1119,7 @@ PAGE = """
           {%- else %} {{ p.bucket }}
           {%- endif %}</span>{% if not loop.last %}<span class="compound-plus">+</span>{% endif %}
         {%- endfor %}
-        {{ word_card(w.word, "not in our database on its own -- shown as its component words") }}
+        {{ word_card(w.word, "shown with the component words it is built from") }}
       </span>
       {% else %}
       <span class="word-tag has-card{{ ' unknown' if w.bucket == 'Unknown' else '' }}" style="border-left-color: var(--c-{{ root_slug(w, analysis.mode) }})"><a class="word-link" href="/?word={{ w.word|urlencode }}" target="_blank" rel="noopener">{{ w.word }}</a>{% if count %} <span class="word-count">&times;{{ count }}</span>{% endif %} &rarr;

@@ -1,153 +1,199 @@
 ---
 name: etymology-regen
-description: This skill should be used when code changes to convert_wikt.py, build_etymology_trees.py, resolver.py's data-consuming logic, corrections.py, compounds.py, or tree_corrections.py need to be applied to the live Etymology Analyzer data (e.g. "regenerate the database", "rebuild wikt_words.json", "run the pipeline again", "apply this fix to the data"), or after such a change when confirming nothing broke.
+description: This skill should be used when code changes need to be applied to the live Etymology Analyzer data (e.g. "regenerate the database", "rebuild etymology.db", "run the pipeline again", "apply this fix to the data"), or after such a change when confirming nothing broke. Covers the canonical build (build_etymology_db.py / wiktextract_shapes.py / languages.csv / compounds.py) and the legacy gap-filler files.
 disable-model-invocation: true
 ---
 
 <!--
 disable-model-invocation is set deliberately (2026-07-24 skill audit).
 This isn't a literal deploy/commit/send-message action, but it carries the
-same real-resource risk: a full run is a 30-70 minute unattended operation
-(two ~15-20 min full-database regenerations plus verification) that also
-kills and restarts a live server process. If Claude auto-triggered this on
-a request that didn't actually need it, that's a large, hard-to-notice
-waste, not a quick mistake to undo. User must invoke this explicitly
-(`/etymology-regen`) rather than Claude deciding on its own that a regen is
-warranted.
+same real-resource risk: a full run is a ~10-minute unattended operation that
+overwrites the live database and requires stopping the running server. If
+Claude auto-triggered this on a request that didn't actually need it, that's
+a large, hard-to-notice waste, not a quick mistake to undo. User must invoke
+this explicitly (`/etymology-regen`).
+
+REWRITTEN 2026-07-26. The old version documented convert_wikt.py /
+build_etymology_trees.py as THE pipeline. Those now build gap-filler files
+only -- the app reads etymology.db first (see resolver.DbResolver and
+app._tree_from_db). Following the old instructions would rebuild 16MB of
+JSON nothing consults and leave the actual database untouched.
 -->
 
 # Regenerating the Etymology Analyzer database
 
-The pipeline (`C:\Users\Josep\Desktop\Etymology Project\etymology-app`) has
-two independently-buildable data files with different rebuild triggers, plus
-a fixed verify-and-restart sequence. Follow this order -- skipping the
-verification step or restarting the server before regeneration finishes are
-the two ways this has gone wrong before.
-
-## PowerShell environment note
-
-Environment variable changes (PATH) do **not** persist between separate
-tool invocations in this shell -- every command that needs `git`/`gh` must
-re-set PATH in the SAME command:
+## The whole loop, in one command
 
 ```powershell
-$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+powershell -File scripts\build.ps1              # build + verify
+powershell -File scripts\build.ps1 -Sample 20000
+powershell -File scripts\build.ps1 -Words mile father wolves
 ```
 
-`python`/`pip` do not need this (already on the base PATH); only `git`/`gh`
-do.
-
-## 1. Decide which file(s) actually need rebuilding
-
-- **`wikt_words.json`** (via `python convert_wikt.py`) -- needed for ANY
-  change to `convert_wikt.py` itself, or to `corrections.py`/`compounds.py`
-  (both are applied inside `convert_wikt.py`'s `main()` before the
-  inheritance patches run, as well as at `WiktionaryResolver` load time --
-  see that resolver's docstring). Takes **~15-20 minutes**.
-- **`etymology_trees.json`** (via `python build_etymology_trees.py`) --
-  needed if `build_etymology_trees.py` ITSELF changed, OR `tree_corrections.py`
-  changed, OR a function `build_etymology_trees.py` imports from
-  `convert_wikt.py` changed (check its import line: currently
-  `ANCESTRY_RELS, ROOT_RELS, GROUP_MARKER_RELS, NON_DONOR_LANGS,
-  PARQUET_PATH, _depth_hint`). A `corrections.py`/`compounds.py`-only change
-  does NOT require this -- those aren't read by the tree builder at all.
-  Also takes **~15-20 minutes**.
-  - **Before rebuilding, back up the current `etymology_trees.json`** (16MB,
-    a plain `Copy-Item` to a scratch path) whenever the change alters tree
-    STRUCTURE rather than just adding/fixing one word. The rebuild
-    overwrites in place, and having the previous file is what makes a real
-    before/after diff possible -- that diff is how the 2026-07-24 dedup
-    change proved it dropped only redundant branches and never lost a
-    multi-node branch or fabricated one. Without the baseline you can only
-    check that the new file looks reasonable, not that nothing regressed.
-
-- **`inflections.json`** (via `python build_inflections.py`) -- needed if
-  `build_inflections.py` changed or the wiktextract dump was refreshed.
-  **~2-3 minutes.** Note this reads the **wiktextract JSONL dump**
-  (`Etymology Project\wiktextract_data\`), NOT the parquet. **Order matters:**
-  `convert_wikt.py` imports `inflection_candidates` and uses it at build time,
-  so `inflections.json` must exist and be current BEFORE regenerating
-  `wikt_words.json`, or the inheritance bridge (`unheard`->`hear`) silently
-  degrades.
-- **`word_info.json`** (via `python build_word_info.py`) -- definitions, part
-  of speech, cognates, doublets. **~5-8 minutes.** Reads BOTH the wiktextract
-  dump and the parquet, and scopes itself to words present in
-  `wikt_words.json`/`wiktextract_words.json` -- so regenerate it AFTER either
-  of those changes, or newly-added words will have no definition.
-
-The two etymology converters read the raw parquet fresh each run (~2 seconds)
-and do a full 364,161-term pass -- there is no incremental/partial regen. Run each in the
-background and poll rather than blocking, and don't assume a timeout under
-~15 minutes means it hung. Deciding WHICH of the two to run is a judgment
-call based on what actually changed -- not scripted, since it depends on
-reading the diff.
+It warns if `app.py` is holding the database, clears any stale scratch build,
+launches detached (a tool call would be killed at the 10-minute cap), polls
+until done, prints only the lines worth reading, then runs `scripts\verify.py`.
 
 ```powershell
-cd "C:\Users\Josep\Desktop\Etymology Project\etymology-app"
-python convert_wikt.py 2>&1          # background, ~15-20 min
-python build_etymology_trees.py 2>&1 # background, ~15-20 min, only if needed
+python scripts\verify.py            # just the checks, ~40s
+python scripts\verify.py --db etymology.db.new    # before swapping in
+python scripts\verify.py --skip-regression        # faster
 ```
 
-## 2. Run the regression check
+`verify.py` prints FOUR lines and detail only for failures:
 
-```powershell
-python test_regression.py
+```
+  PASS  invariants             12/12 checks passed
+  FAIL  regression (legacy)    86/103 checks passed
+  PASS  known words            14/14 correct
+  PASS  tree/analyzer agree    14/14 contained
 ```
 
-Plain script (no pytest dependency) covering the historical verified-word
-suite, known multi-sense-collision corrections, the compound-display
-feature, the case-fallback guard, the bare-root-stub guard, and
-tree/analyzer consistency. Prints PASS/FAIL per check and exits non-zero on
-any failure -- do not proceed to restarting the server if anything fails.
-Investigate failures before continuing; a regen that regresses a
-previously-fixed word means something in the change was too broad (see
-`CLAUDE.md`'s known issues for examples of this happening and how it was
-caught, e.g. the `_is_reliable_root` safety filter).
+`known words` is a panel where each entry guards a bug that actually happened
+(`wolves` resolving to the surname `Wolf`, `went` to the Japanese board game,
+`mile`'s false PIE edge). Add a word whenever you fix one -- that is how the
+panel stays worth running. The legacy suite reports but does not gate, because
+it still asserts pre-rework behaviour in places.
 
-For a quick pre-check on a single word without running the full suite,
-`scripts\check_word.py` (project root, shared with the `etymology-fix-word`
-skill) gives the same answer faster.
+The sections below are the manual steps those two scripts automate; read them
+when something goes wrong, not to run a normal build.
 
-## 3. Restart the local Flask dev server
+`etymology.db` is the canonical store: one row per word, read through
+`etymology_db.py` (the ONLY module that opens it) by both the paragraph
+analyzer and the Word Search. Rebuilding it is one command; the traps are all
+in the environment around it, and every one below was hit for real.
+
+## 1. Stop the app FIRST
+
+The build ends by swapping a freshly built file into place, and Windows will
+not replace a file another process holds open. `app.py` opens `etymology.db`
+at import, so a running server blocks the swap.
 
 ```powershell
 powershell -File .claude\skills\etymology-regen\scripts\stop_dev_server.ps1
 ```
 
-Deterministic -- finds whatever's genuinely `Listen`-ing on port 5000, stops
-it, and confirms the port is actually free before reporting success. Filters
-out two Windows table-entry artifacts confirmed while writing this script
-(not just documented, actually reproduced): a stale `Listen` row can outlive
-its already-dead owning process for several seconds, and an unrelated
-`TimeWait` row can report `OwningProcess = 0` (the System Idle Process,
-never a real server) -- neither should be treated as "still running."
+**`Get-Process python` returns nothing here** -- the Store build reports as
+`python3.13`. Use this instead, and check the command line before killing
+anything, since the user may have their own session open:
 
-Then start fresh in the background (this step stays a direct background
-tool invocation, not a bundled script, so the harness can track it as a
-long-running process rather than a fire-and-forget daemon):
+```powershell
+Get-CimInstance Win32_Process -Filter "Name LIKE 'python%'" |
+  Select-Object ProcessId, CreationDate, CommandLine
+```
+
+If the swap is blocked anyway, the build does **not** discard its work: the
+finished database is left at `etymology.db.new`, and renaming it is all that
+remains.
+
+## 2. Build
+
+```powershell
+cd "C:\Users\Josep\Desktop\Etymology Project\etymology-app"
+python build_etymology_db.py            # ~10 min, full corpus
+python build_etymology_db.py --sample 20000    # fast dev copy
+python build_etymology_db.py --words mile father wolves   # one-off check
+```
+
+Run it detached rather than through a foreground tool call -- background tool
+invocations are capped at 10 minutes and will kill it just before it finishes:
+
+```powershell
+Start-Process python -ArgumentList "build_etymology_db.py" `
+  -WorkingDirectory "C:\Users\Josep\Desktop\Etymology Project\etymology-app" `
+  -RedirectStandardOutput out.log -RedirectStandardError err.log -WindowStyle Hidden
+```
+
+Note `--words` still streams the whole 3.2GB dump (~90s); it filters, it does
+not seek.
+
+**The build gates itself.** Four validators run before the swap -- no floating
+nodes, exactly one head per etymology, no word marked `resolved` without a
+solid edge, no surface form pointing at an empty word. On failure it exits 1
+and leaves the build at `etymology.db.new` rather than replacing anything.
+
+## 3. Verify
+
+```powershell
+python test_etymology_db.py                      # live database
+python test_etymology_db.py etymology.db.new     # before swapping it in
+```
+
+12 structural invariants: floating nodes, dotted edges never traversed by
+chain code, `additive_only` sources kept out of ancestry, relations never
+appearing as ancestry edges, `March`/`march` staying distinct, and
+`lineage()` emitting no invented adjacency.
+
+Then the old suite, which still covers the legacy layer:
+
+```powershell
+python test_regression.py
+```
+
+For one word, `python scripts\check_word.py WORD` (shared with
+`etymology-fix-word`) is faster than either.
+
+## 4. Compare against the previous behaviour
+
+Before trusting a structural change, triage every difference:
+
+```powershell
+python scripts\compare_db.py --sample 150000 --dump diff.tsv
+```
+
+Buckets: `lost_data` (the only one that blocks), `bucket_changed` /
+`root_changed` (read by hand), `gained_data` / `unfloated`, `same`.
+
+The script forces `ETYMOLOGY_DB=0` for the "old" side and asserts the legacy
+stack isn't contaminated. **That assert exists because a run without it
+silently compared the new layer against itself** -- 0.04% changed, and
+meaningless.
+
+## 5. Restart and smoke-test
 
 ```powershell
 cd "C:\Users\Josep\Desktop\Etymology Project\etymology-app"
 python app.py   # background
-```
-
-## 4. Live end-to-end check
-
-```powershell
 powershell -File .claude\skills\etymology-regen\scripts\http_smoke_test.ps1 -Word "WORD"
 ```
 
-Deterministic mechanics (POST, status check, response parsing); the one
-judgment call left is WHICH word to pass -- use whatever word the change was
-actually about. Don't declare the regen done on the regression script alone;
-this is the real HTTP round-trip through Flask and the templates, not just
-the resolver layer.
+## Kill switch
+
+`ETYMOLOGY_DB=0` disables the database for BOTH the resolver and the tree,
+falling back to the legacy files. Use it to isolate whether a problem comes
+from the new layer.
+
+## Legacy files (gap-fillers only)
+
+These no longer feed the app first. They supply the ~151-per-150,000 words
+that exist in etymology-db or Etymological Wordnet but not in the wiktextract
+dump. Rebuild only when changing them specifically:
+
+- `wikt_words.json` -- `python convert_wikt.py`, ~15-20 min. Also the source
+  of the 22,317 auto-detected compound splits the canonical build imports.
+- `etymology_trees.json` -- `python build_etymology_trees.py`, ~15-20 min.
+- `inflections.json` -- `python build_inflections.py`, ~2-3 min. Must be
+  current BEFORE the canonical build: `materialize_surface_forms` reads it.
+- `word_info.json` -- `python build_word_info.py`, ~5-8 min.
+
+## Traps worth knowing
+
+- **A build that cannot start clean now aborts loudly.** It used to swallow a
+  failed delete and append to the previous database, dying later on a
+  duplicate-etymology error that pointed at the wrong place entirely.
+- **Never read `cur.lastrowid` after `INSERT OR IGNORE`** without checking
+  `cur.rowcount == 1`. On an ignored insert lastrowid holds the last
+  successful insert on the connection -- usually a row in another table.
+  (`rowcount` is `-1` when undeterminable, and `-1` is truthy.)
+- **Lowercase-keyed dicts over `word` rows silently pick the proper noun.**
+  `wolf`/`Wolf` collide; that is how `wolves` came to resolve to the surname
+  and lose its Proto-Germanic ancestry. Prefer `headword == key_lower`.
+- **PATH does not persist between tool calls** -- `git`/`gh` need it re-set in
+  the same command. `python` does not.
 
 ## Additional resources
 
-- `.claude\skills\etymology-regen\scripts\stop_dev_server.ps1` -- step 3.
-- `.claude\skills\etymology-regen\scripts\http_smoke_test.ps1 -Word <word>` -- step 4.
-- `scripts\check_word.py` (project root -- shared with the `etymology-fix-word`
-  skill, not duplicated here) -- optional fast single-word pre-check,
-  referenced in step 2. All paths above are relative to the project root
-  (`C:\Users\Josep\Desktop\Etymology Project\etymology-app`).
+- `.claude\skills\etymology-regen\scripts\stop_dev_server.ps1` -- step 1.
+- `.claude\skills\etymology-regen\scripts\http_smoke_test.ps1 -Word <word>` -- step 5.
+- `scripts\check_word.py`, `scripts\compare_db.py` (project root).
+- `etymology_schema.sql` -- the DDL, with the reasoning for each table.

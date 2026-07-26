@@ -69,8 +69,51 @@ worth checking for specifically:
   the earlier assumption that gaps are mostly rare words.
 - Missing compounds not yet in `compounds.py` or auto-detected.
 
+## 5. Ask the database directly before scanning a corpus (2026-07-26)
+
+A corpus scan answers "what do REAL SENTENCES hit that we can't explain",
+which is still the question that finds user-visible gaps. But since the
+`etymology.db` rework, two cheaper questions are usually worth asking first,
+because they need no corpus and take seconds:
+
+**How much resolves at all?**
+
+```powershell
+python -c "import etymology_db as E; print(E.get().stats())"
+```
+
+`word.resolved` / `word.stub` / `word.none`. Note `none` is large (~950k of
+1.38M) and that is NOT 70% failure -- the dump counts every rare phrase,
+inflected oddity and taxonomic name as a word. Judge coverage against real
+text, which is what this skill's corpus scan is for.
+
+**Did a change make anything WORSE?** That is a different question from
+coverage and has its own tool -- don't re-derive it here:
+
+```powershell
+python scripts\compare_db.py --sample 150000 --dump diff.tsv
+```
+
+It triages every difference against the previous behaviour into
+`lost_data` (blocks), `bucket_changed` / `root_changed` (review by hand),
+`gained_data` / `unfloated`, `same`. Use it whenever the question is "did my
+fix regress anything", and use the corpus scan when the question is "what are
+we still missing".
+
+Two stale assumptions from the 2026-07-24 write-up above, corrected by the
+rework -- do not go hunting for these as if they were still open:
+
+- The `_IRREGULAR_FORMS` table (~100 hand-maintained entries) is **deleted**.
+  Inflections come from Wiktionary's own tagged `forms` data (361,995 rows)
+  plus generated regular forms (1,117,563), materialized into `surface_form`
+  at build time. wolf/wolves and the f/v shift are covered.
+- Compounds are no longer a query-time fallback. `compounds.py`'s 743 verified
+  splits and `convert_wikt.py`'s 22,317 auto-detected ones are materialized
+  into the database as ordinary fork etymologies by `materialize_compounds()`.
+
 ## Additional resources
 
 - `scripts/scan_unknown_words.py` -- step 2.
 - `scripts/check_word.py` / `scripts/check_raw_data.py` (shared with
   `etymology-fix-word`) -- step 4.
+- `scripts/compare_db.py`, `test_etymology_db.py` -- step 5.
