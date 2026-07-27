@@ -26,6 +26,8 @@ from datetime import datetime, timezone
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import languages
+import language_codes
+from buckets_wikt import bucket_for_name
 from wiktextract_shapes import build_trees
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -214,23 +216,31 @@ def scan_dump(path, limit=None, only=None):
 def insert_tree(db, ety_id, head_node, lang_ids, src_id, unknown_langs):
     """Write a TNode tree as node+edge rows. Returns the head node_id."""
     def node_row(n):
-        lid = lang_ids.get(n.lang)
+        # Wiktionary hands us a CODE where languages.csv has no entry, and
+        # this used to store that code as the language NAME -- so `muskrat`
+        # displayed its donor as "alg" and bucketed it Other, along with 1,250
+        # other rows covering ~9,400 words (found 2026-07-27). Resolve it to a
+        # real name first, and let the bucket follow from that name instead of
+        # defaulting everything to "Other".
+        lang_name = language_codes.resolve(n.lang)
+        lid = lang_ids.get(lang_name)
         if lid is None:
             # A language not in languages.csv used to be DROPPED, which silently
             # deleted real ancestry and left words marked "resolved" with no
             # ancestor at all (caught by the validator). Instead: create a
             # minimal row flagged era_certain=0 so nothing is lost, and report
             # it so the table gets topped up from evidence rather than guesses.
-            unknown_langs[n.lang] += 1
+            unknown_langs[lang_name] += 1
             db.execute(
                 "INSERT OR IGNORE INTO language (name, bucket, era_start,"
                 " era_end, era_label, era_certain, source_url)"
                 " VALUES (?,?,?,?,?,?,?)",
-                (n.lang, "Other", 0, 9999, "era unknown", 0,
+                (lang_name, bucket_for_name(lang_name), 0, 9999,
+                 "era unknown", 0,
                  "auto-added at build time; needs curating in languages.csv"))
             lid = db.execute("SELECT lang_id FROM language WHERE name=?",
-                              (n.lang,)).fetchone()[0]
-            lang_ids[n.lang] = lid
+                              (lang_name,)).fetchone()[0]
+            lang_ids[lang_name] = lid
         cur = db.execute(
             "INSERT INTO ety_node (ety_id, lang_id, term, is_head, is_root,"
             " source_id) VALUES (?,?,?,?,?,?)",

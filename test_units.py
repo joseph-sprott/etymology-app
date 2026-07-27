@@ -877,6 +877,66 @@ for _w in ("brother", "night", "earth", "king", "water", "zzzqqqnotaword",
     check(f"tree_form({_w!r}) agrees with full_tree (no dead links)",
           (_form is None) or (_real is not None))
 
+
+# ------------------------------------------------------------ language_codes
+section("language_codes -- raw code -> real language name")
+# Written before the module existed (2026-07-27). `muskrat` displayed its
+# donor as "alg" and bucketed it "Other"; the builder had stored the raw
+# Wiktionary code as the language NAME. 1,250 of 1,530 language rows were
+# code-shaped, dragging 8,575 words into Other.
+import language_codes as LC
+
+# From Wiktionary's own registry (8,651 rows, vendored as language_codes.csv).
+eq("a plain ISO code", LC.name_for("phn"), "Phoenician")
+eq("an extended Wiktionary code", LC.name_for("zlw-opl"), "Old Polish")
+eq("a proto code", LC.name_for("sem-pro"), "Proto-Semitic")
+eq("a stage-of-English code", LC.name_for("enm-nor"), "Northern Middle English")
+
+# FAMILY codes are NOT in that registry -- it lists languages. These are the
+# curated additions, and `alg` is the one `muskrat` needs.
+eq("a family code resolves too", LC.name_for("alg"), "Algonquian")
+eq("another family code", LC.name_for("trk"), "Turkic")
+
+eq("an unknown code returns None, never a guess", LC.name_for("zzzz"), None)
+eq("None in, None out", LC.name_for(None), None)
+eq("a real NAME is not mangled by the code lookup", LC.name_for("Latin"), None)
+
+# resolve() is the one callers use: give it whatever the database holds and
+# it hands back the best name available, unchanged when already a name.
+eq("resolve passes a real name straight through", LC.resolve("Old French"), "Old French")
+eq("resolve upgrades a bare code", LC.resolve("phn"), "Phoenician")
+eq("resolve leaves an unknown code alone rather than inventing one",
+   LC.resolve("zzzz"), "zzzz")
+
+# The bucket must follow the name. This is the whole point: `muskrat` should
+# read Indigenous American, not Other.
+import buckets_wikt as BW
+eq("Algonquian buckets as Indigenous American",
+   BW.bucket_for_name("Algonquian"), "Indigenous American")
+eq("Phoenician buckets as Semitic", BW.bucket_for_name("Phoenician"), "Semitic")
+
+# The reported bug, end to end: `muskrat` showed "Other" with the raw code
+# "alg" as its donor language. Its real source is Western Abenaki *moskwas*
+# (Algonquian) -- Wiktionary records `musk` + `rat` only as the folk
+# etymology that reshaped the spelling.
+import resolver as _R
+_res = _R.shared_resolver()
+_d = _res.resolve("muskrat").view("direct")
+eq("muskrat buckets as Indigenous American, not Other",
+   _d.bucket, "Indigenous American")
+for _w in ("tomahawk", "skunk", "moccasin", "raccoon", "opossum", "hickory"):
+    eq(f"{_w} also reads Indigenous American",
+       _res.resolve(_w).view("direct").bucket, "Indigenous American")
+
+# And no word should DISPLAY a bare language code any more. Codes are what the
+# builder stored where languages.csv had no entry; a reader seeing "alg"
+# learns nothing.
+import re as _re
+for _w in ("muskrat", "tomahawk", "skunk"):
+    _lang = _res.resolve(_w).view("root").depth_lang or ""
+    check(f"{_w} names a language, not a code (got {_lang!r})",
+          not _re.fullmatch(r"[a-z]{2,3}(-[a-z]{2,7})?", _lang))
+
 # -------------------------------------------------------------------- summary
 print()
 # Phrased as "checks passed" so scripts/verify.py's summary scraper picks it

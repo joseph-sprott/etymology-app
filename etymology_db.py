@@ -28,6 +28,7 @@ import sqlite3
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Sequence, Tuple
 
+import language_codes
 import linguistics
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -186,8 +187,21 @@ class Entry:
 
 
 def _node(raw: dict) -> Node:
+    # `language_codes.resolve` upgrades a raw Wiktionary code to a real
+    # language name. The builder wrote codes into the language table's `name`
+    # column for 1,250 of 1,530 rows, so `muskrat` displayed its donor as
+    # "alg" and bucketed it "Other" (Joe, 2026-07-27). Doing it HERE means
+    # every consumer -- the bars, the hover card, the tree, the descendants
+    # view -- gets the real name from one place, because they all build their
+    # nodes through this function.
+    #
+    # This is a LOOKUP-layer repair of a BUILD-time defect, the same shape as
+    # known issue #19. `build_etymology_db.py` now resolves the name too, so a
+    # future rebuild stores it correctly and this call becomes a no-op rather
+    # than load-bearing. Keeping both costs nothing and means neither the
+    # current database nor a rebuilt one is wrong.
     return Node(
-        lang=raw["lang"],
+        lang=language_codes.resolve(raw["lang"]),
         term=raw.get("term"),
         rel=raw.get("rel", "head"),
         certainty=raw.get("certainty", DIRECT),
