@@ -26,7 +26,7 @@ from datetime import datetime, timezone
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import languages
-from wiktextract_shapes import build_trees, SIBLING_TEMPLATES
+from wiktextract_shapes import build_trees
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SCHEMA = os.path.join(HERE, "etymology_schema.sql")

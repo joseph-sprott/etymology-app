@@ -16,7 +16,7 @@ this explicitly (`/etymology-regen`).
 REWRITTEN 2026-07-26. The old version documented convert_wikt.py /
 build_etymology_trees.py as THE pipeline. Those now build gap-filler files
 only -- the app reads etymology.db first (see resolver.DbResolver and
-app._tree_from_db). Following the old instructions would rebuild 16MB of
+word_trees._tree_from_db). Following the old instructions would rebuild 16MB of
 JSON nothing consults and leave the actual database untouched.
 -->
 
@@ -40,14 +40,20 @@ python scripts\verify.py --db etymology.db.new    # before swapping in
 python scripts\verify.py --skip-regression        # faster
 ```
 
-`verify.py` prints FOUR lines and detail only for failures:
+`verify.py` prints FIVE lines and detail only for failures:
 
 ```
   PASS  invariants             12/12 checks passed
-  FAIL  regression (legacy)    86/103 checks passed
-  PASS  known words            14/14 correct
-  PASS  tree/analyzer agree    14/14 contained
+  PASS  units (fast)           266/266 checks passed
+  FAIL  regression (legacy)    124/130 checks passed
+  PASS  known words            17/17 correct
+  PASS  tree/analyzer agree    17/17 contained
 ```
+
+The `units (fast)` line (added 2026-07-27) runs `test_units.py` -- pure logic,
+about a second, no database. It runs BEFORE the slow suite on purpose: a
+broken predicate should be reported in a second, not after minutes of loading.
+If that line fails, fix it before reading anything below it.
 
 `known words` is a panel where each entry guards a bug that actually happened
 (`wolves` resolving to the surname `Wolf`, `went` to the Japanese board game,
@@ -132,6 +138,22 @@ python test_regression.py
 
 For one word, `python scripts\check_word.py WORD` (shared with
 `etymology-fix-word`) is faster than either.
+
+## 3b. Reload the descendant tables -- a rebuild WIPES them
+
+`build_etymology_db.py` creates the database fresh, and `descendant_tree` /
+`descendant_node` are not in `etymology_schema.sql`. They are silently gone
+after every full rebuild, and the only symptom is `/descendants` answering "no
+recorded descendants" for every word -- no error, no failing invariant.
+
+```powershell
+python build_descendants.py          # ~1 min, reloads from the same extracts
+python build_descendants.py --stats  # confirm: expect 10,870 trees
+```
+
+`test_regression.py`'s descendant section SKIPS rather than fails when the
+tables are missing (so a fresh clone runs clean), which means the suite will
+NOT catch this for you. See the `etymology-descendants` skill for the feature.
 
 ## 4. Compare against the previous behaviour
 

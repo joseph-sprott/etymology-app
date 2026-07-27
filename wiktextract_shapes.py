@@ -1,4 +1,4 @@
-﻿"""
+"""
 Turn one wiktextract entry into a CONNECTED etymology tree.
 
 The whole point: a word's history is ONE rooted tree -- the modern word at

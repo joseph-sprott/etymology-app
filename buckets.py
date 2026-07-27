@@ -94,10 +94,18 @@ CODE_TO_BUCKET = {
 APPROXIMATE_BUCKETS = {"Germanic"}   # because OE/ME dead-ends land here unproven
 
 # Order for stable, readable reporting.
-BUCKET_ORDER = [
-    "Germanic", "Norse", "French", "Latin", "Greek",
-    "Romance (other)", "Celtic", "Iranian", "Caribbean", "PIE", "Unknown",
-]
+# DISPLAY ORDER LIVES IN `buckets_wikt`, NOT HERE (fixed in the 2026-07-27
+# audit). This module's own list had 11 entries and the live taxonomy has 20,
+# so the ten buckets it never heard of -- Slavic, Indo-Iranian, Semitic,
+# Turkic, East Asian, Austronesian, Indigenous American, Afro-Asiatic,
+# African, Other -- fell to the end of every chart and every "Language group"
+# sort in arbitrary dict order. `Unknown` and `PIE` were rendering AHEAD of
+# `Slavic` and `Turkic` as a result.
+#
+# Re-exported rather than deleted: `analyzer.py` and `app.py` both imported
+# the name from here, and this keeps any other caller working while making it
+# impossible for the two lists to disagree again.
+from buckets_wikt import BUCKET_ORDER        # noqa: E402,F401
 
 
 def bucket_for(iso_code: str) -> str:

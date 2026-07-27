@@ -35,6 +35,8 @@ import argparse
 import json
 import sys
 
+from wiktextract_dump import stream_english_entries
+
 JSONL_PATH = r"C:\Users\Josep\Desktop\Etymology Project\wiktextract_data\kaikki.org-dictionary-English.jsonl"
 OUT_PATH = "inflections.json"
 
@@ -58,43 +60,30 @@ def extract(jsonl_path: str) -> dict:
     entries_with_forms = 0
     scanned = 0
 
-    with open(jsonl_path, encoding="utf-8") as f:
-        for line_no, line in enumerate(f, 1):
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                entry = json.loads(line)
-            except json.JSONDecodeError:
-                continue
-            if entry.get("lang") != "English":
-                continue
-            word = entry.get("word")
-            if not word:
-                continue
-            scanned += 1
+    for line_no, entry, word in stream_english_entries(jsonl_path):
+        scanned += 1
 
-            used_any = False
-            for fm in entry.get("forms") or []:
-                surface = fm.get("form")
-                tags = set(fm.get("tags") or [])
-                if not surface or surface in _SCAFFOLD_FORMS or (tags & _SCAFFOLD_TAGS):
-                    continue
-                if not (tags & INFLECTION_TAGS):
-                    continue
-                if surface.lower() == word.lower():
-                    continue  # e.g. run (past participle) == run; nothing to map
-                used_any = True
-                # First mapping wins. File order follows Wiktionary's own page
-                # order (primary/most-common sense first), the same convention
-                # convert_wiktextract.py documents and relies on.
-                form_to_base.setdefault(surface.lower(), word)
-            if used_any:
-                entries_with_forms += 1
+        used_any = False
+        for fm in entry.get("forms") or []:
+            surface = fm.get("form")
+            tags = set(fm.get("tags") or [])
+            if not surface or surface in _SCAFFOLD_FORMS or (tags & _SCAFFOLD_TAGS):
+                continue
+            if not (tags & INFLECTION_TAGS):
+                continue
+            if surface.lower() == word.lower():
+                continue  # e.g. run (past participle) == run; nothing to map
+            used_any = True
+            # First mapping wins. File order follows Wiktionary's own page
+            # order (primary/most-common sense first), the same convention
+            # convert_wiktextract.py documents and relies on.
+            form_to_base.setdefault(surface.lower(), word)
+        if used_any:
+            entries_with_forms += 1
 
-            if line_no % 1_000_000 == 0:
-                print(f"  ...{line_no:,} lines, {len(form_to_base):,} forms mapped",
-                      file=sys.stderr)
+        if line_no % 1_000_000 == 0:
+            print(f"  ...{line_no:,} lines, {len(form_to_base):,} forms mapped",
+                  file=sys.stderr)
 
     print(f"{scanned:,} English entries scanned, {entries_with_forms:,} carried usable forms",
           file=sys.stderr)

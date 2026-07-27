@@ -45,6 +45,7 @@ import re
 import sys
 
 import ety
+import linguistics
 from buckets import bucket_for, APPROXIMATE_BUCKETS
 from buckets_wikt import bucket_for_name
 from corrections import WORD_CORRECTIONS
@@ -56,7 +57,9 @@ from compounds import COMPOUND_SPLITS
 from inflections import inflection_candidates
 
 # ISO codes that are stages of English itself, not foreign donors.
-ENGLISH_STAGES = {"ang", "enm", "eng"}
+# Owned by `linguistics`; this name is kept because it is part of this
+# module's existing surface.
+ENGLISH_STAGES = linguistics.ENGLISH_STAGE_ISO
 
 # The "top 8" bucket families that are common enough in everyday English to
 # get their own color in app.py. Used here too: a family OUTSIDE this set is
@@ -639,6 +642,10 @@ class DbResolver(Resolver):
         import etymology_db
         self._db = etymology_db.get(path) if path else etymology_db.get()
         self._english = etymology_db.ENGLISH_STAGES
+        # Shared with `lineage()` rather than restated here: the two used to
+        # disagree about what a donor is, which is the exact drift the single
+        # access layer exists to prevent.
+        self._donor_rels = etymology_db.DONOR_RELS
         self._affix_cache: dict = {}
 
     def resolve(self, word: str) -> Resolution:
@@ -763,11 +770,33 @@ class DbResolver(Resolver):
         # drawing `mile`'s Middle-English-to-PIE edge, just in the bar chart
         # instead of the tree.
         foreign = [n for n in line[1:]
-                   if n.lang not in self._english and n.rel != "root"]
+                   if n.lang not in self._english
+                   and n.rel in self._donor_rels]
         if not foreign:
-            # Deepest English stage actually reached -- NOT line[-1], which
-            # may be the root we just excluded.
+            # NATIVE DESCENT IS A CLAIM, AND IT NEEDS EVIDENCE.
+            #
+            # This branch used to fire on "no foreign donor found", which
+            # treats absence of evidence as evidence. It is true for `trust`
+            # (English -> Middle English -> Old English, a real inherited
+            # thread) and false for `movie`, whose entire recorded formation
+            # is the suffix `ie` -- the builder lost `move` -- and which was
+            # therefore announced as native Germanic. `zoophysiologist` got
+            # the same treatment while actually being Greek, because its parts
+            # `zoo` and `physiologist` are absent from the database and the
+            # walk dead-ended in English.
+            #
+            # The evidence required is an `inherited` edge: descent through
+            # the English stages, which is what "native core" means. Without
+            # one this is a MISS, and a miss lets the file-backed gap-fillers
+            # and `compounds.py` have their turn -- which is how `peacemaker`
+            # gets back to peace + maker. Reporting Germanic instead both
+            # stated a falsehood and blocked every backend behind it.
             stages = [n for n in line if n.lang in self._english]
+            if not any(n.rel == "inherited" for n in line):
+                return Resolution(word, [], None, None, self.name,
+                                   case_fallback=case_fallback,
+                                   inherited_from=inherited,
+                                   compound_parts=parts)
             stage = stages[-1].lang if len(stages) > 1 else "English (native core)"
             return Resolution(word, [], "eng", stage, self.name,
                                case_fallback=case_fallback,
@@ -794,8 +823,9 @@ class DbResolver(Resolver):
                            compound_parts=parts)
 
 
-def _is_pie(lang: str) -> bool:
-    return lang in ("Proto-Indo-European", "PIE")
+# Owned by `linguistics` -- `app.py` had grown its own, differently-worded
+# copy of this same test.
+_is_pie = linguistics.is_pie
 
 
 class ChainResolver(Resolver):
@@ -1007,6 +1037,31 @@ class ChainResolver(Resolver):
                     flat.append(pr)
             return Resolution(word, [], None, None, self.name, compound_parts=flat)
         return r
+
+
+_SHARED: Optional[Resolver] = None
+
+
+def shared_resolver() -> Resolver:
+    """
+    The one resolver instance for this process. Use this, not `default_resolver`.
+
+    Building a resolver loads ~100MB of JSON, so a second instance is slow;
+    but the reason this exists is correctness, not speed. `app.py` used to
+    hold the only shared instance in a module global that nothing else could
+    reach, so any new feature had two options -- import from `app` (a web
+    module) or build its own stack. The second is how a feature ends up
+    answering differently from the analyzer, which is known issue #16 in one
+    sentence.
+
+    `default_resolver()` still builds a fresh stack, deliberately: tests that
+    need an isolated one, or a different `ETYMOLOGY_DB` setting, should keep
+    using it.
+    """
+    global _SHARED
+    if _SHARED is None:
+        _SHARED = default_resolver()
+    return _SHARED
 
 
 def default_resolver() -> Resolver:

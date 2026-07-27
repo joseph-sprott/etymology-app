@@ -59,10 +59,15 @@ sys.path.insert(0, ".")
 from etymology_chain import build_chain
 from wiktextract_langs import name_for_wikt_code, bucket_for_wikt_code, EXCLUDED_CODES
 from buckets_wikt import family_for_name
-# Reused, not reinvented (composability): convert_wikt.py's own depth-hint
-# table, already tuned to break ties between untied donor languages by real
-# chronological tier (modern/Middle/Old/Classical/proto, per family).
-from convert_wikt import _DEPTH_HINT
+# Reused, not reinvented (composability): the shared depth-hint table, tuned
+# to break ties between untied donor languages by real chronological tier
+# (modern/Middle/Old/Classical/proto, per family).
+#
+# Imported from `linguistics`, its actual home, rather than through
+# `convert_wikt` -- that indirection meant this build script loaded the OTHER
+# build script (and pandas) for one dict. Same table, same values.
+from linguistics import DEPTH_HINT as _DEPTH_HINT
+from wiktextract_dump import stream_english_entries
 
 JSONL_PATH = r"C:\Users\Josep\Desktop\Etymology Project\wiktextract_data\kaikki.org-dictionary-English.jsonl"
 OUT_PATH = "wiktextract_words.json"
@@ -208,29 +213,16 @@ def main():
 
     words = {}
     total_english_entries = 0
-    with open(args.jsonl, encoding="utf-8") as f:
-        for line_no, line in enumerate(f, 1):
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                entry = json.loads(line)
-            except json.JSONDecodeError:
-                continue
-            if entry.get("lang") != "English":
-                continue
-            word = entry.get("word")
-            if not word:
-                continue
-            total_english_entries += 1
-            if word not in words:
-                result = parse_entry(entry)
-                if result is not None:
-                    words[word] = result
-            if line_no % 1_000_000 == 0:
-                print(f"...{line_no:,} lines scanned, {len(words):,} words resolved", file=sys.stderr)
-            if args.limit and total_english_entries >= args.limit:
-                break
+    # `--limit` is honoured by the reader itself, which counts YIELDED English
+    # entries -- the same thing the old inline `break` counted.
+    for line_no, entry, word in stream_english_entries(args.jsonl, limit=args.limit):
+        total_english_entries += 1
+        if word not in words:
+            result = parse_entry(entry)
+            if result is not None:
+                words[word] = result
+        if line_no % 1_000_000 == 0:
+            print(f"...{line_no:,} lines scanned, {len(words):,} words resolved", file=sys.stderr)
 
     print(f"{total_english_entries:,} English entries scanned, "
           f"{len(words):,} distinct headwords with a resolvable chain.", file=sys.stderr)

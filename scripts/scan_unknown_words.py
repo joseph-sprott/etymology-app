@@ -35,9 +35,6 @@ sys.path.insert(0, ".")
 from analyzer import tokenize
 from resolver import default_resolver
 
-_SENTENCE_RE = re.compile(r"[A-Za-z]+")
-
-
 def _capitalization_hints(paragraph: str):
     """
     word (lowercased) -> True if it EVER appears capitalized somewhere that

@@ -36,6 +36,8 @@ import json
 import os
 import sys
 
+import linguistics
+
 JSONL = r"C:\Users\Josep\Desktop\Etymology Project\wiktextract_data\kaikki.org-dictionary-English.jsonl"
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "root_glosses.json")
 
@@ -89,8 +91,12 @@ def key_for(term):
     whitespace. Case and the hyphens that mark a bound root are kept -- they
     are part of how the form is written, and collapsing them would merge forms
     Wiktionary keeps apart.
+
+    Delegates to `linguistics.root_key` so the BUILD side and the LOOKUP side
+    cannot compute different keys -- they had each written this expression,
+    and both had the strip order wrong (see that function).
     """
-    return term.lstrip("*").strip()
+    return linguistics.root_key(term)
 
 
 def scan(path, limit=None):

@@ -135,15 +135,25 @@ NAME_TO_BUCKET = {
 }
 
 # English stage names (used to detect "never left English" chains).
-ENGLISH_STAGE_NAMES = {"English", "Middle English", "Old English"}
+# Re-exported from `linguistics`, which owns this definition -- importers that
+# already say `from buckets_wikt import ENGLISH_STAGE_NAMES` keep working.
+from linguistics import ENGLISH_STAGE_NAMES        # noqa: E402,F401
 
 APPROXIMATE_BUCKETS = {"Germanic"}
 
+# THE canonical display order for every bucket the app can show, in any
+# chart, legend or sort. `buckets.py` re-exports this rather than keeping the
+# shorter list it used to own -- see the note there for what that cost.
+#
+# "Iranian" is the legacy `ety`/ISO backend's name for what this taxonomy
+# calls "Indo-Iranian" (`buckets.py` still maps fas/pal/peo to it), so it sits
+# immediately after its modern equivalent. It is a display slot for a bucket
+# that is still reachable, not a separate family.
 BUCKET_ORDER = [
     "Germanic", "Norse", "French", "Latin", "Greek", "Romance (other)",
-    "Celtic", "Slavic", "Indo-Iranian", "Semitic", "Turkic", "East Asian",
-    "Austronesian", "Indigenous American", "Caribbean", "Afro-Asiatic (other)",
-    "African (other)", "PIE", "Other", "Unknown",
+    "Celtic", "Slavic", "Indo-Iranian", "Iranian", "Semitic", "Turkic",
+    "East Asian", "Austronesian", "Indigenous American", "Caribbean",
+    "Afro-Asiatic (other)", "African (other)", "PIE", "Other", "Unknown",
 ]
 
 

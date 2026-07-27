@@ -121,11 +121,15 @@ def check_agreement(db_path):
     import etymology_db
     if db_path:
         etymology_db.get(db_path)
-    import app
+    # word_trees, not app: this needs `resolve_tree` and a resolver, neither
+    # of which is web code. Importing `app` dragged Flask and the page
+    # templates in just to draw a tree (2026-07-27 audit).
+    import word_trees
+    resolver = word_trees.shared_resolver()
 
     failures = []
     for word in PANEL:
-        tree = app.resolve_tree(word)
+        tree = word_trees.resolve_tree(word)
         langs = set()
         if tree:
             langs.add(tree["lang"])
@@ -136,7 +140,7 @@ def check_agreement(db_path):
                     collect(c)
             for b in tree["branches"]:
                 collect(b)
-        res = app.RESOLVER.resolve(word)
+        res = resolver.resolve(word)
         reported = {l.specific_lang or l.lang for l in res.chain}
         root = (res.view("root").depth_lang or "").replace(" (from PIE)", "")
         if root:
@@ -165,6 +169,14 @@ def main():
                                    [args.db] if args.db else [])
     rows.append(("invariants", summary, ok))
     detail["invariants"] = [l for l in text.splitlines() if "FAIL" in l]
+
+    # The fast unit suite (2026-07-27 audit). Runs first-ish and takes about a
+    # second, so a broken predicate is reported before the slow suite spends
+    # minutes loading the world to tell you the same thing.
+    ok, summary, text = run_module(os.path.join(ROOT, "test_units.py"))
+    rows.append(("units (fast)", summary, ok))
+    detail["units (fast)"] = [l.strip() for l in text.splitlines()
+                              if l.strip().startswith("FAIL")]
 
     if not args.skip_regression:
         ok, summary, text = run_module(os.path.join(ROOT, "test_regression.py"))

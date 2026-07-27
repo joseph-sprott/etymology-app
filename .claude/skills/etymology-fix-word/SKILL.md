@@ -170,10 +170,15 @@ including specific attested spellings from the live Wiktionary page (step 3),
 not just bucket names.
 
 If the word is a compound handled via `compounds.py` instead, no
-`tree_corrections.py` entry is needed -- `app.py`'s `resolve_tree()` already
-falls back to the resolver's compound-split data automatically for any word
-without its own tree, via the `RESOLVER.resolve(word).compound_parts`
-mechanism (see that function's docstring in `app.py` for the full "why").
+`tree_corrections.py` entry is needed -- `word_trees.py`'s `resolve_tree()`
+already falls back to the resolver's compound-split data automatically for any
+word without its own tree, via the `shared_resolver().resolve(word)
+.compound_parts` mechanism (see that function's docstring for the full "why").
+
+(`resolve_tree` lived in `app.py` until the 2026-07-27 audit split the tree
+subsystem out. Its six public functions -- `resolve_tree`, `build_diagram`,
+`node_slug`, `root_gloss`, `is_reconstructed`, `wiktionary_url` -- are now
+importable without pulling in Flask.)
 
 ## 7. Verify, and know what's verified vs. not yet
 

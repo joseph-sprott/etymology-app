@@ -1,4 +1,4 @@
-﻿"""
+"""
 Phase-1 prototype: build the NEW connected tree for a handful of words and
 print it beside what the app shows today. Writes nothing, touches no
 production data -- this exists so the tree shape can be judged before any
@@ -88,7 +88,7 @@ def render(node, langs, depth=0, out=None):
 
 def old_tree(word):
     try:
-        import app
+        import word_trees as app
         t = app.resolve_tree(word)
     except Exception as exc:
         return [f"   (error: {exc})"]

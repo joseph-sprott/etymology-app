@@ -27,6 +27,7 @@ import sys
 
 sys.path.insert(0, ".")
 from resolver import default_resolver
+from wiktextract_dump import stream_english_entries
 
 
 def load_words(args):
@@ -51,46 +52,36 @@ def main():
     found = {}
     total_english_headwords_with_etymology = set()
 
-    with open(args.jsonl, encoding="utf-8") as f:
-        for line_no, line in enumerate(f, 1):
-            if not args.full_stats and targets and found.keys() >= targets:
-                break
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                entry = json.loads(line)
-            except json.JSONDecodeError:
-                continue
-            if entry.get("lang") != "English":
-                continue
-            word = entry.get("word", "")
-            if not word:
-                continue
-            word_lc = word.lower()
-            has_text = bool(entry.get("etymology_text"))
-            has_templates = bool(entry.get("etymology_templates"))
-            has_ety = has_text or has_templates
+    for line_no, entry, word in stream_english_entries(args.jsonl):
+        # Early exit once every requested word is accounted for -- the
+        # whole point of this script is answering a short word list
+        # quickly, not reading 1.4M lines to say so.
+        if not args.full_stats and targets and found.keys() >= targets:
+            break
+        word_lc = word.lower()
+        has_text = bool(entry.get("etymology_text"))
+        has_templates = bool(entry.get("etymology_templates"))
+        has_ety = has_text or has_templates
 
-            if args.full_stats and has_ety:
-                total_english_headwords_with_etymology.add(word_lc)
+        if args.full_stats and has_ety:
+            total_english_headwords_with_etymology.add(word_lc)
 
-            if word_lc in targets:
-                rec = found.setdefault(word_lc, {
-                    "has_etymology_text": False,
-                    "has_etymology_templates": False,
-                    "pos_seen": set(),
-                    "etymology_number_seen": set(),
-                })
-                rec["has_etymology_text"] = rec["has_etymology_text"] or has_text
-                rec["has_etymology_templates"] = rec["has_etymology_templates"] or has_templates
-                if entry.get("pos"):
-                    rec["pos_seen"].add(entry["pos"])
-                if entry.get("etymology_number") is not None:
-                    rec["etymology_number_seen"].add(entry["etymology_number"])
+        if word_lc in targets:
+            rec = found.setdefault(word_lc, {
+                "has_etymology_text": False,
+                "has_etymology_templates": False,
+                "pos_seen": set(),
+                "etymology_number_seen": set(),
+            })
+            rec["has_etymology_text"] = rec["has_etymology_text"] or has_text
+            rec["has_etymology_templates"] = rec["has_etymology_templates"] or has_templates
+            if entry.get("pos"):
+                rec["pos_seen"].add(entry["pos"])
+            if entry.get("etymology_number") is not None:
+                rec["etymology_number_seen"].add(entry["etymology_number"])
 
-            if line_no % 1_000_000 == 0:
-                print(f"  ...{line_no:,} lines scanned", file=sys.stderr)
+        if line_no % 1_000_000 == 0:
+            print(f"  ...{line_no:,} lines scanned", file=sys.stderr)
 
     if args.full_stats:
         print(f"\nTotal distinct English headwords with etymology data in wiktextract: "

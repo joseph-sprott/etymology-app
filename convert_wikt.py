@@ -153,42 +153,11 @@ NON_DONOR_LANGS = {"Translingual"}
 # reserved LOW band (0-1) and starting every foreign tier at a fixed +10
 # offset -- English-stage always wins regardless of how many internal
 # foreign sub-tiers exist above it.
-_DEPTH_HINT = {
-    # English-stage band: ALWAYS shallower than any foreign entry below.
-    "Middle English": 0, "English": 0, "Scots": 0,
-    "Old English": 1,
-    # Foreign bands start at +10, an unbridgeable gap from the English-stage
-    # band above -- tier 10: modern/current stage of a foreign family.
-    "French": 10, "German": 10, "Dutch": 10, "Irish": 10, "Modern Greek": 10,
-    # Tier 11: "Middle"-period foreign stages.
-    "Middle French": 11,
-    "Middle High German": 11, "Middle Low German": 11, "Middle Dutch": 11,
-    "Middle Irish": 11,
-    "New Latin": 11,  # modern scientific/scholarly Latin -- shallow despite the name
-    "Byzantine Greek": 11, "Medieval Greek": 11,
-    # Tier 12: "Old"-period / earliest-attested foreign stages.
-    "Old French": 12, "Anglo-Norman": 12, "Norman": 12, "Old Northern French": 12,
-    "Old Norse": 12,
-    "Old High German": 12, "Old Saxon": 12, "Old Dutch": 12, "Old Frisian": 12,
-    "Old Irish": 12,
-    "Medieval Latin": 12,
-    # Tier 13: post-Classical but pre-Medieval.
-    "Late Latin": 13, "Vulgar Latin": 13, "Koine Greek": 13,
-    # Tier 14: Classical-era -- the oldest ATTESTED (non-reconstructed) stage.
-    "Latin": 14, "Ancient Greek": 14,
-    # Tiers 15-18: reconstructed proto-languages, oldest/deepest.
-    "Proto-West Germanic": 15, "Proto-Italic": 15, "Proto-Celtic": 15,
-    "Proto-Slavic": 15, "Sanskrit": 15,
-    "Proto-Germanic": 16,
-    "Proto-Indo-European": 18,
-}
-
-
-def _depth_hint(lang):
-    # Default (unlisted foreign languages) sits inside the foreign band, not
-    # the English-stage band -- so an unlisted donor language still always
-    # sorts after any English-stage-first branch, same guarantee as above.
-    return _DEPTH_HINT.get(lang, 10)
+# Moved to `linguistics.py` in the 2026-07-27 audit so the Flask app can
+# order tree branches without importing this build script (and pandas with
+# it). Same table, same numbers; re-exported here because this module's
+# own code and `build_etymology_trees.py` both already use these names.
+from linguistics import depth_hint as _depth_hint
 
 
 

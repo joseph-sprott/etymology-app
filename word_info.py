@@ -49,14 +49,6 @@ def lookup(word: str) -> Optional[dict]:
     return info.get(word.lower()) or info.get(word)
 
 
-def pos_label(word: str) -> Optional[str]:
-    """Human-readable part of speech list, e.g. "noun, verb"."""
-    rec = lookup(word)
-    if not rec or not rec.get("pos"):
-        return None
-    return ", ".join(rec["pos"])
-
-
 def gloss(word: str) -> Optional[str]:
     rec = lookup(word)
     return rec.get("gloss") if rec else None

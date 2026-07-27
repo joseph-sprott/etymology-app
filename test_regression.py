@@ -24,9 +24,11 @@ apply immediately at resolver load time).
 """
 import sys
 
-from resolver import default_resolver
+from resolver import shared_resolver
 
-RESOLVER = default_resolver()
+# The SAME instance app.py and word_trees.py use, so the tree checks
+# below compare like with like instead of poking a module global.
+RESOLVER = shared_resolver()
 
 failures = []
 passed = 0
@@ -116,6 +118,46 @@ check(f"critical: Deepest Root still shows PIE (got {r.bucket})",
       r.bucket != "Unknown")
 
 print()
+print("=== Donor evidence: only transmitting edges may answer (2026-07-27) ===")
+# Two bugs with one cause: the resolver decided a donor by "any foreign node
+# that isn't a root", and claimed native descent whenever that found nothing.
+# So a CALQUE became a donor (`peacemaker` read Greek -- it is peace + maker,
+# merely modelled on Koine Greek), and ABSENCE of evidence became a positive
+# Germanic claim (`movie`, whose recorded formation is only the suffix `ie`,
+# and `zoophysiologist`, which is Greek). Both directions are checked here,
+# plus the controls that must NOT move -- the danger of the fix is over-reach.
+
+# A calque transmits no material and must never be the answer.
+d = RESOLVER.resolve("peacemaker").view("direct")
+check(f"peacemaker: not the Koine Greek phrase it calques (got {d.bucket})",
+      d.bucket != "Greek")
+check("peacemaker: shows its peace + maker split instead", bool(d.parts))
+d = RESOLVER.resolve("blackshirt").view("direct")
+check(f"blackshirt: not the Italian phrase it calques (got {d.bucket})",
+      d.bucket != "Romance (other)" and d.bucket != "Latin")
+
+# A native-core claim needs an `inherited` edge, not merely the absence of a
+# foreign one. `zoophysiologist`'s parts are absent from the database, so the
+# walk dead-ends in English -- which is not evidence that it IS English.
+d = RESOLVER.resolve("zoophysiologist").view("direct")
+check(f"zoophysiologist: no fabricated Germanic claim (got {d.bucket})",
+      d.bucket != "Germanic")
+
+# Controls. Real native descent must survive untouched -- these carry genuine
+# inherited edges through the English stages.
+for word in ("trust", "free", "brother", "the", "walk", "back"):
+    d = RESOLVER.resolve(word).view("direct")
+    check(f"{word}: real native inheritance still reads Germanic (got {d.bucket})",
+          d.bucket == "Germanic")
+
+# And `formed_from` pointing at a FOREIGN part is real transmission, not a
+# calque: `sthenolagnia` genuinely is built out of Greek. Excluding it along
+# with calques would have lost true ancestry.
+d = RESOLVER.resolve("sthenolagnia").view("direct")
+check(f"sthenolagnia: foreign formation still counts as ancestry (got {d.bucket})",
+      d.bucket == "Greek")
+
+print()
 print("=== Compound-display feature (must still split) ===")
 COMPOUNDS = ["upside", "purebred", "outdoorsman", "mindset", "meltdown"]
 for word in COMPOUNDS:
@@ -133,14 +175,13 @@ for mode, expected in MODE_EXPECT.items():
 print()
 print("=== Tree/analyzer consistency (issue #16) ===")
 try:
-    import app as app_module
-    app_module.RESOLVER = RESOLVER  # use the same resolver instance as above
+    import word_trees as app_module
     TREE_WORDS = ["professional", "consistency", "mindset", "ran"]
     for word in TREE_WORDS:
         tree = app_module.resolve_tree(word)
         check(f"{word} has a real tree (not 'no recorded etymology data')", tree is not None)
 except ImportError as e:
-    check(f"could not import app.py to check tree consistency ({e})", False)
+    check(f"could not import word_trees.py to check tree consistency ({e})", False)
 
 print()
 print("=== Issue #17: 347-paragraph coverage scan fixes (2026-07-24) ===")
@@ -290,8 +331,7 @@ print("=== Tree and analyzer must agree (2026-07-25, the 'intrude' bug) ===")
 # the resolver-backed paths. This guards the whole class, not just "intrude":
 # if the analyzer names a specific donor language, the tree must mention it.
 try:
-    import app as app_module
-    app_module.RESOLVER = RESOLVER
+    import word_trees as app_module
 
     def _langs_in(tree):
         out = set()
@@ -330,7 +370,7 @@ try:
               f"{(' -- lost ' + str(sorted(lost))) if lost else ''}",
               stored is not None and served is not None and not lost)
 except ImportError as e:
-    check(f"could not import app.py to check tree/analyzer agreement ({e})", False)
+    check(f"could not import word_trees.py to check tree/analyzer agreement ({e})", False)
 
 print()
 print("=== Tree: no duplicate orphan branches (2026-07-24) ===")
@@ -347,8 +387,7 @@ print("=== Tree: no duplicate orphan branches (2026-07-24) ===")
 # would be over-deletion: a genuinely-new-but-stranded citation must
 # survive, since dropping it would silently lose real information.
 try:
-    import app as app_module
-    app_module.RESOLVER = RESOLVER
+    import word_trees as app_module
 
     def _pairs_in(node, out):
         out.append((node["lang"], node["term"]))
@@ -408,7 +447,65 @@ try:
           {"Ancient Greek", "Arabic"} <= sandal_langs
           and any(l.endswith("Latin") for l in sandal_langs))
 except ImportError as e:
-    check(f"could not import app.py to check tree dedup ({e})", False)
+    check(f"could not import word_trees.py to check tree dedup ({e})", False)
+
+print()
+print("=== Descendant trees (2026-07-26) ===")
+# The downward view: what came FROM a root, rather than where a word came from.
+# Skipped rather than failed when the tables aren't built -- build_descendants.py
+# needs its own extracts and a fresh clone won't have them.
+try:
+    import descendants as _desc
+    _bro = _desc.full_tree("brother")
+    if _bro is None:
+        print("  SKIP  descendant tables not built (run build_descendants.py)")
+    else:
+        check("brother's descendant tree climbs to the PIE root",
+              _bro["root_lang"] == "Proto-Indo-European"
+              and _bro["root_term"].startswith("b"))
+
+        def _flat(node, out):
+            out.append((node.get("lang"), node.get("raw_term") or node.get("term")))
+            for kid in node.get("children") or ():
+                _flat(kid, out)
+            return out
+
+        rows = _flat(_bro["tree"], [])
+        langs = {l for l, _ in rows}
+        # The splice: PIE lists Proto-Germanic and stops ("see there for further
+        # descendants"). If the join breaks, the tree ends at the branch heads
+        # and everything below Proto-Germanic silently vanishes.
+        check("splice reaches modern English through Proto-Germanic",
+              {"Proto-Germanic", "Proto-West Germanic", "Old English",
+               "Middle English", "English"} <= langs)
+        def _any_match(node):
+            return bool(node.get("match")) or any(
+                _any_match(k) for k in node.get("children") or ())
+        # The view opens on the searched word by following `match`/`on_path`.
+        # Without the mark it opens on a folded root and the user sees nothing.
+        check("the searched word is marked in the tree", _any_match(_bro["tree"]))
+
+        # Variant merging. `night`'s raw tree is 3,402 nodes but only 97
+        # distinct forms -- the same leaves repeated under 180 spelling
+        # variants of their ancestors. If merging regresses, this explodes.
+        _night = _desc.full_tree("night")
+        check(f"night's tree stays deduplicated "
+              f"(got {_night['total_nodes']} nodes, raw is 3,402)",
+              _night["total_nodes"] < 300)
+
+        # A merge must never invent a parent-child link: every merged group
+        # had structurally identical subtrees, so no (lang, term) pair should
+        # appear twice at the same depth under one parent.
+        def _dupe_children(node):
+            kids = node.get("children") or []
+            seen = [(k.get("lang"), k.get("raw_term")) for k in kids]
+            if len(seen) != len(set(seen)):
+                return True
+            return any(_dupe_children(k) for k in kids)
+        check("no duplicate siblings survive the merge",
+              not _dupe_children(_bro["tree"]))
+except ImportError as e:
+    check(f"could not import descendants.py ({e})", False)
 
 print()
 total = passed + len(failures)

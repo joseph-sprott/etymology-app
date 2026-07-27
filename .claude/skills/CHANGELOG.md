@@ -8,6 +8,109 @@ change).
 
 ---
 
+## 2026-07-27 (spring cleaning)
+
+**`etymology-regen` and `etymology-fix-word` reference `HISTORY.md` now.**
+`CLAUDE.md`'s known-issues section was split: the working summary stays there,
+the full narrative moved to `HISTORY.md`, which is NOT loaded into context.
+Any skill telling an agent to "see known issue #N for the full story" should
+point at `HISTORY.md`, not `CLAUDE.md`, or the agent will find three lines and
+assume that is all there is.
+
+**Standing note for skill authors:** `CLAUDE.md` costs tokens on EVERY
+session; a skill body costs them only when invoked. Detail that only matters
+while doing a specific job belongs in the skill, not in `CLAUDE.md`. The
+cleanup took `CLAUDE.md` from ~24,100 tokens to ~6,600.
+
+---
+
+## 2026-07-27 (structural audit + test-first)
+
+**Created `etymology-test-first`.** Joe, 2026-07-27: "test driven development.
+Write tests for what you know the outcome should look like and then write the
+code to fit the test ... I know you probably arent doing that." He was right —
+the audit earlier that day wrote code first and tests after. The skill exists
+to make the loop explicit and, more importantly, to carry the thing that is
+easy to skip: **when a test fails, decide whether the TEST or the CODE is
+wrong, by verifying against a real source.** All three outcomes from that day
+are written into it as worked examples (bad guess; right rule wrong layer; and
+a genuine latent bug in `key_for`'s strip order that only surfaced because the
+test asserted the DOCUMENTED contract rather than the observed behaviour).
+
+Carries `scripts/coverage_report.py` (audit dimension 2 — the omit lists and
+suite order were a fixed, repeatable operation being retyped). It prints the
+whole-codebase number AND the runtime-only number, because reporting the
+latter alone inflates the result by ~30 points.
+
+**Audited all 7 existing skills after the structural refactor** (`app.py`
+split into `palette.py` + `word_trees.py`, new `linguistics.py` leaf, new
+`test_units.py`, `shared_resolver()`). Findings:
+
+- *Visibility*: clean. The two skills with real side effects
+  (`etymology-commit-push`, `etymology-regen`) were already gated
+  `disable-model-invocation: true`. No change.
+- *Stale references, fixed*: `etymology-fix-word` pointed at "`app.py`'s
+  `resolve_tree()`" and `etymology-regen` at `app._tree_from_db` — both moved
+  to `word_trees.py`. `etymology-regen` also documented `verify.py` as
+  printing FOUR lines; it now prints FIVE (the `units (fast)` row).
+- *Composability*: `scripts/verify.py` and `scripts/prototype_tree.py` were
+  importing `app` — pulling in Flask and the page templates — purely to reach
+  `resolve_tree`. Both now import `word_trees`. `verify.py` additionally used
+  `app.RESOLVER`, which `word_trees` does not define, so it now calls
+  `shared_resolver()`; caught by running the script rather than by reading it,
+  which is the argument for testing skills and not just editing them.
+- *Tested, not just edited*: ran `check_word.py`, `check_db_word.py`,
+  `check_descendants.py` and `list_skills.py` against real data. All four work.
+
+---
+
+## 2026-07-26 (descendants feature)
+
+**Created `etymology-descendants`** — the new downward-tree feature (PIE root →
+every modern descendant, rendered with d3). Written because the single most
+expensive fact about it is invisible from the code: the English wiktextract
+extract this project builds from CANNOT answer descendant questions at all.
+Its `descendants` rows are 18,276-of-20,529 at depth 0 and point the wrong way
+(`brother` → Jamaican `bredda`); everything above English lives on a
+non-English page. Without that written down, the obvious next move is to hunt
+for a parsing bug that isn't there, or to download the 23GB all-languages dump
+that isn't needed — six small per-language extracts (~99MB total) reconstruct
+the whole diagram, because each proto entry carries its subtree nested.
+
+**Audited it with `etymology-skill-audit` before shipping**, which produced
+three real changes rather than a rubber stamp:
+
+- *Deterministic → script*: the skill's diagnosis section spelled out the same
+  four-step Python snippet every time (is anything loaded / is the word in a
+  tree / does the splice find a parent / what got assembled). No decision
+  point anywhere in it, so it became `scripts/check_descendants.py`, in the
+  project-root `scripts/` folder alongside `check_word.py` and
+  `check_db_word.py` — same diagnostic family, and a word investigation may
+  want it too.
+- *Deterministic → script*: widening coverage was four prose steps whose only
+  judgment is WHICH language. Now `scripts/add_descendant_language.py "Proto-
+  Italic"`. The URL derivation earns its place in code: the kaikki directory
+  keeps hyphens while the filename strips them, and getting it wrong 404s in a
+  way that reads as "that language isn't available." Used it immediately to add
+  four branches (Celtic, Italic, Indo-Iranian, Balto-Slavic) — `brother` went
+  from 59 nodes on one branch to 87 across five.
+- *Composability*: the "a full rebuild silently wipes the descendant tables"
+  trap was documented in the new skill, but the person about to trigger it is
+  reading `etymology-regen`. Added §3b there. This one mattered — the failure
+  is invisible (no error, no failing invariant, and the regression suite SKIPS
+  the section when the tables are absent, so it cannot catch it either).
+
+**Visibility**: left auto-invocable. It edits local files and runs a ~1-minute
+build over its own two tables; that is `etymology-fix-word`'s risk profile, not
+`etymology-regen`'s 10-minute unattended rebuild of a live database.
+
+**Discovery note, still unresolved from the 2026-07-26 entry below:** these
+skills only register when the session starts inside `etymology-app/`. That held
+true again today — the skills were visible this session, and `Skill` resolved
+`etymology-skill-audit` on the first try.
+
+---
+
 ## 2026-07-26 (handoff edits, applied 2026-07-26)
 
 Two edits queued at the end of the etymology.db rework session and blocked

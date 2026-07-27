@@ -10,15 +10,19 @@ import json
 import os
 import sys
 from collections import Counter
-from urllib.parse import quote
 
 from flask import Flask, render_template_string, request
 
-from analyzer import analyze, format_report
+from analyzer import analyze
 from buckets import BUCKET_ORDER
 from buckets_wikt import bucket_for_name
-from convert_wikt import _depth_hint
-from resolver import default_resolver
+import linguistics
+from palette import (PROTO_SLUGS, THEME_CSS,
+                     bucket_slug, root_slug, language_shades)
+from word_trees import (resolve_tree, build_diagram, node_slug,
+                        root_gloss, is_reconstructed, wiktionary_url)
+from resolver import shared_resolver
+import descendants
 import inflections
 import word_info
 
@@ -33,27 +37,14 @@ app = Flask(__name__)
 # word like "mindset" correctly split in the analyzer but showed "No
 # recorded etymology data" in the tree. Both features now read through this
 # one instance: `analyze()` below is passed `resolver=RESOLVER` explicitly,
-# and `resolve_tree()` (below) consults it directly for compound splits
-# when a word isn't in TREES on its own.
-RESOLVER = default_resolver()
-
-# The shared word database, when it has been built. Held here so the TREE and
-# the ANALYZER read the same rows: RESOLVER's DbResolver backend and
-# _tree_from_db() below both go through etymology_db, which is the only module
-# that opens the file. None means "not built yet" and every path degrades to
-# the older per-feature stores.
-# ETYMOLOGY_DB=0 disables it for BOTH paths (resolver and tree), which is what
-# scripts/compare_db.py relies on to measure the legacy stack honestly.
-if os.environ.get("ETYMOLOGY_DB") == "0":
-    _DB = None
-else:
-    try:
-        import etymology_db as _etymology_db
-        _DB = _etymology_db.get()
-    except Exception as _db_exc:      # not built, or mid-rebuild
-        print(f"etymology.db unavailable ({_db_exc}); using legacy stores",
-              file=sys.stderr)
-        _DB = None
+# and `resolve_tree()` (now in word_trees.py) consults the same one.
+#
+# `shared_resolver()`, not `default_resolver()`: the tree code moved out of
+# this module in the 2026-07-27 audit, and a second `default_resolver()` call
+# there would have built a SECOND ~100MB stack -- and, worse, one that could
+# answer differently. The shared accessor makes one instance the only thing
+# either module can get.
+RESOLVER = shared_resolver()
 
 # "Core" families for the Most Distinctive sort -- same set resolver.py's
 # _pick_influence uses to decide what counts as an unremarkable, expected
@@ -172,623 +163,6 @@ def sort_per_word(per_word, word_sort, collapse_duplicates=False):
 
     return [(w, counts[w.word] if counts else None) for w in rows]
 
-# Etymology-tree feature, 2026-07-23 (Joe: "I really like the etymology tree
-# that Wiktionary provides"). Loaded from etymology_trees.json
-# (build_etymology_trees.py) -- a separate file from wikt_words.json because
-# the bucket/chain pipeline deliberately FLATTENS a word's graph into one
-# answer, while a real tree needs every branch preserved. See that build
-# script's docstring for the full design (and the two things tried and
-# reverted: naive has_root placement, and merging top-level branches -- both
-# produced actively wrong trees, not just untidy ones, so this shows the raw
-# recorded structure rather than guessing which fragments belong together).
-def _load_trees():
-    try:
-        with open("etymology_trees.json", encoding="utf-8") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return {}
-
-
-TREES = _load_trees()
-
-
-def _lookup_tree_direct(word):
-    """Exact-case only: lowercase first (the common case), then as-typed.
-
-    Deliberately does NOT also try word.capitalize() here, unlike the rest
-    of this file's other case-fallback lookups -- found 2026-07-24 (Joe:
-    "ran" showed an unrelated Japanese loanword in the tree, even though the
-    analyzer correctly showed Norse). Root cause: this function used to try
-    capitalize() unconditionally, landing on "Ran"'s real-but-unrelated tree
-    before resolve_tree() below ever got a chance to check whether the
-    resolver would actually trust that match -- the EXACT same coincidental-
-    homograph risk `Resolution.case_fallback` now protects against in
-    resolver.py (issue #12's "went"/"Went" bug, widened today for "ran"), but
-    this second, independent case-fallback implementation didn't know about
-    that protection at all. Rather than re-teach this function the same
-    fragile judgment call, resolve_tree() now defers capitalize() to its own
-    final fallback, AFTER checking what the resolver itself actually trusts
-    (inherited_from/compound_parts) -- the same "one real source of truth,
-    not two implementations that can quietly drift" principle as the rest of
-    today's fix.
-    """
-    return TREES.get(word.lower()) or TREES.get(word)
-
-
-# A stored tree whose every branch is a bare, childless `has_root` pointer
-# isn't really a lineage -- it's the tree-side equivalent of the resolver's
-# `prox_kind == "root"` stub (see Resolution.prox_kind), and the same rule
-# applies: never let a stub outrank a real answer.
-_ROOT_ONLY_RELS = {"has_root"}
-
-
-def _is_bare_root_tree(tree):
-    branches = (tree or {}).get("branches") or []
-    if not branches:
-        return True
-    return all(not b.get("children") and b.get("reltype") in _ROOT_ONLY_RELS
-               for b in branches)
-
-
-# etymology_db's relation names -> the reltype vocabulary this module and the
-# stored trees already speak, so the renderer and _is_bare_root_tree need no
-# changes to accept a database-backed tree.
-_DB_RELTYPE = {"inherited": "inherited_from", "borrowed": "borrowed_from",
-               "derived": "derived_from", "calque": "calqued_from",
-               "root": "has_root", "formed_from": "compound_of"}
-
-
-def _tree_from_db(word):
-    """
-    The word's tree straight from etymology.db, or None.
-
-    THIS is what closes the gap the rework exists for. Every other path in
-    resolve_tree() derives the tree from a DIFFERENT store than the analyzer
-    reads, which is how `intrude` came to show a Latin donor in one feature
-    and not the other. Here the tree and the analyzer's chain are two readings
-    of ONE `Etymology` object: the analyzer walks it with spine()/lineage(),
-    the renderer walks the same nodes. They cannot disagree, because there is
-    no second derivation left to disagree with.
-    """
-    if _DB is None:
-        return None
-    entry = _DB.entry(word)
-    if entry is None or not entry.primary:
-        return None
-
-    def node(n, depth, seen):
-        children = [node(c, depth, seen) for c in n.children]
-        # A component is a POINTER to another word, whose history lives on
-        # that word's row. Expanding it here is what keeps the tree and the
-        # analyzer telling the same story: lineage() already follows `pipe`
-        # to Latin for `bagpipe`, so a tree that stopped at "English pipe"
-        # would show a Germanic-looking word beside a bar chart saying Latin
-        # -- the exact split-brain this rework exists to remove.
-        # "No children" means no DONOR children -- a bare root pointer must
-        # not count as expansion. `computer`'s `compute` carries a PIE root,
-        # which made it look already-expanded and hid its French ancestry.
-        has_donor_child = any(c.rel != "root" for c in n.children)
-        if (n.rel == "formed_from" and n.term and not has_donor_child
-                and depth < 4 and n.term.lower() not in seen):
-            sub = _DB.entry(n.term)
-            if sub is not None and sub.primary:
-                expanded = [node(c, depth + 1, seen | {n.term.lower()})
-                            for c in sub.primary.head.children]
-                if expanded:
-                    # Keep the root alongside the newly-found ancestry.
-                    children = expanded + [c for c in children
-                                            if c["reltype"] == "has_root"]
-        return {"lang": n.lang, "term": n.term,
-                "reltype": _DB_RELTYPE.get(n.rel, n.rel),
-                # Carried through for the timeline work: 'related' renders as
-                # a dotted edge and is never counted as descent.
-                "certainty": n.certainty,
-                "children": children}
-
-    # EVERY etymology, not just the primary one. `bow` the weapon and `bow` the
-    # bend are different histories, and `sandal` has three competing accounts;
-    # rendering only slot 1 silently hid the rest, which the regression suite
-    # caught as "sandal: all multi-node branches preserved (3 expected)".
-    # Separate etymologies appearing as separate top-level branches is the
-    # existing contract of this shape -- the no-floating-nodes rule is about
-    # nodes WITHIN one etymology, and each of these is connected to the head.
-    head = entry.primary.head
-    seen = {(head.term or word).lower()}
-    branches = []
-    placed = set()          # (lang, term) already drawn somewhere
-
-    def record(n):
-        placed.add((n["lang"], n["term"]))
-        for c in n["children"]:
-            record(c)
-
-    for ety in entry.etymologies:
-        for child in ety.head.children:
-            drawn = node(child, 0, seen)
-            # Skip a childless branch whose node is ALREADY in the diagram.
-            # `sandal` keeps a bare `Arabic صَنْدَل` etymology alongside a
-            # fuller account that contains the same term mid-chain; drawing
-            # both puts a redundant orphan box next to the real lineage, which
-            # is the clutter the 2026-07-24 dedup pass removed. A branch with
-            # children is never skipped -- that would drop a real account.
-            if not drawn["children"] and (drawn["lang"], drawn["term"]) in placed:
-                continue
-            record(drawn)
-            branches.append(drawn)
-    if not branches:
-        return None
-    return {"lang": head.lang, "term": head.term or word,
-            "branches": branches}
-
-
-def _tree_from_chain(word, res, stub=None):
-    """
-    Build a nested lineage tree from the resolver's OWN chain.
-
-    Added 2026-07-25 (Joe: "intrude doesn't show that it's from Latin when
-    using word search. Why are the two tools not agreeing?"). Root cause: the
-    2026-07-24 wiktextract migration added a new top-priority resolver backend
-    for the ANALYZER, but etymology_trees.json is still built by
-    build_etymology_trees.py from the etymology-db parquet alone. So for any
-    word wiktextract knows better -- 1,736 of them, measured, including
-    computer/growth/investment/species -- the analyzer had a real chain while
-    Word Search showed only whatever bare PIE root pointer the older data had.
-    Two features, two databases: exactly what this project's standing "every
-    feature must pool from the same database" rule forbids, and the same
-    failure shape as known issue #16.
-
-    Rather than teach the tree builder about wiktextract (a second, parallel
-    tree pipeline that could drift from the resolver all over again), this
-    reads the answer the shared RESOLVER already computed -- the same
-    principle resolve_tree() already applies for inherited_from/compound_parts.
-
-    Terms per step are recovered where available: the discarded stub's own
-    nodes supply the deepest reconstructed form (e.g. PIE *trewd-), and
-    root_lang/root_term supply the attested one (Latin intrudere). Steps with
-    no recorded spelling render as language-only nodes rather than inventing
-    a form.
-    """
-    if not res.chain:
-        return None
-    terms = {}
-    for b in (stub or {}).get("branches") or []:
-        if b.get("term") and b.get("lang"):
-            terms.setdefault(b["lang"], b["term"])
-    if res.root_lang and res.root_term:
-        terms.setdefault(res.root_lang, res.root_term)
-
-    langs = []
-    for link in res.chain:
-        lang = link.specific_lang or link.lang
-        if lang and lang not in langs:
-            langs.append(lang)
-    if not langs:
-        return None
-
-    node = None
-    for lang in reversed(langs):  # deepest first, nesting outward
-        node = {"lang": lang, "term": terms.get(lang), "reltype": "derived_from",
-                "children": [node] if node else []}
-    return {"lang": "English", "term": word, "branches": [node]}
-
-
-def resolve_tree(word, _depth=0):
-    """
-    Word -> tree dict (same {"lang", "term", "branches"} shape TREES itself
-    uses), falling back to real resolver data when the word has no raw-data
-    tree of its own. Added 2026-07-24 (Joe, all-caps: every feature must
-    pool from the SAME database -- there should be no way one feature has
-    word info another doesn't). etymology_trees.json is built straight from
-    raw ancestry rows with no awareness of compounds.py/auto_compounds, of
-    convert_wikt.py's has_prefix_with_root inheritance (issue #15), or of
-    resolver.py's own runtime irregular-form/stemming fallback -- so a word
-    fixed through ANY of those (mindset, professional, consistency, ...)
-    used to show "no recorded etymology data" here despite the analyzer
-    having a real answer.
-
-    Rather than re-implementing each of those mechanisms a second time (risking
-    a second copy that quietly drifts from what the analyzer actually does),
-    this asks RESOLVER -- the exact same instance analyze() uses below -- what
-    it actually did, via two general fields on Resolution that exist for
-    exactly this purpose:
-      - `inherited_from`: the OTHER word whose data actually produced the
-        answer, whenever it isn't a direct hit (covers data-layer inheritance
-        AND the resolver's own irregular/stemming retry -- see
-        Resolution.inherited_from's docstring). Recurses through this
-        function again for that word, so a multi-hop chain (a word inherited
-        from a word that was itself found via stemming) still resolves.
-      - `compound_parts`: unchanged from the original version of this
-        function -- builds one synthetic branch per part (a wrapper node
-        labeled with the part's own word, children = that part's own real
-        branches, found the same recursive way).
-      - Last resort: if the resolver has SOME real answer (a chain) but
-        neither of the above applies and still no tree was found anywhere
-        (e.g. convert_wikt.py's _patch_foreign_root_stubs, a direct foreign-
-        root citation with no English intermediate to recurse through),
-        synthesize a single-node tree from root_lang/root_term rather than
-        showing nothing for a word the analyzer really does have data for.
-    Any word the resolver can't really answer (a bare has_root stub, or a
-    genuine total miss) correctly still returns None here too -- same honest
-    "no data" the analyzer shows for those, not a fabricated tree.
-
-    `_depth` guards against runaway recursion on a pathological cycle (not
-    expected in practice, but defensive, matching build_etymology_trees.py's
-    own `seen_groups` guard for the same class of risk).
-    """
-    # The database first: it is the only store the analyzer also reads, so a
-    # word it can answer is answered identically in both features. Everything
-    # below is the legacy cascade, kept as a gap-filler for words the dump
-    # doesn't cover -- it can add coverage, never override.
-    from_db = _tree_from_db(word)
-    if from_db is not None and not _is_bare_root_tree(from_db):
-        return from_db
-
-    direct = _lookup_tree_direct(word)
-    # A real stored tree still wins outright, unchanged. But a bare-root-stub
-    # tree no longer short-circuits the resolver-backed paths below -- see
-    # _is_bare_root_tree / _tree_from_chain (2026-07-25, the "intrude" bug).
-    if direct is not None and not _is_bare_root_tree(direct):
-        return direct
-    if _depth > 5:
-        return direct
-    res = RESOLVER.resolve(word)
-    if res.inherited_from and res.inherited_from != word:
-        inherited = resolve_tree(res.inherited_from, _depth + 1)
-        if inherited:
-            return {"lang": "English", "term": word, "branches": inherited["branches"]}
-    if res.compound_parts:
-        branches = []
-        for part in res.compound_parts:
-            part_tree = resolve_tree(part.word, _depth + 1)
-            children = part_tree["branches"] if part_tree else []
-            branches.append({"lang": "English", "term": part.word,
-                              "reltype": "compound_of", "children": children})
-        return {"lang": "English", "term": word, "branches": branches}
-    if res.chain and res.root_lang:
-        # The resolver has a real answer here with no richer inherited_from/
-        # compound path (e.g. a bare-root stub like "vitamin", or a word
-        # that genuinely only exists capitalized, like "Paris" typed
-        # lowercase). For the latter shape, prefer that entry's own FULL
-        # tree over the flattened single-node fallback below -- reached only
-        # now, after confirming via `res` that the resolver itself would
-        # also trust an answer here, not tried unconditionally the way
-        # _lookup_tree_direct used to (see its docstring for why that was a
-        # bug for "ran").
-        cap_tree = TREES.get(word.capitalize())
-        if cap_tree is not None:
-            return cap_tree
-        # Prefer the full chain over a single flattened node whenever the
-        # resolver has a real (non-stub) one -- this is what actually fixes
-        # the "intrude shows PIE but not Latin" class. Falls through to the
-        # original single-node synthesis when the chain is only a bare stub.
-        if res.prox_kind != "root":
-            built = _tree_from_chain(word, res, direct)
-            if built is not None:
-                return built
-        node = {"lang": res.root_lang, "term": res.root_term,
-                "reltype": "derived_from", "children": []}
-        return {"lang": "English", "term": word, "branches": [node]}
-    # Nothing better found. Return the thin stored stub if we had one -- it's
-    # real (if incomplete) recorded data, and better than claiming no data.
-    return direct
-
-
-def node_slug(node):
-    """Color slot for one tree node, reusing the same bucket->hue mapping
-    as the rest of the app (English stages already map to Germanic via
-    buckets_wikt.py, no special-casing needed here)."""
-    return bucket_slug(bucket_for_name(node["lang"]))
-
-
-# What a reconstructed root MEANS, for the hover tooltip Joe asked for
-# 2026-07-26 ("hover over a PIE root and see what that root means -- gidʰ-
-# means kid/goatling/little goat"). Built by build_root_glosses.py from
-# Wiktionary's own template arguments; see that module for why the meaning
-# can't come from the database (`ety_node.gloss` is empty for all 12,996 root
-# nodes) and why it is never inferred from the descendant word.
-#
-# Missing file is a normal state, not an error: the app runs fine without it
-# and simply shows no tooltip, exactly like a word with no definition.
-_ROOT_GLOSSES = None
-_ROOT_GLOSS_FOLD = None
-
-
-def _load_root_glosses():
-    global _ROOT_GLOSSES, _ROOT_GLOSS_FOLD
-    if _ROOT_GLOSSES is not None:
-        return
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                        "root_glosses.json")
-    try:
-        with open(path, encoding="utf-8") as fh:
-            _ROOT_GLOSSES = json.load(fh)
-    except Exception as exc:
-        print(f"root_glosses.json unavailable ({exc}); root tooltips off",
-              file=sys.stderr)
-        _ROOT_GLOSSES = {}
-    # Citation styles differ over the TRAILING hyphen that marks a bound root
-    # (`*gʰaid-` vs `*gʰaid`), so fold that -- and only where the result is
-    # unambiguous, since two roots collapsing to one spelling would show a
-    # meaning belonging to the other.
-    #
-    # The LEADING hyphen is never folded. It marks a suffix, which is a
-    # different lexical item, not a different way of writing the same one:
-    # folding both ends matched Proto-West-Germanic `*frī` ("free") to the
-    # suffix `-frī` and captioned the root of `free` as "-free".
-    folded = {}
-    for key in _ROOT_GLOSSES:
-        folded.setdefault(key.rstrip("-").casefold(), []).append(key)
-    _ROOT_GLOSS_FOLD = {k: v[0] for k, v in folded.items() if len(v) == 1}
-
-
-def root_gloss(term):
-    """
-    The recorded meaning of a reconstructed form, or None.
-
-    Returns the most frequently attested wording plus any alternative wordings
-    Wiktionary's own entries use, so the card can show that a reconstruction's
-    meaning is a range rather than a single settled definition.
-    """
-    if not term:
-        return None
-    _load_root_glosses()
-    key = term.lstrip("*").strip()
-    rec = _ROOT_GLOSSES.get(key)
-    if rec is None:
-        alt = _ROOT_GLOSS_FOLD.get(key.rstrip("-").casefold())
-        rec = _ROOT_GLOSSES.get(alt) if alt else None
-    return rec
-
-
-def is_reconstructed(term):
-    """Wiktionary's own convention: a leading asterisk marks a form that is
-    reconstructed rather than attested, and those live under a different
-    namespace on the site."""
-    return bool(term) and term.startswith("*")
-
-
-def wiktionary_url(term, lang=None):
-    """
-    Link to the Wiktionary page for a term (Joe, 2026-07-26 -- "a link to the
-    Wiktionary page whenever you look up a word", for spot-checking answers
-    against the source).
-
-    Reconstructed forms are not ordinary entries: `*gʰaidos` lives at
-    `Reconstruction:Proto-Indo-European/gʰaidos`. Without the language name
-    that page cannot be addressed at all, so those link to the site's search
-    instead of to a URL that would 404.
-    """
-    if not term:
-        return None
-    term = term.strip()
-    if is_reconstructed(term):
-        form = term.lstrip("*")
-        if not lang:
-            return ("https://en.wiktionary.org/w/index.php?search="
-                    + quote(form))
-        return ("https://en.wiktionary.org/wiki/Reconstruction:"
-                + quote(lang.replace(" ", "_")) + "/" + quote(form))
-    return "https://en.wiktionary.org/wiki/" + quote(term)
-
-
-# Free-floating tree diagram (task 2026-07-23): Joe wants a "free floating"
-# layout like Wiktionary's own tree diagram or the old Google etymology
-# panel, not a spreadsheet grid -- but with one specific structural rule he
-# clarified: forms from the SAME generation (e.g. every "Old English" stage
-# node, across whatever branch they belong to) share one horizontal axis,
-# while parent->child depth within a single branch runs vertically. That's
-# exactly a "row = generation, column = branch" layout, so that's what this
-# computes -- generation is the same _depth_hint tiering already used to
-# order branches shallowest-first (see convert_wikt.py), so alignment is
-# automatic: two branches that both pass through "Old English" land on the
-# same row without any special-casing. Static/auto-computed only (Joe chose
-# this over an interactive draggable canvas) -- rendered as plain SVG,
-# no JS or charting library needed.
-_TIER_ROW_H = 54
-_COL_W = 210
-_NODE_W = 176
-_NODE_H = 40
-_PAD = 24
-
-
-def _diagram_color(lang):
-    return "var(--c-%s)" % bucket_slug(bucket_for_name(lang))
-
-
-def build_diagram(tree):
-    """
-    Lays out one word's tree (see etymology_trees.json's shape) as a flat
-    list of positioned nodes + connecting edges for SVG rendering.
-
-    Cosmetic merge (closes the "two adjacent PIE boxes" look flagged for
-    "what" -- diagnosed as legitimate data, not a bug: a reconstructed
-    form's OWN has_root citation, e.g. PIE *kʷód's root *kʷ-, both being
-    "Proto-Indo-European"): when a node's only child shares its exact `lang`
-    and the child is a has_root edge, they're drawn as ONE box with both
-    terms stacked, instead of two boxes that look like an accidental repeat.
-    """
-    if not tree or not tree.get("branches"):
-        return None
-
-    raw = []  # (branch_index, raw_depth_hint_tier, lang, term, term2)
-    for col, branch in enumerate(tree["branches"]):
-        node = branch
-        while node is not None:
-            children = node.get("children") or []
-            merged_term2 = None
-            if (len(children) == 1 and children[0]["lang"] == node["lang"]
-                    and children[0].get("reltype") == "has_root"):
-                merged_term2 = children[0].get("term")
-                children = children[0].get("children") or []
-            raw.append((col, _depth_hint(node["lang"]), node["lang"], node.get("term"), merged_term2))
-            node = children[0] if children else None
-
-    # Compress the (sparse, 0-18) depth-hint tiers actually used in THIS tree
-    # down to compact consecutive rows -- a word rarely touches more than
-    # 3-5 distinct tiers, so using the raw scale directly would waste most
-    # of the diagram's height on empty rows. Order (not spacing) is what
-    # carries meaning, so this loses nothing.
-    used_tiers = sorted({t for _, t, *_ in raw})
-    row_of = {t: i for i, t in enumerate(used_tiers)}
-    rows = [(col, row_of[t], lang, term, term2) for col, t, lang, term, term2 in raw]
-    max_tier = len(used_tiers) - 1 if used_tiers else 0
-
-    n_cols = len(tree["branches"])
-    width = _PAD * 2 + n_cols * _COL_W
-    height = _PAD * 2 + (max_tier + 1) * _TIER_ROW_H
-
-    def cx(col):
-        return _PAD + col * _COL_W
-
-    def cy(tier):
-        return _PAD + tier * _TIER_ROW_H
-
-    nodes = [
-        {"x": cx(col), "y": cy(tier), "w": _NODE_W, "h": _NODE_H,
-         "lang": lang, "term": term, "term2": term2,
-         "color": _diagram_color(lang)}
-        for col, tier, lang, term, term2 in rows
-    ]
-    # Edges: consecutive rows within the same column (branch).
-    by_col = {}
-    for col, tier, *_ in rows:
-        by_col.setdefault(col, []).append(tier)
-    edges = []
-    for col, tiers in by_col.items():
-        tiers = sorted(tiers)
-        for a, b in zip(tiers, tiers[1:]):
-            x = cx(col) + _NODE_W / 2
-            edges.append({"x1": x, "y1": cy(a) + _NODE_H, "x2": x, "y2": cy(b)})
-
-    return {"width": width, "height": height, "nodes": nodes, "edges": edges}
-
-# Bucket -> color slot.
-#
-# The dataviz skill's categorical palette is a hard 8-hue ceiling ("a 9th
-# series is never a generated hue" -- CVD-safe adjacent-pair distinguishability
-# genuinely doesn't scale past 8 fixed hues; the skill's own validator has no
-# passing 9-hue ordering). These 8 stay exactly as originally validated
-# (validate_palette.py confirms this exact order clears CVD/contrast checks
-# for adjacent pairs in both modes -- re-ordering to chase hue<->bucket
-# associations was tried and FAILED the same validator).
-#
-# 2026-07-23: Joe asked for every bucket to look different, not just these 8.
-# Added a second, lower-chroma "extended tier" (one new hue family, hue~205 --
-# the largest open gap between the 8 core hues -- differentiated by an ORDINAL
-# lightness ramp, not 5 more competing categorical hues) for the 5 buckets
-# most likely to actually appear in real English prose per this project's own
-# scan history (Slavic, Indo-Iranian, Semitic, Turkic, East Asian). Verified
-# against a Python port of the skill's validator (same OKLab/CVD math,
-# cross-checked against the documented default's published numbers before
-# trusting it) -- passes validate_ordinal (monotone L, gaps >=0.06, light-end
-# contrast, single hue) in both modes. The remaining 7 rare buckets
-# (Austronesian, Indigenous American, Caribbean, Afro-Asiatic (other),
-# African (other), Other, Unknown) still share the flat muted tone -- adding
-# a 3rd tier for buckets this rare wasn't judged worth the added visual noise.
-BUCKET_SLUGS = {
-    "Germanic": "germanic",
-    "Norse": "norse",
-    "French": "french",
-    "Latin": "latin",
-    "Greek": "greek",
-    "Romance (other)": "romance-other",
-    "Celtic": "celtic",
-    "PIE": "pie",
-    "Slavic": "slavic",
-    "Indo-Iranian": "indo-iranian",
-    "Semitic": "semitic",
-    "Turkic": "turkic",
-    "East Asian": "east-asian",
-}
-
-
-def bucket_slug(name):
-    # "Unknown" (a true lookup failure) gets its own slug -- deliberately
-    # distinct from "muted" (the shared tone for real-but-rare buckets like
-    # "Other"/Caribbean/Austronesian). Found 2026-07-23 (Joe: "persona" reads
-    # as Unknown) -- the word actually resolves fine (Etruscan<-Latin<-Greek,
-    # bucket "Other"), but "Other" and "Unknown" rendered in the EXACT same
-    # muted gray with no distinction, so a real-but-rare answer was
-    # indistinguishable from a genuine failure. Same root cause would affect
-    # every "Other"-bucket word, not just this one -- fixed generally, not
-    # per-word, by giving Unknown its own visually-recessive treatment (see
-    # --c-unknown in the page CSS) instead of sharing muted's tone.
-    if name == "Unknown":
-        return "unknown"
-    return BUCKET_SLUGS.get(name, "muted")
-
-
-# Deepest Root mode names the specific reconstructed form (see resolver.py's
-# root_lang/root_pie) -- coordinate each proto-language with its parent
-# bucket's hue via a validated lightness step (lighter = deeper reconstructed
-# stage), so "Proto-Germanic (from PIE)" reads as a shade of Germanic-blue,
-# not an unrelated color. Slots not tied to one of the 8 core hues (Slavic,
-# Indo-Iranian) get a lighter step of their own extended-tier hue instead.
-PROTO_SLUGS = {
-    "Proto-Germanic": "proto-germanic",
-    "Proto-West Germanic": "proto-west-germanic",
-    "Proto-Italic": "proto-italic",
-    "Proto-Celtic": "proto-celtic",
-    "Proto-Slavic": "proto-slavic",
-    "Proto-Indo-Iranian": "proto-indo-iranian",
-}
-
-
-# Base hex per bucket (light-mode values from the CSS custom properties
-# below) -- kept here too so Python can generate shades from them. Used only
-# for the bar-drill-down sub-language shading (task 2026-07-23): a lighter-
-# weight scope than the validated CVD-checked palette above -- Joe's own
-# framing ("sky blue, dark blue, neon blue... or a nice visualization to
-# distinguish the subgroups") was satisfied with simple lightness/saturation
-# variation around the bucket hue, not another full ordinal-ramp validation
-# pass (which the original 8-hue palette and the proto-language shades DID
-# get -- this reuses that same visual language without re-deriving it for
-# what could be dozens of specific donor languages per bucket).
-BUCKET_HEX = {
-    "Germanic": "#2a78d6", "Norse": "#eb6834", "French": "#1baf7a",
-    "Latin": "#eda100", "Greek": "#e87ba4", "Romance (other)": "#008300",
-    "Celtic": "#4a3aa7", "PIE": "#e34948",
-    "Slavic": "#156068", "Indo-Iranian": "#30767e", "Semitic": "#488c94",
-    "Turkic": "#5fa4ab", "East Asian": "#77bbc3",
-}
-_MUTED_HEX = "#898781"
-
-
-def _hex_to_rgb(h):
-    h = h.lstrip("#")
-    return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
-
-
-def _rgb_to_hex(rgb):
-    return "#" + "".join(f"{max(0, min(255, round(c))):02x}" for c in rgb)
-
-
-def language_shades(bucket, languages):
-    """
-    Maps each specific language name (within one bucket) to its own shade of
-    that bucket's base hue -- deterministic (same language always gets the
-    same shade), spread across a moderate lightness/saturation range chosen
-    to stay legible on both light and dark surfaces without needing a
-    separate light/dark variant (a lighter-weight approach than the main
-    palette's per-mode CSS variables -- see BUCKET_HEX comment).
-    """
-    import colorsys
-    base = BUCKET_HEX.get(bucket, _MUTED_HEX)
-    r, g, b = (c / 255.0 for c in _hex_to_rgb(base))
-    h, l, s = colorsys.rgb_to_hls(r, g, b)
-    n = max(len(languages), 1)
-    shades = {}
-    for i, lang in enumerate(sorted(languages)):
-        # Spread lightness across a legible band; nudge saturation opposite
-        # to lightness so the darkest shade doesn't also look washed out.
-        t = i / n if n > 1 else 0.5
-        lt = 0.35 + t * 0.35          # 0.35 -> 0.70
-        st = min(1.0, s * (0.85 + 0.3 * (1 - t)))
-        rr, gg, bb = colorsys.hls_to_rgb(h, lt, st)
-        shades[lang] = _rgb_to_hex((rr * 255, gg * 255, bb * 255))
-    return shades
-
-
 def bucket_language_breakdown(per_word, bucket):
     """
     For the bar-drill-down (task 2026-07-23): the specific languages that
@@ -802,8 +176,7 @@ def bucket_language_breakdown(per_word, bucket):
     from collections import Counter
     counts = Counter()
 
-    def _is_proto(lang):
-        return lang is not None and (lang == "Proto-Indo-European" or lang.startswith("Proto-"))
+    _is_proto = linguistics.is_proto
 
     def _tally(view):
         if view.bucket != bucket:
@@ -850,14 +223,6 @@ def bucket_language_breakdown(per_word, bucket):
     return rows
 
 
-def root_slug(w, mode):
-    """Per-word swatch slug for the current mode -- the proto-language slug
-    in Deepest Root mode when one applies, else the plain bucket slug."""
-    if mode == "root" and w.depth_lang:
-        base = w.depth_lang.removesuffix(" (from PIE)")
-        if base in PROTO_SLUGS:
-            return PROTO_SLUGS[base]
-    return bucket_slug(w.bucket)
 
 
 PAGE = """
@@ -866,87 +231,7 @@ PAGE = """
 <head>
   <title>Etymology Analyzer</title>
   <style>
-    :root {
-      /* Dictionary/wiki typography (2026-07-26, Joe: "more in line with a
-         dictionary look, etymonline is a good example ... nothing too
-         crazy"). Serif for READING -- headwords, definitions, the foreign
-         terms in a lineage. Sans for CHROME -- buttons, inputs, percentage
-         bars, anything that is an instrument rather than an entry. Keeping
-         those two jobs on different faces is most of what makes a reference
-         page read like one; the rest is whitespace and hairlines.
-         Every --c-* bucket colour below is deliberately UNCHANGED: they are
-         load-bearing (validated hue/lightness steps, see BUCKET_SLUGS) and
-         a restyle is no reason to disturb them. */
-      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
-               Georgia, Cambria, "Times New Roman", serif;
-      --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      --rule: #ddd8c9;          /* hairlines under headings */
-      --accent: #7a3323;        /* muted oxblood, for links only */
-      --surface: #fbf9f3;       /* warm paper, was near-white */
-      --surface-2: #f2eee2;
-      --text-primary: #16150f;
-      --text-secondary: #56534a;
-      --track-bg: #e2ddcd;
-      --c-germanic: #2a78d6;
-      --c-norse: #eb6834;
-      --c-french: #1baf7a;
-      --c-latin: #eda100;
-      --c-greek: #e87ba4;
-      --c-romance-other: #008300;
-      --c-celtic: #4a3aa7;
-      --c-pie: #e34948;
-      --c-muted: #898781;
-      /* "Unknown" (a true lookup failure) -- deliberately lighter/more
-         washed-out than --c-muted, so it visually recedes as "nothing
-         found" rather than reading as a real (if rare) category the way
-         --c-muted's "Other"/Caribbean/etc. do. See bucket_slug() comment. */
-      --c-unknown: #d6d4cc;
-      /* Extended tier (hue~205, lower chroma -- see BUCKET_SLUGS comment in app.py) */
-      --c-slavic: #156068;
-      --c-indo-iranian: #30767e;
-      --c-semitic: #488c94;
-      --c-turkic: #5fa4ab;
-      --c-east-asian: #77bbc3;
-      /* Proto-language shades: validated lighter step of the parent hue */
-      --c-proto-germanic: #75a7e9;
-      --c-proto-west-germanic: #5391e0;
-      --c-proto-italic: #a37734;
-      --c-proto-celtic: #7d7ad1;
-      --c-proto-slavic: #4e939a;
-      --c-proto-indo-iranian: #61a5ad;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --rule: #38362f;
-        --accent: #d99277;
-        --surface: #171613;
-        --surface-2: #221f1a;
-        --text-primary: #f4f1e8;
-        --text-secondary: #b8b4a6;
-        --track-bg: #302c25;
-        --c-germanic: #3987e5;
-        --c-norse: #d95926;
-        --c-french: #199e70;
-        --c-latin: #c98500;
-        --c-greek: #d55181;
-        --c-romance-other: #008300;
-        --c-celtic: #9085e9;
-        --c-pie: #e66767;
-        --c-muted: #898781;
-        --c-unknown: #3a3a37;
-        --c-slavic: #156068;
-        --c-indo-iranian: #30767e;
-        --c-semitic: #488c94;
-        --c-turkic: #5fa4ab;
-        --c-east-asian: #77bbc3;
-        --c-proto-germanic: #75a7e9;
-        --c-proto-west-germanic: #5391e0;
-        --c-proto-italic: #a37734;
-        --c-proto-celtic: #7d7ad1;
-        --c-proto-slavic: #4e939a;
-        --c-proto-indo-iranian: #61a5ad;
-      }
-    }
+""" + THEME_CSS + """
     body { font-family: var(--serif); font-size: 1.02rem; line-height: 1.62;
            max-width: 860px; margin: 2.5rem auto 4rem; padding: 0 1.25rem;
            background: var(--surface); color: var(--text-primary);
@@ -1296,8 +581,12 @@ PAGE = """
       </p>
       {% endif %}
       {# The source, one click away -- every answer on this page should be
-         checkable against the page it was derived from. #}
-      <p class="search-meta"><a class="wc-wikt" href="{{ wiktionary_url(tree_word) }}" target="_blank" rel="noopener">&ldquo;{{ tree_word }}&rdquo; on Wiktionary &#8599;</a></p>
+         checkable against the page it was derived from. Alongside it, the
+         same word read the OTHER way: this tree runs up to the ancestors,
+         /descendants runs down from them. #}
+      <p class="search-meta"><a class="wc-wikt" href="{{ wiktionary_url(tree_word) }}" target="_blank" rel="noopener">&ldquo;{{ tree_word }}&rdquo; on Wiktionary &#8599;</a>
+        &nbsp;&middot;&nbsp;
+        <a class="wc-wikt" href="/descendants?word={{ tree_word|urlencode }}">descendants of this word&rsquo;s root &rarr;</a></p>
       {% if tree %}
         {% if tree_view == 'diagram' %}
           {% set d = build_diagram(tree) %}
@@ -1370,6 +659,254 @@ PAGE = """
 </body>
 </html>
 """
+
+
+DESC_PAGE = """
+<!doctype html>
+<html>
+<head>
+  <title>Descendants &mdash; Etymology Analyzer</title>
+  <style>
+""" + THEME_CSS + """
+    body { font-family: var(--serif); font-size: 1.02rem; line-height: 1.62;
+           max-width: 1400px; margin: 1.6rem auto 2rem; padding: 0 1.25rem;
+           background: var(--surface); color: var(--text-primary);
+           -webkit-font-smoothing: antialiased; }
+    h1 { font-size: 1.95rem; font-weight: 600; letter-spacing: -0.01em;
+         margin: 0 0 0.5rem; padding-bottom: 0.55rem;
+         border-bottom: 2px solid var(--rule); }
+    a { color: var(--accent); text-underline-offset: 2px; }
+    .sub { color: var(--text-secondary); margin: 0 0 1rem; font-size: 0.95rem; }
+    form { margin: 0 0 0.9rem; font-family: var(--sans); }
+    input[type=text] { font-family: var(--sans); font-size: 0.95rem;
+      padding: 0.4rem 0.55rem; border: 1px solid var(--rule); border-radius: 4px;
+      background: var(--surface-2); color: var(--text-primary); min-width: 15rem; }
+    button { font-family: var(--sans); font-size: 0.92rem; padding: 0.42rem 0.9rem;
+      border: 1px solid var(--rule); border-radius: 4px; cursor: pointer;
+      background: var(--surface-2); color: var(--text-primary); }
+    button:hover { border-color: var(--accent); }
+    .meta { font-family: var(--sans); font-size: 0.85rem; color: var(--text-secondary);
+            margin: 0 0 0.6rem; }
+    .meta b { color: var(--text-primary); font-weight: 600; }
+    .warn { color: var(--accent); }
+    /* The canvas. Fixed height with the SVG panning inside it: a 3,000-node
+       tree is far taller than any screen, and letting the page itself grow
+       would put the controls off-screen. */
+    #canvas { border: 1px solid var(--rule); border-radius: 6px;
+              background: var(--surface-2); overflow: hidden; height: 74vh; }
+    #canvas svg { display: block; width: 100%; height: 100%; cursor: grab; }
+    #canvas svg:active { cursor: grabbing; }
+    .link { fill: none; stroke: var(--track-bg); stroke-width: 1.4px; }
+    .node circle { stroke-width: 2px; }
+    .node text { font-family: var(--serif); font-size: 12px; fill: var(--text-primary);
+                 paint-order: stroke; stroke: var(--surface-2); stroke-width: 3px; }
+    .node .lang { font-family: var(--sans); font-size: 9.5px;
+                  fill: var(--text-secondary); letter-spacing: 0.02em; }
+    .node.collapsed circle { stroke-dasharray: 2 1.6; }
+    .node.match text { font-weight: 700; }
+    .node.match circle { stroke: var(--accent); stroke-width: 3.5px; }
+    .legend { font-family: var(--sans); font-size: 0.8rem; color: var(--text-secondary);
+              margin-top: 0.5rem; }
+    .legend span { margin-right: 1rem; }
+    .dot { display: inline-block; width: 0.62rem; height: 0.62rem; border-radius: 50%;
+           margin-right: 0.3rem; vertical-align: -1px; }
+    .empty { padding: 2rem 0; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+  <h1>Descendants</h1>
+  <p class="sub">Everything Wiktionary records as descending from one ancestral form &mdash;
+     the reverse of the etymology tree. <a href="/">&larr; analyzer</a></p>
+
+  <form method="get">
+    <input type="text" name="word" value="{{ word }}" placeholder="brother, water, night...">
+    <button type="submit">Show descendants</button>
+  </form>
+
+  {% if result %}
+  <p class="meta">
+    <b>{{ result.root_lang }} *{{ result.root_raw }}</b> &rarr;
+    <b>{{ "{:,}".format(result.total_nodes) }}</b> recorded descendants
+    {%- if result.truncated %} <span class="warn">&middot; showing the first
+      {{ "{:,}".format(result.shown_nodes) }}, breadth-first</span>{% endif %}
+    &middot; click a node to fold or unfold it &middot; drag to pan, scroll to zoom
+    &middot; <button type="button" id="refit" style="padding:0.1rem 0.5rem;font-size:0.8rem">fit to screen</button>
+  </p>
+  <div id="canvas"></div>
+  <p class="legend" id="legend"></p>
+  <script src="/static/d3.v7.min.js"></script>
+  <script>
+    const DATA = {{ tree_json|safe }};
+
+    // Colour comes from the server as a palette slug per node, so this view
+    // uses the SAME validated bucket hues as the bar chart and the etymology
+    // tree rather than inventing a second colour system.
+    const colorOf = d => getComputedStyle(document.documentElement)
+      .getPropertyValue('--c-' + (d.data.slug || 'muted')).trim() || '#898781';
+
+    const el = document.getElementById('canvas');
+    const W = el.clientWidth, H = el.clientHeight;
+    const svg = d3.select('#canvas').append('svg')
+        .attr('viewBox', [0, 0, W, H]);
+    const g = svg.append('g');
+
+    const zoom = d3.zoom().scaleExtent([0.05, 3])
+        .on('zoom', ev => g.attr('transform', ev.transform));
+    svg.call(zoom);
+
+    const root = d3.hierarchy(DATA);
+    // Row height is per-NODE, not a fixed canvas size: these trees vary from
+    // 12 nodes to 3,000, and a fixed size would squash the big ones into an
+    // unreadable band. Horizontal layout because language names are wide.
+    const layout = d3.tree().nodeSize([30, 258]);
+
+    // Start folded. `on_path` marks the chain to the searched word, so the
+    // view opens showing exactly that thread through an otherwise closed tree
+    // -- the alternative, 3,000 nodes at once, is unreadable.
+    root.descendants().forEach(d => {
+      d.id = d.data.lang + '|' + (d.data.term || '') + '|' + d.depth;
+      if (d.children && !d.data.on_path && d.depth >= 1) {
+        d._children = d.children; d.children = null;
+      }
+    });
+
+    function update(source) {
+      layout(root);
+      const nodes = root.descendants(), links = root.links();
+      let x0 = Infinity, x1 = -Infinity;
+      nodes.forEach(d => { if (d.x < x0) x0 = d.x; if (d.x > x1) x1 = d.x; });
+
+      const t = svg.transition().duration(220);
+
+      const link = g.selectAll('path.link').data(links, d => d.target.id);
+      link.enter().append('path').attr('class', 'link')
+        .merge(link).transition(t)
+          .attr('d', d3.linkHorizontal().x(d => d.y).y(d => d.x));
+      link.exit().remove();
+
+      const node = g.selectAll('g.node').data(nodes, d => d.id);
+      const enter = node.enter().append('g')
+          .attr('class', 'node')
+          .attr('transform', d => `translate(${source.y0 || d.y},${source.x0 || d.x})`)
+          .style('cursor', d => (d.children || d._children) ? 'pointer' : 'default')
+          .on('click', (ev, d) => {
+            if (d.children) { d._children = d.children; d.children = null; }
+            else if (d._children) { d.children = d._children; d._children = null; }
+            update(d);
+          });
+      enter.append('circle').attr('r', 4.5);
+      enter.append('text').attr('class', 'lang')
+          .attr('dy', '-0.55em').attr('x', 8).text(d => d.data.lang || '');
+      // A merged variant node can carry a dozen spellings; printing them all
+      // runs straight through the next column. Show three, keep the rest in
+      // the tooltip -- hidden, not dropped.
+      enter.append('text')
+          .attr('dy', '0.72em').attr('x', 8)
+          .text(d => {
+            const term = d.data.raw_term || d.data.term || '';
+            const parts = term.split(', ');
+            let label = parts.length > 3
+              ? parts.slice(0, 3).join(', ') + ` +${parts.length - 3}`
+              : term;
+            if (d.data.pruned) label += ` (+${d.data.pruned.toLocaleString()} more)`;
+            return label;
+          })
+          .append('title').text(d => d.data.raw_term || d.data.term || '');
+
+      const all = enter.merge(node);
+      all.classed('collapsed', d => !!d._children)
+         .classed('match', d => !!d.data.match);
+      all.select('circle')
+         .attr('fill', d => d._children ? colorOf(d) : 'var(--surface-2)')
+         .attr('stroke', colorOf);
+      all.transition(t).attr('transform', d => `translate(${d.y},${d.x})`);
+      node.exit().remove();
+
+      nodes.forEach(d => { d.x0 = d.x; d.y0 = d.y; });
+    }
+
+    root.x0 = 0; root.y0 = 0;
+    update(root);
+
+    // Fit whatever is open to the canvas on first paint. d3.tree() with
+    // nodeSize puts the root at the origin, so without this a wide tree opens
+    // with its modern-language end off the right edge -- which is exactly the
+    // end the user searched for. Measured from the real bounding box rather
+    // than a guessed scale, because tree width varies hugely by word.
+    function fit(animate) {
+      const b = g.node().getBBox();
+      if (!b.width || !b.height) return;
+      const scale = Math.min(1, 0.92 * Math.min(W / b.width, H / b.height));
+      const tx = (W - b.width * scale) / 2 - b.x * scale;
+      const ty = (H - b.height * scale) / 2 - b.y * scale;
+      const target = d3.zoomIdentity.translate(tx, ty).scale(scale);
+      (animate ? svg.transition().duration(280) : svg).call(zoom.transform, target);
+    }
+    fit(false);
+    document.getElementById('refit').addEventListener('click', () => fit(true));
+
+    // Legend from what is actually on screen, not a fixed list.
+    const seen = new Map();
+    root.descendants().forEach(d => {
+      if (d.data.bucket && !seen.has(d.data.bucket)) seen.set(d.data.bucket, d.data.slug);
+    });
+    document.getElementById('legend').innerHTML =
+      [...seen].slice(0, 12).map(([b, s]) =>
+        `<span><i class="dot" style="background:var(--c-${s})"></i>${b}</span>`).join('');
+  </script>
+  {% elif word %}
+  <p class="empty">No recorded descendants for &ldquo;{{ word }}&rdquo;.
+     Coverage today is the Proto-Indo-European and Proto-Germanic branches
+     &mdash; try <a href="/descendants?word=brother">brother</a>,
+     <a href="/descendants?word=water">water</a> or
+     <a href="/descendants?word=night">night</a>.</p>
+  {% else %}
+  <p class="empty">Try <a href="/descendants?word=brother">brother</a>,
+     <a href="/descendants?word=water">water</a>,
+     <a href="/descendants?word=king">king</a> or
+     <a href="/descendants?word=night">night</a>.</p>
+  {% endif %}
+</body>
+</html>
+"""
+
+
+def _decorate(node):
+    """
+    Tag every node with the palette slug its language maps to, server-side.
+
+    Deliberately not done in JavaScript: `bucket_for_name` is the same taxonomy
+    the bar chart and the etymology tree use, and reimplementing it in the
+    browser would be a second copy free to drift -- the exact failure mode the
+    2026-07-24 one-database rule exists to prevent.
+    """
+    lang = node.get("lang") or ""
+    bucket = bucket_for_name(lang) if lang else "Other"
+    node["bucket"] = bucket
+    node["slug"] = root_slug_for_lang(lang)
+    for kid in node.get("children") or ():
+        _decorate(kid)
+    return node
+
+
+def root_slug_for_lang(lang):
+    """Palette slug for a language name, preferring the proto-specific shade
+    (Proto-Germanic has its own validated lighter hue) over the family bucket."""
+    if lang in PROTO_SLUGS:
+        return PROTO_SLUGS[lang]
+    return bucket_slug(bucket_for_name(lang)) if lang else "muted"
+
+
+@app.route("/descendants")
+def descendants_view():
+    word = (request.args.get("word") or "").strip()
+    result = descendants.full_tree(word) if word else None
+    tree_json = "null"
+    if result:
+        tree_json = json.dumps(_decorate(result["tree"]), ensure_ascii=False)
+    return render_template_string(DESC_PAGE, word=word, result=result,
+                                   tree_json=tree_json)
+
 
 
 @app.route("/", methods=["GET", "POST"])
