@@ -163,6 +163,60 @@ def _mark(node, target_lang, target_term):
     return hit
 
 
+# Every English word that appears anywhere in a stored tree. Loaded once and
+# held, because the UI asks this question per WORD in a pasted paragraph and
+# the answer decides whether to draw a link. `full_tree()` would splice, merge
+# and prune an entire family to answer it -- thousands of times over for a
+# page of prose.
+#
+# Small enough to keep: ~3,800 strings.
+_COVERED: Optional[set] = None
+
+
+def _covered() -> set:
+    global _COVERED
+    if _COVERED is None:
+        db = etymology_db.get()
+        try:
+            _COVERED = {r[0] for r in db._db.execute(
+                "SELECT DISTINCT term FROM descendant_node"
+                " WHERE lang = 'English' AND term IS NOT NULL AND term != ''")}
+        except Exception:
+            # Descendant tables absent (nothing built yet) is a normal state,
+            # and it should read as "no coverage", never as an error.
+            _COVERED = set()
+    return _COVERED
+
+
+def tree_form(word: Optional[str]) -> Optional[str]:
+    """
+    The exact spelling that has a descendant tree, or None.
+
+    Returns the FORM rather than a bare bool so a caller can link the spelling
+    that actually resolves. A sentence-initial "Brother" should still offer
+    the link, and it must point at `brother` -- the stored node -- rather than
+    at a capitalisation the tree lookup would miss, which would render an
+    empty page and read as a broken feature.
+
+    Guaranteed consistent with `full_tree`: if this returns a form, that form
+    produces a tree. `test_units.py` asserts exactly that, because the failure
+    mode here is a link that promises something and then shows nothing.
+    """
+    word = (word or "").strip()
+    if not word:
+        return None
+    covered = _covered()
+    if word in covered:
+        return word
+    lower = word.lower()
+    return lower if lower in covered else None
+
+
+def has_tree(word: Optional[str]) -> bool:
+    """Whether the descendants view has anything to show for this word."""
+    return tree_form(word) is not None
+
+
 def full_tree(word: str, lang: str = "English",
               budget: int = NODE_BUDGET) -> Optional[dict]:
     """

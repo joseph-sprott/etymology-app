@@ -561,6 +561,30 @@ eq("descendants of nonsense still renders",
 eq("POST with empty text does not crash",
    client.post("/", data={"text": "", "mode": "direct"}).status_code, 200)
 
+# The descendants cross-links (2026-07-27). The rule is that the offer is made
+# ONLY when there is something to show -- a link to an empty page reads as a
+# broken feature, and 3,807 of ~1.4M words are covered, so the common case is
+# "no link".
+_covered_page = client.post("/", data={"text": "the brother walked through night",
+                                       "mode": "direct"}).data.decode()
+check("analyzer offers a descendants link for a covered word",
+      "/descendants?word=brother" in _covered_page)
+_bare_page = client.post("/", data={"text": "computer telephone",
+                                    "mode": "direct"}).data.decode()
+check("analyzer offers NO descendants link when nothing is covered",
+      "/descendants?word=" not in _bare_page)
+
+_ws_hit = client.get("/?word=brother").data.decode()
+check("Word Search offers the link for a covered word",
+      "/descendants?word=brother" in _ws_hit)
+_ws_miss = client.get("/?word=computer").data.decode()
+check("Word Search hides it for an uncovered word",
+      "/descendants?word=" not in _ws_miss)
+
+# An inflected form links the spelling that actually resolves, not itself.
+check("an inflected word links its base form's tree",
+      "/descendants?word=walk" in _covered_page)
+
 body = client.post("/", data={"text": "the brother walked", "mode": "direct"}).data.decode()
 check("the rendered page carries the palette variables", "--c-germanic" in body)
 check("the rendered page names the analysed word", "brother" in body)
@@ -819,6 +843,39 @@ try:
        len(list(WD.stream_english_entries(tmp2, limit=0))), 0)
 finally:
     _os.unlink(tmp2)
+
+
+# ---------------------------------------------------- descendants.tree_form
+section("descendants -- the cheap 'is there a tree?' check")
+# Written before the function existed (2026-07-27). The UI needs to decide,
+# per word in a pasted paragraph, whether to offer a descendants link. Calling
+# full_tree() for that would splice, merge and prune a whole tree per token.
+import descendants as D
+
+eq("a covered word returns the form that works", D.tree_form("brother"), "brother")
+eq("...and another", D.tree_form("night"), "night")
+eq("an uncovered word returns None", D.tree_form("zzzqqqnotaword"), None)
+eq("empty string", D.tree_form(""), None)
+eq("None", D.tree_form(None), None)
+eq("whitespace is trimmed", D.tree_form("  brother  "), "brother")
+
+# Capitalisation: a sentence-initial "Brother" must still offer the link, and
+# must link the form that actually resolves rather than a dead one.
+eq("a capitalised word falls back to the lowercase form",
+   D.tree_form("Brother"), "brother")
+
+eq("has_tree is just the boolean of it", D.has_tree("brother"), True)
+eq("has_tree on a miss", D.has_tree("zzzqqqnotaword"), False)
+
+# THE INVARIANT THAT MATTERS: the check must never promise a link that then
+# renders an empty page. Whatever tree_form says is available, full_tree must
+# actually produce.
+for _w in ("brother", "night", "earth", "king", "water", "zzzqqqnotaword",
+           "the", "computer", "Brother"):
+    _form = D.tree_form(_w)
+    _real = D.full_tree(_form) if _form else None
+    check(f"tree_form({_w!r}) agrees with full_tree (no dead links)",
+          (_form is None) or (_real is not None))
 
 # -------------------------------------------------------------------- summary
 print()

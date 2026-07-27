@@ -371,6 +371,9 @@ PAGE = """
     .wc-links { display: block; margin-top: 0.4rem; font-size: 0.8rem; }
     .wc-wikt { color: var(--text-secondary); text-decoration: none; border-bottom: 1px dotted var(--text-secondary); }
     .wc-wikt:hover { border-bottom-style: solid; }
+    /* Second link on the card, so it needs separating from the Wiktionary one
+       and marking as the more interesting of the two -- it stays in-app. */
+    .wc-desc { margin-left: 0.6rem; color: var(--accent); border-bottom-color: var(--accent); }
 
     /* Reconstructed-root meaning, shown on hover over a starred form in the
        tree (Joe 2026-07-26). Same pure-CSS pattern as .word-card above --
@@ -421,7 +424,12 @@ PAGE = """
      <details> drill-down and the server-computed SVG diagram. #}
   {% macro word_card(word, note=None) %}
     {%- set card = word_cards.get(word) -%}
-    {%- if card or note %}
+    {#- Resolved once here, because it also decides whether the card renders at
+        all: ~12% of words WITH a descendant tree have no definition or lineage
+        to show (obscure ones -- `dreigh`, `reke`), and gating the card on the
+        definition alone hid the descendants link for exactly those. #}
+    {%- set desc_form = descendant_form(card.defined_by if card and card.defined_by else word) -%}
+    {%- if card or note or desc_form %}
     <span class="word-card">
       <span class="wc-head">{{ word }}{% if card and card.pos %}<span class="wc-pos">{{ card.pos }}</span>{% endif %}</span>
       {%- if card and card.defined_by %}<span class="wc-note">defined under &ldquo;{{ card.defined_by }}&rdquo;</span>{% endif %}
@@ -440,7 +448,16 @@ PAGE = """
       {#- Straight to the source, for checking an answer against Wiktionary
           itself. Links the word the definition actually belongs to, so an
           inflected form points at the entry that has the content. #}
-      <span class="wc-links"><a class="wc-wikt" href="{{ wiktionary_url((card.defined_by if card and card.defined_by else word)) }}" target="_blank" rel="noopener">Wiktionary &#8599;</a></span>
+      {#- Descendants, when this word is actually in a stored tree (see the
+          `desc_form` note at the top of this macro). Shown on the hover card
+          rather than as a second clickable region on the chip itself: the
+          chip's own click already means "search this word", and two competing
+          click targets on one small chip is how you get people landing
+          somewhere they didn't intend. #}
+      <span class="wc-links"><a class="wc-wikt" href="{{ wiktionary_url((card.defined_by if card and card.defined_by else word)) }}" target="_blank" rel="noopener">Wiktionary &#8599;</a>
+        {%- if desc_form %}
+        <a class="wc-wikt wc-desc" href="/descendants?word={{ desc_form|urlencode }}">descendants &rarr;</a>
+        {%- endif %}</span>
     </span>
     {%- endif %}
   {% endmacro %}
@@ -587,9 +604,17 @@ PAGE = """
          checkable against the page it was derived from. Alongside it, the
          same word read the OTHER way: this tree runs up to the ancestors,
          /descendants runs down from them. #}
+      {#- The descendants link is CONDITIONAL: only ~3,800 English words sit in
+          a stored tree, and offering it for the rest sent the reader to an
+          empty page (Joe, 2026-07-27). `descendant_form` also returns the
+          spelling that actually resolves, so a capitalised search still links
+          a working one. #}
+      {%- set desc_form = descendant_form(tree_word) %}
       <p class="search-meta"><a class="wc-wikt" href="{{ wiktionary_url(tree_word) }}" target="_blank" rel="noopener">&ldquo;{{ tree_word }}&rdquo; on Wiktionary &#8599;</a>
+        {%- if desc_form %}
         &nbsp;&middot;&nbsp;
-        <a class="wc-wikt" href="/descendants?word={{ tree_word|urlencode }}">descendants of this word&rsquo;s root &rarr;</a></p>
+        <a class="feature-link" href="/descendants?word={{ desc_form|urlencode }}">what descended from its root &rarr;</a>
+        {%- endif %}</p>
       {% if tree %}
         {% if tree_view == 'diagram' %}
           {% set d = build_diagram(tree) %}
@@ -970,7 +995,12 @@ def index():
                                    node_slug=node_slug, bucket_breakdown=bucket_language_breakdown,
                                    build_diagram=build_diagram, bucket_for_name=bucket_for_name,
                                    wiktionary_url=wiktionary_url, root_gloss=root_gloss,
-                                   is_reconstructed=is_reconstructed)
+                                   is_reconstructed=is_reconstructed,
+                                   # Returns the spelling that HAS a descendant
+                                   # tree, or None. The template links only when
+                                   # it's a real form, so the offer is never made
+                                   # for a word that would render an empty page.
+                                   descendant_form=descendants.tree_form)
 
 
 if __name__ == "__main__":
