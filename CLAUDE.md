@@ -1,5 +1,27 @@
 # CLAUDE.md — Etymology Analyzer Project
 
+> ### 📖 There is a second file: `HISTORY.md`. Read it before you change anything non-trivial.
+>
+> This file is the **working summary**. `HISTORY.md` is the **full record** —
+> every known issue's complete narrative, and, more importantly, **every
+> approach that was already tried and failed.** It is not loaded into your
+> context automatically, so you have to open it. Joe should not have to remind
+> you; that is what this box is for.
+>
+> **Open it when:** an issue entry below looks thin and you need the reasoning;
+> you are about to "fix" something that looks obviously improvable; you are
+> touching multi-sense collisions, chain ordering, tree branch merging, root
+> inheritance, or the compound/affix split; or you catch yourself thinking
+> *"why on earth is it done this way?"* — that question is almost always
+> answered there.
+>
+> **Why it matters:** at least six documented dead ends live in that file
+> (two multi-sense auto-split heuristics, two tree-merge attempts, chain
+> segmentation on English-stage restarts, and a root-inheritance rule that
+> pulled from bound morphemes). Each was tried against real data, broke real
+> words, and was reverted. Re-deriving any of them costs hours and a database
+> rebuild. It is cheaper to read than to rediscover.
+
 ## Working rules (read first — these come from Joe and are non-negotiable)
 
 1. **Just do it. Stop asking for approval.** Said once 2026-07-22, had to repeat it the same night — take it seriously. Make the call yourself (which approach, what to check, how to scope a fix, UI/design choices) and report what you did and why *after*, not before. Don't use a multiple-choice question tool for this — that's still an approval gate wearing a different UI.
@@ -15,6 +37,8 @@
 
    Other things worth interrupting Joe for, unchanged: (a) a genuinely destructive/irreversible action outside this project folder (deleting something elsewhere, force-pushing, sending/publishing something externally), or (b) a real blocker — you don't have and can't get the information needed to proceed at all, verification included. Everything else: decide, do it, tell him afterward.
 2. **Do not guess or assume. Verify with real resources.** If you don't know a path, a fact, or an etymology, check it — don't ask Joe to look it up for you, and don't skip verification just because rule 1 says move fast. Verifying is not the same as asking permission.
+
+   **`HISTORY.md` counts as a real resource, and it is the cheapest one.** Re-attempting an approach this project already tried and reverted is guessing with extra steps. Check there before redesigning anything.
 3. **Be honest about limitations and bugs.** Don't overclaim accuracy; flag imperfect results explicitly.
 
 ## Project vision
