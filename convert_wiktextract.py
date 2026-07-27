@@ -66,6 +66,7 @@ from buckets_wikt import family_for_name
 # Imported from `linguistics`, its actual home, rather than through
 # `convert_wikt` -- that indirection meant this build script loaded the OTHER
 # build script (and pandas) for one dict. Same table, same values.
+import linguistics
 from linguistics import DEPTH_HINT as _DEPTH_HINT
 from wiktextract_dump import stream_english_entries
 
@@ -83,7 +84,10 @@ _BORROW_TEMPLATES = {"bor", "ubor", "bor+"}
 _COMPOUND_DONOR_TEMPLATES = {"inh+bor", "der+bor"}
 _ROOT_TEMPLATE = "root"
 
-_ENGLISH_STAGE_CODES = {"en", "enm", "ang", "sco"}
+# Owned by `linguistics`, which documents WHY Scots is in this set here but
+# not in `ENGLISH_STAGE_NAMES` -- a real, preserved inconsistency rather
+# than an accident. Identical values; this just stops them drifting.
+_ENGLISH_STAGE_CODES = linguistics.ENGLISH_STAGE_WIKT_CODES
 
 
 def _kind_for_template(name: str):

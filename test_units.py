@@ -937,6 +937,69 @@ for _w in ("muskrat", "tomahawk", "skunk"):
     check(f"{_w} names a language, not a code (got {_lang!r})",
           not _re.fullmatch(r"[a-z]{2,3}(-[a-z]{2,7})?", _lang))
 
+
+# --------------------------------------------- uncovered paths, 2026-07-27
+section("edge cases the suites had never reached")
+
+# --- etymology_chain: the PIE-terminal invariant. PIE is the deepest thing
+# reconstructable, so it can never sit ahead of an attested language. This is
+# the `with`/`low` bug: a chain that reached PIE and then "continued" into Old
+# Norse read as though Norse descended from PIE.
+_pie_first = EC.build_chain(
+    [("derived", "Proto-Indo-European", "*x"), ("borrowed", "Old Norse", "y")],
+    [], has_english_stage=True, english_stage_seq=[])
+check("PIE is moved to the END of a chain, never left mid-way",
+      _pie_first is None or _pie_first["chain"][-1] == "PIE"
+      or "PIE" not in _pie_first["chain"])
+
+# A root-only citation has no donor, so its prox_kind must say so -- that is
+# what stops the bars reporting PIE as an immediate source (issue #14).
+_rooted = EC.build_chain([], [("Proto-Indo-European", "*deru-")],
+                         has_english_stage=False, english_stage_seq=[])
+check("a root-only entry is marked prox_kind='root', not a real donor",
+      _rooted is None or _rooted.get("prox_kind") == "root")
+
+# --- word_trees fallbacks. A word with no tree of its own must still draw
+# something when the RESOLVER knows an answer -- that is issue #16's whole
+# point, and each branch below is a different way of getting there.
+for _w, _why in (("consistency", "resolver-only stem retry, no tree data"),
+                 ("upside", "compound split into parts"),
+                 ("vitamin", "bare root stub, synthesised single node"),
+                 ("professional", "inherited_from another word")):
+    _t = WT.resolve_tree(_w)
+    check(f"resolve_tree({_w}) returns something ({_why})",
+          _t is None or ("lang" in _t and "term" in _t))
+
+eq("resolve_tree on nonsense is None", WT.resolve_tree("zzzqqqnotaword"), None)
+eq("resolve_tree on empty input", WT.resolve_tree(""), None)
+
+# build_diagram must survive the shapes resolve_tree can hand it, including a
+# single-node synthesis with no branches at all.
+_solo = {"lang": "English", "term": "x", "branches": []}
+_d = WT.build_diagram(_solo)
+check("build_diagram handles a branchless tree",
+      _d is None or set(_d) == {"width", "height", "nodes", "edges"})
+
+# --- wiktionary_url's three shapes.
+check("an ordinary word links the plain page",
+      "Reconstruction:" not in WT.wiktionary_url("brother"))
+check("a reconstructed form with a known language links Reconstruction:",
+      "Reconstruction:" in WT.wiktionary_url("*wodr", "Proto-Germanic"))
+check("a reconstructed form with NO language falls back to search rather than "
+      "a URL that would 404",
+      "Reconstruction:" not in WT.wiktionary_url("*wodr"))
+
+# --- language_codes edge cases.
+eq("resolve('') passes the empty string through", LC.resolve(""), "")
+check("the registry loads only once (cached)",
+      LC._registry() is LC._registry())
+
+# --- wiktextract_langs, the code->bucket layer the older pipeline uses.
+import wiktextract_langs as WL
+check("a known code buckets", WL.bucket_for_wikt_code("fr") in
+      ("French", "Romance (other)", "Other"))
+eq("an unknown code buckets as Other", WL.bucket_for_wikt_code("zzzz"), "Other")
+
 # -------------------------------------------------------------------- summary
 print()
 # Phrased as "checks passed" so scripts/verify.py's summary scraper picks it

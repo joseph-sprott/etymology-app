@@ -28,6 +28,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import languages
 import language_codes
 from buckets_wikt import bucket_for_name
+from wiktextract_dump import stream_english_entries
 from wiktextract_shapes import build_trees
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -148,66 +149,60 @@ def scan_dump(path, limit=None, only=None):
     seen_sig = defaultdict(set)
     scanned = 0
 
-    with open(path, encoding="utf-8") as f:
-        for line_no, line in enumerate(f, 1):
-            try:
-                e = json.loads(line)
-            except Exception:
-                continue
-            if e.get("lang") != "English":
-                continue
-            head = e.get("word")
-            if not head:
-                continue
-            if want is not None and head.lower() not in want:
-                continue
+    # Shared reader (2026-07-27): this was the fourth hand-rolled copy of the
+    # same open/enumerate/strip/json.loads/filter-English/require-headword
+    # loop. It is the only one that also filters to a caller's word list, so
+    # that stays here -- it is this function's job, not the reader's.
+    for line_no, e, head in stream_english_entries(path):
+        if want is not None and head.lower() not in want:
+            continue
 
-            rec = words.setdefault(head, {
-                "etys": defaultdict(list), "pos": defaultdict(set),
-                "senses": [], "relations": [], "text": {}})
+        rec = words.setdefault(head, {
+            "etys": defaultdict(list), "pos": defaultdict(set),
+            "senses": [], "relations": [], "text": {}})
 
-            try:
-                num = int(e.get("etymology_number") or 1)
-            except (TypeError, ValueError):
-                num = 1
+        try:
+            num = int(e.get("etymology_number") or 1)
+        except (TypeError, ValueError):
+            num = 1
 
-            tmpl = e.get("etymology_templates") or []
-            sig = tuple((t.get("name"),
-                          tuple(sorted((t.get("args") or {}).items())))
-                         for t in tmpl)
-            if sig not in seen_sig[(head, num)]:
-                seen_sig[(head, num)].add(sig)
-                rec["etys"][num].extend(tmpl)
-            if e.get("pos"):
-                rec["pos"][num].add(e["pos"])
-            # The rendered "Etymology tree" block, kept per etymology number:
-            # shape C2 recovers the main line of descent from it for words
-            # whose templates only name one step (`father`).
-            text = e.get("etymology_text") or ""
-            if text.startswith("Etymology tree") and num not in rec["text"]:
-                rec["text"][num] = text
+        tmpl = e.get("etymology_templates") or []
+        sig = tuple((t.get("name"),
+                      tuple(sorted((t.get("args") or {}).items())))
+                     for t in tmpl)
+        if sig not in seen_sig[(head, num)]:
+            seen_sig[(head, num)].add(sig)
+            rec["etys"][num].extend(tmpl)
+        if e.get("pos"):
+            rec["pos"][num].add(e["pos"])
+        # The rendered "Etymology tree" block, kept per etymology number:
+        # shape C2 recovers the main line of descent from it for words
+        # whose templates only name one step (`father`).
+        text = e.get("etymology_text") or ""
+        if text.startswith("Etymology tree") and num not in rec["text"]:
+            rec["text"][num] = text
 
-            if len(rec["senses"]) < 3:
-                for s in e.get("senses") or []:
-                    g = (s.get("glosses") or [None])[0]
-                    if g:
-                        rec["senses"].append(
-                            (e.get("pos"), g[:GLOSS_MAX], len(rec["senses"])))
-                        break
+        if len(rec["senses"]) < 3:
+            for s in e.get("senses") or []:
+                g = (s.get("glosses") or [None])[0]
+                if g:
+                    rec["senses"].append(
+                        (e.get("pos"), g[:GLOSS_MAX], len(rec["senses"])))
+                    break
 
-            for field, kind in RELATION_FIELDS.items():
-                for row in (e.get(field) or []):
-                    term = row.get("word")
-                    if term:
-                        rec["relations"].append(
-                            (kind, term, row.get("lang"), row.get("sense")))
+        for field, kind in RELATION_FIELDS.items():
+            for row in (e.get(field) or []):
+                term = row.get("word")
+                if term:
+                    rec["relations"].append(
+                        (kind, term, row.get("lang"), row.get("sense")))
 
-            scanned += 1
-            if limit and len(words) >= limit:
-                break
-            if line_no % 500_000 == 0:
-                print(f"  ...{line_no:,} lines, {len(words):,} words",
-                      file=sys.stderr, flush=True)
+        scanned += 1
+        if limit and len(words) >= limit:
+            break
+        if line_no % 500_000 == 0:
+            print(f"  ...{line_no:,} lines, {len(words):,} words",
+                  file=sys.stderr, flush=True)
     print(f"  scanned {scanned:,} English entries -> {len(words):,} words",
           file=sys.stderr)
     return words
