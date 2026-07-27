@@ -26,3 +26,6 @@ etymology.db-shm
 # Scratch file the build writes to before swapping it into place -- present
 # only mid-build, or left behind when the swap is blocked by a running app.py.
 etymology.db.new
+# Regenerable from scripts/list_descendant_words.py --out; a snapshot of
+# which words currently have a descendant tree, not a source of truth.
+descendant_words.txt

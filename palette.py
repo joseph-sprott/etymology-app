@@ -237,6 +237,21 @@ THEME_CSS = """
         --c-proto-indo-iranian: #61a5ad;
       }
     }
+
+    /* Shared page furniture. `.sub` lived only in DESC_PAGE until 2026-07-27,
+       so the analyzer could not use it without a second copy -- which is the
+       drift this block exists to prevent. */
+    .sub { color: var(--text-secondary); margin: 0 0 1rem; font-size: 0.95rem; }
+    /* The cross-link between the two directions of the same question: the
+       analyzer looks BACKWARD from a word, /descendants looks FORWARD from an
+       ancestor. Styled as a real control rather than body-text link so it
+       reads as somewhere to go, not a footnote. */
+    .feature-link {
+      display: inline-block; font-family: var(--sans); font-size: 0.85rem;
+      padding: 0.15rem 0.6rem; border: 1px solid var(--rule); border-radius: 999px;
+      text-decoration: none; color: var(--accent); white-space: nowrap;
+    }
+    .feature-link:hover { border-color: var(--accent); background: var(--surface-2); }
 """
 
 

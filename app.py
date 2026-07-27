@@ -446,6 +446,9 @@ PAGE = """
   {% endmacro %}
 
   <h1>Etymology Analyzer</h1>
+  <p class="sub">Where English words come from &mdash; and, the other way round,
+     <a class="feature-link" href="/descendants">what descended from one ancestor &rarr;</a></p>
+
   <form method="post">
     <input type="hidden" name="form" value="analyze">
     <textarea name="text" placeholder="Paste a paragraph...">{{ text }}</textarea>
@@ -676,7 +679,6 @@ DESC_PAGE = """
          margin: 0 0 0.5rem; padding-bottom: 0.55rem;
          border-bottom: 2px solid var(--rule); }
     a { color: var(--accent); text-underline-offset: 2px; }
-    .sub { color: var(--text-secondary); margin: 0 0 1rem; font-size: 0.95rem; }
     form { margin: 0 0 0.9rem; font-family: var(--sans); }
     input[type=text] { font-family: var(--sans); font-size: 0.95rem;
       padding: 0.4rem 0.55rem; border: 1px solid var(--rule); border-radius: 4px;
