@@ -7,17 +7,17 @@ corpus-wide rebuild.
     python scripts/prototype_tree.py                 # the standard test set
     python scripts/prototype_tree.py mile father     # specific words
 """
-import json
-import os
 import sys
 from collections import defaultdict
+from typing import Any, Dict, List
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import scriptlib
+
+scriptlib.bootstrap()
 
 import languages
+from wiktextract_dump import stream_english_entries
 from wiktextract_shapes import build_trees
-
-JSONL = r"C:\Users\Josep\Desktop\Etymology Project\wiktextract_data\kaikki.org-dictionary-English.jsonl"
 
 # Chosen to exercise every shape and every known failure mode:
 #   mile/street  -> root must land at the TAIL, after Latin
@@ -36,39 +36,41 @@ REL_MARK = {"inherited": "<-", "borrowed": "<=", "derived": "<~",
             "calque": "<c", "root": "<*", "formed_from": "+", "head": ""}
 
 
-def collect(words):
+def _etymology_number(entry: Dict[str, Any]) -> int:
+    """An int in most entries, a STRING in some -- coerce or arithmetic blows up."""
+    try:
+        return int(entry.get("etymology_number") or 1)
+    except (TypeError, ValueError):
+        return 1
+
+
+def _signature(templates: List[Dict[str, Any]]) -> tuple:
+    """`bear` appears 3x with byte-identical templates, one per part of speech."""
+    return tuple((t.get("name"), tuple(sorted((t.get("args") or {}).items())))
+                 for t in templates)
+
+
+def collect(words: List[str]) -> Dict[tuple, Any]:
     """(word, etymology_number) -> merged template list. Entries are per-POS."""
     want = {w.lower() for w in words}
-    groups = defaultdict(list)
-    seen_sigs = defaultdict(set)
-    with open(JSONL, encoding="utf-8") as f:
-        for line in f:
-            try:
-                e = json.loads(line)
-            except Exception:
-                continue
-            if e.get("lang") != "English":
-                continue
-            w = e.get("word", "")
-            if w.lower() not in want:
-                continue
-            tmpl = e.get("etymology_templates") or []
-            # etymology_number is an int in most entries but a STRING in some
-            # -- coerce, or arithmetic on it blows up mid-run.
-            try:
-                num = int(e.get("etymology_number") or 1)
-            except (TypeError, ValueError):
-                num = 1
-            key = (w, num)
-            # `bear` appears 3x with byte-identical templates (one per POS).
-            sig = tuple((t.get("name"), tuple(sorted((t.get("args") or {}).items())))
-                        for t in tmpl)
-            if sig in seen_sigs[key]:
-                continue
-            seen_sigs[key].add(sig)
-            groups[key].extend(tmpl)
-            if e.get("etymology_text", "").startswith("Etymology tree"):
-                groups[("_text", w, key[1])] = e["etymology_text"]
+    groups: Dict[tuple, Any] = defaultdict(list)
+    seen: Dict[tuple, set] = defaultdict(set)
+    # The shared reader, not a fourth hand-rolled copy of the same loop.
+    scriptlib.require_file(scriptlib.ENGLISH_DUMP,
+                           "download the kaikki English extract, or set "
+                           "ETYMOLOGY_DATA_ROOT to where it lives")
+    for _line_no, entry, head in stream_english_entries(scriptlib.ENGLISH_DUMP):
+        if head.lower() not in want:
+            continue
+        key = (head, _etymology_number(entry))
+        templates = entry.get("etymology_templates") or []
+        sig = _signature(templates)
+        if sig in seen[key]:
+            continue
+        seen[key].add(sig)
+        groups[key].extend(templates)
+        if entry.get("etymology_text", "").startswith("Etymology tree"):
+            groups[("_text", head, key[1])] = entry["etymology_text"]
     return groups
 
 

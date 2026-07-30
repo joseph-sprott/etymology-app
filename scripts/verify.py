@@ -23,9 +23,11 @@ import subprocess
 import sys
 from contextlib import redirect_stdout
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
-sys.path.insert(0, ROOT)
+import scriptlib
+
+scriptlib.bootstrap()
+
+ROOT = scriptlib.PROJECT_ROOT
 
 # Words with a KNOWN correct answer, each earning its place by having been
 # wrong at some point. The comment is the bug it guards against -- keep it,

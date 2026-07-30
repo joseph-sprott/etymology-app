@@ -19,16 +19,15 @@ visible in the STEP BETWEEN two of them, not in any one alone.
 """
 import argparse
 import json
-import os
-import sys
+from typing import Any, Dict, List
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import scriptlib
+
+scriptlib.bootstrap()
 
 from wiktextract_dump import stream_english_entries
 
 import etymology_db
-
-JSONL = r"C:\Users\Josep\Desktop\Etymology Project\wiktextract_data\kaikki.org-dictionary-English.jsonl"
 
 
 def show_tree(node, depth=0):
@@ -40,12 +39,15 @@ def show_tree(node, depth=0):
         show_tree(child, depth + 1)
 
 
-def raw_templates(word):
+def raw_templates(word: str) -> List[Dict[str, Any]]:
     """The word's own etymology templates, straight from the dump."""
     want = word.lower()
     # Shared reader (2026-07-27) -- this was a hand-rolled copy of the same
     # open/parse/filter-English loop three other modules had.
-    return [e for _ln, e, head in stream_english_entries(JSONL)
+    scriptlib.require_file(scriptlib.ENGLISH_DUMP,
+                           "download the kaikki English extract, or set "
+                           "ETYMOLOGY_DATA_ROOT to where it lives")
+    return [e for _ln, e, head in stream_english_entries(scriptlib.ENGLISH_DUMP)
             if head.lower() == want]
 
 

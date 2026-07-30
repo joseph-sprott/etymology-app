@@ -19,7 +19,8 @@ Three jobs, none of which belong in the database layer:
    than silently pretending it is complete.
 """
 
-from typing import Optional
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Protocol
 
 import etymology_db
 
@@ -33,6 +34,57 @@ NODE_BUDGET = 3000
 # would otherwise loop forever, and `seen` alone can't stop a long chain of
 # distinct forms.
 MAX_SPLICE_DEPTH = 6
+
+TreeRow = Dict[str, Any]
+
+
+@dataclass(frozen=True)
+class ClimbStep:
+    """
+    One form on the way up to a family's root.
+
+    A named record rather than a 3-tuple: callers were reading `step[2]` for
+    the term and unpacking positionally, which is exactly the mistake that
+    makes a `(lang, term)` pair silently swap.
+    """
+    tree_id: Optional[int]
+    lang: str
+    term: str
+
+
+class SupportsParentLookup(Protocol):
+    """The one method `climb_to_root` needs -- so a test can fake it."""
+
+    def parent_tree_of(self, lang: str, term: str) -> Optional[TreeRow]: ...
+
+
+def climb_to_root(db: SupportsParentLookup, tree_id: Optional[int], lang: str,
+                  term: str, max_depth: int = MAX_SPLICE_DEPTH) -> List[ClimbStep]:
+    """
+    Every step from one node up to the topmost recorded ancestor, start first.
+
+    THE TREE A WORD SITS IN IS NOT THE ROOT IT DISPLAYS. Wiktionary ends the
+    PIE page's Germanic row at `*brōþēr` and continues on that form's own page,
+    so `night` sits in the Proto-Germanic `*nahts` tree while this feature
+    climbs on to PIE `*nókʷts`. Reporting the containing tree understates PIE
+    coverage roughly sixty-fold -- a mistake made once already, by the first
+    version of `scripts/list_descendant_words.py`.
+
+    Returns the whole path, not just the top: `full_tree` takes the last step,
+    `scripts/check_descendants.py` prints all of them, and one function serving
+    both readings is why there is no longer a third copy to drift (issue #16 --
+    every feature must read from one shared source).
+    """
+    steps: List[ClimbStep] = [ClimbStep(tree_id, lang, term)]
+    seen = {(lang, term)}
+    for _ in range(max_depth):
+        parent = db.parent_tree_of(lang, term)
+        if parent is None or (parent["lang"], parent["term"]) in seen:
+            break
+        tree_id, lang, term = parent["tree_id"], parent["lang"], parent["term"]
+        steps.append(ClimbStep(tree_id, lang, term))
+        seen.add((lang, term))
+    return steps
 
 
 def _splice(node, seen, depth=0):
@@ -239,16 +291,10 @@ def full_tree(word: str, lang: str = "English",
     # Climb to the topmost recorded ancestor before building anything, so the
     # picture starts where the family starts (PIE) rather than at whichever
     # fragment happened to contain the word.
-    top_id, top_lang, top_term = head["tree_id"], head["lang"], head["term"]
-    seen_up = {(top_lang, top_term)}
-    for _ in range(MAX_SPLICE_DEPTH):
-        parent = db.parent_tree_of(top_lang, top_term)
-        if parent is None or (parent["lang"], parent["term"]) in seen_up:
-            break
-        top_id, top_lang, top_term = parent["tree_id"], parent["lang"], parent["term"]
-        seen_up.add((top_lang, top_term))
+    top = climb_to_root(db, head["tree_id"], head["lang"], head["term"])[-1]
+    top_lang, top_term = top.lang, top.term
 
-    tree = db.descendant_tree(top_id)
+    tree = db.descendant_tree(top.tree_id)
     if tree is None:
         return None
 

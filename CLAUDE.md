@@ -44,6 +44,7 @@ locate one function — is the single biggest avoidable token cost in a session.
 | add a language → bucket mapping | `buckets_wikt.py` → `NAME_TO_BUCKET` |
 | resolve a raw language code | `language_codes.py` |
 | ask "is this an English stage / proto / affix?" | `linguistics.py` — **never write the test yourself** |
+| write a new script in `scripts/` | start with `import scriptlib; scriptlib.bootstrap()` — never hand-roll `sys.path` or a data path |
 | read the dump | `wiktextract_dump.py` → `stream_english_entries` |
 | parse dump templates | `wiktextract_shapes.py` (four shapes, one per section) |
 | know WHY something is the way it is | `HISTORY.md` |
@@ -70,6 +71,44 @@ first while iterating; run the second before you report done.
 
    **`HISTORY.md` counts as a real resource, and it is the cheapest one.** Re-attempting an approach this project already tried and reverted is guessing with extra steps. Check there before redesigning anything.
 3. **Be honest about limitations and bugs.** Don't overclaim accuracy; flag imperfect results explicitly.
+4. **Write it like a senior engineer, the first time** (set 2026-07-30). Clean,
+   modular, maintainable — no spaghetti. Hard guardrails, not preferences:
+   **no function over 20 lines**; **explicit `typing` hints everywhere**;
+   **guard clauses and early returns, never deep `if/else`**; **real
+   `try/except` around every file/dump/HTTP/SQLite read**; **domain entities
+   are `dataclass`es, never raw nested dicts or positional tuples** — a
+   `Node`/`Entry`/`ClimbStep` read by name, not `step[2]` or `n["lang"]`
+   (dicts are a wire format: convert at the JSON/d3 boundary, don't pass them
+   through the logic). A message that
+   names what failed, never a bare `except:` and never a silent `pass`
+   (silence is exactly how issue #19 — affixes counted as component words —
+   and issue #21 — a rebuild dropping the descendant tables — both hid).
+   Small single-purpose functions, descriptive names, comments only where the
+   logic is genuinely hard. When a function heads past 20 lines, extract a
+   named helper rather than nest further. Existing violators are known and
+   exempt until they have characterization tests — see issue #23 (the two
+   deep build functions are untested).
+5. **Test first.** Write the failing test, then the code. `python test_units.py`
+   is ~1s; run it constantly. `scripts/verify.py` before reporting done.
+6. **The Three M's — Make, Maintain, Modify skills and scripts** (set
+   2026-07-30, Joe calls this one of the main things to be doing). Before
+   writing one-off code, check whether a skill or a `scripts/` entry already
+   covers it; if one nearly does, **extend that one** rather than write a
+   parallel version. When a task turns out to be repeatable, leave a script
+   behind, not just an answer. When a script or skill is wrong or slow, fix it
+   as part of the task instead of working around it. New/changed skills go
+   through the `etymology-skill-audit` skill. **Why:** scripts cut the
+   exploration cost that dominates a session, the same work stops being
+   rewritten, and each fix makes the artifact permanently better — quality
+   compounds instead of restarting at zero. Scripts are code and are held to
+   rule 4 (the clean-code guardrails).
+7. **Never cite a number bare** (set 2026-07-30). Every reference to a numbered
+   issue, rule or feature gets a few-word parenthetical saying what it is —
+   "issue #16 (every feature must read from one shared source)", not "issue
+   #16". Applies to chat, code comments, docstrings, commit messages and both
+   markdown files. **Why:** Joe can't hold twenty issue numbers in his head,
+   and a bare number makes him look it up or read past it. The number carries
+   the precision; the gloss carries the meaning.
 
 ## Project vision
 
@@ -231,6 +270,7 @@ scope limits that still bind — are in `HISTORY.md`'s appendix.
 | `wiktextract_shapes.py` | The four parsers (donor chain, formation fork, `ety`/`etymon` DSL, root pointer) |
 | `languages.py` / `languages.csv` | 111 curated languages with era data. `era_start` IS the depth ordering |
 | `scripts/verify.py` | One command: invariants + legacy suite + known-word panel + tree/analyzer agreement, four lines out |
+| `scripts/scriptlib.py` | **Leaf module for `scripts/`.** `bootstrap()` (sys.path + UTF-8 console), the data paths (`ENGLISH_DUMP`, `PARQUET_PATH`, derived from `DATA_ROOT`, overridable via `ETYMOLOGY_DATA_ROOT`), `require_file`, and the kaikki URL rules. Imports nothing project-local. Domain logic does NOT go here — `climb_to_root` lives in `descendants.py` |
 | `build_descendants.py` | Loads Wiktionary DESCENDANTS trees (the downward view) into `etymology.db`. `SOURCES` is the coverage list. **Re-run after any full rebuild** — its tables aren't in the schema |
 | `descendants.py` | Assembles one tree for display: climb to the root, splice fragments, merge spelling variants, apply the node budget |
 | `static/d3.v7.min.js` | Vendored d3 — the project's only JavaScript dependency, used solely by the `/descendants` view |
@@ -338,9 +378,24 @@ refer to them.
   render as `Other`. ~50 of the highest-frequency gaps were added 2026-07-23;
   that was the top of the frequency list, not an exhaustive pass. Genuine
   isolates (Basque, Georgian, Sumerian, Hungarian, Finnish, Armenian) are
-  left as `Other` deliberately rather than force-fitted. Live instance:
-  `muskrat` shows `Other` because the raw code `alg` (Algonquian) is
-  unmapped.
+  left as `Other` deliberately rather than force-fitted.
+  **Re-measured 2026-07-30, and the old example is gone**: `muskrat` now
+  correctly reads Indigenous American / Algonquian (fixed by `language_codes.py`,
+  commit `feb28ae`). Of 1,530 distinct languages in `ety_node`, 1,379 bucket as
+  `Other` — but the SIX largest populations are all the deliberate isolates
+  above (Armenian 495 nodes, Basque 381, Hungarian 312, Georgian 173,
+  Finnish 150, Sumerian 64), so that number overstates the bug badly.
+  **The real remaining mechanism is codes-vs-names**: `NAME_TO_BUCKET` is keyed
+  on language NAMES, and the database still stores some donors as raw codes, so
+  a code bypasses the map even when its own name is mapped. Verified pairs —
+  `mni` → Manipuri → East Asian (357 nodes), `dz` → Dzongkha → East Asian (145),
+  `hop` → Hopi → Indigenous American (112), `gsw` → Alemannic German →
+  **Germanic** (98), `tpw` → Old Tupi → Indigenous American (95), `alg` →
+  Algonquian (67), `iu` → Inuktitut (63). Each resolves correctly through
+  `language_codes.py` and buckets correctly by name; only the raw code fails.
+  The fix is to resolve the code before bucketing at every call site, not to add
+  code keys to the map. One genuine name-level gap remains: `lt` → Lithuanian
+  (125 nodes) — Baltic has no bucket at all.
 - **#4 — coverage is not total.** ~31% of the 1.38M headwords have their own
   etymology; ~52% get an answer once inflection/stem/compound routing is
   counted; **ordinary prose runs ~98%**, because coverage is concentrated
@@ -387,12 +442,17 @@ refer to them.
   `build_descendants.py` re-runs. Never loosen variant merging to merge by
   language alone — it would reattach children to a spelling the source never
   claims.
-- **#22 — `movie` is honest but still not right.** It reads Unknown rather
-  than French/Latin via `move`, because the builder recorded only the suffix
-  `ie` and dropped the real component. Same shape as #19: a lookup-layer
-  defence against a build-time data loss. `zoo` and `physiologist` are absent
-  from a 428,722-word database entirely — a coverage gap this fix only made
-  visible.
+- **#22 — `movie` is honest but still not right.** Re-confirmed 2026-07-30: it
+  reads Unknown rather than French/Latin via `move`, because the builder
+  recorded only the suffix `ie` and dropped the real component. Same shape as
+  #19 (the affix-vs-component split reconstructed at lookup time): a
+  lookup-layer defence against a build-time data loss.
+  `zoo` and `physiologist` are absent from `etymology.db`'s 428,722 words — but
+  that is a claim about the DATABASE, not the app: `zoo` resolves to Greek
+  through the legacy gap-filler stack (it was hand-added to `corrections.py`
+  during issue #11's compound work — needed as a part of `zookeeper`).
+  `physiologist` really does read Unknown everywhere. A coverage gap this fix
+  only made visible.
 - **#23 — the two deep build functions are untested.**
   `convert_wikt._patch_root_stubs` (142 lines, depth 6) and
   `build_word_info.from_wiktextract` (123 lines, depth 7) are the most

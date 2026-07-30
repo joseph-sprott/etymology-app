@@ -30,12 +30,17 @@ import argparse
 import json
 import re
 import sys
+from typing import Dict, List
 
-sys.path.insert(0, ".")
+import scriptlib
+
+scriptlib.bootstrap()
+
 from analyzer import tokenize
 from resolver import default_resolver
 
-def _capitalization_hints(paragraph: str):
+
+def _capitalization_hints(paragraph: str) -> Dict[str, bool]:
     """
     word (lowercased) -> True if it EVER appears capitalized somewhere that
     isn't the first word of a sentence in this paragraph (a real proper-noun
@@ -59,14 +64,25 @@ def _capitalization_hints(paragraph: str):
     return hints
 
 
-def load_paragraphs(path: str, json_field: str):
-    if path.endswith(".json"):
-        with open(path, encoding="utf-8") as f:
-            data = json.load(f)
+def load_paragraphs(path: str, json_field: str) -> List[str]:
+    """Paragraphs from a JSON corpus or a plain-text file, blank-line split."""
+    scriptlib.require_file(path, "pass --corpus with a real path")
+    try:
+        with open(path, encoding="utf-8") as handle:
+            if not path.endswith(".json"):
+                text = handle.read()
+                return [p.strip() for p in re.split(r"\n\s*\n", text) if p.strip()]
+            data = json.load(handle)
+    except (OSError, UnicodeDecodeError) as exc:
+        raise SystemExit(f"could not read {path}: {exc}")
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"{path} is not valid JSON: {exc}")
+    try:
         return [row[json_field] for row in data["data"]]
-    with open(path, encoding="utf-8") as f:
-        text = f.read()
-    return [p.strip() for p in re.split(r"\n\s*\n", text) if p.strip()]
+    except (KeyError, TypeError):
+        raise SystemExit(
+            f'{path} is not the expected shape. Wanted '
+            f'{{"data": [{{"{json_field}": "..."}}]}}; pass --json-field to match yours.')
 
 
 def main():

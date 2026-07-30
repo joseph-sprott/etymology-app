@@ -15,23 +15,21 @@ word investigation (etymology-fix-word) can reach for it too.
 """
 
 import argparse
-import os
-import sys
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.dirname(HERE))
+import scriptlib
+
+scriptlib.bootstrap()
+
+import descendants
+import etymology_db
 
 
-def main():
+def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("word")
     ap.add_argument("--lang", default="English",
                     help="language of the word being looked up")
     args = ap.parse_args()
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-
-    import etymology_db
-    import descendants
 
     db = etymology_db.get()
 
@@ -62,18 +60,14 @@ def main():
         return
 
     # 3. Does the climb find each parent? This is where a spelling mismatch
-    #    between two pages silently truncates the tree.
-    lang, term = hits[0]["lang"], hits[0]["term"]
+    #    between two pages silently truncates the tree. Uses the SAME walk
+    #    `descendants.full_tree` uses, so what prints here is what the page did.
     print("\nclimb:")
-    seen = {(lang, term)}
-    while True:
-        parent = db.parent_tree_of(lang, term)
-        print(f"   {lang} {term}" + (f"  <- {parent['lang']} {parent['raw_term']}"
-                                      if parent else "  (top)"))
-        if parent is None or (parent["lang"], parent["term"]) in seen:
-            break
-        lang, term = parent["lang"], parent["term"]
-        seen.add((lang, term))
+    steps = descendants.climb_to_root(db, hits[0]["tree_id"],
+                                      hits[0]["lang"], hits[0]["term"])
+    for step in steps:
+        arrow = "  (top)" if step is steps[-1] else ""
+        print(f"   {step.lang} {step.term}{arrow}")
 
     # 4. The assembled result, which is what the page actually draws.
     result = descendants.full_tree(args.word, args.lang)

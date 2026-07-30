@@ -1000,6 +1000,120 @@ check("a known code buckets", WL.bucket_for_wikt_code("fr") in
       ("French", "Romance (other)", "Other"))
 eq("an unknown code buckets as Other", WL.bucket_for_wikt_code("zzzz"), "Other")
 
+
+# ------------------------------------------------ the descendants landmine
+section("build.ps1 must reload descendants")
+# etymology_schema.sql does NOT define descendant_tree/descendant_node --
+# build_descendants.py creates them itself. So a full rebuild dropped the whole
+# feature, and build.ps1 never re-ran the loader. Nothing failed loudly; the
+# links simply stopped appearing. Asserted here because the failure mode is
+# silence.
+_bp = open("scripts/build.ps1", encoding="utf-8").read()
+check("build.ps1 re-runs build_descendants.py after a full build",
+      "build_descendants.py" in _bp)
+_schema = open("etymology_schema.sql", encoding="utf-8").read()
+check("...and it has to, because the schema does not define those tables",
+      "descendant_node" not in _schema)
+
+# ------------------------------------------------ scripts/ share one toolkit
+section("scriptlib -- the plumbing every script used to hand-roll")
+# The scripts/ folder had four spellings of the same sys.path bootstrap, the
+# 60-character dump path copy-pasted verbatim, a UTF-8 console fix in 2 of 9
+# scripts (the other 7 print proto-forms and die on this machine's cp1252
+# console), and three implementations of "climb to the topmost ancestor".
+# That is issue #16 (every feature must read from one shared source) in the
+# tooling layer, so it gets the issue #16 answer: one leaf module, imported,
+# not retyped.
+import os as _os
+sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
+                                 "scripts"))
+import scriptlib as SL
+
+# --- kaikki URL derivation. The directory keeps the hyphens and the filename
+# drops them; getting it wrong yields a 404 that reads as "language missing".
+eq("kaikki_url keeps hyphens in the directory, drops them in the file",
+   SL.kaikki_url("Proto-Indo-European"),
+   "https://kaikki.org/dictionary/Proto-Indo-European/"
+   "kaikki.org-dictionary-ProtoIndoEuropean.jsonl")
+eq("kaikki_url on a one-word language",
+   SL.kaikki_url("Latin"),
+   "https://kaikki.org/dictionary/Latin/kaikki.org-dictionary-Latin.jsonl")
+eq("local_name slugifies", SL.local_name("Proto-Italic"), "proto-italic.jsonl")
+eq("local_name folds case and spaces",
+   SL.local_name("Old High German"), "old-high-german.jsonl")
+
+# --- climb_to_root, faked. `parent_tree_of` is the only thing it touches, so
+# the whole walk tests in microseconds without a database. It lives in
+# descendants.py, NOT in scriptlib: it is domain logic, and a core module must
+# never import from scripts/.
+import descendants as DESC
+class _FakeDb:
+    """Minimal stand-in: a dict of (lang, term) -> the parent row above it."""
+
+    def __init__(self, parents):
+        self._parents = parents
+
+    def parent_tree_of(self, lang, term):
+        return self._parents.get((lang, term))
+
+
+def _row(tree_id, lang, term):
+    return {"tree_id": tree_id, "lang": lang, "term": term, "raw_term": term}
+
+
+_chain = _FakeDb({
+    ("English", "brother"): _row(2, "Proto-Germanic", "brothar"),
+    ("Proto-Germanic", "brothar"): _row(3, "Proto-Indo-European", "bhrater"),
+})
+eq("climb_to_root walks every step, start first",
+   [(s.lang, s.term) for s in DESC.climb_to_root(_chain, 1, "English", "brother")],
+   [("English", "brother"), ("Proto-Germanic", "brothar"),
+    ("Proto-Indo-European", "bhrater")])
+eq("climb_to_root's last step is the root the feature displays",
+   DESC.climb_to_root(_chain, 1, "English", "brother")[-1].lang,
+   "Proto-Indo-European")
+# A named record, not a 3-tuple: `step[2]` for the term is how a (lang, term)
+# pair silently swaps.
+eq("a word with no parent is its own root",
+   DESC.climb_to_root(_FakeDb({}), 9, "Latin", "mille"),
+   [DESC.ClimbStep(9, "Latin", "mille")])
+check("steps are read by NAME, not by position",
+   DESC.climb_to_root(_chain, 1, "English", "brother")[0].term == "brother")
+
+# A cycle is real: two fragments can cite each other. Without the guard this
+# is an infinite loop inside a web request.
+_cycle = _FakeDb({("A", "x"): _row(2, "B", "y"), ("B", "y"): _row(1, "A", "x")})
+eq("climb_to_root stops on a cycle instead of looping",
+   [(s.lang, s.term) for s in DESC.climb_to_root(_cycle, 1, "A", "x")],
+   [("A", "x"), ("B", "y")])
+
+_deep = _FakeDb({(str(i), "t"): _row(i + 1, str(i + 1), "t") for i in range(30)})
+check("climb_to_root honours its depth cap",
+      len(DESC.climb_to_root(_deep, 0, "0", "t", max_depth=4)) == 5)
+
+# --- Source hygiene. Static assertions, same shape as the build.ps1 check
+# above: the failure mode is a script quietly growing its own copy again.
+section("scripts/ must not re-grow their own copies")
+_SCRIPTS = [f for f in sorted(_os.listdir("scripts"))
+            if f.endswith(".py") and f != "scriptlib.py"]
+check("there are scripts to check", len(_SCRIPTS) >= 10)
+
+for _name in _SCRIPTS:
+    _src = open(_os.path.join("scripts", _name), encoding="utf-8").read()
+    check(f"{_name} does not hand-roll the sys.path bootstrap",
+          "sys.path.insert" not in _src)
+    check(f"{_name} does not hardcode the data root",
+          r"C:\Users\Josep\Desktop\Etymology Project" not in _src)
+
+# The dump reader exists precisely because three build scripts had each
+# hand-rolled the same open/json.loads/filter-English loop (CLAUDE.md).
+for _name in _SCRIPTS:
+    _src = open(_os.path.join("scripts", _name), encoding="utf-8").read()
+    if ".jsonl" not in _src and "ENGLISH_DUMP" not in _src:
+        continue
+    check(f"{_name} reads the dump through the shared reader",
+          "json.loads" not in _src)
+
 # -------------------------------------------------------------------- summary
 print()
 # Phrased as "checks passed" so scripts/verify.py's summary scraper picks it

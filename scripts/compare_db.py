@@ -29,7 +29,9 @@ import random
 import sys
 from collections import Counter, defaultdict
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import scriptlib
+
+scriptlib.bootstrap()
 
 import etymology_db
 from buckets_wikt import ENGLISH_STAGE_NAMES as ENGLISH_STAGES

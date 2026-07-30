@@ -24,23 +24,32 @@ etymology data, for a direct comparison against wikt_words.json's current
 import argparse
 import json
 import sys
+from typing import List
 
-sys.path.insert(0, ".")
+import scriptlib
+
+scriptlib.bootstrap()
+
 from resolver import default_resolver
 from wiktextract_dump import stream_english_entries
 
 
-def load_words(args):
+def load_words(args: argparse.Namespace) -> List[str]:
+    """The target word list, from --words or a JSON report's keys."""
     if args.words:
         return sorted({w.strip().lower() for w in args.words.split(",") if w.strip()})
-    with open(args.words_file, encoding="utf-8") as f:
-        data = json.load(f)
+    scriptlib.require_file(args.words_file, "pass --words-file with a real path")
+    try:
+        with open(args.words_file, encoding="utf-8") as handle:
+            data = json.load(handle)
+    except (OSError, json.JSONDecodeError) as exc:
+        raise SystemExit(f"could not read {args.words_file}: {exc}")
     return sorted(data.keys())
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--jsonl", required=True)
+    ap.add_argument("--jsonl", default=scriptlib.ENGLISH_DUMP)
     ap.add_argument("--words")
     ap.add_argument("--words-file")
     ap.add_argument("--out", default="wiktextract_coverage_report.json")

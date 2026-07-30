@@ -23,26 +23,22 @@ never rebuilds etymology.db.
 import argparse
 import io
 import os
-import re
 import subprocess
 import sys
+import urllib.error
 import urllib.request
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
-DATA = r"C:\Users\Josep\Desktop\Etymology Project\wiktextract_data"
+import scriptlib
+
+scriptlib.bootstrap()
+
+ROOT = scriptlib.PROJECT_ROOT
 BUILDER = os.path.join(ROOT, "build_descendants.py")
 
-
-def kaikki_url(language: str) -> str:
-    """Directory keeps the hyphens; the filename drops them."""
-    flat = re.sub(r"[^A-Za-z0-9]", "", language)
-    return (f"https://kaikki.org/dictionary/{language}/"
-            f"kaikki.org-dictionary-{flat}.jsonl")
-
-
-def local_name(language: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "-", language.lower()).strip("-") + ".jsonl"
+# The URL/filename derivation lives in scriptlib because it is pure, easily got
+# wrong, and therefore worth a test -- see test_units.py.
+kaikki_url = scriptlib.kaikki_url
+local_name = scriptlib.local_name
 
 
 def register(filename: str, language: str) -> bool:
@@ -59,29 +55,35 @@ def register(filename: str, language: str) -> bool:
     return True
 
 
-def main():
+def probe(url: str, language: str) -> bool:
+    """Is the extract actually published? A 404 here reads as 'no such language'."""
+    request = urllib.request.Request(url, method="HEAD")
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            size = int(response.headers.get("Content-Length") or 0)
+    except (urllib.error.URLError, OSError, ValueError) as exc:
+        print(f"available: NO ({exc})")
+        print("  -> check the language's page at "
+              f"https://kaikki.org/dictionary/{language}/index.html")
+        return False
+    print(f"available: yes ({size / 1e6:.1f} MB)")
+    return True
+
+
+def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("language", help='e.g. "Proto-Italic"')
     ap.add_argument("--check", action="store_true",
                     help="resolve and probe the URL, download nothing")
-    ap.add_argument("--data", default=DATA)
+    ap.add_argument("--data", default=scriptlib.WIKTEXTRACT_DIR)
     args = ap.parse_args()
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     url = kaikki_url(args.language)
     dest = os.path.join(args.data, local_name(args.language))
     print(f"language : {args.language}")
     print(f"url      : {url}")
 
-    req = urllib.request.Request(url, method="HEAD")
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            size = int(resp.headers.get("Content-Length") or 0)
-        print(f"available: yes ({size / 1e6:.1f} MB)")
-    except Exception as exc:
-        print(f"available: NO ({exc})")
-        print("  -> check the language's page at "
-              f"https://kaikki.org/dictionary/{args.language}/index.html")
+    if not probe(url, args.language):
         return
     if args.check:
         return

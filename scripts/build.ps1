@@ -77,7 +77,29 @@ if ($proc.ExitCode -ne 0) {
   exit $proc.ExitCode
 }
 
-# --- 4. Verify ---------------------------------------------------------------
+# --- 4. Descendants ----------------------------------------------------------
+# MUST run after every full build. `build_etymology_db.py` creates the database
+# from etymology_schema.sql, which does NOT contain descendant_tree or
+# descendant_node -- build_descendants.py creates those itself. So a rebuild
+# silently dropped the entire /descendants feature, and (since 2026-07-27) the
+# per-word descendants links throughout the analyzer and Word Search with it:
+# `descendants._covered()` would return an empty set and every link would just
+# stop appearing, with nothing failing loudly to say why.
+#
+# Skipped for --sample/--words builds: those are partial dev databases, and
+# loading ~554k descendant nodes into one wastes the minutes they exist to save.
+if (($Sample -eq 0) -and (-not $Words.Count)) {
+  Write-Host ""
+  Write-Host "loading descendant trees (build_descendants.py)..."
+  & python (Join-Path $root "build_descendants.py")
+  if ($LASTEXITCODE -ne 0) {
+    Write-Host "descendants load failed -- /descendants will be empty until it is re-run" -ForegroundColor Red
+  }
+} else {
+  Write-Host "partial build: skipping descendants (run build_descendants.py to add them)"
+}
+
+# --- 5. Verify ---------------------------------------------------------------
 if (-not $SkipVerify) {
   Write-Host ""
   Write-Host "verifying..."

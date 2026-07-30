@@ -21,38 +21,30 @@ ancestor's proto-language is one of the loaded extracts.
 """
 import argparse
 import collections
-import os
-import sys
+from typing import Any, Dict, Tuple
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import scriptlib
+
+scriptlib.bootstrap()
+
+import descendants
 import etymology_db
 
+RootKey = Tuple[str, str]
 
-def _climb(db, lang, term, cache, max_depth=6):
+
+def _climb(db, lang: str, term: str, cache: Dict[RootKey, RootKey]) -> RootKey:
     """
-    The topmost recorded ancestor, exactly as `descendants.full_tree` finds it.
+    The root `descendants.full_tree` would display, memoized.
 
-    THE TREE A WORD SITS IN IS NOT THE ROOT IT DISPLAYS. Wiktionary ends the
-    PIE page's Germanic row at `*brōþēr` and continues on that form's own page,
-    so `night` sits in the Proto-Germanic `*nahts` tree but the feature climbs
-    on and shows PIE `*nókʷts`. Reporting the containing tree would understate
-    PIE coverage roughly sixty-fold -- which is exactly what the first version
-    of this script did.
-
-    Cached per (lang, term): thousands of words share a handful of chains.
+    The walk itself lives in `descendants.climb_to_root` -- this only adds the
+    cache, because thousands of words share a handful of chains and the raw
+    walk would repeat the same queries tens of thousands of times.
     """
     key = (lang, term)
-    if key in cache:
-        return cache[key]
-    seen = {key}
-    cur_lang, cur_term = lang, term
-    for _ in range(max_depth):
-        parent = db.parent_tree_of(cur_lang, cur_term)
-        if parent is None or (parent["lang"], parent["term"]) in seen:
-            break
-        cur_lang, cur_term = parent["lang"], parent["term"]
-        seen.add((cur_lang, cur_term))
-    cache[key] = (cur_lang, cur_term)
+    if key not in cache:
+        root = descendants.climb_to_root(db, None, lang, term)[-1]
+        cache[key] = (root.lang, root.term)
     return cache[key]
 
 
@@ -79,7 +71,7 @@ def english_words(db):
     return best
 
 
-def main():
+def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--all", action="store_true", help="print every word")
     ap.add_argument("--roots", action="store_true", help="group by root form")

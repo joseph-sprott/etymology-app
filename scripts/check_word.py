@@ -12,41 +12,51 @@ of maintaining two copies that can drift.
 
 Run from the project root (C:\\Users\\Josep\\Desktop\\Etymology Project\\etymology-app).
 """
-import os
 import sys
+from typing import Any
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import scriptlib
+
+scriptlib.bootstrap()
+
 from resolver import default_resolver
 
+MODES = ("direct", "influence", "root")
 
-def main():
+
+def format_split(view: Any) -> str:
+    """A compound shown as its component parts."""
+    return "split: " + " + ".join(f"{p.word}={p.bucket}" for p in view.parts)
+
+
+def format_answer(view: Any) -> str:
+    """
+    One mode's answer, as the UI renders it.
+
+    Prints `depth_lang` and adds `specific_lang` only when it differs. Fixed
+    2026-07-25: this used to print `specific_lang or depth_lang`, so
+    specific_lang always won and Deepest Root's whole point (the "Latin (from
+    PIE)" label built from root_lang/root_pie) was invisible -- precisely the
+    field you check when investigating a wrong root. It reported
+    "Proto-Indo-European" for `mile` both before AND after a fix that genuinely
+    changed the answer.
+    """
+    label = view.depth_lang or view.specific_lang or "-"
+    extra = ""
+    if view.specific_lang and view.specific_lang != view.depth_lang:
+        extra = f"   (donor: {view.specific_lang})"
+    return f"{view.bucket:14s} | {label}{extra}"
+
+
+def main() -> None:
     if len(sys.argv) != 2:
         print("usage: python scripts/check_word.py WORD", file=sys.stderr)
-        sys.exit(2)
-    word = sys.argv[1]
-    r = default_resolver()
-    res = r.resolve(word)
-    for mode in ("direct", "influence", "root"):
-        v = res.view(mode)
-        if v.parts:
-            detail = " + ".join(f"{p.word}={p.bucket}" for p in v.parts)
-            print(f"{mode:10s} -> split: {detail}")
-        else:
-            # Print `depth_lang` -- what the UI actually renders -- and add
-            # `specific_lang` only when it says something different. Fixed
-            # 2026-07-25: this used to print `specific_lang or depth_lang`,
-            # so specific_lang always won and Deepest Root's whole point (the
-            # "Latin (from PIE)" style label built from root_lang/root_pie)
-            # was invisible. That's precisely the field you're checking when
-            # investigating a wrong root, so the script was hiding the
-            # evidence -- it reported "Proto-Indo-European" for `mile` both
-            # before AND after a fix that genuinely changed the answer to
-            # "Latin (from PIE)".
-            label = v.depth_lang or v.specific_lang or "-"
-            extra = ""
-            if v.specific_lang and v.specific_lang != v.depth_lang:
-                extra = f"   (donor: {v.specific_lang})"
-            print(f"{mode:10s} -> {v.bucket:14s} | {label}{extra}")
+        raise SystemExit(2)
+    resolution = default_resolver().resolve(sys.argv[1])
+    for mode in MODES:
+        view = resolution.view(mode)
+        body = format_split(view) if view.parts else format_answer(view)
+        print(f"{mode:10s} -> {body}")
 
 
 if __name__ == "__main__":
