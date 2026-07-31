@@ -638,6 +638,11 @@ class WiktextractResolver(Resolver):
 # rather than extended.
 
 
+# Edge kinds that evidence DESCENT through the English stages, as opposed to
+# formation (`formed_from`) or citation (`root`). See `_native_answer`.
+_NATIVE_DESCENT_RELS = frozenset({"inherited", "derived"})
+
+
 @dataclass(frozen=True)
 class _Provenance:
     """
@@ -800,13 +805,25 @@ class DbResolver(Resolver):
         `zoophysiologist`, which is Greek but whose parts are absent from the
         database so the walk dead-ended inside English.
 
-        The evidence required is an `inherited` edge. Without one this is a
-        miss, and a miss lets the file-backed gap-fillers and `compounds.py`
-        have their turn -- which is how `peacemaker` gets back to peace +
-        maker. Reporting Germanic instead both stated a falsehood and blocked
-        every backend behind it.
+        The evidence required is a DESCENT edge from an English stage --
+        `inherited` or `derived`. Without one this is a miss, and a miss lets
+        the gap-fillers and `compounds.py` have their turn, which is how
+        `peacemaker` gets back to peace + maker. Reporting Germanic instead
+        both stated a falsehood and blocked every backend behind it.
+
+        `derived` was added 2026-07-31. Requiring `inherited` alone was too
+        narrow: Wiktionary records plenty of ordinary native descent as
+        derivation -- `lose` <- Middle English `losen`, `start` <- Middle
+        English `stert` -- and those words were being missed here. It went
+        unnoticed because the legacy file-backed backends answered them, which
+        is a fallback MASKING a defect rather than filling a gap.
+
+        `formed_from` is deliberately NOT descent: it is how a word was BUILT,
+        not where it came from, and accepting it would re-admit `movie` (whose
+        whole recorded formation is the suffix `ie`) and `zoophysiologist`.
         """
-        if not any(n.rel == "inherited" for n in line):
+        if not any(n.rel in _NATIVE_DESCENT_RELS and n.lang in self._english
+                   for n in line):
             return Resolution(word, [], None, None, self.name, **found.kwargs())
         stages = [n for n in line if n.lang in self._english]
         stage = stages[-1].lang if len(stages) > 1 else "English (native core)"

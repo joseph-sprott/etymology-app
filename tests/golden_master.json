@@ -513,24 +513,24 @@
  },
  "as": {
   "direct": {
-   "bucket": "Latin",
-   "depth_lang": "Latin",
+   "bucket": "Germanic",
+   "depth_lang": "Old English",
    "parts": [],
-   "resolved": true,
+   "resolved": false,
    "specific_lang": null
   },
   "influence": {
-   "bucket": "Latin",
-   "depth_lang": "Latin",
+   "bucket": "Germanic",
+   "depth_lang": "Old English",
    "parts": [],
-   "resolved": true,
+   "resolved": false,
    "specific_lang": null
   },
   "root": {
-   "bucket": "Latin",
-   "depth_lang": "Latin",
+   "bucket": "Germanic",
+   "depth_lang": "Old English",
    "parts": [],
-   "resolved": true,
+   "resolved": false,
    "specific_lang": null
   },
   "tree": {
