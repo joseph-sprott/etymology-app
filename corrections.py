@@ -417,6 +417,19 @@ WORD_CORRECTIONS = {
     "movie": {"p": "French", "d": "Latin", "chain": ["French", "Latin"], "prox_kind": "derived",
               "root_lang": "Latin", "root_term": "moveō", "root_pie": True},
 
+    # "photograph": read GERMANIC -- a wrong answer, not a gap. Wiktionary
+    # records it as `{{confix|en|photo|graph}}`, so both parts are positionally
+    # marked affixes and both are dropped, leaving no components and no chain.
+    # The database correctly reports a miss; the legacy `ety` backend then
+    # claimed native English descent with no evidence for it, which is the same
+    # "absence of evidence is not evidence" bug issue #22 fixed for the
+    # database and has NOT been fixed in that backend.
+    # Live Wiktionary, checked 2026-07-30: "From photo- + -graph", photo- from
+    # Ancient Greek φωτο- ("light") and -graph from Ancient Greek γράφω
+    # ("to write"). Both parts Greek, so the whole word is Greek.
+    "photograph": {"p": "Greek", "d": "Greek", "chain": ["Greek"], "prox_kind": "derived",
+                   "root_lang": "Ancient Greek", "root_term": "γράφω", "root_pie": False},
+
     # "incident": bare has_root PIE stub in the raw data (issue #14 shape).
     # Live Wiktionary: "from Middle French incident, from Latin incidens...
     # from in- + -cido, the combining form of cado ('to fall')," explicitly
