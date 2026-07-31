@@ -392,19 +392,7 @@ class Db:
                for n in line):
             return line
 
-        parts = [c for c in entry.primary.head.children
-                 if c.rel == "formed_from" and c.term]
-        # `or parts`: a word made ONLY of affixes still has to answer. `geology`
-        # is geo- + -logy and both are bound, so falling back to them is what
-        # lets it reach Greek instead of going Unknown.
-        candidates = [p for p in parts if not _is_bound(p)] or parts
-        best_line: List[Node] = []
-        for part in candidates:
-            sub = self._lineage(self.entry(part.term), depth - 1, seen)
-            foreign = [n for n in sub if n.lang not in ENGLISH_STAGES]
-            best_foreign = [n for n in best_line if n.lang not in ENGLISH_STAGES]
-            if len(foreign) > len(best_foreign):
-                best_line = sub
+        best_line = self._deepest_part_line(entry, depth, seen)
         if not best_line:
             return line
 
@@ -419,6 +407,31 @@ class Db:
         # view answers "how far back can we follow it", which is a different
         # question off the same rows.
         return [line[0]] + best_line
+
+    def _deepest_part_line(self, entry, depth: int, seen) -> List[Node]:
+        """
+        The component whose own history reaches furthest back, or [].
+
+        A formed word's etymology lives on its PARTS. Whichever part travels
+        through the most foreign languages is the one that answers "where is
+        this word from" -- `bagpipe` follows `pipe` to Latin, not `bag`.
+
+        Bound affixes are skipped, but `or parts` keeps them as a last resort:
+        a word made ONLY of affixes still has to answer, and `geology` is
+        geo- + -logy, so falling back to them is what lets it reach Greek
+        instead of going Unknown.
+        """
+        parts = [c for c in entry.primary.head.children
+                 if c.rel == "formed_from" and c.term]
+        candidates = [p for p in parts if not _is_bound(p)] or parts
+        best_line: List[Node] = []
+        best_foreign = 0
+        for part in candidates:
+            sub = self._lineage(self.entry(part.term), depth - 1, seen)
+            foreign = sum(1 for n in sub if n.lang not in ENGLISH_STAGES)
+            if foreign > best_foreign:
+                best_line, best_foreign = sub, foreign
+        return best_line
 
     # ------------------------------------------------------------- facts
     def senses(self, word_id: int, limit: int = 8) -> List[sqlite3.Row]:
