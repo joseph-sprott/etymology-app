@@ -1,0 +1,769 @@
+{
+ "built_from": [
+  "wiktextract dump",
+  "curated published lists"
+ ],
+ "count": 190,
+ "words": {
+  "academe": {
+   "note": null,
+   "source": "curated"
+  },
+  "accommodation": {
+   "note": null,
+   "source": "curated"
+  },
+  "accused": {
+   "note": null,
+   "source": "curated"
+  },
+  "addiction": {
+   "note": null,
+   "source": "curated"
+  },
+  "advertising": {
+   "note": null,
+   "source": "curated"
+  },
+  "aerial": {
+   "note": null,
+   "source": "curated"
+  },
+  "all that glitters is not gold": {
+   "note": "Popularized by William Shakespeare in The Merchant of Venice, see quotations.",
+   "source": "wiktionary"
+  },
+  "all the world's a stage": {
+   "note": "Coined by the English playwright William Shakespeare (baptized 1564; died 1616) from the beginning of a monologue delivered by the character Jaques in Act II, scene vii, of the play As You Like It, believed to have been written in 1599: “All the world’s a stage, / And all the men and women, meerly Players; […]”.",
+   "source": "wiktionary"
+  },
+  "amazement": {
+   "note": null,
+   "source": "curated"
+  },
+  "apostrophe": {
+   "note": null,
+   "source": "curated"
+  },
+  "argal": {
+   "note": "A corruption of the Latin ergō (“therefore, thus”) by William Shakespeare for\nThe Gravedigger in his famous play, Hamlet.",
+   "source": "wiktionary"
+  },
+  "arouse": {
+   "note": null,
+   "source": "curated"
+  },
+  "assassination": {
+   "note": null,
+   "source": "curated"
+  },
+  "auspicious": {
+   "note": null,
+   "source": "curated"
+  },
+  "backing": {
+   "note": null,
+   "source": "curated"
+  },
+  "bandit": {
+   "note": null,
+   "source": "curated"
+  },
+  "barefaced": {
+   "note": null,
+   "source": "curated"
+  },
+  "baseless": {
+   "note": null,
+   "source": "curated"
+  },
+  "beached": {
+   "note": null,
+   "source": "curated"
+  },
+  "beast with two backs": {
+   "note": "First attested in English by William Shakespeare, see quotations.",
+   "source": "wiktionary"
+  },
+  "bedroom": {
+   "note": null,
+   "source": "curated"
+  },
+  "beggar description": {
+   "note": "Coined by William Shakespeare in 1607 in \"Antony and Cleopatra,\" act 2, scene 2:\n: For her own person,\n: It beggared all description: she did lie\n: In her pavilion—cloth-of-gold, of tissue—\n: O'erpicturing that Venus where we see\n: The fancy outwork nature.",
+   "source": "wiktionary"
+  },
+  "besmirch": {
+   "note": null,
+   "source": "curated"
+  },
+  "bet": {
+   "note": null,
+   "source": "curated"
+  },
+  "between you and i": {
+   "note": "Popularized by William Shakespeare in The Merchant of Venice, see quotations.",
+   "source": "wiktionary"
+  },
+  "birthplace": {
+   "note": null,
+   "source": "curated"
+  },
+  "bitter cold": {
+   "note": "Coined by William Shakespeare in 1602 in \"Hamlet,\" act 1, scene 1:\n: For this relief much thanks.",
+   "source": "wiktionary"
+  },
+  "blanket": {
+   "note": null,
+   "source": "curated"
+  },
+  "bloodstained": {
+   "note": null,
+   "source": "curated"
+  },
+  "bloody": {
+   "note": null,
+   "source": "curated"
+  },
+  "blushing": {
+   "note": null,
+   "source": "curated"
+  },
+  "breathe one's last": {
+   "note": "Perhaps first used in Shakespeare's Henry VI, part 3 (c.",
+   "source": "wiktionary"
+  },
+  "brevity is the soul of wit": {
+   "note": "Coined by William Shakespeare in 1602 in \"Hamlet,\" act 2, scene 2:\n: Therefore, since brevity is the soul of wit,\n: And tediousness the limbs and outward flourishes,\n: I will be brief: your noble son is mad.",
+   "source": "wiktionary"
+  },
+  "bump": {
+   "note": null,
+   "source": "curated"
+  },
+  "buzzer": {
+   "note": null,
+   "source": "curated"
+  },
+  "caked": {
+   "note": null,
+   "source": "curated"
+  },
+  "castigate": {
+   "note": null,
+   "source": "curated"
+  },
+  "cater": {
+   "note": null,
+   "source": "curated"
+  },
+  "cater-cousin": {
+   "note": "The modern use of the term was popularized by the English playwright William Shakespeare (1564–1616) in his play The Merchant of Venice (written c.",
+   "source": "wiktionary"
+  },
+  "celia": {
+   "note": "Introduced into English by William Shakespeare in As You Like It.",
+   "source": "wiktionary"
+  },
+  "champion": {
+   "note": null,
+   "source": "curated"
+  },
+  "changeful": {
+   "note": null,
+   "source": "curated"
+  },
+  "circumstantial": {
+   "note": null,
+   "source": "curated"
+  },
+  "clangor": {
+   "note": null,
+   "source": "curated"
+  },
+  "cold comfort": {
+   "note": "Popularized by William Shakespeare in The Taming of the Shrew, see quotations.",
+   "source": "wiktionary"
+  },
+  "cold fish": {
+   "note": "Coined by William Shakespeare in 1611, see quotations.",
+   "source": "wiktionary"
+  },
+  "cold-blooded": {
+   "note": null,
+   "source": "curated"
+  },
+  "comedy of errors": {
+   "note": "From comedy + of + errors, probably coined by the English playwright William Shakespeare (c.",
+   "source": "wiktionary"
+  },
+  "compromise": {
+   "note": null,
+   "source": "curated"
+  },
+  "compunctious": {
+   "note": "Apparently taken up in modern use from Macbeth by William Shakespeare (see quotation).",
+   "source": "wiktionary"
+  },
+  "control": {
+   "note": null,
+   "source": "curated"
+  },
+  "countless": {
+   "note": null,
+   "source": "curated"
+  },
+  "courtship": {
+   "note": null,
+   "source": "curated"
+  },
+  "crankle": {
+   "note": "According to the Poly-Olbion project, \"Drayton probably derived ‘crankling’ from ‘crank’, a word which had its first recorded usage in Shakespeare’s Venus and Adonis (1594) where it describes a hare which ‘crankes and crosses with a thousand doubles’.",
+   "source": "wiktionary"
+  },
+  "critic": {
+   "note": null,
+   "source": "curated"
+  },
+  "critical": {
+   "note": null,
+   "source": "curated"
+  },
+  "daniel come to judgement": {
+   "note": "Coined by English playwright William Shakespeare in The Merchant of Venice (c.",
+   "source": "wiktionary"
+  },
+  "dauntless": {
+   "note": null,
+   "source": "curated"
+  },
+  "dawn": {
+   "note": null,
+   "source": "curated"
+  },
+  "deafening": {
+   "note": null,
+   "source": "curated"
+  },
+  "dexterously": {
+   "note": null,
+   "source": "curated"
+  },
+  "discontent": {
+   "note": null,
+   "source": "curated"
+  },
+  "dishearten": {
+   "note": null,
+   "source": "curated"
+  },
+  "dislocate": {
+   "note": null,
+   "source": "curated"
+  },
+  "dogs of war": {
+   "note": "Coined by William Shakespeare in 1599 in \"Julius Caesar,\" act 3, scene 1:\n: Cry 'Havoc!', and let slip the dogs of war.",
+   "source": "wiktionary"
+  },
+  "drugged": {
+   "note": null,
+   "source": "curated"
+  },
+  "dwindle": {
+   "note": null,
+   "source": "curated"
+  },
+  "elbow": {
+   "note": null,
+   "source": "curated"
+  },
+  "epileptic": {
+   "note": null,
+   "source": "curated"
+  },
+  "equivocal": {
+   "note": null,
+   "source": "curated"
+  },
+  "even a worm will turn": {
+   "note": "” Popularized by William Shakespeare in The Third Part of Henry the Sixth, see quotations.",
+   "source": "wiktionary"
+  },
+  "eventful": {
+   "note": null,
+   "source": "curated"
+  },
+  "excitement": {
+   "note": null,
+   "source": "curated"
+  },
+  "exposure": {
+   "note": null,
+   "source": "curated"
+  },
+  "eyeball": {
+   "note": null,
+   "source": "curated"
+  },
+  "falstaff": {
+   "note": "From the name of a character invented by William Shakespeare for his Henry IV plays, and who also appeared in The Merry Wives of Windsor.",
+   "source": "wiktionary"
+  },
+  "fap": {
+   "note": "First attested in 1616 in The Merry Wives of Windsor by William Shakespeare.",
+   "source": "wiktionary"
+  },
+  "fashionable": {
+   "note": null,
+   "source": "curated"
+  },
+  "fitful": {
+   "note": null,
+   "source": "curated"
+  },
+  "fixture": {
+   "note": null,
+   "source": "curated"
+  },
+  "flawed": {
+   "note": null,
+   "source": "curated"
+  },
+  "frugal": {
+   "note": null,
+   "source": "curated"
+  },
+  "generous": {
+   "note": null,
+   "source": "curated"
+  },
+  "gloomy": {
+   "note": null,
+   "source": "curated"
+  },
+  "gnarled": {
+   "note": "First attested Shakespeare 1603:\n: Thy sharpe and sulpherous bolt Splits the vn-wedgable [unwedgable] and gnarled Oke [oak].",
+   "source": "wiktionary"
+  },
+  "go to hell": {
+   "note": "The third sense is first attested in Shakespeare.",
+   "source": "wiktionary"
+  },
+  "god save the queen": {
+   "note": "First known to be used during the reign of Queen Mary I during certain royal proclamations, likely popularized after William Shakespeare's Richard III c.",
+   "source": "wiktionary"
+  },
+  "good wine needs no bush": {
+   "note": "First recorded in the epilogue to As You Like It by William Shakespeare: \"If it be true, that good wine needs no bush, ’tis true, that a good play needes no Epilogue.",
+   "source": "wiktionary"
+  },
+  "gossip": {
+   "note": null,
+   "source": "curated"
+  },
+  "green-eyed": {
+   "note": null,
+   "source": "curated"
+  },
+  "green-eyed monster": {
+   "note": "Coined by William Shakespeare in his play Othello.",
+   "source": "wiktionary"
+  },
+  "grovel": {
+   "note": null,
+   "source": "curated"
+  },
+  "gust": {
+   "note": null,
+   "source": "curated"
+  },
+  "henriad": {
+   "note": "Popularized in the Shakespearean sense by Alvin Kernan in 1969 in his book The Henriad: Shakespeare’s Major History Plays, from Henry + -iad.",
+   "source": "wiktionary"
+  },
+  "hint": {
+   "note": null,
+   "source": "curated"
+  },
+  "hobnob": {
+   "note": null,
+   "source": "curated"
+  },
+  "hoist by one's own petard": {
+   "note": "From the play Hamlet by William Shakespeare, see quotations.",
+   "source": "wiktionary"
+  },
+  "hurried": {
+   "note": null,
+   "source": "curated"
+  },
+  "hurry": {
+   "note": null,
+   "source": "curated"
+  },
+  "imogen": {
+   "note": "First used by William Shakespeare in Cymbeline, a misprint for Innogen, from Scottish Gaelic inghean (“girl, maiden”)",
+   "source": "wiktionary"
+  },
+  "impartial": {
+   "note": null,
+   "source": "curated"
+  },
+  "impede": {
+   "note": "First attested use as a verb was in William Shakespeare's Macbeth, see quotations.",
+   "source": "wiktionary"
+  },
+  "in a pickle": {
+   "note": "It was first used in English by William Shakespeare in The Tempest (1611), although the phrase had been used in Dutch earlier.",
+   "source": "wiktionary"
+  },
+  "inauspicious": {
+   "note": null,
+   "source": "curated"
+  },
+  "indistinguishable": {
+   "note": null,
+   "source": "curated"
+  },
+  "into thin air": {
+   "note": "Popularized by Shakespeare, see quotations.",
+   "source": "wiktionary"
+  },
+  "invulnerable": {
+   "note": null,
+   "source": "curated"
+  },
+  "it's all greek to me": {
+   "note": "First quoted as it was Greek to me in Julius Caesar by Shakespeare, possibly translated from a sentence in Medieval Latin.",
+   "source": "wiktionary"
+  },
+  "jaded": {
+   "note": null,
+   "source": "curated"
+  },
+  "jessica": {
+   "note": "First used by William Shakespeare in Merchant of Venice in the early 17th century, probably from Hebrew יִסְכָּה (yiská, “Iscah in Genesis 11:29, Jescha in the Wycliffe version”), a proper name meaning \"he will see/behold/look for\", the 3ms imperfect form of a verb ultimately from the root ס־כ־ה (s-k-h), itself an alternative form of the root שׂ־כ־ה (ś-k-h), both of which mean \"to see, behold, look for\".",
+   "source": "wiktionary"
+  },
+  "label": {
+   "note": null,
+   "source": "curated"
+  },
+  "lackluster": {
+   "note": null,
+   "source": "curated"
+  },
+  "lapse": {
+   "note": null,
+   "source": "curated"
+  },
+  "laughable": {
+   "note": null,
+   "source": "curated"
+  },
+  "lonely": {
+   "note": null,
+   "source": "curated"
+  },
+  "lower": {
+   "note": null,
+   "source": "curated"
+  },
+  "luggage": {
+   "note": null,
+   "source": "curated"
+  },
+  "lustrous": {
+   "note": null,
+   "source": "curated"
+  },
+  "madcap": {
+   "note": null,
+   "source": "curated"
+  },
+  "majestic": {
+   "note": null,
+   "source": "curated"
+  },
+  "marketable": {
+   "note": null,
+   "source": "curated"
+  },
+  "milk of human kindness": {
+   "note": "First used by Shakespeare in Macbeth (see quotations).",
+   "source": "wiktionary"
+  },
+  "mimic": {
+   "note": null,
+   "source": "curated"
+  },
+  "miranda": {
+   "note": "Coined by William Shakespeare for a character in The Tempest; feminine of Latin mirandus (“admirable”).",
+   "source": "wiktionary"
+  },
+  "misplaced": {
+   "note": null,
+   "source": "curated"
+  },
+  "monumental": {
+   "note": null,
+   "source": "curated"
+  },
+  "moonbeam": {
+   "note": null,
+   "source": "curated"
+  },
+  "more honored in the breach": {
+   "note": "Coined by William Shakespeare in 1602 in \"Hamlet,\" act 1, scene 4:\n: But to my mind, though I am native here\n: And to the manner born, it is a custom\n: More honored in the breach than the observance.",
+   "source": "wiktionary"
+  },
+  "mountaineer": {
+   "note": null,
+   "source": "curated"
+  },
+  "multitudinous": {
+   "note": null,
+   "source": "curated"
+  },
+  "negotiate": {
+   "note": null,
+   "source": "curated"
+  },
+  "nerissa": {
+   "note": "Coined by Shakespeare for The Merchant of Venice, apparently from Ancient Greek Νηρηΐς (Nērēḯs, “sea-nymph”).",
+   "source": "wiktionary"
+  },
+  "noiseless": {
+   "note": null,
+   "source": "curated"
+  },
+  "obscene": {
+   "note": null,
+   "source": "curated"
+  },
+  "obsequiously": {
+   "note": null,
+   "source": "curated"
+  },
+  "ode": {
+   "note": null,
+   "source": "curated"
+  },
+  "olivia": {
+   "note": "First popularized by Shakespeare's Twelfth Night.",
+   "source": "wiktionary"
+  },
+  "olympian": {
+   "note": null,
+   "source": "curated"
+  },
+  "outbreak": {
+   "note": null,
+   "source": "curated"
+  },
+  "pajock": {
+   "note": "First attested in the 16th century, in the writing of William Shakespeare and possibly coined by him.",
+   "source": "wiktionary"
+  },
+  "palmy": {
+   "note": null,
+   "source": "curated"
+  },
+  "pedant": {
+   "note": null,
+   "source": "curated"
+  },
+  "pedascule": {
+   "note": "It is probable that William Shakespeare first coined this word in his play Taming of the Shrew, (See example below), as a repetition of the word 'pedant' but in Latinised form to shame the other character.",
+   "source": "wiktionary"
+  },
+  "perusal": {
+   "note": null,
+   "source": "curated"
+  },
+  "pious": {
+   "note": null,
+   "source": "curated"
+  },
+  "premeditated": {
+   "note": null,
+   "source": "curated"
+  },
+  "primrose path": {
+   "note": "Coined by William Shakespeare in 1609 in The Tragedy of Hamlet, Prince of Denmark, act 1, scene 3: \"Himself the primrose path of dalliance treads\".",
+   "source": "wiktionary"
+  },
+  "puke": {
+   "note": "In 1600, \"to spit up, regurgitate\", recorded in the Seven Ages of Man speech in Shakespeare's As You Like It.",
+   "source": "wiktionary"
+  },
+  "puking": {
+   "note": null,
+   "source": "curated"
+  },
+  "radiance": {
+   "note": null,
+   "source": "curated"
+  },
+  "rant": {
+   "note": null,
+   "source": "curated"
+  },
+  "reliance": {
+   "note": null,
+   "source": "curated"
+  },
+  "remorseless": {
+   "note": null,
+   "source": "curated"
+  },
+  "road": {
+   "note": null,
+   "source": "curated"
+  },
+  "romeo and juliet": {
+   "note": "From a tragedy, written by Shakespeare, about two young lovers named Romeo and Juliet whose deaths ultimately unite their feuding families.",
+   "source": "wiktionary"
+  },
+  "salad days": {
+   "note": "Coined by William Shakespeare in Antony and Cleopatra around 1607, see quotations.",
+   "source": "wiktionary"
+  },
+  "sanctimonious": {
+   "note": null,
+   "source": "curated"
+  },
+  "savagery": {
+   "note": null,
+   "source": "curated"
+  },
+  "scrippage": {
+   "note": "From scrip + -age; probably coined by Shakespeare.",
+   "source": "wiktionary"
+  },
+  "scuffle": {
+   "note": null,
+   "source": "curated"
+  },
+  "seamy": {
+   "note": null,
+   "source": "curated"
+  },
+  "secure": {
+   "note": null,
+   "source": "curated"
+  },
+  "shuffle off this mortal coil": {
+   "note": "From Hamlet by William Shakespeare, see mortal coil.",
+   "source": "wiktionary"
+  },
+  "shunless": {
+   "note": "From shun + -less (suffix meaning ‘lacking, without’), probably popularized by the English playwright William Shakespeare (1564–1616) by its use in his play Coriolanus (c.",
+   "source": "wiktionary"
+  },
+  "sick at heart": {
+   "note": "From Hamlet, Act I, Scene 1, by William Shakespeare:\n: Francisco: For this relief much thanks: 'tis bitter cold, / And I am sick at heart.",
+   "source": "wiktionary"
+  },
+  "skimble-skamble": {
+   "note": "The term was popularized by William Shakespeare’s use of it in the play Henry IV, Part 1 (c.",
+   "source": "wiktionary"
+  },
+  "slings and arrows": {
+   "note": "Coined by the English playwright William Shakespeare (baptized 1564; died 1616) in his play Hamlet (written 1599–1601; first published 1604 in the second quarto), referring to fortune attacking a person, as if using slingshots and arrows: see the quotation.",
+   "source": "wiktionary"
+  },
+  "sportive": {
+   "note": null,
+   "source": "curated"
+  },
+  "star-crossed": {
+   "note": "Coined by William Shakespeare in 1597 in Romeo and Juliet, see quotations.",
+   "source": "wiktionary"
+  },
+  "still waters run deep": {
+   "note": "Of Latin origin, but possibly popularized by William Shakespeare, c.",
+   "source": "wiktionary"
+  },
+  "submerge": {
+   "note": null,
+   "source": "curated"
+  },
+  "summit": {
+   "note": null,
+   "source": "curated"
+  },
+  "swagger": {
+   "note": null,
+   "source": "curated"
+  },
+  "tetchy": {
+   "note": "Perhaps coined by Shakespeare.",
+   "source": "wiktionary"
+  },
+  "thereby hangs a tale": {
+   "note": "Coined by William Shakespeare in 1623 in \"As you Like it,\" act 2, scene 7:\n: And so from hour to hour we ripe and ripe,\n: And then from hour to hour we rot and rot,\n: And thereby hangs a tale.",
+   "source": "wiktionary"
+  },
+  "to the manner born": {
+   "note": "Coined by William Shakespeare in 1603 in Hamlet, act 1, scene 4:\n: But to my mind, though I am native here\n: And to the manner born, it is a custom\n: More honored in the breach than the observance.",
+   "source": "wiktionary"
+  },
+  "to thine own self be true": {
+   "note": "From a monologue delivered by the character Polonius in Act I Scene III of Hamlet by William Shakespeare.",
+   "source": "wiktionary"
+  },
+  "torture": {
+   "note": null,
+   "source": "curated"
+  },
+  "tranquil": {
+   "note": null,
+   "source": "curated"
+  },
+  "undress": {
+   "note": null,
+   "source": "curated"
+  },
+  "unreal": {
+   "note": null,
+   "source": "curated"
+  },
+  "varied": {
+   "note": null,
+   "source": "curated"
+  },
+  "vaulting": {
+   "note": null,
+   "source": "curated"
+  },
+  "wear on one's sleeve": {
+   "note": "The term does not date from that period though, and is first recorded in Shakespeare's Othello, 1604, in which the treacherous Iago's plan was to feign openness and vulnerability in order to appear faithful.",
+   "source": "wiktionary"
+  },
+  "weird": {
+   "note": "Obsolete by the 16th century in English, it was reintroduced by Shakespeare, who borrowed Middle Scots weird as weyward in the name of the Weyward Sisters (later respelt as Weird Sisters), meaning “Sisters of Fate”.",
+   "source": "wiktionary"
+  },
+  "what's done is done": {
+   "note": "From a line of dialogue spoken by the character Lady Macbeth in Act III Scene II of Macbeth by William Shakespeare.",
+   "source": "wiktionary"
+  },
+  "what's in a name": {
+   "note": "Coined by William Shakespeare in 1597 in \"Romeo and Juliet,\" act 2, scene 2:\n: What's in a name? That which we call a rose,\n: By any other name would smell as sweet.",
+   "source": "wiktionary"
+  },
+  "with bated breath": {
+   "note": "Coined by William Shakespeare in The Merchant of Venice, see quotations.",
+   "source": "wiktionary"
+  },
+  "worthless": {
+   "note": null,
+   "source": "curated"
+  },
+  "zany": {
+   "note": null,
+   "source": "curated"
+  }
+ }
+}

@@ -28,6 +28,7 @@ check_raw_data.py for investigating individual words from that report).
 """
 import argparse
 import json
+import random
 import re
 import sys
 from typing import Dict, List
@@ -38,6 +39,37 @@ scriptlib.bootstrap()
 
 from analyzer import tokenize
 from resolver import default_resolver
+
+
+def sample_words(pool: List[str], count: int, seed: int) -> List[str]:
+    """
+    A reproducible random sample. Takes the pool as an argument so it can be
+    tested without a database, and so the caller decides what "a real word"
+    means rather than this function guessing.
+
+    Seeded on purpose: an unseeded sample changes every run, and two runs that
+    share no words cannot show whether anything improved.
+    """
+    if count >= len(pool):
+        return list(pool)
+    return random.Random(seed).sample(list(pool), count)
+
+
+def classify_bucket(bucket: str) -> str:
+    """
+    Which of the TWO failure modes a bucket represents, or "ok".
+
+    They are different problems and need different fixes, so counting them
+    together would hide the second behind the first:
+      unknown -- no data; the word resolved to nothing at all.
+      other   -- a language WAS found and is simply unmapped to a bucket
+                 (known issue #3, `Other` bucket leakage).
+    """
+    if bucket == "Unknown":
+        return "unknown"
+    if bucket == "Other":
+        return "other"
+    return "ok"
 
 
 def _capitalization_hints(paragraph: str) -> Dict[str, bool]:
@@ -85,12 +117,81 @@ def load_paragraphs(path: str, json_field: str) -> List[str]:
             f'{{"data": [{{"{json_field}": "..."}}]}}; pass --json-field to match yours.')
 
 
+def dictionary_pool() -> List[str]:
+    """
+    Every headword that is a plausible single English word.
+
+    Sampling uniformly from all 1.38M headwords would mostly return taxonomic
+    binomials and rare phrases -- genuinely random, but useless for judging
+    coverage of English. Restricted to alphabetic lowercase headwords of
+    ordinary length that carry at least one SENSE, i.e. real dictionary
+    entries. The definition is stated here rather than buried so the resulting
+    percentage can be read for what it is.
+    """
+    import etymology_db
+
+    db = etymology_db.get()
+    rows = db._db.execute(
+        "SELECT DISTINCT w.headword FROM word w"
+        " JOIN sense s ON s.word_id = w.word_id")
+    return [r[0] for r in rows
+            if r[0] and r[0].isalpha() and r[0].islower() and 2 < len(r[0]) < 20]
+
+
+def scan_words(words: List[str], resolver, mode: str = "direct") -> Dict[str, dict]:
+    """word -> {bucket, kind} for every word that did not resolve cleanly."""
+    findings: Dict[str, dict] = {}
+    for i, word in enumerate(words, 1):
+        view = resolver.resolve(word).view(mode)
+        kind = classify_bucket(view.bucket)
+        if kind != "ok":
+            findings[word] = {"bucket": view.bucket, "kind": kind,
+                              "specific_lang": view.specific_lang,
+                              "source": view.source}
+        if i % 500 == 0:
+            print(f"  ...{i}/{len(words)} words", file=sys.stderr, flush=True)
+    return findings
+
+
+def run_random_scan(count: int, seed: int, out_path: str) -> None:
+    """Joe's ask: a couple thousand truly random words, Unknown AND Other."""
+    from resolver import shared_resolver
+
+    pool = dictionary_pool()
+    print(f"pool: {len(pool):,} single-word dictionary headwords", file=sys.stderr)
+    words = sample_words(pool, count, seed)
+    findings = scan_words(words, shared_resolver())
+
+    with open(out_path, "w", encoding="utf-8") as fh:
+        json.dump({"seed": seed, "sampled": len(words),
+                   "pool_size": len(pool), "findings": findings},
+                  fh, ensure_ascii=False, indent=2)
+
+    unknown = {w: d for w, d in findings.items() if d["kind"] == "unknown"}
+    other = {w: d for w, d in findings.items() if d["kind"] == "other"}
+    ok = len(words) - len(findings)
+    print(f"\n{len(words):,} random words (seed {seed})")
+    print(f"  {ok:,} resolved to a real bucket ({ok / len(words) * 100:.1f}%)")
+    print(f"  {len(unknown):,} Unknown ({len(unknown) / len(words) * 100:.1f}%)")
+    print(f"  {len(other):,} Other   ({len(other) / len(words) * 100:.1f}%)")
+    print(f"\nfull report: {out_path}")
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--corpus", required=True)
+    ap.add_argument("--corpus")
+    ap.add_argument("--random", type=int,
+                    help="scan N truly random dictionary words instead of a corpus")
+    ap.add_argument("--seed", type=int, default=20260730)
     ap.add_argument("--json-field", default="paragraph")
     ap.add_argument("--out", default="unknown_words_report.json")
     args = ap.parse_args()
+
+    if args.random:
+        run_random_scan(args.random, args.seed, args.out)
+        return
+    if not args.corpus:
+        raise SystemExit("pass --corpus PATH or --random N")
 
     paragraphs = load_paragraphs(args.corpus, args.json_field)
     print(f"Loaded {len(paragraphs)} paragraphs from {args.corpus}", file=sys.stderr)

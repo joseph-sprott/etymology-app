@@ -428,6 +428,19 @@ refer to them.
   pattern left; not chased further, per "fix the pattern, not every word".
   **The corpus itself is not on disk** — it was fetched live from
   randomwordgenerator.com's static bank.
+- **#25 — random-word scan findings, AWAITING JOE'S DECISION (2026-07-30).**
+  Documented deliberately rather than fixed — he asked to decide himself.
+  2,000 truly random dictionary words: **70.0% resolved, 29.4% Unknown, 0.5%
+  Other**. The Unknown are only two causes — 87% absent from the database
+  entirely (issue #4's long tail; a looser stemmer was checked and would
+  manufacture wrong answers), 13% derived from a base word that is itself
+  missing. The 11 `Other` are four causes, of which the sharpest is that
+  **`Northern Middle English` and `Anglian Old English` bucket as `Other`
+  when they are plainly Germanic**. Also found: bare affix spellings resolve
+  as unrelated foreign words (`ly`→Vietnamese, `ment`→Korean, `er`→Turkish,
+  `ous`→Hawaiian) — inert today because of issue #19's `is_affix` flag, and a
+  live landmine for any future code that skips that check. **Full breakdown
+  with examples and the rejected fixes: `HISTORY.md` entry 25.**
 - **#24 — the residual of #19 (affixes), in the templates that say nothing.**
   `{{suffix}}`/`{{prefix}}`/`{{confix}}` mark the bound morpheme by POSITION
   and are now read correctly. `af`/`affix`/`surf` (~49,000 templates) do not —

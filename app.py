@@ -24,6 +24,7 @@ from word_trees import (resolve_tree, build_diagram, node_slug,
 from resolver import shared_resolver
 import descendants
 import inflections
+import shakespeare
 import word_info
 
 app = Flask(__name__)
@@ -99,10 +100,16 @@ def build_word_card(word):
 
     pos = ", ".join(rec["pos"]) if rec and rec.get("pos") else None
     gloss = rec.get("gloss") if rec else None
-    if not (pos or gloss or lineage):
+    # An ANNOTATION, deliberately kept out of the origin answer (Joe,
+    # 2026-07-30: "I dont want it to be in the language bucket or whatever,
+    # just something on the side"). `shakespeare` is a leaf module that knows
+    # nothing about buckets, so this cannot move a percentage.
+    bard = shakespeare.is_shakespearean(word)
+    if not (pos or gloss or lineage or bard):
         return None
     return {"pos": pos, "gloss": gloss, "lineage": lineage,
-            "defined_by": base, "inherited_from": res.inherited_from}
+            "defined_by": base, "inherited_from": res.inherited_from,
+            "shakespeare": bard, "shakespeare_note": shakespeare.note(word)}
 
 
 def _dedupe_keep_order(per_word):
@@ -369,6 +376,14 @@ PAGE = """
     .wc-note { display: block; margin-top: 0.35rem; font-style: italic; color: var(--text-secondary); }
     .wc-cta { display: block; margin-top: 0.4rem; font-size: 0.8rem; color: var(--text-secondary); }
     .wc-links { display: block; margin-top: 0.4rem; font-size: 0.8rem; }
+    /* Shakespeare aside. Deliberately NOT a bucket colour -- it is an
+       annotation, not an origin, and must not read as one. */
+    .wc-bard { display: block; margin-top: 6px; padding: 5px 7px; font-size: 11px;
+               line-height: 1.45; border-radius: 4px;
+               background: color-mix(in srgb, var(--accent) 12%, transparent);
+               color: var(--text-secondary); }
+    .wc-bard-note { display: block; margin-top: 3px; font-style: italic; opacity: .85; }
+    .word-bard { margin-left: 5px; font-size: 10px; opacity: .75; }
     .wc-wikt { color: var(--text-secondary); text-decoration: none; border-bottom: 1px dotted var(--text-secondary); }
     .wc-wikt:hover { border-bottom-style: solid; }
     /* Second link on the card, so it needs separating from the Wiktionary one
@@ -443,6 +458,13 @@ PAGE = """
       </span>
       {%- endif %}
       {%- if card and card.inherited_from %}<span class="wc-note">via {{ card.inherited_from }}</span>{% endif %}
+      {#- An ASIDE, never part of the origin answer: it sits below the lineage
+          and carries its own colour, so it cannot be mistaken for a bucket. -#}
+      {%- if card and card.shakespeare %}
+      <span class="wc-bard">&#127917; popularized by Shakespeare
+        {%- if card.shakespeare_note %}<span class="wc-bard-note">{{ card.shakespeare_note }}</span>{% endif %}
+      </span>
+      {%- endif %}
       {%- if note %}<span class="wc-note">{{ note }}</span>{% endif %}
       <span class="wc-cta">click to search &rarr;</span>
       {#- Straight to the source, for checking an answer against Wiktionary
@@ -615,6 +637,13 @@ PAGE = """
         &nbsp;&middot;&nbsp;
         <a class="feature-link" href="/descendants?word={{ desc_form|urlencode }}">what descended from its root &rarr;</a>
         {%- endif %}</p>
+      {#- The same aside the analyzer's hover card shows. Both features read
+          one leaf module, so they cannot disagree about a word (issue #16). -#}
+      {%- if bard %}
+      <p class="wc-bard">&#127917; popularized by Shakespeare
+        {%- if bard_note %}<span class="wc-bard-note">{{ bard_note }}</span>{% endif %}
+      </p>
+      {%- endif %}
       {% if tree %}
         {% if tree_view == 'diagram' %}
           {% set d = build_diagram(tree) %}
@@ -990,6 +1019,8 @@ def index():
                                    collapse_duplicates=collapse_duplicates,
                                    word_sort=word_sort, word_rows=word_rows,
                                    tree_word=tree_word, tree=tree, tree_view=tree_view,
+                                   bard=shakespeare.is_shakespearean(tree_word),
+                                   bard_note=shakespeare.note(tree_word),
                                    info=info, word_cards=word_cards,
                                    bucket_slug=bucket_slug, root_slug=root_slug,
                                    node_slug=node_slug, bucket_breakdown=bucket_language_breakdown,

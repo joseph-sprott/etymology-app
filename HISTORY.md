@@ -1564,6 +1564,71 @@ referring to "issue #14" stay meaningful.
 
 
 
+25. **Random-word coverage scan -- findings only, 2026-07-30. NOT FIXED, and
+    deliberately so: Joe asked for these to be documented for his decision, not
+    patched.** Run via
+    `python scripts\scan_unknown_words.py --random 2000` (new `--random` mode,
+    seeded 20260730 so the exact sample is reproducible).
+
+    **Pool definition matters for reading the number.** Sampling uniformly
+    across all 1,380,567 headwords would mostly return taxonomic binomials.
+    The pool is every headword that is alphabetic, lowercase, 3-19 characters
+    and carries at least one SENSE -- real dictionary entries. That is still
+    "truly random", just over English rather than over Latin species names.
+
+    **Result: 2,000 words -> 70.0% resolved, 29.4% Unknown, 0.5% Other.**
+    Note this is DICTIONARY-wide and is not the prose figure: ordinary text
+    runs ~98% because usage concentrates on covered words (issue #4).
+
+    **The 588 Unknown split into exactly two causes, no long tail of others:**
+    - **512 (87%) have no lookup row at all** -- absent from `etymology.db`
+      entirely (`difethialone`, `kevazingo`, `malononitriles`, `scanographic`).
+      This is issue #4's long tail and needs a data source, not a code change.
+      **A stemming rescue was checked and REJECTED on evidence**: 45 of 250
+      sampled absent words do have a shorter form in the database, but
+      inspection shows the matches are coincidental garbage -- `chowkedar` ->
+      `chowked`, `turneps` -> `turn`, `jambou` -> `jamb`. Wiring a looser
+      stemmer would manufacture wrong answers at scale, the `went`/`Went`
+      failure shape (issue #12) all over again.
+    - **76 (13%) are derived words one hop from a base that is itself
+      missing**: `foetidness` -> `foetid` (Unknown), `shortsightedness` ->
+      `shortsighted`, `unmechanize` -> `mechanize`, `microcatharometers` ->
+      `catharometer`. The mechanism works; the base word simply is not there.
+      Several are spelling variants of a word that IS present (`foetid` /
+      `fetid`), which is the same class as the still-open
+      `favorite`/`favourite` gap.
+
+    **The 11 `Other` words are four distinct causes, and only one is
+    deliberate** (issue #3, `Other` bucket leakage):
+    - **Qualified variants of a mapped language** -- `NAME_TO_BUCKET` knows the
+      parent but not the variant: `North Levantine Arabic` (Semitic),
+      `Yakut` (Turkic), `Balinese` (Austronesian), `Shawnee` (Indigenous
+      American), `Bantu` (African). Mappable, low risk.
+    - **English stages bucketing as Other, which is plainly wrong**:
+      `Northern Middle English` (`bigorexic`) and `Anglian Old English`
+      (`sheeplets`). These are English and must be Germanic. Worth checking
+      whether `linguistics.is_english_stage` also misses them, since that
+      predicate gates real behaviour elsewhere.
+    - **Language fields that are not a single language**: `solyankas` carries
+      `ru,uk` -- two comma-separated codes in one field, never split by the
+      builder. Also `es-ear` and `es-PH` (`autozero`, `bologram`), regional
+      codes `language_codes.resolve` does not know.
+    - **Genuine isolate**: `Basque` (`aizkolaris`). Working as designed.
+
+    **Separate finding, and the most dangerous thing in this scan.** Bare
+    affix spellings resolve as unrelated real words in exotic languages:
+
+        ly -> Vietnamese     ment -> Korean      er -> Turkish
+        ous -> Hawaiian      able -> Old Northern French
+        ness / ish / less / ing / est / ate -> Germanic
+
+    `heteronomously` displays a component `ly = East Asian`. The `is_affix`
+    work (issue #19) stops most of these from being counted, which is exactly
+    why it mattered -- but this is a live landmine for ANY future code path
+    that treats a formation part as a word without checking the flag. A single
+    missed check injects Vietnamese or Korean into an English word's
+    percentages, and it will look plausible.
+
 ---
 
 ## Appendix — the data-file build notes, as written before the 2026-07-27 cleanup
