@@ -25,7 +25,12 @@ etymology.db-wal
 etymology.db-shm
 # Scratch file the build writes to before swapping it into place -- present
 # only mid-build, or left behind when the swap is blocked by a running app.py.
+# The -shm/-wal siblings need naming too: SQLite writes them alongside, and
+# only `etymology.db.new` itself was listed, so a 1GB write-ahead log got
+# committed when a build's swap was blocked (2026-07-31).
 etymology.db.new
+etymology.db.new-shm
+etymology.db.new-wal
 # Regenerable from scripts/list_descendant_words.py --out; a snapshot of
 # which words currently have a descendant tree, not a source of truth.
 descendant_words.txt

@@ -365,11 +365,17 @@ refer to them.
   **(c)** another data source for the remainder. Joe chose (c) for the
   specific words issue #17's scan surfaced; **the general class is still
   open.**
-- **#18 — 6 legacy-suite checks are deliberately failing**: `tag`, `auto`,
-  `critical`, `package`, `free`, `muskrat`. These are answer judgment calls
+- **#18 — 3 legacy-suite checks are deliberately failing**: `critical`,
+  `free`, and the `muskrat` compound split. These are answer judgment calls
   for Joe, not shape failures. Editing the expectations to match the code
-  would destroy the evidence, so they stay red on purpose. (`movie` and
-  `peacemaker` were in this list until #22 fixed them.)
+  would destroy the evidence, so they stay red on purpose.
+  **Corrected 2026-07-31: `tag`, `auto` and `package` were NEVER judgment
+  calls.** `corrections.py` had the right answer for all three; the table was
+  merged into the legacy backends' lookup tables, so a correction only applied
+  when one of THOSE answered, and as the database improved and answered first,
+  16 of 92 corrections silently stopped arriving. `ChainResolver` now applies
+  them as an override from one place. (`movie` and `peacemaker` left this list
+  when #22 fixed them.)
 
 ### Open — live limitations
 
@@ -427,6 +433,20 @@ refer to them.
   pattern left; not chased further, per "fix the pattern, not every word".
   **The corpus itself is not on disk** — it was fetched live from
   randomwordgenerator.com's static bank.
+- **#26 — AUDIT ONLY: synonyms, antonyms, word-level descendants
+  (2026-07-31).** Nothing built, by Joe's instruction. **The data is already
+  in `etymology.db` and no feature reads it**: `word_relation` holds 711,053
+  rows — `derived_term` 478,619, `synonym` 46,903, `antonym` 19,186,
+  `descendant` 17,916, plus hyponym/hypernym/meronym/holonym.
+  **`derived_term` is what answers "what descended from THIS word"** and
+  covers **36,022 English words** (`water` 1,243, `brother` 24) — versus the
+  current `/descendants` trees, which are all rooted at a proto-language and
+  contain only 3,807 English words, which is exactly the limit Joe described.
+  Caveats before building: it is a lexical section, not strict descent (mixes
+  in phrases and proper nouns); coverage is uneven (`hand` has zero); and
+  synonyms are thin enough to look broken on common words (`big` has none).
+  Also found: relations are stored TWICE — `word_relation` here, cognates and
+  doublets in `word_info.json`. **Full write-up: `HISTORY.md` entry 26.**
 - **#25 — random-word scan findings, AWAITING JOE'S DECISION (2026-07-30).**
   Documented deliberately rather than fixed — he asked to decide himself.
   2,000 truly random dictionary words: **70.0% resolved, 29.4% Unknown, 0.5%

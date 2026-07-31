@@ -1629,6 +1629,60 @@ referring to "issue #14" stay meaningful.
     missed check injects Vietnamese or Korean into an English word's
     percentages, and it will look plausible.
 
+26. **AUDIT ONLY -- synonyms, antonyms, and word-level descendants
+    (2026-07-31).** Joe: "what can we do with synonyms, antonyms, and
+    descendants... I want to be able to look up a word on the descendants page
+    and see all the words that descended from that word. But we are not going
+    to start on that yet, I JUST WANT YOU TO AUDIT THAT." Nothing was built.
+
+    **The headline: the data is already in `etymology.db` and NO feature reads
+    it.** `word_relation` holds 711,053 rows:
+
+        478,619  derived_term      <-- this is the answer to Joe's question
+         94,475  related
+         46,903  synonym
+         38,153  hyponym
+         19,186  antonym
+         17,916  descendant
+          5,483  coordinate
+          5,427  meronym
+          3,889  hypernym
+          1,002  holonym
+
+    **Why the current /descendants feature has the limit Joe describes.** All
+    10,870 trees are rooted at a PROTO language -- Proto-Germanic (5,517), PIE
+    (1,825), Proto-Celtic, Proto-Italic, Proto-Indo-Iranian, Proto-Balto-
+    Slavic. Only **3,807 distinct English words appear anywhere in them**, and
+    a lookup climbs to the top before drawing, so it always starts at the
+    proto form. That is by design (issue #21) and it answers "what else came
+    from this word's ancient root", which is a different question from "what
+    came from THIS word".
+
+    **`derived_term` answers the question actually asked**, and it is a much
+    larger dataset: **36,022 English words have at least one**, e.g.
+    `water` 1,243, `fire` 665, `brother` 24, `photograph` 5.
+
+    **Three honest caveats before anyone builds on it:**
+    - It is Wiktionary's "Derived terms" SECTION, which is a lexical relation,
+      not strictly etymological descent. It mixes real derivations
+      (`brotherhood`, `afire`) with multiword phrases (`above water`, `a burnt
+      child dreads the fire`) and even proper nouns (`Agnes Water`). It needs
+      filtering, and the filter is a design decision, not a detail.
+    - **Coverage is uneven in a way that will surprise users**: `hand` has
+      ZERO derived terms, despite `handful`/`handle`/`handy` existing.
+      Wiktionary populates these sections inconsistently.
+    - Synonym coverage is thin and occasionally strange -- `big` has none, and
+      `fast`'s only synonym is `slutty` (a real but marginal sense). Antonyms
+      behaved better in sampling (`happy` -> dejected, depressed, sad).
+      Shipping synonyms as-is would look broken on common words.
+
+    **A structural finding worth acting on regardless**: word relations are
+    stored TWICE. `etymology.db`'s `word_relation` has synonyms/antonyms/
+    derived terms, while `word_info.json` separately holds cognates and
+    doublets (`brother` has 65 cognates there). Two stores for one kind of
+    fact is the shape of issue #16, and any relations feature should read one
+    of them, not grow a third path.
+
 ---
 
 ## Appendix — the data-file build notes, as written before the 2026-07-27 cleanup
