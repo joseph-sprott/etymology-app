@@ -428,21 +428,17 @@ refer to them.
   pattern left; not chased further, per "fix the pattern, not every word".
   **The corpus itself is not on disk** — it was fetched live from
   randomwordgenerator.com's static bank.
-- **#19 — CLOSED 2026-07-30. The builder now keeps the distinction.**
-  `{{suffix}}`/`{{prefix}}`/`{{confix}}` state which part is a bound morpheme
-  BY POSITION, and `wiktextract_shapes.formation_parts` records it as
-  `ety_node.is_affix` (263,951 nodes). `_BOUND_SUFFIXES` — the 40-entry curated
-  list — is deleted. **225,788 words stopped giving half their origin to a
-  morpheme.** The old list only ever covered final-position suffixes, so
-  ~92,000 `prefix` templates were never handled at all: `rewrite` read half
-  Latin via `re`, `disagree` half Norse via `dis`. Measured: ~98% of affixes
-  arrive WITHOUT their hyphen, so no spelling rule could have worked — a third
-  one was tried and rejected this session (it cost 52 hand-verified splits:
-  `aftereffect`, `counterbalance`, `grandparent`, `offshore`).
-  Residual, honestly: `af`/`affix`/`surf` templates promise nothing
-  positionally, so their unhyphenated parts are still judged by spelling
-  alone. And a compound part that is itself derived can still leak a morpheme
-  one level down — `overactive` → over + act + `ive`.
+- **#24 — the residual of #19 (affixes), in the templates that say nothing.**
+  `{{suffix}}`/`{{prefix}}`/`{{confix}}` mark the bound morpheme by POSITION
+  and are now read correctly. `af`/`affix`/`surf` (~49,000 templates) do not —
+  they promise nothing positionally, so an UNHYPHENATED part of one is still
+  judged by spelling alone, which is what leaves `disagree` reading French via
+  a `dis-` that survives as a component. Three spelling rules have now been
+  measured and rejected on this exact problem (they cost 263, 134 and 52
+  hand-verified splits), so a fourth is not the answer. Separately, a compound
+  part that is ITSELF derived can leak a morpheme one level down —
+  `overactive` → over + act + `ive` — because the affix filter runs on the
+  word's own parts, not recursively through a hand-verified split.
 - **#21 — descendants: the Greek branch is missing.** Proto-Hellenic has no
   kaikki extract (404). One command adds any other branch:
   `python scripts/add_descendant_language.py "Proto-Italic"`. The
@@ -494,6 +490,7 @@ stays legible and so nobody re-opens a solved problem.
 | 9 | Contractions split into junk tokens (`don't` → `don`) | 2026-07-22 — expanded before tokenizing |
 | 12 | Bar-graph drill-down, tree redesign, toggles, Deepest Root bugs | 2026-07-23 — one long session, all shipped |
 | 13 | Native words lumped under one flat label | 2026-07-24 — real stage names (Old/Middle English) surfaced |
+| 19 | Affixes counted as component words (`darkness` → dark + ness) | 2026-07-30 — builder keeps the distinction (`ety_node.is_affix`); 225,788 words stopped halving their origin. Residual split off as #24 |
 | 20 | No link to sources; PIE roots had no meanings | 2026-07-26 — Wiktionary links + 5,636 root glosses |
 
 ## Data pipeline notes

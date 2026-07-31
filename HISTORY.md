@@ -1276,6 +1276,92 @@ referring to "issue #14" stay meaningful.
     above is a lookup-layer reconstruction of information the builder threw
     away, and it will stay approximate until the builder stops throwing it
     away.
+
+    **CLOSED 2026-07-30 -- the builder stopped throwing it away.** Joe picked
+    this off the open list. `wiktextract_shapes.formation_parts` now reads the
+    template NAME it had been discarding and records the role as
+    `ety_node.is_affix` (263,951 nodes). `_BOUND_SUFFIXES` is deleted rather
+    than extended. **225,788 words stopped giving half their origin to a
+    morpheme.**
+
+    The gap was twice what this entry described. `_BOUND_SUFFIXES` only ever
+    covered FINAL-position endings, so ~92,000 `{{prefix}}` templates were
+    never handled at all -- `rewrite` counted half Latin through `re`,
+    `disagree` half Norse through `dis`, `geology` half Germanic through
+    `logy`. Position is the only signal that scales, measured over the dump:
+    92,998 `suffix` templates but 1,929 with an explicit hyphen, 92,477
+    `prefix` with 781. **~98% of affixes arrive WITHOUT their hyphen**, so no
+    spelling test could ever have recovered this -- which is the real reason
+    three of them have now failed.
+
+    **The third rejected spelling rule, for the record.** Restricting the
+    "keep it if the bare form is a word" escape to LEADING hyphens (suffix
+    marking) was measured against the 742-entry `compounds.py` table and cost
+    52 hand-verified splits: `after-` in `aftereffect`, `counter-` in
+    `counterbalance`, `grand-` in `grandparent`, `off-` in `offshore`. Those
+    are real first components spelled exactly like prefixes, and `after`,
+    `off` and `dis` are all real words, so neither hyphen direction nor the
+    bare-word test separates them. Joins the two earlier rules (263 and 134
+    splits) in this file's list of things not to re-derive.
+
+    **Where the escape hatch went instead.** Asking "is this piece secretly a
+    real word" protected `-man` in `craftsman` but equally protected `-ness`
+    and `-ion`, because those are words too. Wiktionary's markings are now
+    trusted outright and `compounds.py`'s hand-verified splits win instead --
+    Joe's explicit call when asked (the alternative, trusting the template
+    absolutely, would have dropped ~76 splits and forced the 742-entry
+    regression check to be rewritten). `Resolution.affix_collapsed` marks the
+    single case where the table may override: the word HAS a recorded
+    formation but the affix filter left fewer than two parts, as with
+    `overactive` (genuinely over- + active). **`muskrat` deliberately does not
+    qualify** -- it is BORROWED from Algonquian and "musk + rat" is folk
+    etymology, so a table entry must never beat a real donor edge. Getting
+    that condition too broad flipped `muskrat` to Compound and was caught by
+    the suite; the fix is to require a real formation, not to special-case the
+    word.
+
+    **A reported bug fixed by the same change.** Joe: "`late` shows as en +
+    let, but Word Search is correct." A `+` prefix in a template's first
+    argument marks a DIRECTIVE, not a language code
+    (`{{surf|+deverbal|en|let}}`, `{{surf|+af|en|bio-|-logy}}`), which shifts
+    the language into arg 2. Read positionally, the language code itself
+    became a component word; `biology` carried a part called "en" the same
+    way. Word Search was right because it renders the stored tree while the
+    analyzer builds its own parts list -- issue #16 (every feature must read
+    from one shared source) in miniature, fixed at the shared source.
+
+    **Two build bugs found on the way, both worse than the one being fixed.**
+    (a) `build.ps1` read `$proc.ExitCode` from a `Start-Process` handle that
+    can still be `$null` after the process exits, and `$null -ne 0` is TRUE in
+    PowerShell -- so every SUCCESSFUL build took the failure branch and quit
+    before the descendants step. That is the real reason issue #21 kept
+    recurring after being "fixed": the fix was never reached. (b)
+    `build_etymology_db.py` would swap an EMPTY database over the live one --
+    every validator passes vacuously on zero words, so a `--words` filter that
+    matched nothing reported PASS and replaced the working database. It now
+    counts words before swapping, checked BEFORE the validators.
+
+    **Residual, split off as issue #24**: `af`/`affix`/`surf` templates
+    (~49,000) promise nothing positionally, so their unhyphenated parts are
+    still judged by spelling -- this is why `disagree` still keeps `dis-` as a
+    component. And the affix filter runs on a word's own parts, not
+    recursively through a hand-verified split, so `overactive` shows over +
+    act + `ive`.
+
+    **`movie` closed separately the same day, and could not have been closed
+    here.** Its dump entry is `{{suffix|en|""|ie}}` -- **the base word is an
+    empty string in Wiktionary's own data** -- so `moving` was never recorded
+    and no builder can recover it. Fixed by hand in `corrections.py` against
+    the live page ("From moving (picture) + -ie"), inheriting `move`'s
+    already-verified French/Latin chain, same precedent as `zoo` and `mom`.
+    That exposed one more structural gap: `word_trees._is_bare_root_tree`
+    stopped a stub tree outranking a real answer but only recognised bare
+    `has_root` pointers, and `movie`'s tree is not bare -- it has a branch,
+    just a worthless one. A childless bound affix now counts as saying
+    nothing, which `is_affix` finally makes a fact rather than a guess.
+    `movie` also had to hand over its role as the bare-root-stub specimen in
+    `test_regression.py` (issue #14's guard); `narrate` replaces it, chosen by
+    scanning the database for words whose every edge is a `root`.
 20. **Wiktionary links + PIE root meanings -- 2026-07-26.** Two features Joe
     asked for.
     - **Link to the source.** Every hover card in the analyzer and the Word
