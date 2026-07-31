@@ -168,6 +168,42 @@ def clean_templates(templates: List[dict]) -> List[dict]:
     return out
 
 
+# A component argument may name its own language: `{{af|en|la:obvius|-ous}}`
+# means the part is LATIN `obvius`, not an English word spelled "la:obvius".
+# Only a SHORT leading code counts, so an ordinary term containing a colon
+# (`re:invent`, a URL) is left alone.
+_LANG_PREFIX = re.compile(r"^([a-z]{2,4}(?:-[a-z]{2,5}){0,2}):(?=\S)")
+
+# `-al#Etymology_1` -- a link anchor to a particular sense, not part of the
+# spelling. 471 nodes carry one.
+_SENSE_ANCHOR = re.compile(r"#.*$")
+
+
+def split_language_prefix(raw: Optional[str], is_known_code=None
+                          ) -> Tuple[Optional[str], Optional[str]]:
+    """
+    ("la", "obvius") for `la:obvius`; (None, term) for anything else.
+
+    The code is worth keeping rather than merely stripping: it says the part
+    IS Latin, which is what lets `obvious` resolve to Latin instead of
+    dead-ending on an English word that does not exist.
+
+    `is_known_code` decides whether the prefix really is a language, and is
+    required for that reason. Shape alone cannot tell: `re:invent` and
+    `la:obvius` are indistinguishable by pattern, and guessing would silently
+    mangle any term containing a colon. Without a validator nothing is split.
+    """
+    if not raw:
+        return None, raw
+    match = _LANG_PREFIX.match(raw)
+    if not match or is_known_code is None:
+        return None, raw
+    code = match.group(1)
+    if not is_known_code(code):
+        return None, raw
+    return code, raw[match.end():]
+
+
 def clean_term(raw: Optional[str]) -> Tuple[Optional[str], Optional[str]]:
     """
     Strip inline modifiers off a template argument. Returns (term, gloss).
@@ -182,6 +218,7 @@ def clean_term(raw: Optional[str]) -> Tuple[Optional[str], Optional[str]]:
     """
     if not raw:
         return None, None
+    raw = _SENSE_ANCHOR.sub("", raw)
     if "<" not in raw:
         return raw.strip() or None, None
     split = _split_groups(raw)
@@ -377,15 +414,21 @@ def formation_parts(templates: List[dict], langs: LangIndex) -> List[TNode]:
         lang_name = lang.name if lang else "English"
         flags = _affix_flags(name, len(raw_values))
         for raw, positional_affix in zip(raw_values, flags):
+            # A part may name its OWN language -- `{{af|en|la:obvius|-ous}}`
+            # means Latin `obvius`. Without this the term was stored verbatim,
+            # so the component could never resolve and `obvious` dead-ended.
+            part_code, raw = split_language_prefix(raw, langs.get)
             term, gloss = clean_term(raw)
             if not term or term in _PLACEHOLDER_TERMS:
                 continue
             if any(p.term == term for p in parts):
                 continue
+            part_lang = langs.get(part_code) if part_code else None
             # A hyphen is Wiktionary's own affix marking and is trusted
             # wherever position says nothing.
             is_affix = positional_affix or term != term.strip("-")
-            parts.append(TNode(lang_name, term, "formed_from", note=gloss,
+            parts.append(TNode(part_lang.name if part_lang else lang_name,
+                               term, "formed_from", note=gloss,
                                is_affix=is_affix))
     return parts
 
