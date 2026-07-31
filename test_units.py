@@ -139,6 +139,29 @@ eq("contractions: you'll", _expand_contractions("you'll"), "you will")
 check("possessive 's is deliberately NOT expanded",
       "'s" in _expand_contractions("the dog's bone"))
 
+# TYPOGRAPHIC APOSTROPHES. Word, Google Docs, iOS and most of the web emit
+# U+2019, not the ASCII quote, so this is what a real paste actually contains.
+# Found 2026-07-30 by a corpus scan: 6 of the 35 real gaps were contraction
+# fragments (wouldn/didn/doesn/couldn/hadn/wasn). Worse than Unknown, and the
+# exact shape of known issue #9 (`don't` -> `don`): the fragment can be a real
+# but unrelated word, so `don’t` silently read as the verb "to don clothing",
+# `won’t` as the past tense of win, and `can’t` as the container.
+_CURLY = chr(8217)
+eq("curly apostrophe: don’t is do + not, not the verb 'don'",
+   tokenize("don" + _CURLY + "t"), ["do", "not"])
+eq("curly apostrophe: won’t is will + not, not the past tense of win",
+   tokenize("won" + _CURLY + "t"), ["will", "not"])
+eq("curly apostrophe: can’t keeps its n",
+   tokenize("can" + _CURLY + "t"), ["can", "not"])
+eq("curly apostrophe: couldn’t",
+   tokenize("couldn" + _CURLY + "t"), ["could", "not"])
+eq("curly apostrophe: you’ll",
+   tokenize("you" + _CURLY + "ll"), ["you", "will"])
+eq("modifier-letter apostrophe works too",
+   tokenize("don" + chr(700) + "t"), ["do", "not"])
+check("a curly possessive is still left alone, same as the ASCII one",
+      "s" not in tokenize("the dog" + _CURLY + "s bone")[1:2])
+
 eq("tokenize lowercases and strips punctuation",
    tokenize("The Quick, brown fox!"), ["the", "quick", "brown", "fox"])
 check("tokenize drops single characters (the 'll'/'t' clitic problem)",

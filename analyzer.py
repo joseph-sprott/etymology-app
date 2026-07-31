@@ -76,7 +76,26 @@ _IRREGULAR_CONTRACTIONS = {
 }
 
 
+# Apostrophes that are not the ASCII one. Word, Google Docs, iOS and most of
+# the web emit U+2019, so this is what a real paste actually contains -- and
+# every contraction rule below is written against "'". Found 2026-07-30 by a
+# corpus scan, where 6 of 35 remaining gaps were contraction fragments.
+#
+# Silent WRONG answers, not just Unknown -- the same shape as known issue #9
+# (`don't` splitting to `don`): the leftover fragment can be a real but
+# unrelated word, so `don’t` read as the verb "to don clothing", `won’t` as
+# the past tense of `win`, and `can’t` as the container.
+_APOSTROPHES = {
+    "’": "'",   # right single quotation mark -- the standard smart quote
+    "ʼ": "'",   # modifier letter apostrophe
+    "＇": "'",   # fullwidth apostrophe
+    "‘": "'",   # left single quote, used as an apostrophe in sloppy text
+}
+_APOSTROPHE_RE = re.compile("[" + "".join(_APOSTROPHES) + "]")
+
+
 def _expand_contractions(text: str) -> str:
+    text = _APOSTROPHE_RE.sub("'", text)
     for full, expansion in _IRREGULAR_CONTRACTIONS.items():
         text = re.sub(r"\b" + re.escape(full) + r"\b", expansion, text)
     # Regular "n't" negations: isn't -> is not, doesn't -> does not, etc.
