@@ -144,19 +144,27 @@ separate bugs during the 2026-07-26 rework were the same lowercase-key
 collision between a common word and a capitalised homograph -- each one only
 became visible because the previous one was in the panel.
 
-## 6. Always add the matching tree entry -- never skip this
+## 6. The tree entry is no longer needed (changed 2026-07-31)
 
-**Only needed for a legacy `corrections.py` fix.** If the word's answer comes
-from `etymology.db` (the normal case now -- check the `resolved to:` line in
-step 1), the tree and the analyzer read the SAME rows through
-`etymology_db.py` and cannot disagree; there is nothing to mirror. The rest of
-this section applies to the legacy file-backed path.
+**Do NOT hand-write a `tree_corrections.py` twin. It is redundant.**
 
-This project has an explicit, repeatedly-stated rule: every feature that
-surfaces word-level data must show the same answer. A `corrections.py`-only
-fix is not a complete fix -- the Etymology Tree feature reads a SEPARATE
-file (`etymology_trees.json`) and will keep showing the old/wrong data until
-`tree_corrections.py` also has a matching entry:
+This step used to be mandatory: `resolve_tree()` consulted its stored trees
+before the resolver, so a `corrections.py`-only fix left the Word Search
+showing the old answer until someone mirrored it by hand. Two tables for one
+fact, and they had already drifted -- six corrected words rendered a tree
+contradicting their own correction, `calypso` going so far as to render
+Calypso the Greek NYMPH, the exact collision its correction overrules.
+
+`word_trees._honour_correction` now replaces a stored tree only where it
+CONTRADICTS the correction, so the analyzer and the tree cannot disagree and
+nothing needs mirroring. A test asserts the whole 92-entry table, so a future
+change cannot silently reintroduce the drift. Issue #16 is closed.
+
+`tree_corrections.py`'s 15 remaining entries are all already in
+`corrections.py`; it survives only because `build_etymology_trees.py` still
+bakes it in, and both go when the legacy stack does.
+
+The shape below is kept for reading existing entries, NOT for adding new ones:
 
 ```python
 "word": [

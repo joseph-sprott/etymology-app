@@ -80,9 +80,32 @@ class FakeResolver:
 ```
 
 If a new function can only be tested by loading 100MB of JSON, take the
-dependency as a parameter instead. Both existing test files use plain
-assertions and a `check(label, condition)` helper — there is no pytest in this
-project and none is wanted.
+dependency as a parameter instead.
+
+**TWO test systems now, deliberately (changed 2026-07-31 at Joe's
+instruction). Know which one you are writing for:**
+
+- **`tests/` — pytest.** Where NEW work goes. Run `python -m pytest tests/ -q`.
+  Joe asked for strict red/green/refactor cycles here: write the failing test,
+  watch it fail for the right reason, write the minimum code to pass, then
+  clean up.
+- **`test_units.py` / `test_regression.py` / `test_etymology_db.py` — the
+  legacy suites**, plain assertions with a `check(label, condition)` helper.
+  Still authoritative, still run by `scripts/verify.py`. Add to these when
+  extending a check that already lives there.
+
+They are kept apart on purpose: the three root-level suites RUN ON IMPORT --
+they are scripts, not collectable test functions -- so pytest discovering them
+would execute the whole legacy suite as a collection side effect. That is why
+pytest is pointed at `tests/` by path and `tests/conftest.py` only does import
+plumbing.
+
+**`tests/test_golden_master.py` is the safety net for any refactor.** It pins
+99 words across all three modes plus their Word Search tree -- 216 assertions
+that answers do not CHANGE, not that they are correct. Run it before and after
+restructuring anything. When a change is intended, regenerate deliberately
+with `python tests/test_golden_master.py --update` and say in the commit
+message which answers moved and why.
 
 ## What a good assertion looks like here
 
