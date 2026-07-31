@@ -441,6 +441,23 @@ class Db:
                 best_line, best_rank = sub, rank
         return best_line
 
+    # TRIED AND REVERTED 2026-07-31: looking an AFFIX component up by its
+    # hyphenated dictionary spelling (`phono` -> `phono-`, `graph` -> `-graph`)
+    # so its own etymology could be followed. It fixed `phonograph` and
+    # `seismograph`, which read Unknown because the Ancient Greek sits on the
+    # hyphenated entry -- and broke two things that matter more:
+    #
+    #   lithology  Unknown -> French.  It is litho- + -ology, GREEK. `-ology`
+    #     reached English via French, so following the suffix returns the
+    #     SUFFIX's route rather than the word's. A suffix's own history is not
+    #     the word's history, which is the flaw in the whole idea.
+    #   movie      Unknown -> Germanic on the database alone, regressing
+    #     issue #22's guard -- the evidence-free native claim this project has
+    #     now fixed twice.
+    #
+    # Two words gained, two lost including a guard. Not worth it, and recorded
+    # here so the next person does not re-derive it.
+
     # ------------------------------------------------------------- facts
     def senses(self, word_id: int, limit: int = 8) -> List[sqlite3.Row]:
         return self._db.execute(

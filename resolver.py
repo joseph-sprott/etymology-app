@@ -948,8 +948,33 @@ class DbResolver(Resolver):
         line = self._db.lineage(entry)
         foreign = self._donor_nodes(line)
         if not foreign:
+            root = self._root_citation(entry) if prox_kind == "root" else None
+            if root is not None:
+                return self._donor_answer(word, [root], prox_kind, found)
             return self._native_answer(word, line, found)
         return self._donor_answer(word, foreign, prox_kind, found)
+
+    def _root_citation(self, entry):
+        """
+        The root a bare-stub word cites, for Deepest Root to name.
+
+        Issue #14's design has two halves and this backend only had one. A
+        word whose entire recorded ancestry is a `has_root` pointer must
+        report Unknown for Direct Source and Notable Influence -- no English
+        word borrows straight from a proto-language -- but the citation
+        itself is real, verified data, so Deepest Root still shows it.
+        `Resolution.view` already draws that line off `prox_kind == "root"`;
+        it just needs the node.
+
+        Without this the whole word was a MISS in every mode, and the PIE
+        citation for `narrate`, `cute` and `semi` was arriving from the legacy
+        file-backed backends -- another fallback covering a gap here rather
+        than one in the data.
+        """
+        if entry.primary is None:
+            return None
+        return next((n for n in entry.primary.head.children
+                     if n.rel == "root" and n.lang), None)
 
 
 # Owned by `linguistics` -- `app.py` had grown its own, differently-worded
@@ -1294,32 +1319,44 @@ def default_resolver() -> Resolver:
     """
     The single place that decides the resolver stack.
 
-    DbResolver (etymology.db) is tried first when the database is present:
-    it is the only backend the Word Search also reads, so any word it answers
-    is answered identically in both features -- which is the whole point of
-    the 2026-07-25 rework. The older file-backed backends stay BELOW it as
-    gap-fillers, because ~151 words per 150,000 exist in etymology-db or
-    Etymological Wordnet but not in the wiktextract dump. They can only add
-    coverage where the database has none; they can never override it.
+    ONE BACKEND, as of 2026-07-31. `etymology.db` answers, `corrections.py`
+    overrules it where a human has verified otherwise, and that is the whole
+    stack.
 
-    Set ETYMOLOGY_DB=0 in the environment to drop back to the old stack.
+    Three file-backed backends used to sit below the database as gap-fillers:
+    `WiktextractResolver`, `WiktionaryResolver` and `EtyResolver`. They were
+    removed after measuring what they actually contributed, repeatedly, as
+    each measurement kept shrinking:
 
-    Each stage degrades gracefully if its data file isn't present.
+        22 words -> 12 -> 8 -> 4 -> 3
+
+    on the 347-paragraph corpus. Every time a word looked like it would be
+    lost, the cause turned out to be a DATABASE bug rather than missing data:
+    `lose` and `start` needed `derived` to count as native descent, `obvious`
+    needed `la:obvius` parsed as Latin, `chuckled` and `hikers` needed a
+    natively-descended component to count. The fallbacks were MASKING those
+    defects, not filling gaps -- and two of them (`chuckled` read French,
+    `fondling` read Latin, both Germanic) were masking with wrong answers.
+
+    What that removes, beyond the three classes: ~1,100 lines across
+    `convert_wikt.py` / `convert_wiktextract.py` / `fetch_reconstructions.py`,
+    78MB of tracked JSON, an entire class of bug (every "the wrong backend
+    won" defect -- `went`/`Went`, `ran`/`Ran`, `taxicab`, `outdoors`), and the
+    `setuptools==70.0.0` pin, which existed solely because `ety` needs
+    `pkg_resources`.
+
+    It also matters for where this is going: the planned Java/Spring backend
+    ports one SQLite database trivially and would port a pip package and three
+    bespoke JSON files with difficulty.
+
+    The three words genuinely lost are recorded in `corrections.py` beside
+    `dependant`, which was added rather than lost: `grumpy` and `mall` are
+    honestly Unknown, and `cautious` awaits the parenthetical-term parse.
     """
-    backends: List[Resolver] = []
     here = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(here, "etymology.db")
-    if os.path.exists(db_path) and os.environ.get("ETYMOLOGY_DB") != "0":
-        try:
-            backends.append(DbResolver())
-        except Exception as exc:      # a half-built db must not break the app
-            print(f"DbResolver unavailable ({exc}); using file backends",
-                  file=sys.stderr)
-    wiktextract_path = os.path.join(here, "wiktextract_words.json")
-    if os.path.exists(wiktextract_path):
-        backends.append(WiktextractResolver(wiktextract_path))
-    wikt_path = os.path.join(here, "wikt_words.json")
-    if os.path.exists(wikt_path):
-        backends.append(WiktionaryResolver(wikt_path))
-    backends.append(EtyResolver())
-    return ChainResolver(backends)
+    if not os.path.exists(db_path):
+        raise SystemExit(
+            f"etymology.db not found at {db_path}.\n"
+            "  -> build it with: powershell -File scripts\\build.ps1")
+    return ChainResolver([DbResolver()])

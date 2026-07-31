@@ -5674,21 +5674,21 @@
  "phonograph": {
   "direct": {
    "bucket": "Greek",
-   "depth_lang": "Ancient Greek (to 1453)",
+   "depth_lang": "Greek",
    "parts": [],
    "resolved": true,
    "specific_lang": null
   },
   "influence": {
    "bucket": "Greek",
-   "depth_lang": "Ancient Greek (to 1453)",
+   "depth_lang": "Greek",
    "parts": [],
    "resolved": true,
    "specific_lang": null
   },
   "root": {
    "bucket": "Greek",
-   "depth_lang": "Ancient Greek (to 1453)",
+   "depth_lang": "Ancient Greek",
    "parts": [],
    "resolved": true,
    "specific_lang": null
@@ -5696,25 +5696,15 @@
   "tree": {
    "branches": [
     {
-     "branches": [],
-     "lang": "English",
-     "term": "phono"
-    },
-    {
      "branches": [
       {
        "branches": [],
-       "lang": "English",
-       "term": "graphic formula"
-      },
-      {
-       "branches": [],
-       "lang": "Proto-Indo-European",
-       "term": "*gerbʰ-"
+       "lang": "Ancient Greek",
+       "term": "φωνή"
       }
      ],
-     "lang": "English",
-     "term": "graph"
+     "lang": "Greek",
+     "term": null
     }
    ],
    "lang": "English",

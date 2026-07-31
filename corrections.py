@@ -430,6 +430,42 @@ WORD_CORRECTIONS = {
     "photograph": {"p": "Greek", "d": "Greek", "chain": ["Greek"], "prox_kind": "derived",
                    "root_lang": "Ancient Greek", "root_term": "γράφω", "root_pie": False},
 
+    # "phonograph"/"seismograph": the same shape as `photograph` above, and
+    # kept beside it. Recorded as English `phono` + `graph`, both marked
+    # affixes, with no foreign edge -- so the word has no chain at all. The
+    # Greek IS in the database, on the HYPHENATED entries (`phono-` derives
+    # from Ancient Greek φωνή, `-graph` from -γράφος), but the components are
+    # written without hyphens and the lookup misses.
+    # Following the hyphenated spelling was TRIED and REVERTED 2026-07-31 --
+    # see `etymology_db._deepest_part_line`: it made `lithology` French (it is
+    # Greek; `-ology` merely reached English via French) and regressed
+    # `movie` to a native claim. A suffix's own history is not the word's.
+    # So these are hand entries until the builder records the parts with the
+    # spelling their entries actually use. Verified: both are Ancient Greek
+    # combining forms.
+    "phonograph": {"p": "Greek", "d": "Greek", "chain": ["Greek"], "prox_kind": "derived",
+                   "root_lang": "Ancient Greek", "root_term": "φωνή", "root_pie": False},
+    "seismograph": {"p": "Greek", "d": "Greek", "chain": ["Greek"], "prox_kind": "derived",
+                    "root_lang": "Ancient Greek", "root_term": "σεισμός", "root_pie": False},
+
+    # "dependant": absent from etymology.db entirely -- it is the British noun
+    # spelling of "dependent", and only the -ent form got an entry. Added
+    # 2026-07-31 so collapsing the backend cascade costs nothing here.
+    # Live Wiktionary for "dependent": "From Middle English dependaunt,
+    # dependent, from Middle French dependant (present participle of dependre)
+    # and Latin dependens." So French, deepest Latin.
+    #
+    # Two words that were ALSO lost by the collapse are deliberately NOT here:
+    #   `grumpy` -- `grump` has no recorded ancestry at all, so the legacy
+    #     backend's "Germanic" is an evidence-free native claim, the exact
+    #     shape issue #22 and this week's `derived`-edge work removed. Unknown
+    #     is the honest answer.
+    #   `mall` -- Wiktionary says "PROBABLY from The Mall", a hedge on the
+    #     derivation itself. Asserting French from a hedge is guessing (rule 2).
+    "dependant": {"p": "French", "d": "Latin", "chain": ["French", "Latin"],
+                  "prox_kind": "derived", "root_lang": "Latin",
+                  "root_term": "dēpendeō", "root_pie": False},
+
     # "incident": bare has_root PIE stub in the raw data (issue #14 shape).
     # Live Wiktionary: "from Middle French incident, from Latin incidens...
     # from in- + -cido, the combining form of cado ('to fall')," explicitly
