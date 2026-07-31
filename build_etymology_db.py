@@ -238,9 +238,9 @@ def insert_tree(db, ety_id, head_node, lang_ids, src_id, unknown_langs):
             lang_ids[lang_name] = lid
         cur = db.execute(
             "INSERT INTO ety_node (ety_id, lang_id, term, is_head, is_root,"
-            " source_id) VALUES (?,?,?,?,?,?)",
+            " is_affix, source_id) VALUES (?,?,?,?,?,?,?)",
             (ety_id, lid, n.term, int(n.rel == "head"), int(n.rel == "root"),
-             src_id))
+             int(getattr(n, "is_affix", False)), src_id))
         return cur.lastrowid
 
     head_id = node_row(head_node)
@@ -561,11 +561,12 @@ def cache_trees(db):
     rebuildable from ety_node/ety_edge, never the source of truth.
     """
     nodes_by_ety = defaultdict(dict)
-    for ety_id, nid, lang, term, is_head, is_root in db.execute(
-        "SELECT n.ety_id, n.node_id, l.name, n.term, n.is_head, n.is_root"
-        " FROM ety_node n JOIN language l ON l.lang_id=n.lang_id"):
+    for ety_id, nid, lang, term, is_head, is_root, is_affix in db.execute(
+        "SELECT n.ety_id, n.node_id, l.name, n.term, n.is_head, n.is_root,"
+        " n.is_affix FROM ety_node n JOIN language l ON l.lang_id=n.lang_id"):
         nodes_by_ety[ety_id][nid] = {"lang": lang, "term": term,
                                       "is_head": is_head, "is_root": is_root,
+                                      "is_affix": is_affix,
                                       "children": []}
     edges_by_ety = defaultdict(list)
     for ety_id, parent, child, rel, certainty, ordinal in db.execute(
@@ -712,6 +713,21 @@ def main():
             print(f"    {name}")
         if len(unknown) > 20:
             print(f"    ... and {len(unknown) - 20} more")
+
+    # An EMPTY build passes every validator vacuously -- no floating nodes, no
+    # hollow words, nothing at all -- and then swaps a zero-word database over
+    # the working one. That happened 2026-07-30: `build.ps1 -Words a,b,c` sent
+    # the builder one comma-joined string, nothing matched, and the live
+    # database was replaced with 0 words while the run reported PASS.
+    # A word count is the one thing a real build always has.
+    built_words = db.execute("SELECT COUNT(*) FROM word").fetchone()[0]
+    if not built_words:
+        db.close()
+        print(f"\n  built 0 words -- refusing to swap over {final}.",
+              file=sys.stderr)
+        print("  (a --words/--sample filter that matched nothing does this)",
+              file=sys.stderr)
+        sys.exit(1)
 
     problems = validate(db)
     print("\n  === validators ===")

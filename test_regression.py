@@ -284,6 +284,36 @@ for word in ["craftsman", "businesswoman", "basketball", "mountainside"]:
     check(f"{word} still splits into component words", bool(view.parts))
 
 print()
+print("=== Prefixes are affixes too (issue #19 closed at build time, 2026-07-30) ===")
+# `_BOUND_SUFFIXES` only ever covered FINAL-position endings, so ~92,000
+# {{prefix}} templates were never handled: `rewrite` was counted half Latin
+# through `re` and `disagree` half Norse through `dis`. `ety_node.is_affix`
+# now carries Wiktionary's own positional statement, so these stop splitting.
+for word in ["unhappy", "undo", "rewrite", "disagree", "preview"]:
+    view = RESOLVER.resolve(word).view("direct")
+    parts = [p.word for p in (view.parts or [])]
+    check(f"{word} is one word, not prefix + stem (got {parts})", not view.parts)
+
+# A `+` in a template's first argument is a DIRECTIVE, not a language code
+# (`{{surf|+deverbal|en|let}}`), and reading it positionally made the language
+# code itself a component: `late` displayed as "en + let" (Joe, 2026-07-30).
+# Word Search was right while the analyzer was wrong, because the two derive
+# components separately -- issue #16 (one shared source) in miniature.
+for word in ["late", "biology"]:
+    view = RESOLVER.resolve(word).view("direct")
+    parts = [p.word for p in (view.parts or [])]
+    check(f"{word}: no part is a bare language code (got {parts})",
+          not any(p in ("en", "grc", "la", "enm", "ang") for p in parts))
+
+# A hand-verified split may override the affix filter ONLY where the word
+# genuinely has a formation. `muskrat` does not: it is borrowed from Algonquian
+# and "musk + rat" is folk etymology, so the table must not beat a real donor.
+check("muskrat stays Algonquian rather than being split by compounds.py",
+      RESOLVER.resolve("muskrat").view("direct").bucket == "Indigenous American")
+check("overactive DOES take its hand-verified split (a real formation)",
+      bool(RESOLVER.resolve("overactive").view("direct").parts))
+
+print()
 print("=== Deepest Root must not credit a borrower with PIE descent (2026-07-25) ===")
 # Joe: "mile results as having a PIE root when I can't find one on wiktionary."
 # The PIE root turned out to be real (Wiktionary tags it via a root template,

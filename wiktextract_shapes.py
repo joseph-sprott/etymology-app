@@ -95,6 +95,11 @@ class TNode:
     rel: str                      # inherited|borrowed|derived|calque|root|formed_from
     certainty: str = "direct"     # direct -> solid edge, related -> dotted
     note: Optional[str] = None
+    # A bound morpheme (`-ness`, `un-`), not a word. Set from the TEMPLATE, so
+    # the affix/component distinction survives the build -- see
+    # `_AFFIX_POSITIONS` and known issue #19 (word endings counted as
+    # component words).
+    is_affix: bool = False
     children: List["TNode"] = field(default_factory=list)
 
     def walk(self):
@@ -300,34 +305,88 @@ def chain_to_nodes(steps: List[Step]) -> Optional[TNode]:
 
 # --- shape B: formation fork ----------------------------------------------
 
+# Which POSITIONS a template asserts are bound morphemes rather than words.
+# `{{suffix|en|dark|ness}}` -- arg 2 is the base, arg 3 the ending; `{{prefix}}`
+# is the mirror; `{{confix|en|geo|logy}}` is affixed at both ends.
+#
+# Position is the only signal that scales. Measured over the dump: 92,998
+# `suffix` templates but only 1,929 with an explicit hyphen, and 92,477
+# `prefix` with 781 -- so ~98% of affixes are unhyphenated and invisible to a
+# spelling test. This is what known issue #19 (word endings counted as
+# component words) was reduced to guessing at.
+#
+# `af`/`affix`/`surf`/`univ` are deliberately absent: they promise nothing
+# about position, so their parts are judged by the explicit hyphen alone
+# rather than guessed at (rule 2).
+_AFFIX_FIRST = {"prefix", "pre"}
+_AFFIX_REST = {"suffix", "suf"}
+_AFFIX_BOTH_ENDS = {"confix"}
+
+
+def _affix_flags(name: str, count: int) -> List[bool]:
+    """Which of a template's `count` parts are bound morphemes, by position."""
+    if name in _AFFIX_FIRST:
+        return [i == 0 for i in range(count)]
+    if name in _AFFIX_REST:
+        return [i > 0 for i in range(count)]
+    if name in _AFFIX_BOTH_ENDS:
+        return [i in (0, count - 1) for i in range(count)]
+    return [False] * count
+
+
+def _language_and_parts(args: dict) -> tuple:
+    """
+    Split a formation template's args into (language code, part values).
+
+    Arg 1 is normally the language code, but a `+` prefix marks a DIRECTIVE
+    (`{{surf|+deverbal|en|let}}`, `{{surf|+af|en|bio-|-logy}}`) which pushes
+    the language into arg 2 and the parts into arg 3+. Read positionally, that
+    emitted the language code itself as a component: `late` resolved as
+    "en" + "let", and `biology` carried a part called "en".
+    """
+    keys = sorted((k for k in args if k.isdigit()), key=int)
+    values = [args.get(k) for k in keys]
+    if values and (values[0] or "").strip().startswith("+"):
+        values = values[1:]
+    code = (values[0] or "en").strip() if values else "en"
+    return code, values[1:]
+
+
 def formation_parts(templates: List[dict], langs: LangIndex) -> List[TNode]:
     """
     Component words/morphemes a word was BUILT from, as sibling parents.
 
-    Fork-shaped entries outnumber chain-shaped ones roughly 2:1. Argument 1 is
-    the language the parts are in; args 2,3,4... are the parts themselves.
+    Fork-shaped entries outnumber chain-shaped ones roughly 2:1.
 
-    That language argument is honoured rather than assumed to be English: the
+    Each part is tagged `is_affix` from the template's own shape, so the
+    `suffix`-vs-`compound` distinction reaches the database instead of being
+    reconstructed by a curated list at lookup time (known issue #19 -- word
+    endings counted as component words).
+
+    The language argument is honoured rather than assumed to be English: the
     parts of `portmanteau` are Middle French `porte` + `manteau`, and calling
     them English states something false about both.
     """
     parts: List[TNode] = []
     for t in templates:
-        if t.get("name") not in FORMATION_TEMPLATES:
+        name = t.get("name")
+        if name not in FORMATION_TEMPLATES:
             continue
-        args = t.get("args") or {}
-        code = (args.get("1") or "en").strip()
+        code, raw_values = _language_and_parts(t.get("args") or {})
         lang = langs.get(code)
         lang_name = lang.name if lang else "English"
-        for key in sorted((k for k in args if k.isdigit()), key=int):
-            if key == "1":
-                continue
-            term, gloss = clean_term(args.get(key))
+        flags = _affix_flags(name, len(raw_values))
+        for raw, positional_affix in zip(raw_values, flags):
+            term, gloss = clean_term(raw)
             if not term or term in _PLACEHOLDER_TERMS:
                 continue
             if any(p.term == term for p in parts):
                 continue
-            parts.append(TNode(lang_name, term, "formed_from", note=gloss))
+            # A hyphen is Wiktionary's own affix marking and is trusted
+            # wherever position says nothing.
+            is_affix = positional_affix or term != term.strip("-")
+            parts.append(TNode(lang_name, term, "formed_from", note=gloss,
+                               is_affix=is_affix))
     return parts
 
 

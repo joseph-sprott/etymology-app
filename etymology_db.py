@@ -81,6 +81,20 @@ DONOR_RELS = frozenset({"inherited", "borrowed", "derived", "formed_from"})
 _is_affix = linguistics.is_affix
 
 
+def _is_bound(node: "Node") -> bool:
+    """
+    Is this formation part a morpheme rather than a word?
+
+    ONE definition, used by every consumer. The database column is the real
+    answer (Wiktionary's own `suffix`/`prefix`/`confix` template, recorded at
+    build time); the spelling test still runs so a database built before the
+    column existed keeps behaving as it did. Two call sites independently
+    re-deriving this is the shape of issue #16 -- every feature must read from
+    one shared source.
+    """
+    return bool(node.is_affix) or _is_affix(node.term)
+
+
 @dataclass(frozen=True)
 class Node:
     """One step in a word's history. `children` are its ANCESTORS."""
@@ -89,7 +103,12 @@ class Node:
     rel: str                      # head|inherited|borrowed|derived|calque|root|formed_from
     certainty: str                # direct | related
     is_root: bool
-    children: Tuple["Node", ...]
+    # A bound morpheme (`-ness`, `un-`) rather than a word, recorded from
+    # Wiktionary's own template at BUILD time. Governs weight splitting and
+    # component display only -- never ancestry, since `geology`'s Greek
+    # genuinely arrives through `geo-`/`-logy` (issue #22's lesson).
+    is_affix: bool = False
+    children: Tuple["Node", ...] = ()
 
     @property
     def is_direct(self) -> bool:
@@ -206,6 +225,7 @@ def _node(raw: dict) -> Node:
         rel=raw.get("rel", "head"),
         certainty=raw.get("certainty", DIRECT),
         is_root=bool(raw.get("is_root")),
+        is_affix=bool(raw.get("is_affix")),
         children=tuple(_node(c) for c in raw.get("children", ())),
     )
 
@@ -374,7 +394,10 @@ class Db:
 
         parts = [c for c in entry.primary.head.children
                  if c.rel == "formed_from" and c.term]
-        candidates = [p for p in parts if not _is_affix(p.term)] or parts
+        # `or parts`: a word made ONLY of affixes still has to answer. `geology`
+        # is geo- + -logy and both are bound, so falling back to them is what
+        # lets it reach Greek instead of going Unknown.
+        candidates = [p for p in parts if not _is_bound(p)] or parts
         best_line: List[Node] = []
         for part in candidates:
             sub = self._lineage(self.entry(part.term), depth - 1, seen)

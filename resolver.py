@@ -179,6 +179,14 @@ class Resolution:
     # that's itself a compound has its own parts spliced in directly, so a
     # 3-part word like "outdoorsman" shows 3 flat parts, not a nested tree).
     compound_parts: Optional[List["Resolution"]] = None
+    # True when this word HAS a recorded formation but the affix filter left
+    # fewer than two real components, so it shows no split. Lets a
+    # hand-verified `compounds.py` entry override for `overactive` (genuinely
+    # over- + active) without overriding `muskrat`, which has no formation at
+    # all -- it is borrowed from Algonquian and "musk + rat" is folk
+    # etymology. Added 2026-07-30 with `ety_node.is_affix` (issue #19 -- word
+    # endings counted as component words).
+    affix_collapsed: bool = False
     # Set when this Resolution came from WiktionaryResolver's lowercase-miss
     # case-fallback (word.capitalize() or original-case, not a genuine exact-
     # case hit). Added 2026-07-24 (Joe: "ran" resolved as an unrelated
@@ -604,17 +612,13 @@ class WiktextractResolver(Resolver):
                            root_term=e.get("root_term"))
 
 
-# Derivational suffixes the wiktextract dump records WITHOUT their hyphen, so
-# they arrive looking like ordinary component words. Taken from the 30 most
-# common hyphen-less final formation parts in `etymology.db` (a real frequency
-# scan, not recall), keeping only those that are never a free-standing word in
-# a compound. `man`/`ship`/`head`/`like` appear in that scan too and are
-# deliberately absent -- see `DbResolver._is_bound_affix` for why.
-_BOUND_SUFFIXES = frozenset("""
-    er ly ize ise ist ic ism ity ive ous ness less able ible ally al ful
-    ment ation ization ite ess ee eth est ed ing ish y age ant ent ance ence
-    ory ary ion ian ify ial
-""".split())
+# `_BOUND_SUFFIXES` -- a curated list of 40 hyphen-less endings -- lived here
+# until 2026-07-30. It existed only because the builder collapsed
+# {{suffix}} and {{compound}} into one relation, so the affix/component
+# distinction had to be guessed from spelling at lookup time (known issue #19).
+# `ety_node.is_affix` now carries Wiktionary's own answer, which also covers
+# the ~92,000 PREFIX templates the list could never reach, so it is deleted
+# rather than extended.
 
 
 class DbResolver(Resolver):
@@ -651,7 +655,7 @@ class DbResolver(Resolver):
     def resolve(self, word: str) -> Resolution:
         return self._resolve(word, 0)
 
-    def _is_bound_affix(self, term: str, is_last: bool = False) -> bool:
+    def _is_bound_affix(self, node) -> bool:
         """
         Is this formation part a bound morpheme (`-ness`) rather than a word?
 
@@ -662,59 +666,50 @@ class DbResolver(Resolver):
         that unrelated word's bucket. `beautiful` lost half its weight to
         `ful`, which resolves to nothing at all.
 
-        Two signals, no guessing:
-          1. Wiktionary's own convention: a leading or trailing hyphen marks
-             a bound affix. Covers `-ness`/`-ly`/`a-`.
-          2. The dump drops that hyphen inconsistently -- `beautiful` records
-             `ful`, `government` records `ment`. `_BOUND_SUFFIXES` names those
-             hyphen-less spellings, and only in FINAL position.
+        Wiktionary's own template is the answer, recorded at build time as
+        `ety_node.is_affix` (known issue #19 -- word endings counted as
+        component words). `{{suffix|en|dark|ness}}` states that `ness` is an
+        ending; that it is ALSO a word (a headland) is a coincidence this no
+        longer has to reason about.
 
-        Two weaker rules were tried against the 742-entry `compounds.py` table
-        first and rejected by measurement, not by taste:
+        This replaced `_BOUND_SUFFIXES`, a curated list of 40 hyphen-less
+        endings. Two weaker spelling rules were tried against the 742-entry
+        `compounds.py` table before that list and rejected by measurement:
+        "`-term` exists as an entry, any position" cost 263 splits (`up-`,
+        `back-`, `over-` are real prefixes AND real first components), and the
+        same test in final position only still cost 134 (Wiktionary carries
+        `-ball`, `-woman`, `-work`, `-man` suffix entries). No spelling test
+        could work, because ~98% of affixes reach us WITHOUT their hyphen --
+        and the list never covered prefixes at all, so `rewrite` was counted
+        half-Latin via `re`.
 
-          "`-term` exists as an entry, any position" cost 263 splits -- `up-`,
-          `back-`, `over-` and `after-` are real prefixes AND real first
-          components, so `upside`/`backdrop`/`background` broke.
-
-          The same test in final position only still cost 134, because
-          Wiktionary also carries `-ball`, `-woman`, `-work` and `-man`
-          suffix entries; `basketball` and `businesswoman` are not affixed
-          forms. Existence of a hyphenated entry simply does not separate the
-          two cases.
-
-        So `_BOUND_SUFFIXES` is a curated list, taken from the 30 most common
-        hyphen-less final parts in the database rather than from memory. The
-        genuinely ambiguous members of that list -- `man`, `ship`, `head`,
-        `like` -- are deliberately LEFT OUT and still count as components:
-        they are real words in real compounds (`craftsman`, `friendship`), and
-        the cost of treating the suffix sense as a component is one Germanic
-        half counted under Germanic, whereas dropping them would cost real
-        splits. The template name that would settle every case (`suffix` vs
-        `compound`) is collapsed to `formed_from` at build time and is not in
-        the database -- recovering it is a build-time change, not a lookup one.
+        The one surviving spelling rule is Joe's call (2026-07-30): an
+        EXPLICITLY hyphenated part whose bare form is a real word stays a
+        component, so `craftsman` still reads crafts + man and the 742
+        hand-verified splits are untouched. Position-derived affixes get no
+        such escape -- the template asserted the role outright.
 
         The whole word keeps its own answer either way: `parts` is display and
         weight-splitting only, and `lineage()` still walks the formation to
         build the chain, so dropping a part costs richness, never coverage.
         """
+        term = node.term or ""
         bare = term.strip("-")
         if not bare:
             return True
-        if is_last and bare in _BOUND_SUFFIXES:
-            return True
-        # A hyphen says Wiktionary FORMATTED this as an affix, which is not the
-        # same as saying it isn't a word: `craftsman` is recorded `crafts` +
-        # `-man`, and `-ware`/`-parent`/`-woman` are the same shape. Dropping
-        # every hyphenated part cost 76 hand-verified splits. So a hyphenated
-        # part only fails here when the bare spelling isn't a word either --
-        # `-ful` -> `ful` resolves to nothing, `-man` -> `man` resolves fine.
-        if term != bare:
-            cached = self._affix_cache.get(bare)
-            if cached is None:
-                cached = self._db.entry(bare) is None
-                self._affix_cache[bare] = cached
-            return cached
-        return False
+        # Two statements by Wiktionary, both trusted outright: the template's
+        # position (`ety_node.is_affix`) and the hyphen it printed. Neither is
+        # second-guessed by asking whether the bare spelling happens to be a
+        # word -- `ness` (a headland) and `man` both are, and that coincidence
+        # is exactly what the old curated list existed to paper over.
+        #
+        # Dropping every hyphenated part used to cost 76 hand-verified splits,
+        # which is why an "unless the bare form resolves" escape hatch lived
+        # here. It has moved to where it belongs: `ChainResolver` now lets a
+        # `compounds.py` entry win whenever the database answer has no parts,
+        # so `craftsman` keeps crafts + man by being hand-verified rather than
+        # by a spelling rule that also protected `-ness` and `-ion`.
+        return bool(getattr(node, "is_affix", False)) or term != bare
 
     def _resolve(self, word: str, depth: int) -> Resolution:
         entry = self._db.entry(word)
@@ -750,11 +745,19 @@ class DbResolver(Resolver):
         # 142 real compounds -- `mountainside`, `armchair`, `mindset` all have
         # their components right there as formed_from children.
         parts = None
+        affix_collapsed = False
         if depth == 0 and entry.primary:
-            terms = [c.term for c in entry.primary.head.children
-                     if c.rel == "formed_from" and c.term]
-            terms = [t for i, t in enumerate(terms)
-                     if not self._is_bound_affix(t, is_last=(i == len(terms) - 1))]
+            children = [c for c in entry.primary.head.children
+                        if c.rel == "formed_from" and c.term]
+            terms = [c.term for c in children if not self._is_bound_affix(c)]
+            # Did the affix filter -- not the source data -- take this word's
+            # split away? `overactive` really is recorded over- + active, so
+            # dropping the prefix leaves one part and no split at all. That is
+            # the only case where a hand-verified `compounds.py` entry should
+            # override, and `ChainResolver` needs to be able to tell it apart
+            # from `muskrat`, which never had a formation to begin with: it is
+            # BORROWED from Algonquian, and "musk + rat" is folk etymology.
+            affix_collapsed = len(children) >= 2 and len(terms) < 2
             if len(terms) >= 2:
                 # Show the chip as the WORD. A surviving part is one whose bare
                 # spelling is a real entry (that is what got it past the affix
@@ -796,12 +799,14 @@ class DbResolver(Resolver):
                 return Resolution(word, [], None, None, self.name,
                                    case_fallback=case_fallback,
                                    inherited_from=inherited,
-                                   compound_parts=parts)
+                                   compound_parts=parts,
+                                   affix_collapsed=affix_collapsed)
             stage = stages[-1].lang if len(stages) > 1 else "English (native core)"
             return Resolution(word, [], "eng", stage, self.name,
                                case_fallback=case_fallback,
                                inherited_from=inherited,
-                               compound_parts=parts)
+                               compound_parts=parts,
+                               affix_collapsed=affix_collapsed)
 
         chain = [ChainLink(bucket_for_name(n.lang), bucket_for_name(n.lang),
                             bucket_for_name(n.lang), specific_lang=n.lang)
@@ -820,7 +825,7 @@ class DbResolver(Resolver):
                            root_lang=root_node.lang, root_pie=root_pie,
                            prox_kind=prox_kind, case_fallback=case_fallback,
                            root_term=root_node.term, inherited_from=inherited,
-                           compound_parts=parts)
+                           compound_parts=parts, affix_collapsed=affix_collapsed)
 
 
 # Owned by `linguistics` -- `app.py` had grown its own, differently-worded
@@ -930,8 +935,19 @@ class ChainResolver(Resolver):
         # edge of their own) -- has_real_chain treats this as real enough to
         # short-circuit past the compound fallback below, even though the
         # word never actually resolves to anything but Unknown on its own.
-        prefer_compound = ((r.inherited_from is not None or r.prox_kind == "root")
-                            and word.lower() in COMPOUND_SPLITS)
+        # Third case added 2026-07-30 with `ety_node.is_affix` (known issue #19
+        # -- word endings counted as component words): Wiktionary genuinely
+        # records `overactive` as over- + active and `classmate` as class +
+        # -mate, so the affix filter now drops one half and the word answers
+        # with NO split at all. That is a correct reading of the source and
+        # still the wrong output, because these are hand-verified two-word
+        # compounds. Joe's call this session: the 742 entries win. So a word in
+        # that table whose database answer carries no parts falls through to
+        # the split below -- it is the exact case the table exists for.
+        prefer_compound = (word.lower() in COMPOUND_SPLITS
+                            and (r.inherited_from is not None
+                                 or r.prox_kind == "root"
+                                 or r.affix_collapsed))
         if has_real_chain and r.prox_kind != "root" and not r.case_fallback and not prefer_compound:
             return r  # a confirmed chain with a real donor edge is trustworthy immediately
         # Either no chain yet, or `r` is a bare has_root STUB (prox_kind ==

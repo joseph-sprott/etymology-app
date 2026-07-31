@@ -145,6 +145,15 @@ CREATE TABLE IF NOT EXISTS ety_node (
   gloss     TEXT,
   is_head   INTEGER NOT NULL DEFAULT 0,
   is_root   INTEGER NOT NULL DEFAULT 0,
+  -- A bound morpheme (`-ness`, `un-`), not a word, per Wiktionary's own
+  -- {{suffix}}/{{prefix}}/{{confix}} template. Kept because the distinction is
+  -- REAL in the dump and used to be collapsed into `formed_from`, which forced
+  -- `resolver.py` to reconstruct it from a curated list of spellings (known
+  -- issue #19 -- word endings counted as component words). ~98% of affixes are
+  -- unhyphenated in the source, so spelling could never have recovered this.
+  -- Governs weight splitting and component display ONLY: `geology` must still
+  -- reach Greek THROUGH `geo-`/`-logy`, so ancestry ignores this flag.
+  is_affix  INTEGER NOT NULL DEFAULT 0,
   source_id INTEGER NOT NULL REFERENCES source(source_id)
 );
 CREATE INDEX IF NOT EXISTS ety_node_ety  ON ety_node(ety_id);

@@ -1015,6 +1015,104 @@ _schema = open("etymology_schema.sql", encoding="utf-8").read()
 check("...and it has to, because the schema does not define those tables",
       "descendant_node" not in _schema)
 
+# ------------------------------------- issue #19: word endings vs real parts
+section("formation_parts -- which pieces are word endings, which are words")
+# The dump says `suffix` vs `compound` and the builder used to throw it away,
+# so `darkness` split into dark + ness and gave half its origin to an
+# unrelated word (a headland). Position is the signal: in {{suffix|en|X|Y}}
+# arg 2 is the base and arg 3 is the ending; {{prefix}} is the mirror.
+import wiktextract_shapes as WS
+
+
+def _tmpl(name, *args, **kw):
+    """A dump template. Args are numbered from 1, as wiktextract stores them."""
+    numbered = {str(i): a for i, a in enumerate(args, start=1)}
+    numbered.update(kw)
+    return {"name": name, "args": numbered}
+
+
+def _parts(*templates):
+    """(term, is_affix) for each part the parser produces."""
+    return [(p.term, p.is_affix)
+            for p in WS.formation_parts(list(templates), _LANGS)]
+
+
+_LANGS = languages.load()
+
+eq("suffix: arg 3 is the ending, arg 2 is the word",
+   _parts(_tmpl("suffix", "en", "dark", "ness")),
+   [("dark", False), ("ness", True)])
+eq("prefix is the mirror image: arg 2 is the prefix",
+   _parts(_tmpl("prefix", "en", "un", "happy")),
+   [("un", True), ("happy", False)])
+eq("the short spellings behave the same (suf/pre)",
+   _parts(_tmpl("suf", "en", "govern", "ment")),
+   [("govern", False), ("ment", True)])
+eq("confix: BOTH ends are affixes -- geology is geo- + -logy",
+   _parts(_tmpl("confix", "en", "geo", "logy")),
+   [("geo", True), ("logy", True)])
+eq("compound: every piece is a real word",
+   _parts(_tmpl("compound", "en", "black", "bird")),
+   [("black", False), ("bird", False)])
+eq("blend: also real words (clavichord + clarinet)",
+   _parts(_tmpl("blend", "en", "clavichord", "clarinet")),
+   [("clavichord", False), ("clarinet", False)])
+
+# `af`/`affix`/`surf` carry no positional promise -- the role is only knowable
+# from an explicit hyphen, so an unhyphenated part stays a component. Not
+# guessing is the point (rule 2).
+eq("af: an explicit hyphen marks the affix",
+   _parts(_tmpl("af", "en", "dis-", "agree")),
+   [("dis-", True), ("agree", False)])
+eq("af: without a hyphen we do NOT guess",
+   _parts(_tmpl("af", "en", "book", "shelf")),
+   [("book", False), ("shelf", False)])
+
+# THE `late` BUG. A leading `+` in arg 1 is a directive, not a language code,
+# which shifts the language into arg 2 and the parts into arg 3+. Reading it
+# positionally emitted the language code itself as a component word:
+# `late` -> "en" + "let", and `biology` -> ... + "en" + "logy".
+eq("a +directive shifts the args -- 'en' is NEVER a part (Joe's `late` bug)",
+   _parts(_tmpl("surf", "+deverbal", "en", "let")),
+   [("let", False)])
+eq("+af shifts too, and both pieces are still affixes",
+   _parts(_tmpl("surf", "+af", "en", "bio-", "-logy")),
+   [("bio-", True), ("-logy", True)])
+check("no part is ever a bare language code",
+      all(t not in ("en", "grc", "la") for t, _ in
+          _parts(_tmpl("surf", "+deverbal", "en", "let"),
+                 _tmpl("surf", "+af", "en", "bio-", "-logy"))))
+
+# The parts' language is honoured, not assumed English: `portmanteau` is
+# Middle French porte + manteau, and calling those English states two false
+# things. This behaviour predates the change and must survive it.
+eq("the language argument still wins over an English default",
+   [p.lang for p in WS.formation_parts(
+       [_tmpl("suffix", "grc", "βίος", "λογία")], _LANGS)],
+   ["Ancient Greek", "Ancient Greek"])
+
+# --- The build must never replace a good database with an empty one. Every
+# validator passes VACUOUSLY on a zero-word build (no floating nodes, no
+# hollow words, nothing at all), so on 2026-07-30 a --words filter that
+# matched nothing reported PASS and swapped 0 words over the live database.
+section("the build refuses to swap an empty database")
+_bdb = open("build_etymology_db.py", encoding="utf-8").read()
+check("build_etymology_db.py counts words before swapping",
+      "SELECT COUNT(*) FROM word" in _bdb and "refusing to swap" in _bdb)
+check("...and the count is checked BEFORE the validators can pass vacuously",
+      _bdb.index("refusing to swap") < _bdb.index("=== validators ==="))
+_bps = open("scripts/build.ps1", encoding="utf-8").read()
+check("build.ps1 splits -Words on commas (powershell -File collapses the list)",
+      "-split ','" in _bps)
+# A Start-Process handle can report HasExited while ExitCode is still $null,
+# and `$null -ne 0` is TRUE -- so the failure branch fired on every SUCCESSFUL
+# build and quit before the descendants step. That is why issue #21 (a rebuild
+# dropping the descendant tables) kept returning after being "fixed".
+check("build.ps1 waits for the real exit code before judging the build",
+      "WaitForExit()" in _bps)
+check("...and treats a null exit code as success, not failure",
+      "$null -eq $proc.ExitCode" in _bps)
+
 # ------------------------------------------------ scripts/ share one toolkit
 section("scriptlib -- the plumbing every script used to hand-roll")
 # The scripts/ folder had four spellings of the same sys.path bootstrap, the

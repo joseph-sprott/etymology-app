@@ -428,20 +428,34 @@ refer to them.
   pattern left; not chased further, per "fix the pattern, not every word".
   **The corpus itself is not on disk** — it was fetched live from
   randomwordgenerator.com's static bank.
-- **#19 — the affix-vs-component fix is a lookup-layer reconstruction.**
-  `{{suffix}}` vs `{{compound}}` is real in the dump and is COLLAPSED to
-  `formed_from` at build time. `_BOUND_SUFFIXES` is a curated list papering
-  over information the builder threw away, and it will stay approximate until
-  the builder stops throwing it away. **This is the most valuable open
-  structural fix in the project.**
+- **#19 — CLOSED 2026-07-30. The builder now keeps the distinction.**
+  `{{suffix}}`/`{{prefix}}`/`{{confix}}` state which part is a bound morpheme
+  BY POSITION, and `wiktextract_shapes.formation_parts` records it as
+  `ety_node.is_affix` (263,951 nodes). `_BOUND_SUFFIXES` — the 40-entry curated
+  list — is deleted. **225,788 words stopped giving half their origin to a
+  morpheme.** The old list only ever covered final-position suffixes, so
+  ~92,000 `prefix` templates were never handled at all: `rewrite` read half
+  Latin via `re`, `disagree` half Norse via `dis`. Measured: ~98% of affixes
+  arrive WITHOUT their hyphen, so no spelling rule could have worked — a third
+  one was tried and rejected this session (it cost 52 hand-verified splits:
+  `aftereffect`, `counterbalance`, `grandparent`, `offshore`).
+  Residual, honestly: `af`/`affix`/`surf` templates promise nothing
+  positionally, so their unhyphenated parts are still judged by spelling
+  alone. And a compound part that is itself derived can still leak a morpheme
+  one level down — `overactive` → over + act + `ive`.
 - **#21 — descendants: the Greek branch is missing.** Proto-Hellenic has no
   kaikki extract (404). One command adds any other branch:
-  `python scripts/add_descendant_language.py "Proto-Italic"`. Also: the
+  `python scripts/add_descendant_language.py "Proto-Italic"`. The
   `descendant_tree`/`descendant_node` tables are **not in
-  `etymology_schema.sql`**, so a full rebuild silently drops them until
-  `build_descendants.py` re-runs. Never loosen variant merging to merge by
-  language alone — it would reattach children to a spelling the source never
-  claims.
+  `etymology_schema.sql`**, so a full rebuild drops them until
+  `build_descendants.py` re-runs — `build.ps1` now does that automatically.
+  **Root cause of why this kept coming back, found 2026-07-30**: `build.ps1`
+  read `$proc.ExitCode` from a `Start-Process` handle, which can still be
+  `$null` after the process exits, and `$null -ne 0` is TRUE in PowerShell —
+  so every SUCCESSFUL build took the failure branch and quit before reaching
+  the descendants step. It now calls `WaitForExit()` first. Never loosen
+  variant merging to merge by language alone — it would reattach children to a
+  spelling the source never claims.
 - **#22 — `movie` is honest but still not right.** Re-confirmed 2026-07-30: it
   reads Unknown rather than French/Latin via `move`, because the builder
   recorded only the suffix `ie` and dropped the real component. Same shape as
@@ -453,6 +467,11 @@ refer to them.
   during issue #11's compound work — needed as a part of `zookeeper`).
   `physiologist` really does read Unknown everywhere. A coverage gap this fix
   only made visible.
+  **Why `movie` can never be fixed at build time, confirmed 2026-07-30**: its
+  dump entry is `{{suffix|en|""|ie}}` — **the base word is an empty string in
+  Wiktionary's own data.** `move` was never recorded, so nothing was lost by
+  this project and nothing can be recovered by a better builder. Closing this
+  needs a `corrections.py` entry or a different source, not a parser change.
 - **#23 — the two deep build functions are untested.**
   `convert_wikt._patch_root_stubs` (142 lines, depth 6) and
   `build_word_info.from_wiktextract` (123 lines, depth 7) are the most

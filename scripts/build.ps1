@@ -51,7 +51,16 @@ if (Test-Path $new) {
 # --- 3. Launch detached ------------------------------------------------------
 $argList = @("build_etymology_db.py")
 if ($Sample -gt 0)  { $argList += @("--sample", "$Sample") }
-if ($Words.Count)   { $argList += @("--words") + $Words }
+if ($Words.Count) {
+  # `powershell -File build.ps1 -Words a,b,c` collapses the list into ONE array
+  # element, so the builder received the literal string "a,b,c", matched
+  # nothing, and swapped a zero-word database into place (2026-07-30). Split on
+  # commas so both that form and a real array work. The builder now also
+  # refuses to swap an empty build, which is the actual safety net.
+  $wordList = @($Words | ForEach-Object { $_ -split ',' } |
+                Where-Object { $_ -ne "" })
+  $argList += @("--words") + $wordList
+}
 
 Write-Host "building: python $($argList -join ' ')"
 $proc = Start-Process -FilePath "python" -ArgumentList $argList `
@@ -69,12 +78,23 @@ $sw.Stop()
 Get-Content $outLog | Select-String -Pattern "status_|etymologies|surface_|compound_splits|=== validators|PASS|FAIL"
 Get-Content $errLog | Select-String -Pattern "done in|could not replace|swapping"
 
-if ($proc.ExitCode -ne 0) {
-  Write-Host "build exited $($proc.ExitCode)" -ForegroundColor Red
+# WaitForExit() before reading ExitCode. A Start-Process handle can report
+# HasExited while ExitCode is still $null, and `$null -ne 0` is TRUE in
+# PowerShell -- so this branch fired on every SUCCESSFUL build, printing a bare
+# "build exited " and quitting before the descendants step below ever ran.
+# That is why known issue #21 (a rebuild silently dropping the descendant
+# tables) kept coming back after it was supposedly fixed: the fix was never
+# reached. Found 2026-07-30 by reading the log of a build that had just
+# succeeded.
+$proc.WaitForExit()
+$exitCode = if ($null -eq $proc.ExitCode) { 0 } else { $proc.ExitCode }
+
+if ($exitCode -ne 0) {
+  Write-Host "build exited $exitCode" -ForegroundColor Red
   if (Test-Path $new) {
     Write-Host "finished database left at $new -- stop app.py and rename it." -ForegroundColor Yellow
   }
-  exit $proc.ExitCode
+  exit $exitCode
 }
 
 # --- 4. Descendants ----------------------------------------------------------
