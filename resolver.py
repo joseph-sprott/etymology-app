@@ -711,6 +711,29 @@ class DbResolver(Resolver):
         # by a spelling rule that also protected `-ness` and `-ion`.
         return bool(getattr(node, "is_affix", False)) or term != bare
 
+    def _part_resolution(self, node, depth: int) -> Resolution:
+        """
+        One component's own answer, read in the language it was RECORDED in.
+
+        Only a modern-English component is looked up as a word. `about` is
+        recorded as Old English `on` + `būtan` + `be` + `ūtan`; looking those
+        up as modern English matched `on` and `be` by coincidence and found
+        nothing for `būtan`/`ūtan`, so half of an extremely common word was
+        counted as Unknown. A part already carries its language -- `būtan` IS
+        Old English, and that is the answer without any lookup.
+
+        A modern English part is still followed into its own history, which is
+        the entire reason parts are resolved rather than just bucketed:
+        `bagpipe`'s `pipe` has to reach Latin.
+        """
+        term = (node.term or "").strip("-") or node.term
+        if node.lang == "English":
+            return self._resolve(term, depth + 1)
+        bucket = bucket_for_name(node.lang)
+        link = ChainLink(bucket, bucket, bucket, specific_lang=node.lang)
+        return Resolution(term, [link], None, None, self.name,
+                          root_lang=node.lang, root_term=node.term)
+
     def _resolve(self, word: str, depth: int) -> Resolution:
         entry = self._db.entry(word)
         # No tree means NO ANSWER -- never a native-core claim. `entry` exists
@@ -762,8 +785,8 @@ class DbResolver(Resolver):
                 # Show the chip as the WORD. A surviving part is one whose bare
                 # spelling is a real entry (that is what got it past the affix
                 # check), so `crafts` + `-man` should read "man", not "-man".
-                parts = [self._resolve(t.strip("-") or t, depth + 1)
-                         for t in terms]
+                kept = [c for c in children if not self._is_bound_affix(c)]
+                parts = [self._part_resolution(c, depth) for c in kept]
 
         line = self._db.lineage(entry)
         # A ROOT IS NOT A DONOR. `trust` runs English -> Middle English ->

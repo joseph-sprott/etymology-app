@@ -306,6 +306,28 @@ for word in ["craftsman", "businesswoman", "basketball", "mountainside"]:
     check(f"{word} still splits into component words", bool(view.parts))
 
 print()
+print("=== A component is read in ITS OWN language (2026-07-30) ===")
+# `about` is recorded as Old English on + būtan + be + ūtan. Every part was
+# being looked up as a MODERN English word, so `on` and `be` matched by
+# coincidence while `būtan` and `ūtan` matched nothing and dumped half of an
+# extremely common word into Unknown. A part carries the language it was
+# recorded in; `būtan` IS Old English, and no lookup is needed to say so.
+d = RESOLVER.resolve("about").view("direct")
+parts = [(p.word, p.bucket) for p in (d.parts or [])]
+check(f"about: no component resolves to Unknown (got {parts})",
+      all(b != "Unknown" for _w, b in parts))
+check(f"about itself is Germanic (got {d.bucket})",
+      d.bucket in ("Germanic", "Compound"))
+# The control: a MODERN English component must still be followed into its own
+# history, which is the whole reason parts are resolved rather than bucketed.
+# `bagpipe` is bag + pipe, and `pipe` is a French borrowing -- bucketing an
+# English part as "English -> Germanic" would quietly discard that.
+bp = RESOLVER.resolve("bagpipe").view("direct")
+check(f"bagpipe still follows `pipe` to its real origin (got "
+      f"{[(p.word, p.bucket) for p in (bp.parts or [])]})",
+      any(p.bucket == "French" for p in (bp.parts or [])))
+
+print()
 print("=== Prefixes are affixes too (issue #19 closed at build time, 2026-07-30) ===")
 # `_BOUND_SUFFIXES` only ever covered FINAL-position endings, so ~92,000
 # {{prefix}} templates were never handled: `rewrite` was counted half Latin
