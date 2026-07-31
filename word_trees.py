@@ -322,54 +322,77 @@ def resolve_tree(word, _depth=0):
     if from_db is not None and not _is_bare_root_tree(from_db):
         return from_db
 
+    # A real stored tree still wins outright. A bare-root STUB no longer
+    # short-circuits the resolver-backed paths below -- 2026-07-25, the
+    # "intrude" bug, where the tree showed PIE while the analyzer said Latin.
     direct = _lookup_tree_direct(word)
-    # A real stored tree still wins outright, unchanged. But a bare-root-stub
-    # tree no longer short-circuits the resolver-backed paths below -- see
-    # _is_bare_root_tree / _tree_from_chain (2026-07-25, the "intrude" bug).
     if direct is not None and not _is_bare_root_tree(direct):
         return direct
     if _depth > 5:
         return direct
+
     res = shared_resolver().resolve(word)
-    if res.inherited_from and res.inherited_from != word:
-        inherited = resolve_tree(res.inherited_from, _depth + 1)
-        if inherited:
-            return {"lang": "English", "term": word, "branches": inherited["branches"]}
-    if res.compound_parts:
-        branches = []
-        for part in res.compound_parts:
-            part_tree = resolve_tree(part.word, _depth + 1)
-            children = part_tree["branches"] if part_tree else []
-            branches.append({"lang": "English", "term": part.word,
-                              "reltype": "compound_of", "children": children})
-        return {"lang": "English", "term": word, "branches": branches}
-    if res.chain and res.root_lang:
-        # The resolver has a real answer here with no richer inherited_from/
-        # compound path (e.g. a bare-root stub like "vitamin", or a word
-        # that genuinely only exists capitalized, like "Paris" typed
-        # lowercase). For the latter shape, prefer that entry's own FULL
-        # tree over the flattened single-node fallback below -- reached only
-        # now, after confirming via `res` that the resolver itself would
-        # also trust an answer here, not tried unconditionally the way
-        # _lookup_tree_direct used to (see its docstring for why that was a
-        # bug for "ran").
-        cap_tree = TREES.get(word.capitalize())
-        if cap_tree is not None:
-            return cap_tree
-        # Prefer the full chain over a single flattened node whenever the
-        # resolver has a real (non-stub) one -- this is what actually fixes
-        # the "intrude shows PIE but not Latin" class. Falls through to the
-        # original single-node synthesis when the chain is only a bare stub.
-        if res.prox_kind != "root":
-            built = _tree_from_chain(word, res, direct)
-            if built is not None:
-                return built
-        node = {"lang": res.root_lang, "term": res.root_term,
-                "reltype": "derived_from", "children": []}
-        return {"lang": "English", "term": word, "branches": [node]}
+    for build in (_tree_via_inherited, _tree_via_parts):
+        built = build(word, res, _depth)
+        if built is not None:
+            return built
+    built = _tree_via_resolver_chain(word, res, direct)
+    if built is not None:
+        return built
     # Nothing better found. Return the thin stored stub if we had one -- it's
     # real (if incomplete) recorded data, and better than claiming no data.
     return direct
+
+
+def _tree_via_inherited(word, res, depth):
+    """The tree of the OTHER word whose data actually produced this answer."""
+    if not res.inherited_from or res.inherited_from == word:
+        return None
+    inherited = resolve_tree(res.inherited_from, depth + 1)
+    if not inherited:
+        return None
+    return {"lang": "English", "term": word, "branches": inherited["branches"]}
+
+
+def _tree_via_parts(word, res, depth):
+    """One synthetic branch per component, each carrying its own real tree."""
+    if not res.compound_parts:
+        return None
+    branches = []
+    for part in res.compound_parts:
+        part_tree = resolve_tree(part.word, depth + 1)
+        branches.append({"lang": "English", "term": part.word,
+                         "reltype": "compound_of",
+                         "children": part_tree["branches"] if part_tree else []})
+    return {"lang": "English", "term": word, "branches": branches}
+
+
+def _tree_via_resolver_chain(word, res, direct):
+    """
+    Build a tree from the resolver's own chain, for a word with no stored one.
+
+    Three shapes, narrowest first:
+      * a word that genuinely only exists CAPITALIZED (`Paris` typed
+        lowercase) -- use that entry's full tree. Reached only after `res`
+        confirms the resolver itself would trust an answer here, NOT tried
+        unconditionally the way `_lookup_tree_direct` once did, which is what
+        made `ran` render the Japanese `Ran`.
+      * a real non-stub chain -- render the whole thing. This is what fixes
+        the "intrude shows PIE but not Latin" class.
+      * a bare root stub -- a single flattened node, which is all it has.
+    """
+    if not (res.chain and res.root_lang):
+        return None
+    cap_tree = TREES.get(word.capitalize())
+    if cap_tree is not None:
+        return cap_tree
+    if res.prox_kind != "root":
+        built = _tree_from_chain(word, res, direct)
+        if built is not None:
+            return built
+    node = {"lang": res.root_lang, "term": res.root_term,
+            "reltype": "derived_from", "children": []}
+    return {"lang": "English", "term": word, "branches": [node]}
 
 
 def node_slug(node):

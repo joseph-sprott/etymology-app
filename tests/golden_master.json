@@ -71,6 +71,167 @@
    ],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Middle English",
+         "term": "about"
+        }
+       ],
+       "lang": "Old English",
+       "term": "abūtan"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "aboute"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*h₂en-"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*ana"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*ana"
+          }
+         ],
+         "lang": "Old English",
+         "term": "on"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "on"
+      }
+     ],
+     "lang": "Old English",
+     "term": "on"
+    },
+    {
+     "branches": [],
+     "lang": "Old English",
+     "term": "būtan"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*bʰuH-"
+              }
+             ],
+             "lang": "Proto-Indo-European",
+             "term": "*bʰuHyéti"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*beuną"
+          },
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [],
+                 "lang": "Proto-Indo-European",
+                 "term": "*h₁ésti"
+                }
+               ],
+               "lang": "Proto-Germanic",
+               "term": "*wesaną"
+              }
+             ],
+             "lang": "Proto-West Germanic",
+             "term": "*wesan"
+            }
+           ],
+           "lang": "Old English",
+           "term": "wesan"
+          }
+         ],
+         "lang": "Old English",
+         "term": "bēon"
+        },
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [
+                  {
+                   "branches": [],
+                   "lang": "Proto-Indo-European",
+                   "term": "*h₂wes-"
+                  }
+                 ],
+                 "lang": "Proto-Germanic",
+                 "term": "*wesaną"
+                }
+               ],
+               "lang": "Proto-West Germanic",
+               "term": "*wesan"
+              }
+             ],
+             "lang": "Old English",
+             "term": "bēon"
+            }
+           ],
+           "lang": "Old English",
+           "term": "ġebēon"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "been"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "been"
+      }
+     ],
+     "lang": "Old English",
+     "term": "be"
+    },
+    {
+     "branches": [],
+     "lang": "Old English",
+     "term": "ūtan"
+    }
+   ],
+   "lang": "English",
+   "term": "about"
   }
  },
  "algebra": {
@@ -94,6 +255,23 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Arabic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Arabic",
+       "term": "جبر"
+      }
+     ],
+     "lang": "Medieval Latin",
+     "term": "algebra"
+    }
+   ],
+   "lang": "English",
+   "term": "algebra"
   }
  },
  "and": {
@@ -117,6 +295,99 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*h₂en-"
+              }
+             ],
+             "lang": "Proto-Indo-European",
+             "term": "*h₂énti"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*andi"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*andi"
+        }
+       ],
+       "lang": "Old English",
+       "term": "and"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "and"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*h₂enh₁-"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*anadô"
+          }
+         ],
+         "lang": "Old Norse",
+         "term": "andi"
+        }
+       ],
+       "lang": "Old English",
+       "term": "anda"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "ande"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Germanic",
+           "term": "*anadōną"
+          }
+         ],
+         "lang": "Old Norse",
+         "term": "anda"
+        }
+       ],
+       "lang": "Old English",
+       "term": "andian"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "anden"
+    }
+   ],
+   "lang": "English",
+   "term": "and"
   }
  },
  "anger": {
@@ -140,6 +411,46 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Indo-European",
+           "term": "*h₂enǵʰ-"
+          }
+         ],
+         "lang": "Proto-Germanic",
+         "term": "*angazaz"
+        }
+       ],
+       "lang": "Old Norse",
+       "term": "angr"
+      },
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Old Norse",
+         "term": "angra"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "angren"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "anger"
+    }
+   ],
+   "lang": "English",
+   "term": "anger"
   }
  },
  "army": {
@@ -163,6 +474,41 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Latin"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*h₂er-"
+            }
+           ],
+           "lang": "Latin",
+           "term": "armāre"
+          }
+         ],
+         "lang": "Medieval Latin",
+         "term": "armāta"
+        }
+       ],
+       "lang": "Old French",
+       "term": "armee"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "armee"
+    }
+   ],
+   "lang": "English",
+   "term": "army"
   }
  },
  "as": {
@@ -186,6 +532,92 @@
    "parts": [],
    "resolved": true,
    "specific_lang": null
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Proto-Indo-European",
+         "term": "*h₂el-"
+        }
+       ],
+       "lang": "Old English",
+       "term": "eallswā"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "as"
+    },
+    {
+     "branches": [],
+     "lang": "Latin",
+     "term": "as"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Latin",
+           "term": "ā"
+          }
+         ],
+         "lang": "Old French",
+         "term": null
+        }
+       ],
+       "lang": "Middle English",
+       "term": "a"
+      }
+     ],
+     "lang": "English",
+     "term": "a"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*-es"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*-ōs"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*-ōs"
+          }
+         ],
+         "lang": "Old English",
+         "term": "-as"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "-s"
+      }
+     ],
+     "lang": "English",
+     "term": "-s"
+    }
+   ],
+   "lang": "English",
+   "term": "as"
   }
  },
  "auto": {
@@ -209,6 +641,147 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Ancient Greek"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*men-"
+            }
+           ],
+           "lang": "Ancient Greek",
+           "term": "αὐτόματον"
+          }
+         ],
+         "lang": "Latin",
+         "term": "automatum"
+        }
+       ],
+       "lang": "New Latin",
+       "term": "automaticus"
+      }
+     ],
+     "lang": "English",
+     "term": "automatic"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Ancient Greek",
+         "term": "αὐτός"
+        }
+       ],
+       "lang": "French",
+       "term": "automobile"
+      },
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Latin",
+         "term": "mōbilis"
+        }
+       ],
+       "lang": "French",
+       "term": "mobile"
+      },
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Ancient Greek",
+         "term": "αὐτο-"
+        }
+       ],
+       "lang": "English",
+       "term": "auto-"
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*m(y)ewh₁-"
+              }
+             ],
+             "lang": "Latin",
+             "term": "mōbilis"
+            }
+           ],
+           "lang": "Old French",
+           "term": null
+          }
+         ],
+         "lang": "Middle English",
+         "term": null
+        }
+       ],
+       "lang": "English",
+       "term": "mobile"
+      }
+     ],
+     "lang": "English",
+     "term": "automobile"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "English",
+       "term": "auto"
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Middle Chinese",
+           "term": null
+          }
+         ],
+         "lang": "Japanese",
+         "term": null
+        },
+        {
+         "branches": [],
+         "lang": "Middle Chinese",
+         "term": "人力"
+        },
+        {
+         "branches": [],
+         "lang": "Middle Chinese",
+         "term": "車"
+        }
+       ],
+       "lang": "English",
+       "term": "rickshaw"
+      }
+     ],
+     "lang": "English",
+     "term": "autorickshaw"
+    }
+   ],
+   "lang": "English",
+   "term": "auto"
   }
  },
  "back": {
@@ -232,6 +805,46 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*bʰeg-"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*baką"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*bak"
+        }
+       ],
+       "lang": "Old English",
+       "term": "bæc"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "bak"
+    },
+    {
+     "branches": [],
+     "lang": "French",
+     "term": "bac"
+    }
+   ],
+   "lang": "English",
+   "term": "back"
   }
  },
  "bagpipe": {
@@ -282,6 +895,93 @@
    ],
    "resolved": true,
    "specific_lang": "Portuguese"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Old Norse",
+         "term": "baggi"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "bagge"
+      }
+     ],
+     "lang": "English",
+     "term": "bag"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Latin",
+               "term": "pipire"
+              }
+             ],
+             "lang": "Vulgar Latin",
+             "term": "*pīpa"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*pīpā"
+          }
+         ],
+         "lang": "Old English",
+         "term": "pīpe"
+        },
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [],
+                 "lang": "Old English",
+                 "term": "pīpian"
+                }
+               ],
+               "lang": "Middle English",
+               "term": "pipen"
+              }
+             ],
+             "lang": "Portuguese",
+             "term": "pipa"
+            }
+           ],
+           "lang": "Old French",
+           "term": "pipe"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "pipe"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "pipe"
+      }
+     ],
+     "lang": "English",
+     "term": "pipe"
+    }
+   ],
+   "lang": "English",
+   "term": "bagpipe"
   }
  },
  "basketball": {
@@ -332,6 +1032,94 @@
    ],
    "resolved": true,
    "specific_lang": "qfa-sub"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [
+                  {
+                   "branches": [],
+                   "lang": "qfa-sub",
+                   "term": null
+                  }
+                 ],
+                 "lang": "Proto-Indo-European",
+                 "term": null
+                }
+               ],
+               "lang": "Proto-Celtic",
+               "term": "*baskis"
+              }
+             ],
+             "lang": "Proto-Brythonic",
+             "term": null
+            }
+           ],
+           "lang": "Late Latin",
+           "term": "bascauda"
+          }
+         ],
+         "lang": "Anglo-Norman",
+         "term": "baschet"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "basket"
+      }
+     ],
+     "lang": "English",
+     "term": "basket"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*bʰel-"
+              }
+             ],
+             "lang": "Proto-Indo-European",
+             "term": "*bʰélō"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*balluz"
+          }
+         ],
+         "lang": "Old English",
+         "term": "*beall"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "bal"
+      }
+     ],
+     "lang": "English",
+     "term": "ball"
+    }
+   ],
+   "lang": "English",
+   "term": "basketball"
   }
  },
  "beautiful": {
@@ -355,6 +1143,57 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Latin"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [],
+     "lang": "Middle English",
+     "term": "bewteful"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Latin",
+               "term": "bellus"
+              }
+             ],
+             "lang": "Vulgar Latin",
+             "term": "*bellitātem"
+            }
+           ],
+           "lang": "Old French",
+           "term": "beauté"
+          }
+         ],
+         "lang": "Anglo-Norman",
+         "term": null
+        }
+       ],
+       "lang": "Middle English",
+       "term": "bewty"
+      }
+     ],
+     "lang": "English",
+     "term": "beauty"
+    },
+    {
+     "branches": [],
+     "lang": "English",
+     "term": "ful"
+    }
+   ],
+   "lang": "English",
+   "term": "beautiful"
   }
  },
  "became": {
@@ -378,6 +1217,198 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Indo-European",
+           "term": "*gʷem-"
+          }
+         ],
+         "lang": "Proto-Germanic",
+         "term": "*bikwemaną"
+        }
+       ],
+       "lang": "Old English",
+       "term": "becuman"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "becomen"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*h₁epi"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*bi"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*bi-"
+          }
+         ],
+         "lang": "Old English",
+         "term": "be-"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "be-"
+      }
+     ],
+     "lang": "English",
+     "term": "be-"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*gʷémt"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*kwemaną"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*kweman"
+          }
+         ],
+         "lang": "Old English",
+         "term": "cuman"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "comen"
+      }
+     ],
+     "lang": "English",
+     "term": "come"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*bʰuH-"
+              }
+             ],
+             "lang": "Proto-Indo-European",
+             "term": "*bʰuHyéti"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*beuną"
+          },
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [],
+                 "lang": "Proto-Indo-European",
+                 "term": "*h₁ésti"
+                }
+               ],
+               "lang": "Proto-Germanic",
+               "term": "*wesaną"
+              }
+             ],
+             "lang": "Proto-West Germanic",
+             "term": "*wesan"
+            }
+           ],
+           "lang": "Old English",
+           "term": "wesan"
+          }
+         ],
+         "lang": "Old English",
+         "term": "bēon"
+        },
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [
+                  {
+                   "branches": [],
+                   "lang": "Proto-Indo-European",
+                   "term": "*h₂wes-"
+                  }
+                 ],
+                 "lang": "Proto-Germanic",
+                 "term": "*wesaną"
+                }
+               ],
+               "lang": "Proto-West Germanic",
+               "term": "*wesan"
+              }
+             ],
+             "lang": "Old English",
+             "term": "bēon"
+            }
+           ],
+           "lang": "Old English",
+           "term": "ġebēon"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "been"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "been"
+      }
+     ],
+     "lang": "English",
+     "term": "be"
+    }
+   ],
+   "lang": "English",
+   "term": "become"
   }
  },
  "because": {
@@ -401,6 +1432,23 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Old French"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Old French",
+       "term": "par cause"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "bi cause"
+    }
+   ],
+   "lang": "English",
+   "term": "because"
   }
  },
  "beef": {
@@ -424,6 +1472,47 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Italic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*gʷṓws"
+              }
+             ],
+             "lang": "Proto-Italic",
+             "term": "*gʷōs"
+            }
+           ],
+           "lang": "Latin",
+           "term": "bōs"
+          }
+         ],
+         "lang": "Old French",
+         "term": "buef"
+        }
+       ],
+       "lang": "Anglo-Norman",
+       "term": "beof"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "bef"
+    }
+   ],
+   "lang": "English",
+   "term": "beef"
   }
  },
  "biology": {
@@ -447,6 +1536,79 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Ancient Greek"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Ancient Greek",
+       "term": null
+      }
+     ],
+     "lang": "New Latin",
+     "term": "biologia"
+    },
+    {
+     "branches": [],
+     "lang": "Ancient Greek",
+     "term": "βίος"
+    },
+    {
+     "branches": [],
+     "lang": "Ancient Greek",
+     "term": "λογία"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Proto-Indo-European",
+         "term": "*gʷeyh₃-"
+        }
+       ],
+       "lang": "Ancient Greek",
+       "term": "βιο-"
+      }
+     ],
+     "lang": "English",
+     "term": "bio-"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*leǵ-"
+            }
+           ],
+           "lang": "Ancient Greek",
+           "term": "-λογία"
+          }
+         ],
+         "lang": "Latin",
+         "term": "-logia"
+        }
+       ],
+       "lang": "French",
+       "term": "-logie"
+      }
+     ],
+     "lang": "English",
+     "term": "-logy"
+    }
+   ],
+   "lang": "English",
+   "term": "biology"
   }
  },
  "blackbird": {
@@ -497,6 +1659,69 @@
    ],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [],
+     "lang": "Middle English",
+     "term": "blakebird"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*bʰleg-"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*blakaz"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*blak"
+          }
+         ],
+         "lang": "Old English",
+         "term": "blæc"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "blak"
+      }
+     ],
+     "lang": "English",
+     "term": "black"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Old English",
+         "term": "bridd"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "bird"
+      }
+     ],
+     "lang": "English",
+     "term": "bird"
+    }
+   ],
+   "lang": "English",
+   "term": "blackbird"
   }
  },
  "brother": {
@@ -520,6 +1745,41 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*bʰréh₂tēr"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*brōþēr"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*brōþer"
+        }
+       ],
+       "lang": "Old English",
+       "term": "brōþor"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "broder"
+    }
+   ],
+   "lang": "English",
+   "term": "brother"
   }
  },
  "bull": {
@@ -543,6 +1803,110 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*bʰl̥no-"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*bulô"
+          }
+         ],
+         "lang": "Old Norse",
+         "term": "boli"
+        }
+       ],
+       "lang": "Old English",
+       "term": "bula"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "bole,bul,bule"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Gaulish",
+           "term": null
+          }
+         ],
+         "lang": "Latin",
+         "term": "bulla"
+        }
+       ],
+       "lang": "Old French",
+       "term": "bulle"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "bulle"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Middle Low German",
+           "term": "bôlen"
+          }
+         ],
+         "lang": "Old French",
+         "term": "bouler,boler"
+        }
+       ],
+       "lang": "Old French",
+       "term": "boul,boule,bole"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "bull,bul,boule"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Gaulish",
+           "term": null
+          }
+         ],
+         "lang": "Latin",
+         "term": "bulla"
+        }
+       ],
+       "lang": "Old French",
+       "term": "bulle,boule"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "bowle,boule"
+    }
+   ],
+   "lang": "English",
+   "term": "bull"
   }
  },
  "businesswoman": {
@@ -605,6 +1969,86 @@
    ],
    "resolved": true,
    "specific_lang": null
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Old English",
+         "term": "bisiġnes"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "busines"
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-West Germanic",
+             "term": "*bisīg"
+            }
+           ],
+           "lang": "Old English",
+           "term": "bisiġ"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "bisy"
+        }
+       ],
+       "lang": "English",
+       "term": "busy"
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Germanic",
+             "term": "*nasją"
+            }
+           ],
+           "lang": "Old English",
+           "term": "næs"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "nesse"
+        }
+       ],
+       "lang": "English",
+       "term": "ness"
+      }
+     ],
+     "lang": "English",
+     "term": "business"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Middle English",
+       "term": "-woman"
+      }
+     ],
+     "lang": "English",
+     "term": "-woman"
+    }
+   ],
+   "lang": "English",
+   "term": "businesswoman"
   }
  },
  "can": {
@@ -628,6 +2072,58 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*ǵneh₃-"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*kunnaną"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*kunnan"
+        }
+       ],
+       "lang": "Old English",
+       "term": "cann"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "can"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Proto-Germanic",
+         "term": "*kannǭ"
+        }
+       ],
+       "lang": "Old English",
+       "term": "canne"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "canne"
+    }
+   ],
+   "lang": "English",
+   "term": "can"
   }
  },
  "canines": {
@@ -651,6 +2147,17 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Latin"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [],
+     "lang": "Latin",
+     "term": "canīnus"
+    }
+   ],
+   "lang": "English",
+   "term": "canine"
   }
  },
  "careful": {
@@ -674,6 +2181,93 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Proto-Indo-European",
+         "term": "*ǵeh₂r-"
+        }
+       ],
+       "lang": "Old English",
+       "term": "carful"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "careful"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*ǵeh₂r-"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*karō"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*karu"
+          }
+         ],
+         "lang": "Old English",
+         "term": "caru"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "care"
+      }
+     ],
+     "lang": "English",
+     "term": "care"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Germanic",
+             "term": "*fullaz"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*-fullaz"
+          }
+         ],
+         "lang": "Old English",
+         "term": "-ful"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "-ful"
+      }
+     ],
+     "lang": "English",
+     "term": "-ful"
+    }
+   ],
+   "lang": "English",
+   "term": "careful"
   }
  },
  "coffee": {
@@ -697,6 +2291,41 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Arabic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Arabic",
+             "term": "ق ه ي"
+            }
+           ],
+           "lang": "Arabic",
+           "term": "قَهْوَة"
+          }
+         ],
+         "lang": "Ottoman Turkish",
+         "term": "قهوه"
+        }
+       ],
+       "lang": "Italian",
+       "term": "caffè"
+      }
+     ],
+     "lang": "Dutch",
+     "term": "koffie"
+    }
+   ],
+   "lang": "English",
+   "term": "coffee"
   }
  },
  "computer": {
@@ -720,6 +2349,144 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Latin"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Indo-European",
+           "term": "*pewH-"
+          }
+         ],
+         "lang": "Latin",
+         "term": "computō"
+        }
+       ],
+       "lang": "French",
+       "term": "computer"
+      },
+      {
+       "branches": [],
+       "lang": "Proto-Indo-European",
+       "term": "*pewH-"
+      }
+     ],
+     "lang": "English",
+     "term": "compute"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Latin",
+               "term": "-ārius"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*-ārijaz"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*-ārī"
+          }
+         ],
+         "lang": "Old English",
+         "term": "-ere"
+        },
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Latin",
+             "term": "-ārius"
+            },
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [
+                  {
+                   "branches": [],
+                   "lang": "Proto-Indo-European",
+                   "term": "*-tōr"
+                  }
+                 ],
+                 "lang": "Latin",
+                 "term": "-tor"
+                }
+               ],
+               "lang": "Anglo-Norman",
+               "term": null
+              }
+             ],
+             "lang": "Old French",
+             "term": "-or"
+            }
+           ],
+           "lang": "Old French",
+           "term": "-ier"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "-er"
+        },
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [],
+                 "lang": "Proto-Indo-European",
+                 "term": "*wer-"
+                }
+               ],
+               "lang": "Proto-Germanic",
+               "term": "*warjaz"
+              }
+             ],
+             "lang": "Proto-West Germanic",
+             "term": "*-wari"
+            }
+           ],
+           "lang": "Old English",
+           "term": "-ware"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "-ware"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "-ere, -er"
+      }
+     ],
+     "lang": "English",
+     "term": "-er"
+    }
+   ],
+   "lang": "English",
+   "term": "computer"
   }
  },
  "consistency": {
@@ -782,6 +2549,223 @@
    ],
    "resolved": true,
    "specific_lang": "Latin"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Indo-European",
+           "term": "*stísteh₂ti"
+          }
+         ],
+         "lang": "Proto-Indo-European",
+         "term": "*ḱóm"
+        }
+       ],
+       "lang": "Latin",
+       "term": "consistens"
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Latin",
+           "term": "consistō"
+          }
+         ],
+         "lang": "Middle French",
+         "term": "consister"
+        }
+       ],
+       "lang": "English",
+       "term": "consist"
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Latin",
+             "term": "-ēns"
+            }
+           ],
+           "lang": "Old French",
+           "term": "-ent"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "-ent"
+        }
+       ],
+       "lang": "English",
+       "term": "-ent"
+      }
+     ],
+     "lang": "English",
+     "term": "consistent"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Ancient Greek",
+           "term": "-κια"
+          },
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Ancient Greek",
+             "term": "-ια"
+            }
+           ],
+           "lang": "Latin",
+           "term": "-ia"
+          }
+         ],
+         "lang": "Latin",
+         "term": "-cia"
+        }
+       ],
+       "lang": "Anglo-Norman",
+       "term": "-cie"
+      }
+     ],
+     "lang": "English",
+     "term": "-cy"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Middle French",
+       "term": null
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Latin",
+           "term": "consistō"
+          }
+         ],
+         "lang": "Middle French",
+         "term": "consister"
+        }
+       ],
+       "lang": "English",
+       "term": "consist"
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Latin",
+             "term": "-entia"
+            }
+           ],
+           "lang": "Old French",
+           "term": "-ence"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "-ence"
+        }
+       ],
+       "lang": "English",
+       "term": "-ence"
+      }
+     ],
+     "lang": "English",
+     "term": "consistence"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*-kos"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*-īgaz"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*-g"
+          }
+         ],
+         "lang": "Old English",
+         "term": "-iġ"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "-y"
+      }
+     ],
+     "lang": "English",
+     "term": "-y"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Latin",
+         "term": "consistō"
+        }
+       ],
+       "lang": "Middle French",
+       "term": "consister"
+      }
+     ],
+     "lang": "English",
+     "term": "consist"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Latin",
+       "term": "-entia"
+      }
+     ],
+     "lang": "English",
+     "term": "-ency"
+    }
+   ],
+   "lang": "English",
+   "term": "consistency"
   }
  },
  "could": {
@@ -805,6 +2789,29 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Proto-Indo-European",
+         "term": "*ǵneh₃-"
+        }
+       ],
+       "lang": "Old English",
+       "term": "cūþe"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "coude"
+    }
+   ],
+   "lang": "English",
+   "term": "could"
   }
  },
  "cover": {
@@ -828,6 +2835,35 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Latin"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Latin",
+           "term": "cooperiō"
+          }
+         ],
+         "lang": "Late Latin",
+         "term": "coperire"
+        }
+       ],
+       "lang": "Old French",
+       "term": "covrir"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "coveren"
+    }
+   ],
+   "lang": "English",
+   "term": "cover"
   }
  },
  "craftsman": {
@@ -878,6 +2914,69 @@
    ],
    "resolved": true,
    "specific_lang": null
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Germanic",
+             "term": "*kraftuz"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*kraftu"
+          }
+         ],
+         "lang": "Old English",
+         "term": "cræft"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "craft"
+      }
+     ],
+     "lang": "English",
+     "term": "craft"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Old English",
+         "term": "-es"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "-s, -es"
+      }
+     ],
+     "lang": "English",
+     "term": "-s-"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Middle English",
+       "term": "-man"
+      }
+     ],
+     "lang": "English",
+     "term": "-man"
+    }
+   ],
+   "lang": "English",
+   "term": "craftsman"
   }
  },
  "cute": {
@@ -901,6 +3000,17 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Indo-European"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [],
+     "lang": "Proto-Indo-European",
+     "term": "*h₂eḱ-"
+    }
+   ],
+   "lang": "English",
+   "term": "cute"
   }
  },
  "darkness": {
@@ -924,6 +3034,81 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-West Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Old English",
+       "term": "deorcnes"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "derknesse"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*dʰer-"
+              }
+             ],
+             "lang": "Proto-Indo-European",
+             "term": "*dʰerg-"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*derk"
+          }
+         ],
+         "lang": "Old English",
+         "term": "deorc"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "derk"
+      }
+     ],
+     "lang": "English",
+     "term": "dark"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Germanic",
+           "term": "*nasją"
+          }
+         ],
+         "lang": "Old English",
+         "term": "næs"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "nesse"
+      }
+     ],
+     "lang": "English",
+     "term": "ness"
+    }
+   ],
+   "lang": "English",
+   "term": "darkness"
   }
  },
  "die": {
@@ -947,6 +3132,69 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Indo-European",
+           "term": "*dʰew-"
+          }
+         ],
+         "lang": "Proto-Germanic",
+         "term": "*dawjaną"
+        }
+       ],
+       "lang": "Old Norse",
+       "term": "deyja"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "deyen"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Indo-European",
+           "term": "*deh₃-"
+          }
+         ],
+         "lang": "Latin",
+         "term": "datum"
+        }
+       ],
+       "lang": "Old French",
+       "term": "de"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "dee"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Latin",
+       "term": "dies"
+      }
+     ],
+     "lang": "Latin",
+     "term": "die"
+    }
+   ],
+   "lang": "English",
+   "term": "die"
   }
  },
  "disagree": {
@@ -970,6 +3218,81 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Old French"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Old French",
+         "term": "desagreer"
+        }
+       ],
+       "lang": "Anglo-Norman",
+       "term": "disagreer"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "disagre"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Indo-European",
+           "term": "*dwís"
+          }
+         ],
+         "lang": "Latin",
+         "term": "dis-"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "dis-"
+      }
+     ],
+     "lang": "English",
+     "term": "dis-"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*gʷerH-"
+            }
+           ],
+           "lang": "Latin",
+           "term": "ad"
+          }
+         ],
+         "lang": "Old French",
+         "term": "agreer"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "agreen"
+      }
+     ],
+     "lang": "English",
+     "term": "agree"
+    }
+   ],
+   "lang": "English",
+   "term": "disagree"
   }
  },
  "egg": {
@@ -993,6 +3316,64 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Indo-European",
+           "term": "*h₂ōwyóm"
+          }
+         ],
+         "lang": "Proto-Germanic",
+         "term": "*ajją"
+        }
+       ],
+       "lang": "Old Norse",
+       "term": "egg"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "eg"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*h₂eḱ-"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*agjō"
+          }
+         ],
+         "lang": "Old Norse",
+         "term": "eggja"
+        }
+       ],
+       "lang": "Old English",
+       "term": "eggian"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "eggen"
+    }
+   ],
+   "lang": "English",
+   "term": "egg"
   }
  },
  "father": {
@@ -1016,6 +3397,47 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Indo-European"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*peh₂-"
+              }
+             ],
+             "lang": "Proto-Indo-European",
+             "term": "*ph₂tḗr"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*fadēr"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*fader"
+        }
+       ],
+       "lang": "Old English",
+       "term": "fæder"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "fader"
+    }
+   ],
+   "lang": "English",
+   "term": "father"
   }
  },
  "free": {
@@ -1039,6 +3461,70 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*priHós"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*frijaz"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*frī"
+        }
+       ],
+       "lang": "Old English",
+       "term": "frēo"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "fre"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*preyH-"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*frijōną"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*frijōn"
+        }
+       ],
+       "lang": "Old English",
+       "term": "frēon"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "freen"
+    }
+   ],
+   "lang": "English",
+   "term": "free"
   }
  },
  "generate": {
@@ -1089,6 +3575,72 @@
    ],
    "resolved": true,
    "specific_lang": "Latin"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [],
+     "lang": "English",
+     "term": "generō"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Latin",
+       "term": "-ātus"
+      }
+     ],
+     "lang": "English",
+     "term": "-ate"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Indo-European",
+           "term": "*ǵenh₁-"
+          }
+         ],
+         "lang": "Latin",
+         "term": "gignō"
+        }
+       ],
+       "lang": "Latin",
+       "term": "genus"
+      }
+     ],
+     "lang": "Latin",
+     "term": "genus"
+    },
+    {
+     "branches": [],
+     "lang": "Latin",
+     "term": "-ō"
+    },
+    {
+     "branches": [],
+     "lang": "Latin",
+     "term": "generātus"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Latin",
+       "term": "-ātus"
+      }
+     ],
+     "lang": "English",
+     "term": "-ate"
+    }
+   ],
+   "lang": "English",
+   "term": "generate"
   }
  },
  "geology": {
@@ -1112,6 +3664,62 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Ancient Greek"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Ancient Greek",
+       "term": "-λογία"
+      }
+     ],
+     "lang": "Latin",
+     "term": "-logia"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Ancient Greek",
+       "term": "γεω-"
+      }
+     ],
+     "lang": "Renaissance Latin",
+     "term": "geōlogia"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Old Norse",
+         "term": "gjá"
+        }
+       ],
+       "lang": "Norn",
+       "term": "gjo"
+      }
+     ],
+     "lang": "English",
+     "term": "geo"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Dutch",
+       "term": "log"
+      }
+     ],
+     "lang": "English",
+     "term": "logy"
+    }
+   ],
+   "lang": "English",
+   "term": "geology"
   }
  },
  "government": {
@@ -1135,6 +3743,69 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Old French"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Old French",
+       "term": "governement"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "governement"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Ancient Greek",
+               "term": "κυβερνάω"
+              }
+             ],
+             "lang": "Latin",
+             "term": "gubernō"
+            }
+           ],
+           "lang": "Old French",
+           "term": "governer"
+          }
+         ],
+         "lang": "Anglo-Norman",
+         "term": null
+        }
+       ],
+       "lang": "Middle English",
+       "term": "governen"
+      }
+     ],
+     "lang": "English",
+     "term": "govern"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Korean",
+       "term": "멘트"
+      }
+     ],
+     "lang": "English",
+     "term": "ment"
+    }
+   ],
+   "lang": "English",
+   "term": "government"
   }
  },
  "happiness": {
@@ -1158,6 +3829,151 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Old Norse"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Old Norse",
+           "term": "heppinn"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "happyn"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "happy"
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*kob-"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*hampą"
+            }
+           ],
+           "lang": "Old Norse",
+           "term": "happ"
+          },
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [],
+                 "lang": "Proto-Germanic",
+                 "term": "*hampijaną"
+                }
+               ],
+               "lang": "Old Norse",
+               "term": "*happa"
+              }
+             ],
+             "lang": "Old English",
+             "term": "hæppan"
+            }
+           ],
+           "lang": "Middle English",
+           "term": "happen"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "hap"
+        }
+       ],
+       "lang": "English",
+       "term": "hap"
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [],
+                 "lang": "Proto-Indo-European",
+                 "term": "*-kos"
+                }
+               ],
+               "lang": "Proto-Germanic",
+               "term": "*-īgaz"
+              }
+             ],
+             "lang": "Proto-West Germanic",
+             "term": "*-g"
+            }
+           ],
+           "lang": "Old English",
+           "term": "-iġ"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "-y"
+        }
+       ],
+       "lang": "English",
+       "term": "-y"
+      }
+     ],
+     "lang": "English",
+     "term": "happy"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Germanic",
+             "term": "*-inassuz"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*-nassī"
+          }
+         ],
+         "lang": "Old English",
+         "term": "-nis"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "-nes"
+      }
+     ],
+     "lang": "English",
+     "term": "-ness"
+    }
+   ],
+   "lang": "English",
+   "term": "happiness"
   }
  },
  "held": {
@@ -1181,6 +3997,70 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*kel-"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*haldaną"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*haldan"
+        }
+       ],
+       "lang": "Old English",
+       "term": "healdan"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "holden"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*kel-"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*hulþaz"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*holþ"
+        }
+       ],
+       "lang": "Old English",
+       "term": "hold"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "hold"
+    }
+   ],
+   "lang": "English",
+   "term": "hold"
   }
  },
  "hidden": {
@@ -1204,6 +4084,58 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*(s)kewH-"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*huzdijaną"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*huʀdijan"
+          }
+         ],
+         "lang": "Old English",
+         "term": "hȳdan"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "hiden"
+      }
+     ],
+     "lang": "English",
+     "term": "hid"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Latin",
+       "term": "en"
+      }
+     ],
+     "lang": "English",
+     "term": "en"
+    }
+   ],
+   "lang": "English",
+   "term": "hidden"
   }
  },
  "hurricane": {
@@ -1227,6 +4159,23 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Taino"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Taino",
+       "term": "*hurakā"
+      }
+     ],
+     "lang": "Spanish",
+     "term": "huracán"
+    }
+   ],
+   "lang": "English",
+   "term": "hurricane"
   }
  },
  "intrude": {
@@ -1250,6 +4199,23 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Latin"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Proto-Indo-European",
+       "term": "*trewd-"
+      }
+     ],
+     "lang": "Latin",
+     "term": "intrudere"
+    }
+   ],
+   "lang": "English",
+   "term": "intrude"
   }
  },
  "justice": {
@@ -1273,6 +4239,41 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Italic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*h₂yew-"
+            }
+           ],
+           "lang": "Proto-Italic",
+           "term": "*jowos"
+          }
+         ],
+         "lang": "Latin",
+         "term": "iūstitia"
+        }
+       ],
+       "lang": "Old French",
+       "term": "justise"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "justice"
+    }
+   ],
+   "lang": "English",
+   "term": "justice"
   }
  },
  "knife": {
@@ -1296,6 +4297,47 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*gneybʰ-"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*knībaz"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*knīb"
+          }
+         ],
+         "lang": "Old Norse",
+         "term": "knífr"
+        }
+       ],
+       "lang": "Old English",
+       "term": "cnīf"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "knyf"
+    }
+   ],
+   "lang": "English",
+   "term": "knife"
   }
  },
  "late": {
@@ -1319,6 +4361,70 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Germanic",
+           "term": "*lataz"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*lat"
+        }
+       ],
+       "lang": "Old English",
+       "term": "læt"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "late"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*leh₁d-"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*lētaną"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*lātan"
+          }
+         ],
+         "lang": "Old English",
+         "term": "lǣtan"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "leten"
+      }
+     ],
+     "lang": "English",
+     "term": "let"
+    }
+   ],
+   "lang": "English",
+   "term": "late"
   }
  },
  "law": {
@@ -1342,6 +4448,75 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*legʰ-"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*lagą"
+          }
+         ],
+         "lang": "Old Norse",
+         "term": "lǫg"
+        }
+       ],
+       "lang": "Old English",
+       "term": "lagu"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "lawe"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Proto-Indo-European",
+         "term": "*ḱley-"
+        }
+       ],
+       "lang": "Old English",
+       "term": "hlāw"
+      }
+     ],
+     "lang": "Northern Middle English",
+     "term": "lawe"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Proto-Germanic",
+         "term": "*lagą"
+        }
+       ],
+       "lang": "Old Norse",
+       "term": "lag"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "lagh"
+    }
+   ],
+   "lang": "English",
+   "term": "law"
   }
  },
  "lithology": {
@@ -1365,7 +4540,8 @@
    "parts": [],
    "resolved": false,
    "specific_lang": null
-  }
+  },
+  "tree": null
  },
  "look": {
   "direct": {
@@ -1388,6 +4564,29 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-West Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Proto-West Germanic",
+         "term": "*lōkōn"
+        }
+       ],
+       "lang": "Old English",
+       "term": "lōcian"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "loken"
+    }
+   ],
+   "lang": "English",
+   "term": "look"
   }
  },
  "low": {
@@ -1411,6 +4610,109 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Indo-European",
+           "term": "*legʰ-"
+          }
+         ],
+         "lang": "Proto-Germanic",
+         "term": "*lēgaz"
+        }
+       ],
+       "lang": "Old Norse",
+       "term": "lágr"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "lowe"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Old English",
+       "term": "hlōh"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "lough"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Indo-European",
+           "term": "*kelh₁-"
+          }
+         ],
+         "lang": "Proto-Germanic",
+         "term": "*hlōaną"
+        }
+       ],
+       "lang": "Old English",
+       "term": "hlōwan"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "lowen"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Indo-European",
+           "term": "*lewk-"
+          }
+         ],
+         "lang": "Proto-Germanic",
+         "term": "*lugô"
+        }
+       ],
+       "lang": "Old Norse",
+       "term": "logi"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "lowe"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Proto-Indo-European",
+         "term": "*ḱley-"
+        }
+       ],
+       "lang": "Proto-West Germanic",
+       "term": "*hlaiw"
+      }
+     ],
+     "lang": "Old English",
+     "term": "hlāw"
+    }
+   ],
+   "lang": "English",
+   "term": "low"
   }
  },
  "mile": {
@@ -1434,6 +4736,41 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Latin"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*sem-"
+            }
+           ],
+           "lang": "Latin",
+           "term": "mīlia"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*mīliju"
+        }
+       ],
+       "lang": "Old English",
+       "term": "mīl"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "myle"
+    }
+   ],
+   "lang": "English",
+   "term": "mile"
   }
  },
  "mindset": {
@@ -1484,6 +4821,88 @@
    ],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [],
+                 "lang": "Proto-Indo-European",
+                 "term": "*men-"
+                }
+               ],
+               "lang": "Proto-Indo-European",
+               "term": "*méntis"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*mundiz"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*mundi"
+          }
+         ],
+         "lang": "Old English",
+         "term": "mynd"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "minde"
+      }
+     ],
+     "lang": "English",
+     "term": "mind"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*sodéyeti"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*satjaną"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*sattjan"
+          }
+         ],
+         "lang": "Old English",
+         "term": "settan"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "setten"
+      }
+     ],
+     "lang": "English",
+     "term": "set"
+    }
+   ],
+   "lang": "English",
+   "term": "mindset"
   }
  },
  "mountainside": {
@@ -1534,6 +4953,82 @@
    ],
    "resolved": true,
    "specific_lang": "Latin"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [],
+                 "lang": "Proto-Indo-European",
+                 "term": "*men-"
+                }
+               ],
+               "lang": "Proto-Indo-European",
+               "term": "*monti"
+              }
+             ],
+             "lang": "Latin",
+             "term": "mōns"
+            }
+           ],
+           "lang": "la-eme",
+           "term": "montānia"
+          }
+         ],
+         "lang": "Anglo-Norman",
+         "term": "montaigne"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "mountayne"
+      }
+     ],
+     "lang": "English",
+     "term": "mountain"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*seh₁-"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*sīdǭ"
+          }
+         ],
+         "lang": "Old English",
+         "term": "sīde"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "side"
+      }
+     ],
+     "lang": "English",
+     "term": "side"
+    }
+   ],
+   "lang": "English",
+   "term": "mountainside"
   }
  },
  "movie": {
@@ -1557,6 +5052,23 @@
    "parts": [],
    "resolved": true,
    "specific_lang": null
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Latin",
+       "term": "moveō"
+      }
+     ],
+     "lang": "French",
+     "term": null
+    }
+   ],
+   "lang": "English",
+   "term": "movie"
   }
  },
  "muskrat": {
@@ -1580,6 +5092,17 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Algonquian"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [],
+     "lang": "Algonquian",
+     "term": null
+    }
+   ],
+   "lang": "English",
+   "term": "muskrat"
   }
  },
  "narrate": {
@@ -1603,6 +5126,17 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Indo-European"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [],
+     "lang": "Proto-Indo-European",
+     "term": "*ǵneh₃-"
+    }
+   ],
+   "lang": "English",
+   "term": "narrate"
   }
  },
  "night": {
@@ -1626,6 +5160,41 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*nókʷts"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*nahts"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*naht"
+        }
+       ],
+       "lang": "Old English",
+       "term": "niht"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "nighte,night,nyght,niȝt,naht"
+    }
+   ],
+   "lang": "English",
+   "term": "night"
   }
  },
  "outdoorsman": {
@@ -1700,6 +5269,126 @@
    ],
    "resolved": true,
    "specific_lang": null
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Germanic",
+               "term": "*ūt"
+              }
+             ],
+             "lang": "Proto-West Germanic",
+             "term": "*ūt"
+            },
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [],
+                 "lang": "Proto-Indo-European",
+                 "term": "*úd"
+                }
+               ],
+               "lang": "Proto-Germanic",
+               "term": "*ūtai"
+              }
+             ],
+             "lang": "Old English",
+             "term": "ūte"
+            }
+           ],
+           "lang": "Old English",
+           "term": "ūt"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "out"
+        }
+       ],
+       "lang": "English",
+       "term": "out"
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [
+                  {
+                   "branches": [],
+                   "lang": "Proto-Indo-European",
+                   "term": "*dʰwer-"
+                  }
+                 ],
+                 "lang": "Proto-Indo-European",
+                 "term": "*dʰwṓr"
+                }
+               ],
+               "lang": "Proto-Germanic",
+               "term": "*durz"
+              }
+             ],
+             "lang": "Proto-West Germanic",
+             "term": "*dur"
+            }
+           ],
+           "lang": "Old English",
+           "term": "duru"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "dore"
+        }
+       ],
+       "lang": "English",
+       "term": "doors"
+      },
+      {
+       "branches": [],
+       "lang": "English",
+       "term": "outdoor#Adjective"
+      },
+      {
+       "branches": [],
+       "lang": "English",
+       "term": "s"
+      }
+     ],
+     "lang": "English",
+     "term": "outdoors"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Middle English",
+       "term": "-man"
+      }
+     ],
+     "lang": "English",
+     "term": "-man"
+    }
+   ],
+   "lang": "English",
+   "term": "outdoorsman"
   }
  },
  "overactive": {
@@ -1762,6 +5451,122 @@
    ],
    "resolved": true,
    "specific_lang": null
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*upér"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*uber"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*obar"
+          }
+         ],
+         "lang": "Old English",
+         "term": "ofer"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "over"
+      }
+     ],
+     "lang": "English",
+     "term": "over"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*h₂eǵ-"
+              }
+             ],
+             "lang": "Proto-Indo-European",
+             "term": "*h₂éǵeti"
+            }
+           ],
+           "lang": "Latin",
+           "term": "activus"
+          }
+         ],
+         "lang": "Old French",
+         "term": "actif"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "actyf"
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [],
+                 "lang": "Proto-Indo-European",
+                 "term": "*h₂eǵ-"
+                }
+               ],
+               "lang": "Proto-Indo-European",
+               "term": "*h₂éǵeti"
+              }
+             ],
+             "lang": "Latin",
+             "term": "ācta"
+            }
+           ],
+           "lang": "Old French",
+           "term": "acte"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "acte"
+        }
+       ],
+       "lang": "English",
+       "term": "act"
+      },
+      {
+       "branches": [],
+       "lang": "English",
+       "term": "ive"
+      }
+     ],
+     "lang": "English",
+     "term": "active"
+    }
+   ],
+   "lang": "English",
+   "term": "overactive"
   }
  },
  "peacemaker": {
@@ -1812,6 +5617,17 @@
    ],
    "resolved": true,
    "specific_lang": null
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [],
+     "lang": "Koine Greek",
+     "term": "εἰρηνοποιοί"
+    }
+   ],
+   "lang": "English",
+   "term": "peacemaker"
   }
  },
  "phonograph": {
@@ -1835,6 +5651,33 @@
    "parts": [],
    "resolved": true,
    "specific_lang": null
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [],
+     "lang": "English",
+     "term": "phono"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "English",
+       "term": "graphic formula"
+      },
+      {
+       "branches": [],
+       "lang": "Proto-Indo-European",
+       "term": "*gerbʰ-"
+      }
+     ],
+     "lang": "English",
+     "term": "graph"
+    }
+   ],
+   "lang": "English",
+   "term": "phonograph"
   }
  },
  "photograph": {
@@ -1858,6 +5701,39 @@
    "parts": [],
    "resolved": true,
    "specific_lang": null
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "English",
+       "term": "photograph"
+      }
+     ],
+     "lang": "English",
+     "term": "photo"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "English",
+       "term": "graphic formula"
+      },
+      {
+       "branches": [],
+       "lang": "Proto-Indo-European",
+       "term": "*gerbʰ-"
+      }
+     ],
+     "lang": "English",
+     "term": "graph"
+    }
+   ],
+   "lang": "English",
+   "term": "photograph"
   }
  },
  "physiologist": {
@@ -1881,7 +5757,8 @@
    "parts": [],
    "resolved": false,
    "specific_lang": null
-  }
+  },
+  "tree": null
  },
  "preview": {
   "direct": {
@@ -1904,6 +5781,52 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Old French"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Latin",
+         "term": "prae-"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "pre-"
+      }
+     ],
+     "lang": "English",
+     "term": "pre-"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Old French",
+           "term": "veue"
+          }
+         ],
+         "lang": "Anglo-Norman",
+         "term": "vewe"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "vewe"
+      }
+     ],
+     "lang": "English",
+     "term": "view"
+    }
+   ],
+   "lang": "English",
+   "term": "preview"
   }
  },
  "professional": {
@@ -1927,6 +5850,97 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Latin"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [],
+     "lang": "Middle English",
+     "term": "professhennalle"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Latin",
+             "term": "professiō"
+            }
+           ],
+           "lang": "Old French",
+           "term": "profession"
+          }
+         ],
+         "lang": "Anglo-Norman",
+         "term": "professioun"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "professioun"
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*bʰeh₂-"
+            }
+           ],
+           "lang": "Latin",
+           "term": "profitērī"
+          }
+         ],
+         "lang": "Old French",
+         "term": "professer"
+        }
+       ],
+       "lang": "English",
+       "term": "profess"
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Latin",
+           "term": "-tiō"
+          }
+         ],
+         "lang": "Middle French",
+         "term": "-tion"
+        }
+       ],
+       "lang": "English",
+       "term": "-ion"
+      }
+     ],
+     "lang": "English",
+     "term": "profession"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Hindi",
+       "term": "आल"
+      }
+     ],
+     "lang": "English",
+     "term": "al"
+    }
+   ],
+   "lang": "English",
+   "term": "professional"
   }
  },
  "quartz": {
@@ -1950,6 +5964,41 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Slavic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*twerH-"
+            }
+           ],
+           "lang": "Proto-Slavic",
+           "term": "*tvьrdъ"
+          }
+         ],
+         "lang": "zlw",
+         "term": null
+        }
+       ],
+       "lang": "Middle High German",
+       "term": null
+      }
+     ],
+     "lang": "German",
+     "term": "Quarz"
+    }
+   ],
+   "lang": "English",
+   "term": "quartz"
   }
  },
  "quickly": {
@@ -1973,6 +6022,93 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Old English",
+       "term": "cwiculīċe"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "quykly"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [],
+                 "lang": "Proto-Indo-European",
+                 "term": "*gʷeyh₃-"
+                }
+               ],
+               "lang": "Proto-Indo-European",
+               "term": "*gʷih₃wós"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*kwikwaz"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*kwiku"
+          }
+         ],
+         "lang": "Old English",
+         "term": "cwic"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "quik"
+      }
+     ],
+     "lang": "English",
+     "term": "quick"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Germanic",
+             "term": "*-līkaz"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*-līk"
+          }
+         ],
+         "lang": "Old English",
+         "term": "-līċ"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "-ly"
+      }
+     ],
+     "lang": "English",
+     "term": "-ly"
+    }
+   ],
+   "lang": "English",
+   "term": "quickly"
   }
  },
  "ran": {
@@ -1996,6 +6132,47 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*h₃er-"
+              }
+             ],
+             "lang": "Proto-Indo-European",
+             "term": "*h₃reyH-"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*rinnaną"
+          }
+         ],
+         "lang": "Old Norse",
+         "term": "rinna"
+        }
+       ],
+       "lang": "Old English",
+       "term": "rinnan"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "runnen"
+    }
+   ],
+   "lang": "English",
+   "term": "run"
   }
  },
  "reggae": {
@@ -2019,6 +6196,17 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Jamaican Creole"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [],
+     "lang": "Jamaican Creole",
+     "term": "rege"
+    }
+   ],
+   "lang": "English",
+   "term": "reggae"
   }
  },
  "rewrite": {
@@ -2042,6 +6230,70 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Latin",
+           "term": "re-"
+          }
+         ],
+         "lang": "Old French",
+         "term": "re-"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "re-"
+      }
+     ],
+     "lang": "English",
+     "term": "re-"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*wrey-"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*wrītaną"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*wrītan"
+          }
+         ],
+         "lang": "Old English",
+         "term": "wrītan"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "writen"
+      }
+     ],
+     "lang": "English",
+     "term": "write"
+    }
+   ],
+   "lang": "English",
+   "term": "rewrite"
   }
  },
  "robot": {
@@ -2065,6 +6317,40 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "zlw"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Proto-Indo-European",
+         "term": "*h₃erbʰ-"
+        }
+       ],
+       "lang": "zlw",
+       "term": null
+      }
+     ],
+     "lang": "German",
+     "term": "Robot"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Proto-Slavic",
+       "term": null
+      }
+     ],
+     "lang": "Czech",
+     "term": "robot"
+    }
+   ],
+   "lang": "English",
+   "term": "robot"
   }
  },
  "said": {
@@ -2088,6 +6374,75 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Old English",
+       "term": "sǣde"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "seide"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*sokʷ-h₁-yé-"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*sagjaną"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*saggjan"
+          }
+         ],
+         "lang": "Old English",
+         "term": "seċġan"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "saien"
+      }
+     ],
+     "lang": "English",
+     "term": "say"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "English",
+         "term": "ending"
+        }
+       ],
+       "lang": "Japanese",
+       "term": null
+      }
+     ],
+     "lang": "English",
+     "term": "ed"
+    }
+   ],
+   "lang": "English",
+   "term": "said"
   }
  },
  "sandal": {
@@ -2111,6 +6466,70 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Ancient Greek"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Ancient Greek",
+           "term": "σανδάλιον"
+          }
+         ],
+         "lang": "Latin",
+         "term": "sandalium"
+        }
+       ],
+       "lang": "Old French",
+       "term": "sandale"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "sandal"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Sanskrit",
+               "term": "चन्दन"
+              }
+             ],
+             "lang": "Pahlavi",
+             "term": null
+            }
+           ],
+           "lang": "Arabic",
+           "term": "صَنْدَل"
+          }
+         ],
+         "lang": "Byzantine Greek",
+         "term": "σάνδανον"
+        }
+       ],
+       "lang": "Medieval Latin",
+       "term": "sandalum"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "sandal"
+    }
+   ],
+   "lang": "English",
+   "term": "sandal"
   }
  },
  "semi": {
@@ -2134,6 +6553,17 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Indo-European"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [],
+     "lang": "Proto-Indo-European",
+     "term": "*sem-"
+    }
+   ],
+   "lang": "English",
+   "term": "semi"
   }
  },
  "she": {
@@ -2157,6 +6587,41 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*ḱe-"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*hijō"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*hiju"
+        }
+       ],
+       "lang": "Old English",
+       "term": "hēo"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "sche"
+    }
+   ],
+   "lang": "English",
+   "term": "she"
   }
  },
  "skill": {
@@ -2180,6 +6645,64 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Indo-European",
+           "term": "*(s)kelH-"
+          }
+         ],
+         "lang": "Proto-Germanic",
+         "term": "*skilją"
+        }
+       ],
+       "lang": "Old Norse",
+       "term": "skil"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "skill"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*(s)kelH-"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*skilōną"
+          }
+         ],
+         "lang": "Old Norse",
+         "term": "skilja"
+        }
+       ],
+       "lang": "Old English",
+       "term": "scilian"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "skilen"
+    }
+   ],
+   "lang": "English",
+   "term": "skill"
   }
  },
  "sky": {
@@ -2203,6 +6726,35 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Indo-European",
+           "term": "*(s)kewH-"
+          }
+         ],
+         "lang": "Proto-Germanic",
+         "term": "*skiwją"
+        }
+       ],
+       "lang": "Old Norse",
+       "term": "ský"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "sky"
+    }
+   ],
+   "lang": "English",
+   "term": "sky"
   }
  },
  "sugar": {
@@ -2226,6 +6778,17 @@
    "parts": [],
    "resolved": false,
    "specific_lang": null
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [],
+     "lang": "Middle English",
+     "term": "sugren"
+    }
+   ],
+   "lang": "English",
+   "term": "sugar"
   }
  },
  "table": {
@@ -2249,6 +6812,40 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Old French"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Latin",
+           "term": "tabula"
+          }
+         ],
+         "lang": "Proto-Germanic",
+         "term": null
+        }
+       ],
+       "lang": "Old English",
+       "term": "tabele"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "table"
+    },
+    {
+     "branches": [],
+     "lang": "Old French",
+     "term": "table"
+    }
+   ],
+   "lang": "English",
+   "term": "table"
   }
  },
  "tag": {
@@ -2272,6 +6869,28 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Old Norse"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Old Norse",
+       "term": null
+      }
+     ],
+     "lang": "Middle English",
+     "term": "tagge"
+    },
+    {
+     "branches": [],
+     "lang": "Aramaic",
+     "term": "תגא"
+    }
+   ],
+   "lang": "English",
+   "term": "tag"
   }
  },
  "tea": {
@@ -2295,6 +6914,35 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Sino-Tibetan"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Sino-Tibetan",
+           "term": "*s-la"
+          }
+         ],
+         "lang": "Old Chinese",
+         "term": null
+        }
+       ],
+       "lang": "Hokkien",
+       "term": "茶"
+      }
+     ],
+     "lang": "Dutch",
+     "term": "thee"
+    }
+   ],
+   "lang": "English",
+   "term": "tea"
   }
  },
  "th": {
@@ -2318,7 +6966,8 @@
    "parts": [],
    "resolved": false,
    "specific_lang": null
-  }
+  },
+  "tree": null
  },
  "the": {
   "direct": {
@@ -2341,6 +6990,34 @@
    "parts": [],
    "resolved": false,
    "specific_lang": null
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Old English",
+       "term": "þē"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "þe"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Old English",
+       "term": "þe"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "the"
+    }
+   ],
+   "lang": "English",
+   "term": "the"
   }
  },
  "them": {
@@ -2364,6 +7041,23 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Old Norse"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Old Norse",
+       "term": "þeim"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "þem"
+    }
+   ],
+   "lang": "English",
+   "term": "them"
   }
  },
  "they": {
@@ -2387,6 +7081,35 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Indo-European",
+           "term": "*só"
+          }
+         ],
+         "lang": "Proto-Germanic",
+         "term": "*þai"
+        }
+       ],
+       "lang": "Old Norse",
+       "term": "þeir"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "þei"
+    }
+   ],
+   "lang": "English",
+   "term": "they"
   }
  },
  "trust": {
@@ -2410,6 +7133,29 @@
    "parts": [],
    "resolved": false,
    "specific_lang": null
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Proto-Indo-European",
+         "term": "*deru-"
+        }
+       ],
+       "lang": "Old English",
+       "term": "*trust"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "trust"
+    }
+   ],
+   "lang": "English",
+   "term": "trust"
   }
  },
  "undo": {
@@ -2433,6 +7179,92 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-West Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Proto-West Germanic",
+         "term": "*andadōn"
+        }
+       ],
+       "lang": "Old English",
+       "term": "ondōn"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "undōn"
+    },
+    {
+     "branches": [],
+     "lang": "English",
+     "term": "un"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*dʰeh₁-"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*dōną"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*dōn"
+          }
+         ],
+         "lang": "Old English",
+         "term": "don"
+        },
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*dʰédʰeh₁ti"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*dedǭ"
+            }
+           ],
+           "lang": "Old English",
+           "term": "dyde"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "didde"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "don"
+      }
+     ],
+     "lang": "English",
+     "term": "do"
+    }
+   ],
+   "lang": "English",
+   "term": "undo"
   }
  },
  "unhappy": {
@@ -2456,6 +7288,132 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Old Norse"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [],
+     "lang": "Middle English",
+     "term": "unhappy"
+    },
+    {
+     "branches": [],
+     "lang": "English",
+     "term": "un"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Old Norse",
+           "term": "heppinn"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "happyn"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "happy"
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*kob-"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*hampą"
+            }
+           ],
+           "lang": "Old Norse",
+           "term": "happ"
+          },
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [],
+                 "lang": "Proto-Germanic",
+                 "term": "*hampijaną"
+                }
+               ],
+               "lang": "Old Norse",
+               "term": "*happa"
+              }
+             ],
+             "lang": "Old English",
+             "term": "hæppan"
+            }
+           ],
+           "lang": "Middle English",
+           "term": "happen"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "hap"
+        }
+       ],
+       "lang": "English",
+       "term": "hap"
+      },
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [],
+                 "lang": "Proto-Indo-European",
+                 "term": "*-kos"
+                }
+               ],
+               "lang": "Proto-Germanic",
+               "term": "*-īgaz"
+              }
+             ],
+             "lang": "Proto-West Germanic",
+             "term": "*-g"
+            }
+           ],
+           "lang": "Old English",
+           "term": "-iġ"
+          }
+         ],
+         "lang": "Middle English",
+         "term": "-y"
+        }
+       ],
+       "lang": "English",
+       "term": "-y"
+      }
+     ],
+     "lang": "English",
+     "term": "happy"
+    }
+   ],
+   "lang": "English",
+   "term": "unhappy"
   }
  },
  "unheard": {
@@ -2479,6 +7437,69 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Old English",
+       "term": "unġehīered"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "unherd"
+    },
+    {
+     "branches": [],
+     "lang": "English",
+     "term": "un"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [],
+                 "lang": "Proto-Indo-European",
+                 "term": "*h₂eḱ-"
+                }
+               ],
+               "lang": "Proto-Indo-European",
+               "term": "*h₂ḱh₂owsyéti"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*hauzijaną"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*hauʀijan"
+          }
+         ],
+         "lang": "Old English",
+         "term": "hēran"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "har"
+      }
+     ],
+     "lang": "English",
+     "term": "heard"
+    }
+   ],
+   "lang": "English",
+   "term": "unheard"
   }
  },
  "upside": {
@@ -2529,6 +7550,70 @@
    ],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Germanic",
+             "term": "*upp"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*upp"
+          }
+         ],
+         "lang": "Old English",
+         "term": "upp"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "up"
+      }
+     ],
+     "lang": "English",
+     "term": "up"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*seh₁-"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*sīdǭ"
+          }
+         ],
+         "lang": "Old English",
+         "term": "sīde"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "side"
+      }
+     ],
+     "lang": "English",
+     "term": "side"
+    }
+   ],
+   "lang": "English",
+   "term": "upside"
   }
  },
  "vitamin": {
@@ -2552,6 +7637,23 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Latin"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Proto-Indo-European",
+       "term": "*gʷeyh₃-"
+      }
+     ],
+     "lang": "Latin",
+     "term": "vīta"
+    }
+   ],
+   "lang": "English",
+   "term": "vitamin"
   }
  },
  "washing": {
@@ -2575,6 +7677,180 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-West Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [],
+         "lang": "Proto-West Germanic",
+         "term": "*waskingu"
+        }
+       ],
+       "lang": "Old English",
+       "term": "*wæsċing//*weasċing"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "waschynge//wasshynge//weschynge"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*wed-"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*waskaną,*watskaną"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*waskan"
+          }
+         ],
+         "lang": "Old English",
+         "term": "wascan"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "wasshen,waschen,weschen"
+      }
+     ],
+     "lang": "English",
+     "term": "wash"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Germanic",
+             "term": "*-ungō"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*-ingu"
+          }
+         ],
+         "lang": "Old English",
+         "term": "-ing"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "-ing"
+      }
+     ],
+     "lang": "English",
+     "term": "-ing"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Germanic",
+           "term": "*waskandz"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*waskandī"
+        }
+       ],
+       "lang": "Old English",
+       "term": "*wæsċende//*wasċende"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "waschyng//wasschinge//wasschynge//wassende//wesschinge"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*wed-"
+              }
+             ],
+             "lang": "Proto-Germanic",
+             "term": "*waskaną,*watskaną"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*waskan"
+          }
+         ],
+         "lang": "Old English",
+         "term": "wascan"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "wasshen,waschen,weschen"
+      }
+     ],
+     "lang": "English",
+     "term": "wash"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Germanic",
+             "term": "*-ungō"
+            }
+           ],
+           "lang": "Proto-West Germanic",
+           "term": "*-ingu"
+          }
+         ],
+         "lang": "Old English",
+         "term": "-ing"
+        }
+       ],
+       "lang": "Middle English",
+       "term": "-ing"
+      }
+     ],
+     "lang": "English",
+     "term": "-ing"
+    }
+   ],
+   "lang": "English",
+   "term": "washing"
   }
  },
  "water": {
@@ -2598,6 +7874,76 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*wed-"
+              }
+             ],
+             "lang": "Proto-Indo-European",
+             "term": "*wódr̥"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*watōr"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*watar"
+        }
+       ],
+       "lang": "Old English",
+       "term": "wæter"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "water"
+    },
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*wódr̥"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*watōr"
+          }
+         ],
+         "lang": "Proto-Germanic",
+         "term": "*watrōną"
+        }
+       ],
+       "lang": "Old English",
+       "term": "wæterian"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "wateren"
+    }
+   ],
+   "lang": "English",
+   "term": "water"
   }
  },
  "went": {
@@ -2621,6 +7967,52 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*ǵʰeh₁-"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*gāną"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*gān"
+        }
+       ],
+       "lang": "Old English",
+       "term": "gān"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "gon"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Chinese",
+       "term": "圍棋"
+      }
+     ],
+     "lang": "Japanese",
+     "term": null
+    }
+   ],
+   "lang": "English",
+   "term": "go"
   }
  },
  "what": {
@@ -2644,6 +8036,47 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Indo-European",
+               "term": "*kʷ-"
+              }
+             ],
+             "lang": "Proto-Indo-European",
+             "term": "*kʷód"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*hwat"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*hwat"
+        }
+       ],
+       "lang": "Old English",
+       "term": "hwæt"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "what"
+    }
+   ],
+   "lang": "English",
+   "term": "what"
   }
  },
  "with": {
@@ -2667,6 +8100,51 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [],
+           "lang": "Proto-Germanic",
+           "term": "*wiþrą"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*wiþi"
+        }
+       ],
+       "lang": "Old English",
+       "term": "wiþ"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "with"
+    },
+    {
+     "branches": [],
+     "lang": "Old Norse",
+     "term": "við"
+    },
+    {
+     "branches": [
+      {
+       "branches": [],
+       "lang": "Old English",
+       "term": "wiþþe"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "withe"
+    }
+   ],
+   "lang": "English",
+   "term": "with"
   }
  },
  "wolves": {
@@ -2690,6 +8168,41 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Proto-Germanic"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [],
+             "lang": "Proto-Indo-European",
+             "term": "*wĺ̥kʷos"
+            }
+           ],
+           "lang": "Proto-Germanic",
+           "term": "*wulfaz"
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "term": "*wulf"
+        }
+       ],
+       "lang": "Old English",
+       "term": "wulf"
+      }
+     ],
+     "lang": "Middle English",
+     "term": "wolf"
+    }
+   ],
+   "lang": "English",
+   "term": "wolf"
   }
  },
  "zero": {
@@ -2713,6 +8226,53 @@
    "parts": [],
    "resolved": true,
    "specific_lang": "Sanskrit"
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [
+      {
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [],
+                 "lang": "Arabic",
+                 "term": "ص ف ر"
+                }
+               ],
+               "lang": "Sanskrit",
+               "term": "शून्य"
+              }
+             ],
+             "lang": "Arabic",
+             "term": "صِفْر"
+            }
+           ],
+           "lang": "Medieval Latin",
+           "term": "zēphirum"
+          }
+         ],
+         "lang": "Old Italian",
+         "term": "zero"
+        }
+       ],
+       "lang": "Middle French",
+       "term": "zero"
+      }
+     ],
+     "lang": "es-ear",
+     "term": "zero"
+    }
+   ],
+   "lang": "English",
+   "term": "zero"
   }
  },
  "zoophysiologist": {
@@ -2736,6 +8296,22 @@
    "parts": [],
    "resolved": false,
    "specific_lang": null
+  },
+  "tree": {
+   "branches": [
+    {
+     "branches": [],
+     "lang": "English",
+     "term": "zoo"
+    },
+    {
+     "branches": [],
+     "lang": "English",
+     "term": "physiologist"
+    }
+   ],
+   "lang": "English",
+   "term": "zoophysiologist"
   }
  }
 }

@@ -245,7 +245,33 @@ class Resolution:
             resolved = any(v.resolved for v in sub_views)
             return ResolvedView(self.word, "Compound", None, None, resolved, self.source, parts=sub_views)
         if self.chain:
-            if mode in ("direct", "influence") and self.prox_kind == "root":
+            return self._chain_view(mode, sub_views)
+        # No foreign donor: fall back to English-stage approximation (Path A).
+        # Same answer at every level -- a word that never left English has no
+        # distinct direct/influence/root story to tell.
+        if self.english_stage_iso is not None:
+            bucket = bucket_for(self.english_stage_iso)
+            return ResolvedView(
+                self.word, bucket, self.english_stage_iso,
+                self.english_stage_lang, bucket not in APPROXIMATE_BUCKETS,
+                self.source, parts=sub_views,
+            )
+        return ResolvedView(self.word, "Unknown", None, None, False, self.source,
+                            parts=sub_views)
+
+    def _link_for(self, mode: str) -> "ChainLink":
+        """Which step of the chain this mode reads."""
+        if mode == "direct":
+            return self.chain[0]
+        if mode == "root":
+            return self.chain[-1]
+        if mode == "influence":
+            return _pick_influence(self.chain)
+        raise ValueError(f"unknown mode: {mode!r} (expected direct/influence/root)")
+
+    def _chain_view(self, mode: str, sub_views) -> ResolvedView:
+        """This resolution read at one level, for a word that has a chain."""
+        if mode in ("direct", "influence") and self.prox_kind == "root":
                 # Added 2026-07-24 (Joe: "vitamin"/"critical" showed PIE for
                 # Direct Source -- same impossible shape as the "computer" bug
                 # (issue #12), just without a sibling term_id for
@@ -262,40 +288,21 @@ class Resolution:
                 # itself is real, verified data (Wiktionary's own `has_root`
                 # tag) -- only the false claim that it's an immediate donor
                 # goes away.
-                return ResolvedView(self.word, "Unknown", None, None, False, self.source)
-            if mode == "direct":
-                link = self.chain[0]
-            elif mode == "root":
-                link = self.chain[-1]
-            elif mode == "influence":
-                link = _pick_influence(self.chain)
-            else:
-                raise ValueError(f"unknown mode: {mode!r} (expected direct/influence/root)")
-            depth_lang = link.lang
-            if mode == "root" and self.root_lang:
-                # Name the actual reconstructed/attested form reached, not
-                # just the family bucket -- e.g. "Proto-Germanic (from PIE)"
-                # instead of just "PIE". See convert_wikt.py's `resolve_term`
-                # for how root_lang/root_pie are derived and their limits
-                # (only surfaces names explicitly recorded in the word's own
-                # chain, never inferred).
-                depth_lang = f"{self.root_lang} (from PIE)" if self.root_pie else self.root_lang
-            return ResolvedView(
-                self.word, link.bucket, link.iso, depth_lang, True, self.source,
-                specific_lang=link.specific_lang, parts=sub_views,
-            )
-        # No foreign donor: fall back to English-stage approximation (Path A).
-        # Same answer at every level -- a word that never left English has no
-        # distinct direct/influence/root story to tell.
-        if self.english_stage_iso is not None:
-            bucket = bucket_for(self.english_stage_iso)
-            return ResolvedView(
-                self.word, bucket, self.english_stage_iso,
-                self.english_stage_lang, bucket not in APPROXIMATE_BUCKETS,
-                self.source, parts=sub_views,
-            )
-        return ResolvedView(self.word, "Unknown", None, None, False, self.source,
-                            parts=sub_views)
+            return ResolvedView(self.word, "Unknown", None, None, False, self.source)
+        link = self._link_for(mode)
+        depth_lang = link.lang
+        if mode == "root" and self.root_lang:
+            # Name the actual reconstructed/attested form reached, not just
+            # the family bucket -- "Proto-Germanic (from PIE)" rather than a
+            # bare "PIE" that says nothing about which branch it came down.
+            # Only surfaces names explicitly recorded in the word's own chain,
+            # never inferred.
+            depth_lang = (f"{self.root_lang} (from PIE)" if self.root_pie
+                          else self.root_lang)
+        return ResolvedView(
+            self.word, link.bucket, link.iso, depth_lang, True, self.source,
+            specific_lang=link.specific_lang, parts=sub_views,
+        )
 
 
 class Resolver:
@@ -631,6 +638,28 @@ class WiktextractResolver(Resolver):
 # rather than extended.
 
 
+@dataclass(frozen=True)
+class _Provenance:
+    """
+    How an answer was reached -- the four fields every `DbResolver` result
+    carries regardless of which branch produced it.
+
+    A record rather than four repeated keyword arguments: the three
+    `Resolution` constructions in `_resolve` each listed all four, and keeping
+    them in step was manual. Adding a fifth meant remembering three places.
+    """
+    case_fallback: bool
+    inherited_from: Optional[str]
+    compound_parts: Optional[List["Resolution"]]
+    affix_collapsed: bool
+
+    def kwargs(self) -> dict:
+        return {"case_fallback": self.case_fallback,
+                "inherited_from": self.inherited_from,
+                "compound_parts": self.compound_parts,
+                "affix_collapsed": self.affix_collapsed}
+
+
 class DbResolver(Resolver):
     """
     Path C backend: etymology.db, via etymology_db.py.
@@ -744,6 +773,67 @@ class DbResolver(Resolver):
         return Resolution(term, [link], None, None, self.name,
                           root_lang=node.lang, root_term=node.term)
 
+    def _donor_nodes(self, line: List) -> List:
+        """
+        The foreign steps in a lineage that actually transmitted the word.
+
+        A ROOT IS NOT A DONOR. `trust` runs English -> Middle English -> Old
+        English -> PIE *deru-: its only foreign node is a reconstructed root,
+        so the honest direct-source answer is "native Germanic", not "PIE".
+        Counting the root as a donor is the same false claim as drawing
+        `mile`'s Middle-English-to-PIE edge, just in the bar chart instead of
+        the tree.
+        """
+        return [n for n in line[1:]
+                if n.lang not in self._english and n.rel in self._donor_rels]
+
+    def _native_answer(self, word: str, line: List,
+                       found: "_Provenance") -> Resolution:
+        """
+        A native-core identification -- or a MISS, when nothing evidences it.
+
+        NATIVE DESCENT IS A CLAIM, AND IT NEEDS EVIDENCE. This used to fire on
+        "no foreign donor found", which treats absence of evidence as
+        evidence. True for `trust` (a real inherited thread through the
+        English stages) and false for `movie`, whose entire recorded formation
+        is the suffix `ie` because the builder lost `move`, and for
+        `zoophysiologist`, which is Greek but whose parts are absent from the
+        database so the walk dead-ended inside English.
+
+        The evidence required is an `inherited` edge. Without one this is a
+        miss, and a miss lets the file-backed gap-fillers and `compounds.py`
+        have their turn -- which is how `peacemaker` gets back to peace +
+        maker. Reporting Germanic instead both stated a falsehood and blocked
+        every backend behind it.
+        """
+        if not any(n.rel == "inherited" for n in line):
+            return Resolution(word, [], None, None, self.name, **found.kwargs())
+        stages = [n for n in line if n.lang in self._english]
+        stage = stages[-1].lang if len(stages) > 1 else "English (native core)"
+        return Resolution(word, [], "eng", stage, self.name, **found.kwargs())
+
+    def _donor_answer(self, word: str, foreign: List, prox_kind: Optional[str],
+                      found: "_Provenance") -> Resolution:
+        """
+        A real foreign chain, plus the deepest form to name for Deepest Root.
+
+        Deepest Root names the deepest ATTESTED-or-reconstructed language and
+        flags separately whether it goes on to PIE, so a Germanic word reads
+        "Proto-Germanic (from PIE)" rather than collapsing to a bare "PIE"
+        that says nothing about which branch it came down.
+        """
+        chain = [ChainLink(bucket_for_name(n.lang), bucket_for_name(n.lang),
+                           bucket_for_name(n.lang), specific_lang=n.lang)
+                 for n in foreign]
+        deepest = foreign[-1]
+        non_pie = [n for n in foreign if not _is_pie(n.lang)]
+        root_pie = bool(non_pie) and _is_pie(deepest.lang)
+        root_node = non_pie[-1] if root_pie else deepest
+        return Resolution(word, chain, None, None, self.name,
+                          root_lang=root_node.lang, root_pie=root_pie,
+                          prox_kind=prox_kind, root_term=root_node.term,
+                          **found.kwargs())
+
     def _resolve(self, word: str, depth: int) -> Resolution:
         entry = self._db.entry(word)
         # No tree means NO ANSWER -- never a native-core claim. `entry` exists
@@ -798,67 +888,13 @@ class DbResolver(Resolver):
                 kept = [c for c in children if not self._is_bound_affix(c)]
                 parts = [self._part_resolution(c, depth) for c in kept]
 
+        found = _Provenance(case_fallback=case_fallback, inherited_from=inherited,
+                            compound_parts=parts, affix_collapsed=affix_collapsed)
         line = self._db.lineage(entry)
-        # A ROOT IS NOT A DONOR. `trust` runs English -> Middle English ->
-        # Old English -> PIE *deru-: its only foreign node is a reconstructed
-        # root, so the honest direct-source answer is "native Germanic", not
-        # "PIE". Counting the root as a donor is the same false claim as
-        # drawing `mile`'s Middle-English-to-PIE edge, just in the bar chart
-        # instead of the tree.
-        foreign = [n for n in line[1:]
-                   if n.lang not in self._english
-                   and n.rel in self._donor_rels]
+        foreign = self._donor_nodes(line)
         if not foreign:
-            # NATIVE DESCENT IS A CLAIM, AND IT NEEDS EVIDENCE.
-            #
-            # This branch used to fire on "no foreign donor found", which
-            # treats absence of evidence as evidence. It is true for `trust`
-            # (English -> Middle English -> Old English, a real inherited
-            # thread) and false for `movie`, whose entire recorded formation
-            # is the suffix `ie` -- the builder lost `move` -- and which was
-            # therefore announced as native Germanic. `zoophysiologist` got
-            # the same treatment while actually being Greek, because its parts
-            # `zoo` and `physiologist` are absent from the database and the
-            # walk dead-ended in English.
-            #
-            # The evidence required is an `inherited` edge: descent through
-            # the English stages, which is what "native core" means. Without
-            # one this is a MISS, and a miss lets the file-backed gap-fillers
-            # and `compounds.py` have their turn -- which is how `peacemaker`
-            # gets back to peace + maker. Reporting Germanic instead both
-            # stated a falsehood and blocked every backend behind it.
-            stages = [n for n in line if n.lang in self._english]
-            if not any(n.rel == "inherited" for n in line):
-                return Resolution(word, [], None, None, self.name,
-                                   case_fallback=case_fallback,
-                                   inherited_from=inherited,
-                                   compound_parts=parts,
-                                   affix_collapsed=affix_collapsed)
-            stage = stages[-1].lang if len(stages) > 1 else "English (native core)"
-            return Resolution(word, [], "eng", stage, self.name,
-                               case_fallback=case_fallback,
-                               inherited_from=inherited,
-                               compound_parts=parts,
-                               affix_collapsed=affix_collapsed)
-
-        chain = [ChainLink(bucket_for_name(n.lang), bucket_for_name(n.lang),
-                            bucket_for_name(n.lang), specific_lang=n.lang)
-                 for n in foreign]
-
-        # Deepest Root names the deepest ATTESTED-or-reconstructed language
-        # and flags separately whether it goes on to PIE -- so a Germanic word
-        # reads "Proto-Germanic (from PIE)" rather than collapsing to a bare
-        # "PIE" that says nothing about which branch it came down. Preserves
-        # the 2026-07-23 design; PIE is in the chain either way.
-        deepest = foreign[-1]
-        non_pie = [n for n in foreign if not _is_pie(n.lang)]
-        root_pie = bool(non_pie) and _is_pie(deepest.lang)
-        root_node = non_pie[-1] if root_pie else deepest
-        return Resolution(word, chain, None, None, self.name,
-                           root_lang=root_node.lang, root_pie=root_pie,
-                           prox_kind=prox_kind, case_fallback=case_fallback,
-                           root_term=root_node.term, inherited_from=inherited,
-                           compound_parts=parts, affix_collapsed=affix_collapsed)
+            return self._native_answer(word, line, found)
+        return self._donor_answer(word, foreign, prox_kind, found)
 
 
 # Owned by `linguistics` -- `app.py` had grown its own, differently-worded

@@ -62,8 +62,18 @@ WORDS = [
 ]
 
 
+def _tree_shape(node):
+    """Language/term/reltype skeleton of a tree, order preserved."""
+    if not node:
+        return None
+    return {"lang": node.get("lang"), "term": node.get("term"),
+            "branches": [_tree_shape(b) for b in
+                         (node.get("branches") or node.get("children") or [])]}
+
+
 def _snapshot():
     from resolver import shared_resolver
+    import word_trees
 
     resolver = shared_resolver()
     out = {}
@@ -79,6 +89,11 @@ def _snapshot():
                 "resolved": bool(view.resolved),
                 "parts": [[p.word, p.bucket] for p in (view.parts or [])],
             }
+        # The Word Search tree too: it is a SECOND derivation of the same
+        # word, and the whole point of issue #16 is that the two must not
+        # drift apart. Pinning only the resolver would leave half the
+        # behaviour unguarded during a refactor of `word_trees`.
+        entry["tree"] = _tree_shape(word_trees.resolve_tree(word))
         out[word] = entry
     return out
 
@@ -103,6 +118,15 @@ def test_answer_is_unchanged(word):
         assert bool(view.resolved) == want["resolved"], f"{word}/{mode} resolved-flag changed"
         parts = [[p.word, p.bucket] for p in (view.parts or [])]
         assert parts == want["parts"], f"{word}/{mode} component split changed"
+
+
+@pytest.mark.parametrize("word", sorted(set(WORDS)))
+def test_tree_is_unchanged(word):
+    import word_trees
+
+    expected = _load()[word].get("tree")
+    assert _tree_shape(word_trees.resolve_tree(word)) == expected, \
+        f"{word}: the Word Search tree changed shape"
 
 
 if __name__ == "__main__":
