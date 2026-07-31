@@ -50,9 +50,42 @@ ENGLISH_STAGE_ISO = frozenset({"ang", "enm", "eng"})
 ENGLISH_STAGE_WIKT_CODES = frozenset({"en", "enm", "ang", "sco"})
 
 
+# Regional/dialectal qualifiers Wiktionary puts in FRONT of a stage name:
+# `Northern Middle English`, `Anglian Old English`, `Northumbrian Old English`.
+# These are the same language, narrowed to a dialect, and are native descent.
+#
+# Matching on the SUFFIX and nothing else is what keeps this safe. `Chinese
+# Pidgin English` and `Trinidadian Creole English` also end in "English" but
+# are CONTACT languages, not stages -- a word borrowed from one is a
+# borrowing, and counting it as a stage would record that borrowing as
+# inheritance. So a name qualifies only when what follows the qualifier is
+# itself a stage name AND the qualifier is a known dialect word, never merely
+# because the name ends in "English".
+_STAGE_QUALIFIERS = frozenset({
+    "Northern", "Southern", "Eastern", "Western", "Midland",
+    "Anglian", "Northumbrian", "Mercian", "Kentish", "West Saxon",
+    "Early", "Late",
+})
+
+
 def is_english_stage(name: Optional[str]) -> bool:
-    """True for a stage of English itself, by NAME (not code)."""
-    return name in ENGLISH_STAGE_NAMES
+    """
+    True for a stage of English itself, by NAME (not code).
+
+    Includes dialectal narrowings of a stage (`Northern Middle English`) and
+    deliberately EXCLUDES contact languages named after English
+    (`Chinese Pidgin English`) -- see `_STAGE_QUALIFIERS` for why the
+    distinction is drawn on the qualifier rather than the suffix.
+    """
+    if not name:
+        return False
+    if name in ENGLISH_STAGE_NAMES:
+        return True
+    words = name.split()
+    for start in range(1, len(words)):
+        if " ".join(words[start:]) in ENGLISH_STAGE_NAMES:
+            return " ".join(words[:start]) in _STAGE_QUALIFIERS
+    return False
 
 
 # ----------------------------------------------------------- proto forms

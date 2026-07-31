@@ -401,6 +401,16 @@ refer to them.
   The fix is to resolve the code before bucketing at every call site, not to add
   code keys to the map. One genuine name-level gap remains: `lt` → Lithuanian
   (125 nodes) — Baltic has no bucket at all.
+  **Largely reduced 2026-07-31**: `bucket_for_name` now falls back to a
+  qualified name's PARENT (`Andalusian Arabic` → Arabic → Semitic,
+  `Renaissance Latin` → Latin, `Northern Middle English` → Middle English →
+  Germanic), dropping leading qualifiers one at a time so the longest suffix
+  wins. **778 nodes rescued from `Other`** (8,024 → 7,246). Curated entries
+  still win outright, so the deliberate isolates stay `Other` on purpose.
+  Separately, `linguistics.is_english_stage` now accepts a DIALECT of a stage
+  (`Anglian Old English`) while still rejecting a CONTACT language named after
+  one (`Chinese Pidgin English`) — a word borrowed from a pidgin is a
+  borrowing, and counting it as a stage would record it as inheritance.
 - **#4 — coverage is not total.** ~31% of the 1.38M headwords have their own
   etymology; ~52% get an answer once inflection/stem/compound routing is
   counted; **ordinary prose runs ~98%**, because coverage is concentrated

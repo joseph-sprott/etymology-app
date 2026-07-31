@@ -244,7 +244,37 @@ BUCKET_FAMILY = {
 
 
 def bucket_for_name(name: str) -> str:
-    return NAME_TO_BUCKET.get(name, "Other")
+    """
+    The origin bucket for a language name, falling back to its PARENT.
+
+    Wiktionary names many languages as a qualified variant of one the map
+    already knows -- `Andalusian Arabic`, `Renaissance Latin`, `Canadian
+    French`, `Attic Greek`, `Northern Middle English`. Every one of those fell
+    to `Other`, which is issue #3 (`Other` bucket leakage) and is what put
+    `Northern Middle English` and `Anglian Old English` -- plainly Germanic --
+    in the catch-all bucket.
+
+    The fallback drops leading qualifiers one at a time and takes the first
+    suffix the map knows, so `Northern Middle English` finds `Middle English`
+    rather than jumping straight to `English`. Longest match first matters:
+    the two answer the same here, but a variant of `Old French` must not be
+    read as modern `French`.
+
+    Only ever consulted when the full name is unmapped, so every curated entry
+    still wins -- including the deliberate isolates (Basque, Georgian,
+    Sumerian) which stay `Other` on purpose.
+    """
+    if not name:
+        return "Other"
+    direct = NAME_TO_BUCKET.get(name)
+    if direct is not None:
+        return direct
+    words = name.split()
+    for start in range(1, len(words)):
+        parent = NAME_TO_BUCKET.get(" ".join(words[start:]))
+        if parent is not None:
+            return parent
+    return "Other"
 
 
 def family_for_name(name: str):
