@@ -33,6 +33,7 @@ import linguistics
 from buckets_wikt import bucket_for_name
 from palette import PROTO_SLUGS, bucket_slug
 from linguistics import depth_hint as _depth_hint
+from corrections import WORD_CORRECTIONS
 from resolver import shared_resolver
 import sys
 
@@ -335,14 +336,14 @@ def resolve_tree(word, _depth=0):
     # doesn't cover -- it can add coverage, never override.
     from_db = _tree_from_db(word)
     if from_db is not None and not _is_bare_root_tree(from_db):
-        return from_db
+        return _honour_correction(word, from_db, _depth)
 
     # A real stored tree still wins outright. A bare-root STUB no longer
     # short-circuits the resolver-backed paths below -- 2026-07-25, the
     # "intrude" bug, where the tree showed PIE while the analyzer said Latin.
     direct = _lookup_tree_direct(word)
     if direct is not None and not _is_bare_root_tree(direct):
-        return direct
+        return _honour_correction(word, direct, _depth)
     if _depth > 5:
         return direct
 
@@ -357,6 +358,47 @@ def resolve_tree(word, _depth=0):
     # Nothing better found. Return the thin stored stub if we had one -- it's
     # real (if incomplete) recorded data, and better than claiming no data.
     return direct
+
+
+def _honour_correction(word, tree, depth):
+    """
+    Replace a stored tree ONLY when it contradicts a hand-verified correction.
+
+    Issue #16's standing residual, closed 2026-07-31. `resolve_tree` consults
+    stored trees before the resolver, so a word fixed in `corrections.py` kept
+    rendering the uncorrected tree unless someone ALSO hand-wrote a matching
+    entry in the parallel `tree_corrections.py`. Two tables, kept in step by
+    hand -- and they HAD drifted: six corrected words rendered a tree
+    contradicting their own correction, `photograph` showing Germanic/PIE
+    while the analyzer said Greek.
+
+    Contradiction only, never wholesale replacement. A correction's chain is
+    bucket names, so substituting it everywhere would flatten the rich nested
+    trees `tree_corrections.py` supplies for `die`, `bull`, `and` and `low` --
+    real attested spellings replaced by one word like "Germanic". Where the
+    stored tree already reaches the corrected bucket, it stays.
+    """
+    fix = WORD_CORRECTIONS.get(word.lower())
+    if fix is None or depth > 5:
+        return tree
+    wanted = fix.get("p")
+    langs = set()
+
+    def walk(node):
+        langs.add(node.get("lang"))
+        for child in node.get("branches") or node.get("children") or []:
+            walk(child)
+
+    walk(tree)
+    for lang in langs:
+        if lang and (lang == wanted or bucket_for_name(lang) == wanted):
+            return tree
+    # `_synthesized_tree`, NOT `_tree_via_resolver_chain`: that one first tries
+    # the word's CAPITALIZED entry, which for `calypso` is Calypso the Greek
+    # nymph -- the exact unrelated-homograph collision this correction exists
+    # to overrule.
+    corrected = _synthesized_tree(word, shared_resolver().resolve(word))
+    return corrected if corrected is not None else tree
 
 
 def _tree_via_inherited(word, res, depth):
@@ -396,7 +438,7 @@ def _tree_via_resolver_chain(word, res, direct):
         the "intrude shows PIE but not Latin" class.
       * a bare root stub -- a single flattened node, which is all it has.
     """
-    if not (res.chain and res.root_lang):
+    if not res.chain:
         return None
     cap_tree = TREES.get(word.capitalize())
     if cap_tree is not None:
@@ -405,8 +447,32 @@ def _tree_via_resolver_chain(word, res, direct):
         built = _tree_from_chain(word, res, direct)
         if built is not None:
             return built
-    node = {"lang": res.root_lang, "term": res.root_term,
-            "reltype": "derived_from", "children": []}
+    return _synthesized_tree(word, res)
+
+
+def _synthesized_tree(word, res):
+    """
+    A one-node tree naming the deepest form the resolver reached.
+
+    `root_lang` names a specific form where the data has one. A hand-verified
+    correction often does not carry one -- its chain is bucket names -- so the
+    deepest chain entry is used instead, rather than drawing nothing, which is
+    what left `calypso` and `duppy` rendering their uncorrected trees.
+    """
+    if not res.chain:
+        return None
+    # The WHOLE chain, nested, not just its deepest step. `obeah` is
+    # Caribbean <- African, and drawing only the African end contradicted its
+    # own correction, which names Caribbean as the direct donor. A one-step
+    # chain renders exactly as it did before.
+    steps = [link.specific_lang or link.lang for link in res.chain]
+    if res.root_lang and res.root_lang not in steps:
+        steps.append(res.root_lang)
+    node = None
+    for lang in reversed(steps):
+        term = res.root_term if (node is None and lang == res.root_lang) else None
+        node = {"lang": lang, "term": term, "reltype": "derived_from",
+                "children": [node] if node else []}
     return {"lang": "English", "term": word, "branches": [node]}
 
 

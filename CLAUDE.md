@@ -423,11 +423,21 @@ refer to them.
 - **#15 — 256 hub words are excluded from root inheritance** by an automated
   signature check and were never individually verified. None were used as an
   inheritance source, so no coverage was gained *or* risked from them.
-- **#16 — one database, one answer.** The coverage mechanisms (inheritance,
-  stemming, compounds — ~164k words) are fully unified. Residual: an
-  individual `corrections.py` collision fix still needs a hand-maintained
-  `tree_corrections.py` twin, because `resolve_tree()` consults `TREES`
-  before the resolver.
+- **#16 — CLOSED 2026-07-31.** The coverage mechanisms (inheritance,
+  stemming, compounds — ~164k words) were unified 2026-07-24. The residual —
+  a `corrections.py` fix needing a hand-maintained `tree_corrections.py` twin
+  — is now gone: `word_trees._honour_correction` replaces a stored tree only
+  where it CONTRADICTS the correction, so the two features cannot disagree
+  and no parallel table is required. It had already drifted: six corrected
+  words rendered a contradicting tree (`photograph` showed Germanic/PIE while
+  the analyzer said Greek; `calypso` rendered Calypso the Greek nymph, the
+  very collision its correction exists to overrule). Contradiction-only, not
+  wholesale replacement — a correction's chain is bucket names, so always
+  substituting it would flatten the rich nested trees `tree_corrections.py`
+  supplies for `die`/`bull`/`and`/`low`. **`tree_corrections.py`'s 15 entries
+  are now all redundant** (every one is already in `corrections.py`); it is
+  kept only because `build_etymology_trees.py` still bakes it in, and both go
+  when the legacy stack does.
 - **#17 — 105 words remain Unknown** on the 347-paragraph corpus after the
   2026-07-24 audit (191 → 139 unique, 156 → 105 real-gap). No strong shared
   pattern left; not chased further, per "fix the pattern, not every word".
