@@ -25,6 +25,7 @@ apply immediately at resolver load time).
 import sys
 
 from resolver import shared_resolver
+import word_trees
 
 # The SAME instance app.py and word_trees.py use, so the tree checks
 # below compare like with like instead of poking a module global.
@@ -103,12 +104,33 @@ print("=== Bare-root-stub guard (issue #14) ===")
 # legitimately resolving to French is a correct side effect, not a
 # regression of the guard. Keeping both cases here, with different
 # expectations, so a future change can't quietly break either shape.
-d = RESOLVER.resolve("movie").view("direct")
-r = RESOLVER.resolve("movie").view("root")
-check("movie: Direct Source stays Unknown (no fabricated immediate donor)",
+# "movie" HELD this role until 2026-07-30, when it got a hand-verified
+# corrections.py entry (see below), so it is no longer a pure stub. "narrate"
+# replaces it -- chosen from a database scan for words whose every recorded
+# edge is a `root`, not from memory. The guard itself is unchanged and is the
+# point: a bare PIE citation must never be rendered as an immediate donor.
+d = RESOLVER.resolve("narrate").view("direct")
+r = RESOLVER.resolve("narrate").view("root")
+check("narrate: Direct Source stays Unknown (no fabricated immediate donor)",
       d.bucket == "Unknown")
-check(f"movie: Deepest Root still shows real PIE citation (got {r.bucket})",
+check(f"narrate: Deepest Root still shows real PIE citation (got {r.bucket})",
       r.bucket != "Unknown")
+
+# "movie" itself: the one case where NO build-time fix is possible, because
+# Wiktionary's own entry is `{{suffix|en|""|ie}}` -- the base word is an empty
+# string in the source, so `moving` was never recorded for any parser to find.
+# Fixed by hand (corrections.py, verified against the live page: "From moving
+# (picture) + -ie"), inheriting `move`'s already-verified French/Latin chain.
+d = RESOLVER.resolve("movie").view("direct")
+check(f"movie now reaches French via move, not Unknown (got {d.bucket})",
+      d.bucket == "French")
+# ...and the Word Search must say the same thing. Its stored tree is the
+# ending `-ie` plus a root citation, which used to outrank the correction and
+# left the two features disagreeing -- the `intrude` complaint again.
+_mt = word_trees.resolve_tree("movie")
+check("movie: the tree agrees with the analyzer rather than showing `-ie`",
+      bool(_mt) and any(b.get("lang") in ("French", "Latin")
+                        for b in _mt.get("branches", [])))
 
 d = RESOLVER.resolve("critical").view("direct")
 r = RESOLVER.resolve("critical").view("root")

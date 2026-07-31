@@ -104,10 +104,25 @@ _ROOT_ONLY_RELS = {"has_root"}
 
 
 def _is_bare_root_tree(tree):
+    """
+    Does this tree actually say anything, or is it a stub wearing branches?
+
+    A childless BOUND AFFIX counts for as little as a bare root pointer, and
+    for the same reason: `-ie` is not where `movie` came from. Wiktionary's
+    entry for `movie` is `{{suffix|en|""|ie}}` -- the base word is an empty
+    string in the source -- so its stored tree is the ending plus a root
+    citation and nothing else. Without this the tree returned that, while the
+    analyzer (via a `corrections.py` entry) said French/Latin: the two
+    features disagreeing about one word, which is issue #16 (every feature
+    must read from one shared source) and exactly the `intrude` complaint.
+    Added 2026-07-30, once `ety_node.is_affix` made "is this a real component"
+    a fact rather than a guess.
+    """
     branches = (tree or {}).get("branches") or []
     if not branches:
         return True
-    return all(not b.get("children") and b.get("reltype") in _ROOT_ONLY_RELS
+    return all(not b.get("children")
+               and (b.get("reltype") in _ROOT_ONLY_RELS or b.get("is_affix"))
                for b in branches)
 
 
@@ -161,6 +176,9 @@ def _tree_from_db(word):
                                             if c["reltype"] == "has_root"]
         return {"lang": n.lang, "term": n.term,
                 "reltype": _DB_RELTYPE.get(n.rel, n.rel),
+                # Wiktionary's own affix marking, so `_is_bare_root_tree` can
+                # tell a real component from a word ending (issue #19).
+                "is_affix": bool(getattr(n, "is_affix", False)),
                 # Carried through for the timeline work: 'related' renders as
                 # a dotted edge and is never counted as descent.
                 "certainty": n.certainty,

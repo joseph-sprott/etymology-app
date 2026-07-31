@@ -398,6 +398,25 @@ WORD_CORRECTIONS = {
     "package": {"p": "Germanic", "d": "Germanic", "chain": ["Germanic"], "prox_kind": "derived",
                 "root_lang": "Middle Dutch", "root_term": "pak", "root_pie": False},
 
+    # "movie": the ONE case where a build-time fix is provably impossible, so
+    # it earns a hand entry rather than waiting for a better builder.
+    # Wiktionary's own dump entry is `{{suffix|en|""|ie}}` -- the base word is
+    # an EMPTY STRING in the source data, so `moving` was never recorded and
+    # there is nothing for any parser to recover. That left the whole word
+    # resolving through the suffix `ie` alone (issues #19 and #22).
+    # Live Wiktionary, checked 2026-07-30: "From moving (picture) +' -ie.
+    # Attested since at least 1912 (if not 1908), originally in American
+    # English." So the ancestry runs through `move`, whose own chain is
+    # already fully verified in this project's database: English move <-
+    # Middle English moven <- Old Northern French mover <- Old French mouver
+    # <- Latin moveo <- PIE *m(y)ewh1-. Inherits that exact resolved chain --
+    # the same "a clipping/derivation of a word with real data is a verifiable
+    # claim, not a guess" precedent as "zoo" and "mom" above.
+    # Deepest Root reads Latin, not PIE, because a root is a citation and not
+    # a donor -- matching what `move` itself already reports.
+    "movie": {"p": "French", "d": "Latin", "chain": ["French", "Latin"], "prox_kind": "derived",
+              "root_lang": "Latin", "root_term": "moveō", "root_pie": True},
+
     # "incident": bare has_root PIE stub in the raw data (issue #14 shape).
     # Live Wiktionary: "from Middle French incident, from Latin incidens...
     # from in- + -cido, the combining form of cado ('to fall')," explicitly
