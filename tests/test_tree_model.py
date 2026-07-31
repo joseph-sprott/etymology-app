@@ -32,6 +32,32 @@ SAMPLE = {
 }
 
 
+# The trees come from sources with DIFFERENT key sets: a database-built node
+# carries `is_affix` and `certainty`, a legacy stored node often carries
+# neither. A `to_dict` that emitted a canonical key set would silently change
+# the JSON the Jinja templates read. Round-tripping must be exact for BOTH.
+LEGACY = {
+    "lang": "English", "term": "walk",
+    "branches": [{"lang": "Middle English", "term": "walken",
+                  "reltype": "inherited_from", "children": []}],
+}
+
+
+def test_round_trips_a_database_built_tree_exactly():
+    assert TreeNode.from_dict(SAMPLE).to_dict() == SAMPLE
+
+
+def test_round_trips_a_legacy_stored_tree_exactly():
+    # No `is_affix`, no `certainty`. They must not appear on the way back.
+    assert TreeNode.from_dict(LEGACY).to_dict() == LEGACY
+
+
+def test_a_freshly_built_node_emits_the_canonical_shape():
+    node = TreeNode(lang="Latin", term="pipa", reltype="derived_from")
+    assert node.to_dict() == {"lang": "Latin", "term": "pipa",
+                              "reltype": "derived_from", "children": []}
+
+
 def test_walk_visits_every_node_parents_first():
     langs = [n.lang for n in TreeNode.from_dict(SAMPLE).walk()]
     assert langs == ["English", "English", "English", "Latin"]

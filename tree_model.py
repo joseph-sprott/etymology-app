@@ -55,6 +55,12 @@ class TreeNode:
     children: List["TreeNode"] = field(default_factory=list)
     #: True for the tree's ROOT, whose descendants serialize as "branches".
     is_root: bool = False
+    #: Which optional keys the SOURCE dict carried, so `to_dict` can reproduce
+    #: it exactly. None for a node built in code, which emits the canonical
+    #: shape instead. Without this, round-tripping a legacy stored tree would
+    #: add `is_affix`/`certainty` keys it never had and change the JSON the
+    #: templates read.
+    _source_keys: Optional[frozenset] = None
 
     # ------------------------------------------------------------ traversal
     def walk(self) -> Iterator["TreeNode"]:
@@ -86,7 +92,33 @@ class TreeNode:
             is_affix=bool(raw.get("is_affix")),
             children=[cls.from_dict(k, _root=False) for k in (kids or [])],
             is_root=_root and "branches" in raw,
+            _source_keys=frozenset(raw),
         )
+
+    def to_dict(self) -> dict:
+        """
+        Back to the wire shape, reproducing the source's key set exactly.
+
+        A node read from a dict emits precisely the keys that dict had; a node
+        built in code emits the canonical set. That distinction is the whole
+        reason `_source_keys` exists -- these trees come from stores with
+        different key sets, and quietly adding `is_affix: false` to a legacy
+        stored tree would change JSON the Jinja templates and the golden master
+        compare against.
+        """
+        out = {"lang": self.lang, "term": self.term}
+        optional = (("reltype", self.reltype),
+                    ("certainty", self.certainty),
+                    ("is_affix", self.is_affix))
+        for key, value in optional:
+            if self._source_keys is not None:
+                if key in self._source_keys:
+                    out[key] = value
+            elif value not in (None, False):
+                out[key] = value
+        out["branches" if self.is_root else "children"] = [
+            c.to_dict() for c in self.children]
+        return out
 
     def is_stub(self) -> bool:
         """

@@ -124,6 +124,12 @@ _DB_RELTYPE = {"inherited": "inherited_from", "borrowed": "borrowed_from",
                "derived": "derived_from", "calque": "calqued_from",
                "root": "has_root", "formed_from": "compound_of"}
 
+# The exact key set `_tree_from_db` has always emitted. Pinned so `TreeNode`
+# reproduces it byte-for-byte -- the cached `tree_json` column and the golden
+# master were both written against this shape.
+_DB_NODE_KEYS = frozenset({"lang", "term", "reltype", "is_affix",
+                           "certainty", "children"})
+
 
 def _wants_expanding(n, depth, seen):
     """
@@ -154,7 +160,7 @@ def _is_redundant_orphan(drawn, placed):
     box beside the real lineage. A branch WITH children is never skipped --
     that would drop a whole competing account.
     """
-    return not drawn["children"] and (drawn["lang"], drawn["term"]) in placed
+    return not drawn.children and (drawn.lang, drawn.term) in placed
 
 
 def _tree_from_db(word):
@@ -185,16 +191,20 @@ def _tree_from_db(word):
                 if expanded:
                     # Keep the root alongside the newly-found ancestry.
                     children = expanded + [c for c in children
-                                            if c["reltype"] == "has_root"]
-        return {"lang": n.lang, "term": n.term,
-                "reltype": _DB_RELTYPE.get(n.rel, n.rel),
-                # Wiktionary's own affix marking, so `_is_bare_root_tree` can
-                # tell a real component from a word ending (issue #19).
-                "is_affix": bool(getattr(n, "is_affix", False)),
-                # Carried through for the timeline work: 'related' renders as
-                # a dotted edge and is never counted as descent.
-                "certainty": n.certainty,
-                "children": children}
+                                            if c.reltype == "has_root"]
+        return TreeNode(
+            lang=n.lang, term=n.term,
+            reltype=_DB_RELTYPE.get(n.rel, n.rel),
+            # Wiktionary's own affix marking, so `is_stub` can tell a real
+            # component from a word ending (issue #19).
+            is_affix=bool(getattr(n, "is_affix", False)),
+            # Carried through for the timeline work: 'related' renders as a
+            # dotted edge and is never counted as descent.
+            certainty=n.certainty,
+            children=children,
+            # This builder always emits the same key set, and the stored
+            # `tree_json` cache was written with it.
+            _source_keys=_DB_NODE_KEYS)
 
     # EVERY etymology, not just the primary one. `bow` the weapon and `bow` the
     # bend are different histories, and `sandal` has three competing accounts;
@@ -209,9 +219,8 @@ def _tree_from_db(word):
     placed = set()          # (lang, term) already drawn somewhere
 
     def record(n):
-        placed.add((n["lang"], n["term"]))
-        for c in n["children"]:
-            record(c)
+        for descendant in n.walk():
+            placed.add((descendant.lang, descendant.term))
 
     for ety in entry.etymologies:
         for child in ety.head.children:
@@ -222,8 +231,8 @@ def _tree_from_db(word):
             branches.append(drawn)
     if not branches:
         return None
-    return {"lang": head.lang, "term": head.term or word,
-            "branches": branches}
+    return TreeNode(lang=head.lang, term=head.term or word, is_root=True,
+                    children=branches).to_dict()
 
 
 def _tree_from_chain(word, res, stub=None):
@@ -386,6 +395,18 @@ def _honour_correction(word, tree, depth):
     return corrected if corrected is not None else tree
 
 
+def _rooted(word, branches):
+    """An English-headed tree over these branches, in the wire shape."""
+    return TreeNode(lang="English", term=word, is_root=True,
+                    children=branches).to_dict()
+
+
+def _branches_of(tree):
+    """The branches of a built tree as TreeNodes, or []."""
+    node = TreeNode.from_dict(tree)
+    return node.children if node else []
+
+
 def _tree_via_inherited(word, res, depth):
     """The tree of the OTHER word whose data actually produced this answer."""
     if not res.inherited_from or res.inherited_from == word:
@@ -393,20 +414,19 @@ def _tree_via_inherited(word, res, depth):
     inherited = resolve_tree(res.inherited_from, depth + 1)
     if not inherited:
         return None
-    return {"lang": "English", "term": word, "branches": inherited["branches"]}
+    return _rooted(word, _branches_of(inherited))
 
 
 def _tree_via_parts(word, res, depth):
     """One synthetic branch per component, each carrying its own real tree."""
     if not res.compound_parts:
         return None
-    branches = []
-    for part in res.compound_parts:
-        part_tree = resolve_tree(part.word, depth + 1)
-        branches.append({"lang": "English", "term": part.word,
-                         "reltype": "compound_of",
-                         "children": part_tree["branches"] if part_tree else []})
-    return {"lang": "English", "term": word, "branches": branches}
+    branches = [
+        TreeNode(lang="English", term=part.word, reltype="compound_of",
+                 children=_branches_of(resolve_tree(part.word, depth + 1)))
+        for part in res.compound_parts
+    ]
+    return _rooted(word, branches)
 
 
 def _tree_via_resolver_chain(word, res, direct):
@@ -456,9 +476,9 @@ def _synthesized_tree(word, res):
     node = None
     for lang in reversed(steps):
         term = res.root_term if (node is None and lang == res.root_lang) else None
-        node = {"lang": lang, "term": term, "reltype": "derived_from",
-                "children": [node] if node else []}
-    return {"lang": "English", "term": word, "branches": [node]}
+        node = TreeNode(lang=lang, term=term, reltype="derived_from",
+                        children=[node] if node else [])
+    return _rooted(word, [node])
 
 
 def node_slug(node):
