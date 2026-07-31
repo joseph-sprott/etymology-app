@@ -30,8 +30,15 @@ from resolver import ChainResolver, DbResolver
 
 @pytest.fixture(scope="module")
 def db_only():
-    """The database backend ALONE -- no legacy fallback to mask a gap."""
-    return ChainResolver([DbResolver()])
+    """
+    The database backend ALONE -- no legacy fallback to mask a gap.
+
+    Deliberately the raw `DbResolver`, not a `ChainResolver` wrapping it:
+    since 2026-07-31 the chain applies `corrections.py` as an override, which
+    would answer `movie` from the hand-verified table and hide what the
+    database itself does. These tests are about the database's own rule.
+    """
+    return DbResolver()
 
 
 @pytest.mark.parametrize("word", ["lose", "lost", "start", "started"])

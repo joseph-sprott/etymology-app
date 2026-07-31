@@ -458,6 +458,44 @@ def _cy_candidates(word: str) -> List[str]:
 
 
 
+class CorrectionsResolver(Resolver):
+    """
+    Hand-verified answers, and the FIRST backend consulted.
+
+    `corrections.py` exists to fix confirmed-wrong answers -- its own docstring
+    records that every remaining entry was checked against live Wiktionary, and
+    that entries which stopped being necessary were deleted. So an entry that
+    survives is, by construction, a case where the automated pipeline is known
+    to be wrong.
+
+    It used to be merged into the two legacy file-backed backends' lookup
+    tables, which meant a correction only applied when one of THOSE happened to
+    answer. As the database improved and answered more words first, corrections
+    silently stopped arriving: 16 of 92 were being ignored on 2026-07-31,
+    including `tag`, `auto` and `package` -- three of the six failures issue
+    #18 records as "answer judgment calls for Joe". They were not judgment
+    calls. They were corrections that never reached the output.
+
+    Being a separate backend rather than a merge is what makes it independent
+    of which data source wins, which is the whole problem it had. Adding a
+    source as one class with `resolve()` is this project's documented
+    extension point.
+    """
+    name = "corrections"
+
+    def resolve(self, word: str) -> Resolution:
+        fix = WORD_CORRECTIONS.get(word.lower())
+        if fix is None:
+            return Resolution(word, [], None, None, self.name)
+        buckets = fix.get("chain") or [b for b in (fix.get("p"), fix.get("d")) if b]
+        chain = [ChainLink(b, b, b) for b in buckets]
+        return Resolution(word, chain, None, None, self.name,
+                          root_lang=fix.get("root_lang"),
+                          root_pie=fix.get("root_pie", False),
+                          prox_kind=fix.get("prox_kind"),
+                          root_term=fix.get("root_term"))
+
+
 class WiktionaryResolver(Resolver):
     """
     Path B backend: etymology-db (parsed from Wiktionary), ~73k English words.
@@ -931,6 +969,9 @@ class ChainResolver(Resolver):
 
     def __init__(self, backends: List[Resolver]):
         self.backends = backends
+        # Not in `backends`: a correction OVERRULES a wrong answer rather than
+        # competing to be the first answer. See `_corrected`.
+        self._corrections = CorrectionsResolver()
         # Merge in any backend's auto-detected compound splits (currently
         # only WiktionaryResolver has these -- see its __init__) so the
         # compound fallback below can consult them alongside compounds.py's
@@ -1148,11 +1189,39 @@ class ChainResolver(Resolver):
 
     def resolve(self, word: str) -> Resolution:
         """
-        The full cascade, in order: own data, other forms, then a known split.
+        The full cascade, then the hand-verified override.
 
         Each step is one named question, because the order between them is
         load-bearing and every reordering has previously shipped a bug.
         """
+        return self._corrected(word, self._resolve_uncorrected(word))
+
+    def _corrected(self, word: str, answer: Resolution) -> Resolution:
+        """
+        Replace the answer ONLY where a correction disagrees with it.
+
+        `corrections.py` fixes confirmed-wrong answers, and 16 of its 92
+        entries were not reaching the output at all (2026-07-31) because the
+        table lived inside the legacy backends and applied only when one of
+        THOSE answered -- so `tag`, `auto` and `package` stayed wrong, and are
+        recorded in issue #18 as "judgment calls" when they were nothing of
+        the kind.
+
+        But a correction may only OVERRULE, never merely overwrite. Its chain
+        is bucket-names-only, so applying it to a word the stack already gets
+        right destroys real detail: `as` went from "Old English" to a generic
+        "Germanic" the moment corrections were tried first. Where the two
+        already agree, the richer answer wins.
+        """
+        fix = WORD_CORRECTIONS.get(word.lower())
+        if fix is None:
+            return answer
+        if answer.view("direct").bucket == fix.get("p"):
+            return answer
+        corrected = self._corrections.resolve(word)
+        return corrected if corrected.chain else answer
+
+    def _resolve_uncorrected(self, word: str) -> Resolution:
         own = self._try(word)
         prefer_split = self._prefers_hand_verified_split(word, own)
         if self._is_trustworthy(own) and not prefer_split:

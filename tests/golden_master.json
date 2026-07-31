@@ -622,25 +622,25 @@
  },
  "auto": {
   "direct": {
-   "bucket": "Latin",
-   "depth_lang": "Latin",
+   "bucket": "Greek",
+   "depth_lang": "Greek",
    "parts": [],
    "resolved": true,
-   "specific_lang": "New Latin"
+   "specific_lang": null
   },
   "influence": {
-   "bucket": "Latin",
-   "depth_lang": "Latin",
+   "bucket": "Greek",
+   "depth_lang": "Greek",
    "parts": [],
    "resolved": true,
-   "specific_lang": "Latin"
+   "specific_lang": null
   },
   "root": {
    "bucket": "Greek",
    "depth_lang": "Ancient Greek",
    "parts": [],
    "resolved": true,
-   "specific_lang": "Ancient Greek"
+   "specific_lang": null
   },
   "tree": {
    "branches": [
@@ -5211,8 +5211,8 @@
      "Germanic"
     ],
     [
-     "outdoor#Adjective",
-     "Unknown"
+     "outdoor",
+     "Germanic"
     ],
     [
      "man",
@@ -5235,8 +5235,8 @@
      "Germanic"
     ],
     [
-     "outdoor#Adjective",
-     "Unknown"
+     "outdoor",
+     "Germanic"
     ],
     [
      "man",
@@ -5259,8 +5259,8 @@
      "Germanic"
     ],
     [
-     "outdoor#Adjective",
-     "Unknown"
+     "outdoor",
+     "Germanic"
     ],
     [
      "man",
@@ -5362,9 +5362,74 @@
        "term": "doors"
       },
       {
-       "branches": [],
+       "branches": [
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [],
+               "lang": "Proto-Germanic",
+               "term": "*ūt-"
+              }
+             ],
+             "lang": "Old English",
+             "term": "ūt-"
+            }
+           ],
+           "lang": "Middle English",
+           "term": "ut-"
+          }
+         ],
+         "lang": "English",
+         "term": "out-"
+        },
+        {
+         "branches": [
+          {
+           "branches": [
+            {
+             "branches": [
+              {
+               "branches": [
+                {
+                 "branches": [
+                  {
+                   "branches": [
+                    {
+                     "branches": [],
+                     "lang": "Proto-Indo-European",
+                     "term": "*dʰwer-"
+                    }
+                   ],
+                   "lang": "Proto-Indo-European",
+                   "term": "*dʰwṓr"
+                  }
+                 ],
+                 "lang": "Proto-Germanic",
+                 "term": "*durz"
+                }
+               ],
+               "lang": "Proto-West Germanic",
+               "term": "*dur"
+              }
+             ],
+             "lang": "Old English",
+             "term": "duru"
+            }
+           ],
+           "lang": "Middle English",
+           "term": "dore"
+          }
+         ],
+         "lang": "English",
+         "term": "door"
+        }
+       ],
        "lang": "English",
-       "term": "outdoor#Adjective"
+       "term": "outdoor"
       },
       {
        "branches": [],
@@ -6850,25 +6915,25 @@
  },
  "tag": {
   "direct": {
-   "bucket": "Norse",
-   "depth_lang": "Norse",
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
    "parts": [],
    "resolved": true,
-   "specific_lang": "Old Norse"
+   "specific_lang": null
   },
   "influence": {
-   "bucket": "Norse",
-   "depth_lang": "Norse",
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
    "parts": [],
    "resolved": true,
-   "specific_lang": "Old Norse"
+   "specific_lang": null
   },
   "root": {
-   "bucket": "Norse",
-   "depth_lang": "Old Norse",
+   "bucket": "Germanic",
+   "depth_lang": "Middle English",
    "parts": [],
    "resolved": true,
-   "specific_lang": "Old Norse"
+   "specific_lang": null
   },
   "tree": {
    "branches": [
