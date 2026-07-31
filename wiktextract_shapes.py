@@ -218,6 +218,14 @@ def clean_term(raw: Optional[str]) -> Tuple[Optional[str], Optional[str]]:
     """
     if not raw:
         return None, None
+    # A LEADING colon marks a directive in the `ety`/`etymon` mini-language
+    # (`:af`, `:inh`, `:afeq`), not a word. One reached the database as a term
+    # and `pathophysiologically` rendered a component chip reading ":af",
+    # taking a share of the word's weight into Unknown. Same family as the
+    # `+af`/`+deverbal` prefixes that made `late` display as "en + let".
+    # Only a LEADING colon: `re:invent` is a real term.
+    if raw.lstrip().startswith(":"):
+        return None, None
     raw = _SENSE_ANCHOR.sub("", raw)
     if "<" not in raw:
         return raw.strip() or None, None

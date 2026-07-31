@@ -480,7 +480,24 @@ refer to them.
   `ous`→Hawaiian) — inert today because of issue #19's `is_affix` flag, and a
   live landmine for any future code that skips that check. **Full breakdown
   with examples and the rejected fixes: `HISTORY.md` entry 25.**
-- **#24 — the residual of #19 (affixes), in the templates that say nothing.**
+- **#24 — NARROWED 2026-07-31.** The `af`/`surf` half is FIXED: `disagree`,
+  `preview` and `rewrite` no longer split, because Wiktionary's printed hyphen
+  is now trusted outright rather than second-guessed. What remains is one
+  thing — **the same morpheme is marked inconsistently by the source**:
+  `active` records `ive` unmarked while `massive` records it marked and
+  `creative` records `-ive`. So `active` splits into act + `ive`(Unknown) and
+  `overactive` inherits that through its own split.
+  **A fix was tried and rejected on measurement** (do not re-derive it):
+  dropping formation parts that have no database entry, on the theory that a
+  morpheme has no entry while a real word does. It is false. Over 6,000
+  sampled words it would have discarded `āhuacatl` and `mōlli` from
+  `guacamole`, `pixel` from `voxel`, and `derrick` from `derrickman` — all
+  real words that merely lack an etymology. 42 words were affected at all
+  (0.7%) and only a handful were genuine affixes. Database presence does not
+  separate a morpheme from a word we have no data for. The durable fix stays
+  where #19's was: at BUILD time, marking affixes consistently.
+- **#24's original statement, for the record —** the residual of #19
+  (affixes), in the templates that say nothing.
   `{{suffix}}`/`{{prefix}}`/`{{confix}}` mark the bound morpheme by POSITION
   and are now read correctly. `af`/`affix`/`surf` (~49,000 templates) do not —
   they promise nothing positionally, so an UNHYPHENATED part of one is still
