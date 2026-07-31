@@ -149,6 +149,21 @@ def _ordered(d: Dict[str, float]) -> Dict[str, float]:
     return {k: d[k] for k in keys}
 
 
+def _weights(view) -> List[tuple]:
+    """
+    How one token's single vote is distributed across buckets.
+
+    A compound splits its weight EVENLY across its components rather than
+    counting once under one answer: `upside` contributes 0.5 Germanic (`up`)
+    + 0.5 Germanic (`side`), and a mixed-origin compound lands in two buckets.
+    This is why the counts are floats, not ints.
+    """
+    if not view.parts:
+        return [(view.bucket, 1.0)]
+    share = 1.0 / len(view.parts)
+    return [(part.bucket, share) for part in view.parts]
+
+
 def analyze(text: str, resolver: Resolver = None, mode: str = "direct",
             exclude_connectors: bool = False) -> Analysis:
     resolver = resolver or default_resolver()
@@ -160,27 +175,16 @@ def analyze(text: str, resolver: Resolver = None, mode: str = "direct",
         tokens = [t for t in tokens if t not in CONNECTOR_WORDS]
 
     counts = Counter()
-    approximate = 0
+    approximate = 0.0
     per_word = []
 
     for tok in tokens:
         view = resolver.resolve(tok).view(mode)
         per_word.append(view)
-        if view.parts:
-            # Compound split (see compounds.py): this one token's weight is
-            # divided evenly across its component words' own buckets rather
-            # than counted once under a single answer -- e.g. "upside" (Unknown
-            # on its own) contributes 0.5 Germanic ("up") + 0.5 Germanic
-            # ("side"), and a mixed-origin compound splits across two buckets.
-            share = 1.0 / len(view.parts)
-            for part in view.parts:
-                counts[part.bucket] += share
-                if part.bucket in APPROXIMATE_BUCKETS:
-                    approximate += share
-        else:
-            counts[view.bucket] += 1
-            if view.bucket in APPROXIMATE_BUCKETS:
-                approximate += 1
+        for bucket, share in _weights(view):
+            counts[bucket] += share
+            if bucket in APPROXIMATE_BUCKETS:
+                approximate += share
 
     total = len(tokens)
     unknown = counts.get("Unknown", 0)

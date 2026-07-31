@@ -152,20 +152,28 @@ def _tree_from_db(word):
     if entry is None or not entry.primary:
         return None
 
+    def wants_expanding(n, depth, seen):
+        """
+        Is this node a COMPONENT whose own history lives on another row?
+
+        Expanding it is what keeps the tree and the analyzer telling the same
+        story: `lineage()` already follows `pipe` to Latin for `bagpipe`, so a
+        tree stopping at "English pipe" would show a Germanic-looking word
+        beside a bar chart saying Latin -- the split-brain this rework removed.
+
+        "Already expanded" means having a DONOR child; a bare root pointer
+        does not count. `computer`'s `compute` carries a PIE root, which made
+        it look expanded and hid its French ancestry.
+        """
+        if n.rel != "formed_from" or not n.term:
+            return False
+        if depth >= 4 or n.term.lower() in seen:
+            return False
+        return not any(c.rel != "root" for c in n.children)
+
     def node(n, depth, seen):
         children = [node(c, depth, seen) for c in n.children]
-        # A component is a POINTER to another word, whose history lives on
-        # that word's row. Expanding it here is what keeps the tree and the
-        # analyzer telling the same story: lineage() already follows `pipe`
-        # to Latin for `bagpipe`, so a tree that stopped at "English pipe"
-        # would show a Germanic-looking word beside a bar chart saying Latin
-        # -- the exact split-brain this rework exists to remove.
-        # "No children" means no DONOR children -- a bare root pointer must
-        # not count as expansion. `computer`'s `compute` carries a PIE root,
-        # which made it look already-expanded and hid its French ancestry.
-        has_donor_child = any(c.rel != "root" for c in n.children)
-        if (n.rel == "formed_from" and n.term and not has_donor_child
-                and depth < 4 and n.term.lower() not in seen):
+        if wants_expanding(n, depth, seen):
             sub = _DB.entry(n.term)
             if sub is not None and sub.primary:
                 expanded = [node(c, depth + 1, seen | {n.term.lower()})
@@ -201,16 +209,22 @@ def _tree_from_db(word):
         for c in n["children"]:
             record(c)
 
+    def is_redundant_orphan(drawn):
+        """
+        A childless branch whose node is already drawn elsewhere.
+
+        `sandal` keeps a bare `Arabic صَنْدَل` etymology alongside a fuller
+        account containing the same term mid-chain; drawing both puts a
+        redundant orphan box beside the real lineage. A branch WITH children
+        is never skipped -- that would drop a whole competing account.
+        """
+        return (not drawn["children"]
+                and (drawn["lang"], drawn["term"]) in placed)
+
     for ety in entry.etymologies:
         for child in ety.head.children:
             drawn = node(child, 0, seen)
-            # Skip a childless branch whose node is ALREADY in the diagram.
-            # `sandal` keeps a bare `Arabic صَنْدَل` etymology alongside a
-            # fuller account that contains the same term mid-chain; drawing
-            # both puts a redundant orphan box next to the real lineage, which
-            # is the clutter the 2026-07-24 dedup pass removed. A branch with
-            # children is never skipped -- that would drop a real account.
-            if not drawn["children"] and (drawn["lang"], drawn["term"]) in placed:
+            if is_redundant_orphan(drawn):
                 continue
             record(drawn)
             branches.append(drawn)

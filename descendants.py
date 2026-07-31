@@ -142,26 +142,37 @@ def _merge_variants(node):
     kids = node.get("children") or []
     for kid in kids:
         _merge_variants(kid)
-    if len(kids) > 1:
-        groups = {}
-        for kid in kids:
-            groups.setdefault(_signature(kid), []).append(kid)
-        if any(len(g) > 1 for g in groups.values()):
-            merged = []
-            for group in groups.values():
-                head = group[0]
-                if len(group) > 1:
-                    terms, seen = [], set()
-                    for member in group:
-                        term = member.get("raw_term") or member.get("term")
-                        if term and term not in seen:
-                            seen.add(term)
-                            terms.append(term)
-                    head["raw_term"] = ", ".join(terms)
-                    head["variants"] = len(terms)
-                merged.append(head)
-            node["children"] = merged
+    if len(kids) < 2:
+        return node
+    groups = {}
+    for kid in kids:
+        groups.setdefault(_signature(kid), []).append(kid)
+    if all(len(group) == 1 for group in groups.values()):
+        return node
+    node["children"] = [_collapse(group) for group in groups.values()]
     return node
+
+
+def _collapse(group):
+    """
+    One node standing for a group of identical-subtree spelling variants.
+
+    The surviving node lists every spelling, so no form is hidden -- which is
+    what Wiktionary itself prints: "Old English: brōþor, brōþer, brōþur,
+    brōðer, brōður" on one line.
+    """
+    head = group[0]
+    if len(group) == 1:
+        return head
+    terms, seen = [], set()
+    for member in group:
+        term = member.get("raw_term") or member.get("term")
+        if term and term not in seen:
+            seen.add(term)
+            terms.append(term)
+    head["raw_term"] = ", ".join(terms)
+    head["variants"] = len(terms)
+    return head
 
 
 def _count(node):

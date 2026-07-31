@@ -10,6 +10,7 @@ import json
 import os
 import sys
 from collections import Counter
+from dataclasses import dataclass
 
 from flask import Flask, render_template_string, request
 
@@ -54,6 +55,45 @@ _CORE_FAMILIES = {"Germanic", "Norse", "French", "Latin", "Greek",
                    "Romance (other)", "Celtic", "PIE"}
 
 
+def _has_definition(rec):
+    return bool(rec and (rec.get("gloss") or rec.get("pos")))
+
+
+def _definition_for(word, rec, res):
+    """
+    (record, base_word) -- falling back to the base form's definition.
+
+    An inflected form (`wolves`, `hidden`) has no dictionary entry of its own;
+    Wiktionary defines the base word. The base is returned alongside so the
+    card can SAY which word it defined, and never implies the definition
+    belongs to the surface form.
+    """
+    if _has_definition(rec):
+        return rec, None
+    candidate = inflections.base_form(word) or res.inherited_from
+    if not candidate or candidate.lower() == word.lower():
+        return rec, None
+    base_rec = word_info.lookup(candidate)
+    if not _has_definition(base_rec):
+        return rec, None
+    return base_rec, candidate
+
+
+def _lineage_steps(res):
+    """The mini lineage for the hover card: each distinct language, once."""
+    if not res.chain:
+        if res.english_stage_lang:
+            return [{"lang": res.english_stage_lang, "bucket": "Germanic"}]
+        return []
+    steps, seen = [], set()
+    for link in res.chain:
+        lang = link.specific_lang or link.lang
+        if lang and lang not in seen:
+            seen.add(lang)
+            steps.append({"lang": lang, "bucket": link.bucket})
+    return steps
+
+
 def build_word_card(word):
     """
     Everything the hover card shows for one word: part of speech, definition,
@@ -74,29 +114,8 @@ def build_word_card(word):
     """
     rec = word_info.lookup(word)
     res = RESOLVER.resolve(word)
-
-    # An inflected form ("wolves", "hidden") has no dictionary entry of its
-    # own -- Wiktionary defines the base word. Fall back to it so hovering an
-    # inflected word still shows a definition, labelled with the base so the
-    # card never implies the definition belongs to the surface form.
-    base = None
-    if rec is None or not (rec.get("gloss") or rec.get("pos")):
-        candidate = inflections.base_form(word) or res.inherited_from
-        if candidate and candidate.lower() != word.lower():
-            base_rec = word_info.lookup(candidate)
-            if base_rec and (base_rec.get("gloss") or base_rec.get("pos")):
-                rec, base = base_rec, candidate
-
-    lineage = []
-    if res.chain:
-        langs = [link.specific_lang or link.lang for link in res.chain]
-        seen = set()
-        for lang, link in zip(langs, res.chain):
-            if lang and lang not in seen:
-                seen.add(lang)
-                lineage.append({"lang": lang, "bucket": link.bucket})
-    elif res.english_stage_lang:
-        lineage.append({"lang": res.english_stage_lang, "bucket": "Germanic"})
+    rec, base = _definition_for(word, rec, res)
+    lineage = _lineage_steps(res)
 
     pos = ", ".join(rec["pos"]) if rec and rec.get("pos") else None
     gloss = rec.get("gloss") if rec else None
@@ -965,54 +984,79 @@ def descendants_view():
 
 
 
+@dataclass
+class _Request:
+    """
+    What the page was asked for -- one record instead of eleven locals.
+
+    The route has three entry shapes (analyze a paragraph, search a word by
+    POST, search a word by GET link) and every one of them had to initialise
+    every variable the template reads. That is why a GET once rendered a blank
+    page: it matched neither POST branch and left the defaults in place.
+    """
+    text: str = ""
+    mode: str = "direct"
+    exclude_connectors: bool = False
+    collapse_duplicates: bool = False
+    word_sort: str = "input"
+    tree_word: str = ""
+    tree_view: str = "list"
+
+
+def _read_request(req) -> _Request:
+    """Pull the form or query string into one record, per entry shape."""
+    if req.method == "POST" and req.form.get("form") == "tree":
+        return _Request(tree_word=req.form.get("tree_word", "").strip(),
+                        tree_view=req.form.get("tree_view", "list"))
+    if req.method == "POST":
+        return _Request(
+            text=req.form.get("text", ""),
+            mode=req.form.get("mode", "direct"),
+            exclude_connectors=req.form.get("exclude_connectors") == "on",
+            collapse_duplicates=req.form.get("collapse_duplicates") == "on",
+            word_sort=req.form.get("word_sort", "input"))
+    # GET with ?word=... so an analyzed word can be a real clickable link into
+    # Word Search. Before this existed a GET matched neither POST branch and
+    # silently rendered an empty page.
+    return _Request(tree_word=req.args.get("word", "").strip(),
+                    tree_view=req.args.get("tree_view", "list"))
+
+
+def _cards_for(analysis):
+    """
+    Hover-card data for each UNIQUE word, components included.
+
+    Precomputed here rather than inside the Jinja loop: a long text repeats
+    words many times and each card costs a real resolve.
+    """
+    if analysis is None:
+        return {}
+    cards = {}
+    for view in analysis.per_word:
+        for one in [view] + list(view.parts or []):
+            if one.word not in cards:
+                cards[one.word] = build_word_card(one.word)
+    return cards
+
+
 @app.route("/", methods=["GET", "POST"])
 def index():
-    text = ""
-    mode = "direct"
-    exclude_connectors = False
-    collapse_duplicates = False
-    word_sort = "input"
-    analysis = None
-    word_rows = []
-    tree_word = ""
-    tree = None
-    tree_view = "list"
-    info = None
-    if request.method == "POST" and request.form.get("form") == "tree":
-        tree_word = request.form.get("tree_word", "").strip()
-        tree_view = request.form.get("tree_view", "list")
-    elif request.method == "POST":
-        text = request.form.get("text", "")
-        mode = request.form.get("mode", "direct")
-        exclude_connectors = request.form.get("exclude_connectors") == "on"
-        collapse_duplicates = request.form.get("collapse_duplicates") == "on"
-        word_sort = request.form.get("word_sort", "input")
-        if text.strip():
-            analysis = analyze(text, resolver=RESOLVER, mode=mode, exclude_connectors=exclude_connectors)
-            word_rows = sort_per_word(analysis.per_word, word_sort,
-                                       collapse_duplicates=collapse_duplicates)
-    else:
-        # GET with ?word=... -- added 2026-07-25 so an analyzed word can be a
-        # real clickable link into Word Search (opened in a new tab, so the
-        # paragraph analysis in the original tab survives). Before this, a GET
-        # matched neither POST branch and silently rendered an empty page.
-        tree_word = request.args.get("word", "").strip()
-        tree_view = request.args.get("tree_view", "list")
+    asked = _read_request(request)
+    text, mode = asked.text, asked.mode
+    exclude_connectors = asked.exclude_connectors
+    collapse_duplicates = asked.collapse_duplicates
+    word_sort, tree_word, tree_view = asked.word_sort, asked.tree_word, asked.tree_view
 
-    if tree_word:
-        tree = resolve_tree(tree_word)
-        info = word_info.lookup(tree_word)
+    analysis, word_rows = None, []
+    if text.strip():
+        analysis = analyze(text, resolver=RESOLVER, mode=mode,
+                           exclude_connectors=exclude_connectors)
+        word_rows = sort_per_word(analysis.per_word, word_sort,
+                                  collapse_duplicates=collapse_duplicates)
 
-    # Per-word definition/lineage for the hover cards, precomputed here for
-    # the UNIQUE words only. Deliberately not done inside the Jinja loop: a
-    # long text repeats words many times, and resolve()/resolve_tree() each
-    # cost real work per call.
-    word_cards = {}
-    if analysis is not None:
-        for view in analysis.per_word:
-            for v in ([view] + list(view.parts or [])):
-                if v.word not in word_cards:
-                    word_cards[v.word] = build_word_card(v.word)
+    tree = resolve_tree(tree_word) if tree_word else None
+    info = word_info.lookup(tree_word) if tree_word else None
+    word_cards = _cards_for(analysis)
 
     return render_template_string(PAGE, text=text, mode=mode, analysis=analysis,
                                    exclude_connectors=exclude_connectors,
