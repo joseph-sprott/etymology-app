@@ -321,8 +321,18 @@ class EtyResolver(Resolver):
         for o in origins:
             iso = o.language.iso
             if iso in ENGLISH_STAGES:
-                # Track the deepest English stage seen (for the fallback).
-                english_iso, english_lang = iso, o.language.name
+                # Track the deepest English stage seen (for the fallback) --
+                # but MODERN English is not evidence of descent. `ety` returns
+                # ('eng', 'English') for `lithology` and `photophore`, which
+                # are litho-/photo- + -ology/-phore: a FORMATION citing the
+                # same language, not a native thread. Treating it as evidence
+                # made them Germanic, a confident wrong answer where Unknown
+                # was honest. Real native words cite an older stage --
+                # `water` gives enm/ang, `trust` gives enm. Same rule issue
+                # #22 already applies in `DbResolver` (a native claim needs an
+                # `inherited` edge); this backend never got it.
+                if iso != "eng":
+                    english_iso, english_lang = iso, o.language.name
                 continue
             chain.append(ChainLink(iso, o.language.name, bucket_for(iso)))
 
