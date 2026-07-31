@@ -13,10 +13,6 @@
      "Germanic"
     ],
     [
-     "be",
-     "Germanic"
-    ],
-    [
      "ūtan",
      "Germanic"
     ]
@@ -37,10 +33,6 @@
      "Germanic"
     ],
     [
-     "be",
-     "Germanic"
-    ],
-    [
      "ūtan",
      "Germanic"
     ]
@@ -58,10 +50,6 @@
     ],
     [
      "būtan",
-     "Germanic"
-    ],
-    [
-     "be",
      "Germanic"
     ],
     [
@@ -5466,12 +5454,8 @@
      "Germanic"
     ],
     [
-     "act",
+     "active",
      "French"
-    ],
-    [
-     "ive",
-     "Unknown"
     ]
    ],
    "resolved": true,
@@ -5486,12 +5470,8 @@
      "Germanic"
     ],
     [
-     "act",
+     "active",
      "Latin"
-    ],
-    [
-     "ive",
-     "Unknown"
     ]
    ],
    "resolved": true,
@@ -5506,12 +5486,8 @@
      "Germanic"
     ],
     [
-     "act",
+     "active",
      "Latin"
-    ],
-    [
-     "ive",
-     "Unknown"
     ]
    ],
    "resolved": true,

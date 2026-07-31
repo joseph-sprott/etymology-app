@@ -553,6 +553,64 @@ def materialize_generated_forms(db, src_ids):
     return added
 
 
+# A morpheme has to be marked in at least this share of its appearances before
+# the stragglers are treated as the source being inconsistent. Chosen from the
+# real distribution, which separates cleanly:
+#
+#   ness 7529/7533   ly 10051/10067   ive 345/348   ful 1206/1214   (affixes)
+#   ship  907/1078   man   574/1072   head  99/647  ball    2/287   (words)
+#
+# 0.95 takes the first group and leaves the second. `man` and `ship` staying
+# out is the point: it is what keeps `craftsman` and `friendship` splitting,
+# per Joe's ruling that hand-verified compounds win. Five earlier attempts at
+# the affix problem died by being looser than this.
+_AFFIX_CONSENSUS = 0.95
+
+# A ratio computed from one or two sightings means nothing, and a single
+# mis-tagged entry should not reclassify a morpheme across the database.
+_AFFIX_MIN_SIGHTINGS = 5
+
+
+def is_consensus_affix(marked: int, total: int) -> bool:
+    """Is this morpheme marked as an affix in the vast majority of its uses?"""
+    if total < _AFFIX_MIN_SIGHTINGS:
+        return False
+    return marked / total >= _AFFIX_CONSENSUS
+
+
+def apply_affix_consensus(db):
+    """
+    Mark the stragglers where the source's own majority says "affix".
+
+    Wiktionary's `af`/`surf` templates carry no positional promise, so one
+    entry cannot say whether `ive` in `active` is a suffix. Across the dump it
+    can: the same spelling is marked in 345 of its 348 appearances. This pass
+    settles the 3, and the equivalents for `ness`, `ment`, `ful` and the rest.
+
+    Runs AFTER the main load so every occurrence has been seen -- the counts
+    are the evidence, and they do not exist until the scan is finished.
+    """
+    counts = db.execute(
+        "SELECT n.term, SUM(n.is_affix), COUNT(*) FROM ety_node n"
+        " JOIN ety_edge g ON g.parent_id = n.node_id AND g.rel = 'formed_from'"
+        " WHERE n.term IS NOT NULL AND n.term NOT LIKE '-%'"
+        "   AND n.term NOT LIKE '%-' GROUP BY n.term").fetchall()
+    affixes = [term for term, marked, total in counts
+               if is_consensus_affix(marked or 0, total)]
+    if not affixes:
+        return 0
+    updated = 0
+    for chunk in (affixes[i:i + 500] for i in range(0, len(affixes), 500)):
+        marks = ",".join("?" * len(chunk))
+        cur = db.execute(
+            f"UPDATE ety_node SET is_affix = 1 WHERE is_affix = 0"
+            f" AND term IN ({marks})", chunk)
+        updated += cur.rowcount
+    print(f"  affix consensus: {len(affixes):,} morphemes, "
+          f"{updated:,} nodes newly marked")
+    return updated
+
+
 def cache_trees(db):
     """
     Denormalise each word's etymologies into word.tree_json.
@@ -690,6 +748,13 @@ def main():
 
     print("generating regular forms...", file=sys.stderr)
     stats["surface_generated"] = materialize_generated_forms(db, src_ids)
+    db.commit()
+
+    # BEFORE caching trees: `cache_trees` bakes `is_affix` into `tree_json`,
+    # so settling the consensus afterwards would leave the cache disagreeing
+    # with the rows it was built from.
+    print("applying affix consensus...", file=sys.stderr)
+    stats["affix_consensus"] = apply_affix_consensus(db)
     db.commit()
 
     print("caching trees...", file=sys.stderr)
