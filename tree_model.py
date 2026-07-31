@@ -76,6 +76,23 @@ class TreeNode:
     def terms(self) -> Set[str]:
         return {n.term for n in self.walk() if n.term}
 
+    def is_stub(self) -> bool:
+        """
+        Does this tree say anything, or is it a stub wearing branches?
+
+        A childless BOUND AFFIX counts for as little as a bare root pointer:
+        `-ie` is not where `movie` came from. Its entry is
+        `{{suffix|en|""|ie}}` -- the base is an empty string in Wiktionary's
+        own data -- so its stored tree is the ending plus a root citation and
+        nothing else, and letting that outrank a hand-verified correction left
+        the analyzer and the Word Search disagreeing about one word.
+        """
+        if not self.children:
+            return True
+        return all(not c.children
+                   and (c.reltype in _ROOT_ONLY_RELS or c.is_affix)
+                   for c in self.children)
+
     # ------------------------------------------------------- (de)serialising
     @classmethod
     def from_dict(cls, raw: Optional[dict], _root: bool = True
@@ -120,18 +137,74 @@ class TreeNode:
             c.to_dict() for c in self.children]
         return out
 
-    def is_stub(self) -> bool:
-        """
-        Does this tree say anything, or is it a stub wearing branches?
 
-        A childless BOUND AFFIX counts for as little as a bare root pointer:
-        `-ie` is not where `movie` came from. Its entry is
-        `{{suffix|en|""|ie}}` -- the base is an empty string in Wiktionary's
-        own data -- so its stored tree is the ending plus a root citation and
-        nothing else, and letting that outrank a hand-verified correction left
-        the analyzer and the Word Search disagreeing about one word.
+@dataclass
+class DescendantNode:
+    """
+    One form in the DOWNWARD tree -- `children` are its DESCENDANTS.
+
+    A separate type from `TreeNode`, and deliberately so. Checked rather than
+    assumed: this shape carries `raw_term`, `variants`, `spliced` and `match`
+    and has no `reltype` or `certainty`, while the upward tree is the reverse.
+    One dataclass covering both would be a union of unrelated fields
+    pretending to be a type, and the direction of `children` means the
+    opposite thing in each.
+
+    `raw_term` is the spelling as printed (`*brōþēr`, or a merged variant list
+    "brōþor, brōþer, brōþur"); `term` is the normalised key used for joining
+    fragments. `variants` counts how many spellings a merged node stands for.
+    """
+    lang: Optional[str] = None
+    term: Optional[str] = None
+    raw_term: Optional[str] = None
+    children: List["DescendantNode"] = field(default_factory=list)
+    variants: Optional[int] = None
+    spliced: bool = False
+    match: bool = False
+    tree_id: Optional[int] = None
+    pruned: Optional[int] = None
+    _source_keys: Optional[frozenset] = None
+
+    _FIELDS = ("lang", "term", "raw_term", "variants", "spliced", "match",
+               "tree_id", "pruned")
+
+    def walk(self) -> Iterator["DescendantNode"]:
+        yield self
+        for child in self.children:
+            yield from child.walk()
+
+    def count(self) -> int:
+        return sum(1 for _ in self.walk())
+
+    @classmethod
+    def from_dict(cls, raw: Optional[dict]) -> Optional["DescendantNode"]:
+        if raw is None:
+            return None
+        return cls(
+            lang=raw.get("lang"), term=raw.get("term"),
+            raw_term=raw.get("raw_term"), variants=raw.get("variants"),
+            spliced=bool(raw.get("spliced")), match=bool(raw.get("match")),
+            tree_id=raw.get("tree_id"), pruned=raw.get("pruned"),
+            children=[cls.from_dict(c) for c in (raw.get("children") or [])],
+            _source_keys=frozenset(raw),
+        )
+
+    def to_dict(self) -> dict:
         """
-        if not self.children:
-            return True
-        return all(not c.children and (c.reltype in _ROOT_ONLY_RELS or c.is_affix)
-                   for c in self.children)
+        Back to the wire shape the d3 client reads.
+
+        Same `_source_keys` rule as `TreeNode`: reproduce exactly the keys the
+        source carried, because this JSON goes straight to the browser and an
+        added key changes what the vendored d3 renders -- which no test can
+        catch, since the picture is drawn client-side (issue #21).
+        """
+        out = {}
+        for name in self._FIELDS:
+            value = getattr(self, name)
+            if self._source_keys is not None:
+                if name in self._source_keys:
+                    out[name] = value
+            elif value not in (None, False):
+                out[name] = value
+        out["children"] = [c.to_dict() for c in self.children]
+        return out

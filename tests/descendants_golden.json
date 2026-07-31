@@ -1,0 +1,4995 @@
+{
+ "brother": {
+  "root_lang": "Proto-Indo-European",
+  "root_raw": "bʰréh₂tēr",
+  "shown_nodes": 87,
+  "total_nodes": 87,
+  "tree": {
+   "children": [
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Lydian",
+       "match": false,
+       "raw_term": "𐤡𐤭𐤠𐤱𐤭𐤳𐤦𐤳",
+       "term": "𐤡𐤭𐤠𐤱𐤭𐤳𐤦𐤳",
+       "variants": null
+      }
+     ],
+     "lang": "Anatolian",
+     "match": false,
+     "raw_term": null,
+     "term": null,
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Old Armenian",
+       "match": false,
+       "raw_term": "եղբայր, եղբաւր",
+       "term": "եղբայր",
+       "variants": 2
+      }
+     ],
+     "lang": "Armenian",
+     "match": false,
+     "raw_term": null,
+     "term": null,
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Latgalian",
+         "match": false,
+         "raw_term": "bruoļs",
+         "term": "bruoļs",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Latvian",
+         "match": false,
+         "raw_term": "brãlis, brāls",
+         "term": "brãlis",
+         "variants": 2
+        },
+        {
+         "children": [],
+         "lang": "Lithuanian",
+         "match": false,
+         "raw_term": "brólis",
+         "term": "brólis",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Samogitian",
+         "match": false,
+         "raw_term": "bruolis",
+         "term": "bruolis",
+         "variants": null
+        }
+       ],
+       "lang": "East Baltic",
+       "match": false,
+       "raw_term": null,
+       "term": null,
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Old Prussian",
+         "match": false,
+         "raw_term": "brāti",
+         "term": "brāti",
+         "variants": null
+        }
+       ],
+       "lang": "West Baltic",
+       "match": false,
+       "raw_term": null,
+       "term": null,
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Proto-Slavic",
+       "match": false,
+       "raw_term": "*bràtrъ, *bràtъ",
+       "term": "bràtrъ",
+       "variants": 2
+      }
+     ],
+     "lang": "Proto-Balto-Slavic",
+     "match": false,
+     "raw_term": "*brā́ˀtē",
+     "term": "brā́ˀtē",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "Breton",
+             "match": false,
+             "raw_term": "breur",
+             "term": "breur",
+             "variants": null
+            }
+           ],
+           "lang": "Middle Breton",
+           "match": false,
+           "raw_term": "breuzr",
+           "term": "breuzr",
+           "variants": null
+          }
+         ],
+         "lang": "Old Breton",
+         "match": false,
+         "raw_term": "brotr",
+         "term": "brotr",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "Welsh",
+           "match": false,
+           "raw_term": "brawd",
+           "term": "brawd",
+           "variants": null
+          }
+         ],
+         "lang": "Old Welsh",
+         "match": false,
+         "raw_term": "braut",
+         "term": "braut",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Cornish",
+         "match": false,
+         "raw_term": "broder",
+         "term": "broder",
+         "variants": null
+        }
+       ],
+       "lang": "Proto-Brythonic",
+       "match": false,
+       "raw_term": "*brọdr",
+       "term": "brọdr",
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Irish",
+         "match": false,
+         "raw_term": "bráthair",
+         "term": "bráthair",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Manx",
+         "match": false,
+         "raw_term": "braar",
+         "term": "braar",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Scottish Gaelic",
+         "match": false,
+         "raw_term": "bràthair",
+         "term": "bràthair",
+         "variants": null
+        }
+       ],
+       "lang": "Old Irish",
+       "match": false,
+       "raw_term": "bráthair",
+       "term": "bráthair",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Gaulish",
+       "match": false,
+       "raw_term": "*brātīr",
+       "term": "brātīr",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Celtic",
+     "match": false,
+     "raw_term": "*brātīr",
+     "term": "brātīr",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "English",
+             "match": true,
+             "raw_term": "brother",
+             "term": "brother",
+             "variants": null
+            },
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Scots",
+               "match": false,
+               "raw_term": "brither, bruther, broder, bruder",
+               "term": "brither",
+               "variants": 4
+              }
+             ],
+             "lang": "Middle Scots",
+             "match": false,
+             "raw_term": "brother",
+             "term": "brother",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Yola",
+             "match": false,
+             "raw_term": "brover, brower",
+             "term": "brover",
+             "variants": 2
+            }
+           ],
+           "lang": "Middle English",
+           "match": false,
+           "raw_term": "brother",
+           "term": "brother",
+           "variants": null
+          }
+         ],
+         "lang": "Old English",
+         "match": false,
+         "raw_term": "brōþor, brōþer, brōþur, brōðer, brōður",
+         "term": "brōþor",
+         "variants": 5
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "North Frisian",
+           "match": false,
+           "raw_term": "bruder, bruler, broor, bröör, brår, brööðer, Bruur, brouder, Bröđer",
+           "term": "bruder",
+           "variants": 9
+          },
+          {
+           "children": [],
+           "lang": "Saterland Frisian",
+           "match": false,
+           "raw_term": "Brúur, Brour",
+           "term": "Brúur",
+           "variants": 2
+          },
+          {
+           "children": [],
+           "lang": "West Frisian",
+           "match": false,
+           "raw_term": "broer",
+           "term": "broer",
+           "variants": null
+          }
+         ],
+         "lang": "Old Frisian",
+         "match": false,
+         "raw_term": "brōther",
+         "term": "brōther",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "German Low German",
+             "match": false,
+             "raw_term": "Broder, Broor, Bröör",
+             "term": "Broder",
+             "variants": 3
+            },
+            {
+             "children": [],
+             "lang": "Plautdietsch",
+             "match": false,
+             "raw_term": "Brooda",
+             "term": "Brooda",
+             "variants": null
+            }
+           ],
+           "lang": "Middle Low German",
+           "match": false,
+           "raw_term": "brôder, brûder",
+           "term": "brôder",
+           "variants": 2
+          }
+         ],
+         "lang": "Old Saxon",
+         "match": false,
+         "raw_term": "brōthar",
+         "term": "brōthar",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Afrikaans",
+               "match": false,
+               "raw_term": "broeder, broer",
+               "term": "broeder",
+               "variants": 2
+              }
+             ],
+             "lang": "Dutch",
+             "match": false,
+             "raw_term": "broeder, broer",
+             "term": "broeder",
+             "variants": 2
+            },
+            {
+             "children": [],
+             "lang": "Limburgish",
+             "match": false,
+             "raw_term": "broor",
+             "term": "broor",
+             "variants": null
+            }
+           ],
+           "lang": "Middle Dutch",
+           "match": false,
+           "raw_term": "broeder",
+           "term": "broeder",
+           "variants": null
+          }
+         ],
+         "lang": "Old Dutch",
+         "match": false,
+         "raw_term": "bruother, *bruothar",
+         "term": "bruother",
+         "variants": 2
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "Alemannic German",
+             "match": false,
+             "raw_term": "Brüeder, Brueder",
+             "term": "Brüeder",
+             "variants": 2
+            },
+            {
+             "children": [],
+             "lang": "Bavarian",
+             "match": false,
+             "raw_term": null,
+             "term": null,
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Central Franconian",
+             "match": false,
+             "raw_term": "Broder, Bruder",
+             "term": "Broder",
+             "variants": 2
+            },
+            {
+             "children": [],
+             "lang": "German",
+             "match": false,
+             "raw_term": "Bruder",
+             "term": "Bruder",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Rhine Franconian",
+             "match": false,
+             "raw_term": "Bruder",
+             "term": "Bruder",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Vilamovian",
+             "match": false,
+             "raw_term": "brüder",
+             "term": "brüder",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Yiddish",
+             "match": false,
+             "raw_term": "ברודער",
+             "term": "ברודער",
+             "variants": null
+            }
+           ],
+           "lang": "Middle High German",
+           "match": false,
+           "raw_term": "bruoder",
+           "term": "bruoder",
+           "variants": null
+          }
+         ],
+         "lang": "Old High German",
+         "match": false,
+         "raw_term": "bruoder",
+         "term": "bruoder",
+         "variants": null
+        }
+       ],
+       "lang": "Proto-West Germanic",
+       "match": false,
+       "raw_term": "*brōþer",
+       "term": "brōþer",
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Icelandic",
+         "match": false,
+         "raw_term": "bróðir",
+         "term": "bróðir",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Faroese",
+         "match": false,
+         "raw_term": "bróðir",
+         "term": "bróðir",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Norn",
+         "match": false,
+         "raw_term": "brui",
+         "term": "brui",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Norwegian Bokmål",
+         "match": false,
+         "raw_term": "bror",
+         "term": "bror",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Elfdalian",
+         "match": false,
+         "raw_term": "bruoðer",
+         "term": "bruoðer",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "Swedish",
+           "match": false,
+           "raw_term": "broder, bror",
+           "term": "broder",
+           "variants": 2
+          }
+         ],
+         "lang": "Old Swedish",
+         "match": false,
+         "raw_term": "brōþir, ᛒᚱᚮᚦᛁᚱ",
+         "term": "brōþir",
+         "variants": 2
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "Norwegian Bokmål",
+             "match": false,
+             "raw_term": "broder",
+             "term": "broder",
+             "variants": null
+            }
+           ],
+           "lang": "Danish",
+           "match": false,
+           "raw_term": "bror, broder",
+           "term": "bror",
+           "variants": 2
+          }
+         ],
+         "lang": "Old Danish",
+         "match": false,
+         "raw_term": "brōthær",
+         "term": "brōthær",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Gutnish",
+         "match": false,
+         "raw_term": "bródar, brór",
+         "term": "bródar",
+         "variants": 2
+        }
+       ],
+       "lang": "Old Norse",
+       "match": false,
+       "raw_term": "bróðir",
+       "term": "bróðir",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Gothic",
+       "match": false,
+       "raw_term": "𐌱𐍂𐍉𐌸𐌰𐍂",
+       "term": "𐌱𐍂𐍉𐌸𐌰𐍂",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Crimean Gothic",
+       "match": false,
+       "raw_term": "bruder",
+       "term": "bruder",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Germanic",
+     "match": false,
+     "raw_term": "*brōþēr",
+     "term": "brōþēr",
+     "variants": null
+    },
+    {
+     "children": [],
+     "lang": "Proto-Hellenic",
+     "match": false,
+     "raw_term": "*pʰrā́tēr",
+     "term": "pʰrā́tēr",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Sanskrit",
+         "match": false,
+         "raw_term": "भ्रातृ",
+         "term": "भ्रातृ",
+         "variants": null
+        }
+       ],
+       "lang": "Proto-Indo-Aryan",
+       "match": false,
+       "raw_term": "*bʰráHtā",
+       "term": "bʰráHtā",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Proto-Iranian",
+       "match": false,
+       "raw_term": "*bráHtā",
+       "term": "bráHtā",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Proto-Nuristani",
+       "match": false,
+       "raw_term": "*brātā̆",
+       "term": "brātā̆",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Indo-Iranian",
+     "match": false,
+     "raw_term": "*bʰráHtā",
+     "term": "bʰráHtā",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Latin",
+       "match": false,
+       "raw_term": "frāter",
+       "term": "frāter",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Oscan",
+       "match": false,
+       "raw_term": "𐌚𐌓𐌀𐌕𐌓𐌞𐌌",
+       "term": "𐌚𐌓𐌀𐌕𐌓𐌞𐌌",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Umbrian",
+       "match": false,
+       "raw_term": "𐌚𐌓𐌀𐌕𐌄𐌓",
+       "term": "𐌚𐌓𐌀𐌕𐌄𐌓",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Venetic",
+       "match": false,
+       "raw_term": "𐌇𐌅𐌓𐌀𐌕𐌄𐌓𐌄𐌉",
+       "term": "𐌇𐌅𐌓𐌀𐌕𐌄𐌓𐌄𐌉",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Italic",
+     "match": false,
+     "raw_term": "*frātēr",
+     "term": "frātēr",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Doric Greek",
+       "match": false,
+       "raw_term": "βρά",
+       "term": "βρά",
+       "variants": null
+      }
+     ],
+     "lang": "Illyrian",
+     "match": false,
+     "raw_term": null,
+     "term": null,
+     "variants": null
+    },
+    {
+     "children": [],
+     "lang": "Mysian",
+     "match": false,
+     "raw_term": "βρατεραις",
+     "term": "βρατεραις",
+     "variants": null
+    },
+    {
+     "children": [],
+     "lang": "Phrygian",
+     "match": false,
+     "raw_term": "βρατερε",
+     "term": "βρατερε",
+     "variants": null
+    },
+    {
+     "children": [],
+     "lang": "Proto-Tocharian",
+     "match": false,
+     "raw_term": "*procer",
+     "term": "procer",
+     "variants": null
+    }
+   ],
+   "lang": "Proto-Indo-European",
+   "match": false,
+   "raw_term": "bʰréh₂tēr",
+   "term": "bʰréh₂tēr",
+   "variants": null
+  },
+  "truncated": false
+ },
+ "earth": {
+  "root_lang": "Proto-Indo-European",
+  "root_raw": "h₁er-",
+  "shown_nodes": 80,
+  "total_nodes": 80,
+  "tree": {
+   "children": [
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "Old English",
+           "match": false,
+           "raw_term": "*eormen",
+           "term": "eormen",
+           "variants": null
+          },
+          {
+           "children": [],
+           "lang": "Old Saxon",
+           "match": false,
+           "raw_term": "*irmin",
+           "term": "irmin",
+           "variants": null
+          },
+          {
+           "children": [],
+           "lang": "Old High German",
+           "match": false,
+           "raw_term": "*irmin",
+           "term": "irmin",
+           "variants": null
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "match": false,
+         "raw_term": "*ermun",
+         "term": "ermun",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "Old East Norse",
+           "match": false,
+           "raw_term": "*ᛁᛅᚱᛘᚢᚾᛦ, *iarmunʀ",
+           "term": "ᛁᛅᚱᛘᚢᚾᛦ",
+           "variants": 2
+          },
+          {
+           "children": [],
+           "lang": "Old West Norse",
+           "match": false,
+           "raw_term": "*jǫrmunr",
+           "term": "jǫrmunr",
+           "variants": null
+          }
+         ],
+         "lang": "Proto-Norse",
+         "match": false,
+         "raw_term": "*ᛖᚱᛗᚢᚾᚨᛉ",
+         "term": "ᛖᚱᛗᚢᚾᚨᛉ",
+         "variants": null
+        }
+       ],
+       "lang": "Proto-Germanic",
+       "match": false,
+       "raw_term": "*ermunaz",
+       "term": "ermunaz",
+       "variants": null
+      }
+     ],
+     "lang": "unknown",
+     "match": false,
+     "raw_term": "*h₁ér-mn̥ ~ *h₁r̥-mén-s",
+     "term": "h₁ér-mn̥ ~ *h₁r̥-mén-s",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "English",
+               "match": true,
+               "raw_term": "earth, Earth",
+               "term": "earth",
+               "variants": 2
+              },
+              {
+               "children": [
+                {
+                 "children": [],
+                 "lang": "Scots",
+                 "match": false,
+                 "raw_term": "erd, yerd, yird, yirth, Yird",
+                 "term": "erd",
+                 "variants": 5
+                }
+               ],
+               "lang": "Middle Scots",
+               "match": false,
+               "raw_term": "erd, erde, ȝerd, ȝeird",
+               "term": "erd",
+               "variants": 4
+              },
+              {
+               "children": [],
+               "lang": "Yola",
+               "match": false,
+               "raw_term": "erth, eart, eard, eord, eorth",
+               "term": "erth",
+               "variants": 5
+              }
+             ],
+             "lang": "Middle English",
+             "match": false,
+             "raw_term": "erthe, eerthe, erde, ereth, erth, erþ, erþe, earþe, erðe, eorth, herðe, eorðe, horðe, horþe, ȝerthe, irthe, yerth, yerthe, yrþe, orþe, eirthe, eyrthe, eorthe, eorþe, urþe, urthe, oerþ, oerþe",
+             "term": "erthe",
+             "variants": 28
+            }
+           ],
+           "lang": "Old English",
+           "match": false,
+           "raw_term": "eorþe, earþe, iorþe, eorþ, erðe, yrþ, eorðe, eorþo, eorþu, eorþæ, heorþe, heordæ, eorda, eordæ, eorða",
+           "term": "eorþe",
+           "variants": 15
+          },
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "North Frisian",
+             "match": false,
+             "raw_term": "eerd, eerde, iarde, iir, jard, Iart, Öört, örd",
+             "term": "eerd",
+             "variants": 8
+            },
+            {
+             "children": [],
+             "lang": "Saterland Frisian",
+             "match": false,
+             "raw_term": "Äide, Idde, Äid",
+             "term": "Äide",
+             "variants": 3
+            },
+            {
+             "children": [],
+             "lang": "West Frisian",
+             "match": false,
+             "raw_term": "ierde",
+             "term": "ierde",
+             "variants": null
+            }
+           ],
+           "lang": "Old Frisian",
+           "match": false,
+           "raw_term": "erthe, erde, irthe",
+           "term": "erthe",
+           "variants": 3
+          },
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [
+                {
+                 "children": [],
+                 "lang": "Dutch Low Saxon",
+                 "match": false,
+                 "raw_term": "eerde",
+                 "term": "eerde",
+                 "variants": null
+                },
+                {
+                 "children": [],
+                 "lang": "German Low German",
+                 "match": false,
+                 "raw_term": "Eer, Eerd, Eerde, Ier, Ierd, Ierde",
+                 "term": "Eer",
+                 "variants": 6
+                },
+                {
+                 "children": [],
+                 "lang": "Westphalian",
+                 "match": false,
+                 "raw_term": null,
+                 "term": null,
+                 "variants": null
+                }
+               ],
+               "lang": "Low German",
+               "match": false,
+               "raw_term": "Erde",
+               "term": "Erde",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Plautdietsch",
+               "match": false,
+               "raw_term": "Ead, Ieed",
+               "term": "Ead",
+               "variants": 2
+              }
+             ],
+             "lang": "Middle Low German",
+             "match": false,
+             "raw_term": "ērde",
+             "term": "ērde",
+             "variants": null
+            }
+           ],
+           "lang": "Old Saxon",
+           "match": false,
+           "raw_term": "ertha, erda",
+           "term": "ertha",
+           "variants": 2
+          },
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [
+                {
+                 "children": [],
+                 "lang": "Afrikaans",
+                 "match": false,
+                 "raw_term": "aarde",
+                 "term": "aarde",
+                 "variants": null
+                },
+                {
+                 "children": [
+                  {
+                   "children": [],
+                   "lang": "Virgin Islands Creole",
+                   "match": false,
+                   "raw_term": "adu, ard",
+                   "term": "adu",
+                   "variants": 2
+                  }
+                 ],
+                 "lang": "Negerhollands",
+                 "match": false,
+                 "raw_term": "aarde, adu, aerde",
+                 "term": "aarde",
+                 "variants": 3
+                },
+                {
+                 "children": [],
+                 "lang": "Indonesian",
+                 "match": false,
+                 "raw_term": "arde",
+                 "term": "arde",
+                 "variants": null
+                }
+               ],
+               "lang": "Dutch",
+               "match": false,
+               "raw_term": "aarde, aard",
+               "term": "aarde",
+               "variants": 2
+              },
+              {
+               "children": [],
+               "lang": "Limburgish",
+               "match": false,
+               "raw_term": "aerd, aerj",
+               "term": "aerd",
+               "variants": 2
+              }
+             ],
+             "lang": "Middle Dutch",
+             "match": false,
+             "raw_term": "erde",
+             "term": "erde",
+             "variants": null
+            }
+           ],
+           "lang": "Old Dutch",
+           "match": false,
+           "raw_term": "ertha",
+           "term": "ertha",
+           "variants": null
+          },
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Alemannic German",
+               "match": false,
+               "raw_term": "Ëërde",
+               "term": "Ëërde",
+               "variants": null
+              },
+              {
+               "children": [
+                {
+                 "children": [],
+                 "lang": "Cimbrian",
+                 "match": false,
+                 "raw_term": "èerda",
+                 "term": "èerda",
+                 "variants": null
+                }
+               ],
+               "lang": "Bavarian",
+               "match": false,
+               "raw_term": "Erd, Erdn",
+               "term": "Erd",
+               "variants": 2
+              },
+              {
+               "children": [
+                {
+                 "children": [],
+                 "lang": "Hunsrik",
+                 "match": false,
+                 "raw_term": "Äerd",
+                 "term": "Äerd",
+                 "variants": null
+                },
+                {
+                 "children": [],
+                 "lang": "Kölsch",
+                 "match": false,
+                 "raw_term": "Äd",
+                 "term": "Äd",
+                 "variants": null
+                },
+                {
+                 "children": [],
+                 "lang": "Luxembourgish",
+                 "match": false,
+                 "raw_term": "Äerd",
+                 "term": "Äerd",
+                 "variants": null
+                }
+               ],
+               "lang": "Central Franconian",
+               "match": false,
+               "raw_term": "Ääd, Erd, Äerd",
+               "term": "Ääd",
+               "variants": 3
+              },
+              {
+               "children": [],
+               "lang": "German",
+               "match": false,
+               "raw_term": "Erde",
+               "term": "Erde",
+               "variants": null
+              },
+              {
+               "children": [
+                {
+                 "children": [],
+                 "lang": "Pennsylvania German",
+                 "match": false,
+                 "raw_term": "Erd, Aerd, Eaht",
+                 "term": "Erd",
+                 "variants": 3
+                }
+               ],
+               "lang": "Rhine Franconian",
+               "match": false,
+               "raw_term": "Erd",
+               "term": "Erd",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Vilamovian",
+               "match": false,
+               "raw_term": "Ād",
+               "term": "Ād",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Yiddish",
+               "match": false,
+               "raw_term": "ערד",
+               "term": "ערד",
+               "variants": null
+              }
+             ],
+             "lang": "Middle High German",
+             "match": false,
+             "raw_term": "ërde",
+             "term": "ërde",
+             "variants": null
+            }
+           ],
+           "lang": "Old High German",
+           "match": false,
+           "raw_term": "ërda, haerda",
+           "term": "ërda",
+           "variants": 2
+          }
+         ],
+         "lang": "Proto-West Germanic",
+         "match": false,
+         "raw_term": "*erþu, *erþā",
+         "term": "erþu",
+         "variants": 2
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "Icelandic",
+             "match": false,
+             "raw_term": "jörð",
+             "term": "jörð",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Faroese",
+             "match": false,
+             "raw_term": "jørð",
+             "term": "jørð",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Norn",
+             "match": false,
+             "raw_term": "yurn",
+             "term": "yurn",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Norwegian Nynorsk",
+             "match": false,
+             "raw_term": "jord",
+             "term": "jord",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Jamtish",
+             "match": false,
+             "raw_term": "jórð",
+             "term": "jórð",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Elfdalian",
+             "match": false,
+             "raw_term": "juord",
+             "term": "juord",
+             "variants": null
+            },
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Swedish",
+               "match": false,
+               "raw_term": "jord",
+               "term": "jord",
+               "variants": null
+              }
+             ],
+             "lang": "Old Swedish",
+             "match": false,
+             "raw_term": "iorþ, iordh",
+             "term": "iorþ",
+             "variants": 2
+            },
+            {
+             "children": [
+              {
+               "children": [
+                {
+                 "children": [],
+                 "lang": "Norwegian Bokmål",
+                 "match": false,
+                 "raw_term": "jord",
+                 "term": "jord",
+                 "variants": null
+                }
+               ],
+               "lang": "Danish",
+               "match": false,
+               "raw_term": "jord",
+               "term": "jord",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Scanian",
+               "match": false,
+               "raw_term": "jorð",
+               "term": "jorð",
+               "variants": null
+              }
+             ],
+             "lang": "Old Danish",
+             "match": false,
+             "raw_term": "iorþ, iorth, ᛁᚮᚱᚦ",
+             "term": "iorþ",
+             "variants": 3
+            },
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Gutnish",
+               "match": false,
+               "raw_term": "jård",
+               "term": "jård",
+               "variants": null
+              }
+             ],
+             "lang": "Old Gutnish",
+             "match": false,
+             "raw_term": "iorþ",
+             "term": "iorþ",
+             "variants": null
+            }
+           ],
+           "lang": "Old Norse",
+           "match": false,
+           "raw_term": "jǫrð, jorð",
+           "term": "jǫrð",
+           "variants": 2
+          }
+         ],
+         "lang": "Proto-Norse",
+         "match": false,
+         "raw_term": "*ᛖᚱᚦᚢ",
+         "term": "ᛖᚱᚦᚢ",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Gothic",
+         "match": false,
+         "raw_term": "𐌰𐌹𐍂𐌸𐌰",
+         "term": "𐌰𐌹𐍂𐌸𐌰",
+         "variants": null
+        }
+       ],
+       "lang": "Proto-Germanic",
+       "match": false,
+       "raw_term": "*erþō",
+       "term": "erþō",
+       "variants": null
+      }
+     ],
+     "lang": "unknown",
+     "match": false,
+     "raw_term": "*h₁ér-teh₂",
+     "term": "h₁ér-teh₂",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Albanian",
+       "match": false,
+       "raw_term": "varr",
+       "term": "varr",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Albanian",
+     "match": false,
+     "raw_term": "*ā̆ur(V)n",
+     "term": "ā̆ur(V)n",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Lithuanian",
+       "match": false,
+       "raw_term": "érdvė",
+       "term": "érdvė",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Samogitian",
+       "match": false,
+       "raw_term": "erdvė",
+       "term": "erdvė",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Balto-Slavic",
+     "match": false,
+     "raw_term": null,
+     "term": null,
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Welsh",
+       "match": false,
+       "raw_term": "erw",
+       "term": "erw",
+       "variants": null
+      }
+     ],
+     "lang": "Celtic",
+     "match": false,
+     "raw_term": null,
+     "term": null,
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Ancient Greek",
+       "match": false,
+       "raw_term": "*ἔρα, ἔραζε",
+       "term": "ἔρα",
+       "variants": 2
+      }
+     ],
+     "lang": "Hellenic",
+     "match": false,
+     "raw_term": null,
+     "term": null,
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Tocharian B",
+       "match": false,
+       "raw_term": "āre",
+       "term": "āre",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Tocharian",
+     "match": false,
+     "raw_term": null,
+     "term": null,
+     "variants": null
+    }
+   ],
+   "lang": "Proto-Indo-European",
+   "match": false,
+   "raw_term": "h₁er-",
+   "term": "h₁er-",
+   "variants": null
+  },
+  "truncated": false
+ },
+ "father": {
+  "root_lang": "Proto-Indo-European",
+  "root_raw": "ph₂tḗr",
+  "shown_nodes": 95,
+  "total_nodes": 95,
+  "tree": {
+   "children": [
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Old Armenian",
+       "match": false,
+       "raw_term": "հայր",
+       "term": "հայր",
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Armenian",
+         "match": false,
+         "raw_term": "հորա",
+         "term": "հորա",
+         "variants": null
+        }
+       ],
+       "lang": "Old Armenian",
+       "match": false,
+       "raw_term": "յօրայ, յաւրայ",
+       "term": "յօրայ",
+       "variants": 2
+      }
+     ],
+     "lang": "Proto-Armenian",
+     "match": false,
+     "raw_term": "*hatir, *hayir",
+     "term": "hatir",
+     "variants": 2
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Old Welsh",
+         "match": false,
+         "raw_term": "-atr",
+         "term": "-atr",
+         "variants": null
+        }
+       ],
+       "lang": "Proto-Brythonic",
+       "match": false,
+       "raw_term": null,
+       "term": null,
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Irish",
+         "match": false,
+         "raw_term": "athair",
+         "term": "athair",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "English",
+           "match": false,
+           "raw_term": "ayr",
+           "term": "ayr",
+           "variants": null
+          }
+         ],
+         "lang": "Manx",
+         "match": false,
+         "raw_term": "ayr",
+         "term": "ayr",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Scottish Gaelic",
+         "match": false,
+         "raw_term": "athair",
+         "term": "athair",
+         "variants": null
+        }
+       ],
+       "lang": "Old Irish",
+       "match": false,
+       "raw_term": "athair, athir",
+       "term": "athair",
+       "variants": 2
+      },
+      {
+       "children": [],
+       "lang": "Gaulish",
+       "match": false,
+       "raw_term": "*atir, ater",
+       "term": "atir",
+       "variants": 2
+      }
+     ],
+     "lang": "Proto-Celtic",
+     "match": false,
+     "raw_term": "*ɸatīr",
+     "term": "ɸatīr",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Marshallese",
+               "match": false,
+               "raw_term": "bata",
+               "term": "bata",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Gullah",
+               "match": false,
+               "raw_term": "farruh",
+               "term": "farruh",
+               "variants": null
+              }
+             ],
+             "lang": "English",
+             "match": true,
+             "raw_term": "father",
+             "term": "father",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Scots",
+             "match": false,
+             "raw_term": "faither, fader, faether, faider, father, fither",
+             "term": "faither",
+             "variants": 6
+            },
+            {
+             "children": [],
+             "lang": "Yola",
+             "match": false,
+             "raw_term": "vather",
+             "term": "vather",
+             "variants": null
+            }
+           ],
+           "lang": "Middle English",
+           "match": false,
+           "raw_term": "fader, fadir, fadur, fadyr, ffader, faðer, fæder, faþer, father, ffadere, feader, faderr, feder, vader, veder",
+           "term": "fader",
+           "variants": 15
+          },
+          {
+           "children": [],
+           "lang": "English",
+           "match": false,
+           "raw_term": "faeder",
+           "term": "faeder",
+           "variants": null
+          }
+         ],
+         "lang": "Old English",
+         "match": false,
+         "raw_term": "fæder",
+         "term": "fæder",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "North Frisian",
+           "match": false,
+           "raw_term": "fooje, fååje, Foor, Faađer",
+           "term": "fooje",
+           "variants": 4
+          },
+          {
+           "children": [],
+           "lang": "Saterland Frisian",
+           "match": false,
+           "raw_term": "Foar",
+           "term": "Foar",
+           "variants": null
+          },
+          {
+           "children": [],
+           "lang": "West Frisian",
+           "match": false,
+           "raw_term": "fader, faar",
+           "term": "fader",
+           "variants": 2
+          }
+         ],
+         "lang": "Old Frisian",
+         "match": false,
+         "raw_term": "feder, fader",
+         "term": "feder",
+         "variants": 2
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Plautdietsch",
+               "match": false,
+               "raw_term": "Voda",
+               "term": "Voda",
+               "variants": null
+              }
+             ],
+             "lang": "German Low German",
+             "match": false,
+             "raw_term": "Vader, Vaar",
+             "term": "Vader",
+             "variants": 2
+            }
+           ],
+           "lang": "Middle Low German",
+           "match": false,
+           "raw_term": "vāder",
+           "term": "vāder",
+           "variants": null
+          }
+         ],
+         "lang": "Old Saxon",
+         "match": false,
+         "raw_term": "fadar, fader",
+         "term": "fadar",
+         "variants": 2
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Afrikaans",
+               "match": false,
+               "raw_term": "vader",
+               "term": "vader",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Berbice Creole Dutch",
+               "match": false,
+               "raw_term": "fadir",
+               "term": "fadir",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Javindo",
+               "match": false,
+               "raw_term": "fader",
+               "term": "fader",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Jersey Dutch",
+               "match": false,
+               "raw_term": "vâder",
+               "term": "vâder",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Negerhollands",
+               "match": false,
+               "raw_term": "vader",
+               "term": "vader",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Skepi Creole Dutch",
+               "match": false,
+               "raw_term": "father",
+               "term": "father",
+               "variants": null
+              }
+             ],
+             "lang": "Dutch",
+             "match": false,
+             "raw_term": "vader, vaeder, vaar, vaâr, vaêr",
+             "term": "vader",
+             "variants": 5
+            },
+            {
+             "children": [],
+             "lang": "Limburgish",
+             "match": false,
+             "raw_term": "vajer, vader",
+             "term": "vajer",
+             "variants": 2
+            }
+           ],
+           "lang": "Middle Dutch",
+           "match": false,
+           "raw_term": "vāder, vaer",
+           "term": "vāder",
+           "variants": 2
+          }
+         ],
+         "lang": "Old Dutch",
+         "match": false,
+         "raw_term": "fadar",
+         "term": "fadar",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Italian Walser",
+               "match": false,
+               "raw_term": "fater, vàtter",
+               "term": "fater",
+               "variants": 2
+              }
+             ],
+             "lang": "Alemannic German",
+             "match": false,
+             "raw_term": "Vatter, Vater, Fatter",
+             "term": "Vatter",
+             "variants": 3
+            },
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Cimbrian",
+               "match": false,
+               "raw_term": "vatar, vaatar, baatar",
+               "term": "vatar",
+               "variants": 3
+              },
+              {
+               "children": [],
+               "lang": "Udinese",
+               "match": false,
+               "raw_term": "votar, voter",
+               "term": "votar",
+               "variants": 2
+              }
+             ],
+             "lang": "Bavarian",
+             "match": false,
+             "raw_term": "vadda",
+             "term": "vadda",
+             "variants": null
+            },
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Hunsrik",
+               "match": false,
+               "raw_term": "Fatter",
+               "term": "Fatter",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Transylvanian Saxon",
+               "match": false,
+               "raw_term": "Foater",
+               "term": "Foater",
+               "variants": null
+              }
+             ],
+             "lang": "Central Franconian",
+             "match": false,
+             "raw_term": "Vader",
+             "term": "Vader",
+             "variants": null
+            },
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Vilamovian",
+               "match": false,
+               "raw_term": "foter, fōter",
+               "term": "foter",
+               "variants": 2
+              }
+             ],
+             "lang": "East Central German",
+             "match": false,
+             "raw_term": "Voater",
+             "term": "Voater",
+             "variants": null
+            },
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "English",
+               "match": false,
+               "raw_term": "Vater",
+               "term": "Vater",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Central Franconian",
+               "match": false,
+               "raw_term": "Vatter",
+               "term": "Vatter",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Polish",
+               "match": false,
+               "raw_term": "fater, fader",
+               "term": "fater",
+               "variants": 2
+              }
+             ],
+             "lang": "German",
+             "match": false,
+             "raw_term": "Vater, Vatter",
+             "term": "Vater",
+             "variants": 2
+            },
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Pennsylvania German",
+               "match": false,
+               "raw_term": "Vadder",
+               "term": "Vadder",
+               "variants": null
+              }
+             ],
+             "lang": "Rhine Franconian",
+             "match": false,
+             "raw_term": null,
+             "term": null,
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Yiddish",
+             "match": false,
+             "raw_term": "פֿאָטער",
+             "term": "פֿאָטער",
+             "variants": null
+            }
+           ],
+           "lang": "Middle High German",
+           "match": false,
+           "raw_term": "vater, fater, fatter, vatter",
+           "term": "vater",
+           "variants": 4
+          }
+         ],
+         "lang": "Old High German",
+         "match": false,
+         "raw_term": "fater",
+         "term": "fater",
+         "variants": null
+        }
+       ],
+       "lang": "Proto-West Germanic",
+       "match": false,
+       "raw_term": "*fader",
+       "term": "fader",
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Icelandic",
+         "match": false,
+         "raw_term": "faðir",
+         "term": "faðir",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Faroese",
+         "match": false,
+         "raw_term": "faðir",
+         "term": "faðir",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Norn",
+         "match": false,
+         "raw_term": null,
+         "term": null,
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "Kven",
+           "match": false,
+           "raw_term": "faari",
+           "term": "faari",
+           "variants": null
+          }
+         ],
+         "lang": "Norwegian Nynorsk",
+         "match": false,
+         "raw_term": "far, fader, fade, fair, fai",
+         "term": "far",
+         "variants": 5
+        },
+        {
+         "children": [],
+         "lang": "Elfdalian",
+         "match": false,
+         "raw_term": "faðer",
+         "term": "faðer",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "Finnish",
+             "match": false,
+             "raw_term": "vaari",
+             "term": "vaari",
+             "variants": null
+            }
+           ],
+           "lang": "Swedish",
+           "match": false,
+           "raw_term": "fader, far",
+           "term": "fader",
+           "variants": 2
+          }
+         ],
+         "lang": "Old Swedish",
+         "match": false,
+         "raw_term": "faþir, fadher, fadhir, ᚠᛆᚦᛁᚱ",
+         "term": "faþir",
+         "variants": 4
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "Norwegian Bokmål",
+             "match": false,
+             "raw_term": "far, fader",
+             "term": "far",
+             "variants": 2
+            }
+           ],
+           "lang": "Danish",
+           "match": false,
+           "raw_term": "fader, far",
+           "term": "fader",
+           "variants": 2
+          },
+          {
+           "children": [],
+           "lang": "Scanian",
+           "match": false,
+           "raw_term": "faðer",
+           "term": "faðer",
+           "variants": null
+          }
+         ],
+         "lang": "Old Danish",
+         "match": false,
+         "raw_term": "faþir, fathær",
+         "term": "faþir",
+         "variants": 2
+        },
+        {
+         "children": [],
+         "lang": "Gutnish",
+         "match": false,
+         "raw_term": "far, fadar, fadur",
+         "term": "far",
+         "variants": 3
+        }
+       ],
+       "lang": "Old Norse",
+       "match": false,
+       "raw_term": "faðir, ᚠᛅᚦᛁᛦ",
+       "term": "faðir",
+       "variants": 2
+      },
+      {
+       "children": [],
+       "lang": "Gothic",
+       "match": false,
+       "raw_term": "𐍆𐌰𐌳𐌰𐍂",
+       "term": "𐍆𐌰𐌳𐌰𐍂",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Germanic",
+     "match": false,
+     "raw_term": "*fadēr",
+     "term": "fadēr",
+     "variants": null
+    },
+    {
+     "children": [],
+     "lang": "Proto-Hellenic",
+     "match": false,
+     "raw_term": "*patḗr",
+     "term": "patḗr",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Sanskrit",
+         "match": false,
+         "raw_term": "पितृ, पिता",
+         "term": "पितृ",
+         "variants": 2
+        }
+       ],
+       "lang": "Proto-Indo-Aryan",
+       "match": false,
+       "raw_term": "*pHtā́",
+       "term": "pHtā́",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Proto-Iranian",
+       "match": false,
+       "raw_term": "*pHtā́",
+       "term": "pHtā́",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Indo-Iranian",
+     "match": false,
+     "raw_term": "*pHtā́",
+     "term": "pHtā́",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Aequian",
+       "match": false,
+       "raw_term": "patre",
+       "term": "patre",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Faliscan",
+       "match": false,
+       "raw_term": "𐌐𐌀𐌕𐌄𐌓",
+       "term": "𐌐𐌀𐌕𐌄𐌓",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Latin",
+       "match": false,
+       "raw_term": "pater",
+       "term": "pater",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Oscan",
+       "match": false,
+       "raw_term": "𐌐𐌀𐌕𐌝𐌓",
+       "term": "𐌐𐌀𐌕𐌝𐌓",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "South Picene",
+       "match": false,
+       "raw_term": "𐌐𐌀𐌕𐌄𐌓𐌄𐌑𐌇",
+       "term": "𐌐𐌀𐌕𐌄𐌓𐌄𐌑𐌇",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Umbrian",
+       "match": false,
+       "raw_term": "𐌉𐌖𐌐𐌀𐌕𐌄𐌓",
+       "term": "𐌉𐌖𐌐𐌀𐌕𐌄𐌓",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Marrucinian",
+       "match": false,
+       "raw_term": "patres",
+       "term": "patres",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Italic",
+     "match": false,
+     "raw_term": "*patēr",
+     "term": "patēr",
+     "variants": null
+    },
+    {
+     "children": [],
+     "lang": "Mysian",
+     "match": false,
+     "raw_term": "πατριζι",
+     "term": "πατριζι",
+     "variants": null
+    },
+    {
+     "children": [],
+     "lang": "Phrygian",
+     "match": false,
+     "raw_term": "πατερης",
+     "term": "πατερης",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Tocharian A",
+       "match": false,
+       "raw_term": "pācar",
+       "term": "pācar",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Tocharian B",
+       "match": false,
+       "raw_term": "pācer",
+       "term": "pācer",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Tocharian",
+     "match": false,
+     "raw_term": "*pācer",
+     "term": "pācer",
+     "variants": null
+    }
+   ],
+   "lang": "Proto-Indo-European",
+   "match": false,
+   "raw_term": "ph₂tḗr",
+   "term": "ph₂tḗr",
+   "variants": null
+  },
+  "truncated": false
+ },
+ "friend": {
+  "root_lang": "Proto-Germanic",
+  "root_raw": "frijōndz",
+  "shown_nodes": 52,
+  "total_nodes": 52,
+  "tree": {
+   "children": [
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "English",
+           "match": true,
+           "raw_term": "friend",
+           "term": "friend",
+           "variants": null
+          },
+          {
+           "children": [],
+           "lang": "Scots",
+           "match": false,
+           "raw_term": "freend, frende, freynd, freind",
+           "term": "freend",
+           "variants": 4
+          },
+          {
+           "children": [],
+           "lang": "Yola",
+           "match": false,
+           "raw_term": "vriene, friend",
+           "term": "vriene",
+           "variants": 2
+          },
+          {
+           "children": [],
+           "lang": "Welsh",
+           "match": false,
+           "raw_term": "ffrind",
+           "term": "ffrind",
+           "variants": null
+          }
+         ],
+         "lang": "Middle English",
+         "match": false,
+         "raw_term": "frend, frende, friend, vrend, freend, frond, frund, freind, freynde, vryend, frind, freond, froend",
+         "term": "frend",
+         "variants": 13
+        }
+       ],
+       "lang": "Old English",
+       "match": false,
+       "raw_term": "frēond, frīond",
+       "term": "frēond",
+       "variants": 2
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "North Frisian",
+         "match": false,
+         "raw_term": null,
+         "term": null,
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Saterland Frisian",
+         "match": false,
+         "raw_term": "Früünd, Fjund",
+         "term": "Früünd",
+         "variants": 2
+        },
+        {
+         "children": [],
+         "lang": "West Frisian",
+         "match": false,
+         "raw_term": "freon",
+         "term": "freon",
+         "variants": null
+        }
+       ],
+       "lang": "Old Frisian",
+       "match": false,
+       "raw_term": "friūnd, friōnd",
+       "term": "friūnd",
+       "variants": 2
+      },
+      {
+       "children": [
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "German Low German",
+             "match": false,
+             "raw_term": "Fründ, Frund, Frönd",
+             "term": "Fründ",
+             "variants": 3
+            }
+           ],
+           "lang": "Low German",
+           "match": false,
+           "raw_term": "Fründ",
+           "term": "Fründ",
+           "variants": null
+          },
+          {
+           "children": [],
+           "lang": "Plautdietsch",
+           "match": false,
+           "raw_term": "Frint",
+           "term": "Frint",
+           "variants": null
+          },
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "Swedish",
+             "match": false,
+             "raw_term": "frynt",
+             "term": "frynt",
+             "variants": null
+            }
+           ],
+           "lang": "Old Swedish",
+           "match": false,
+           "raw_term": "frynt, frynd",
+           "term": "frynt",
+           "variants": 2
+          }
+         ],
+         "lang": "Middle Low German",
+         "match": false,
+         "raw_term": "vrint, vrünt, vrent",
+         "term": "vrint",
+         "variants": 3
+        }
+       ],
+       "lang": "Old Saxon",
+       "match": false,
+       "raw_term": "friund",
+       "term": "friund",
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "Afrikaans",
+             "match": false,
+             "raw_term": "vriend",
+             "term": "vriend",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Berbice Creole Dutch",
+             "match": false,
+             "raw_term": "frindi",
+             "term": "frindi",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Javindo",
+             "match": false,
+             "raw_term": "friend",
+             "term": "friend",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Jersey Dutch",
+             "match": false,
+             "raw_term": "vrînt",
+             "term": "vrînt",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Negerhollands",
+             "match": false,
+             "raw_term": "vriend, vrient",
+             "term": "vriend",
+             "variants": 2
+            },
+            {
+             "children": [],
+             "lang": "Petjo",
+             "match": false,
+             "raw_term": "pring",
+             "term": "pring",
+             "variants": null
+            }
+           ],
+           "lang": "Dutch",
+           "match": false,
+           "raw_term": "vriend, vrind",
+           "term": "vriend",
+           "variants": 2
+          },
+          {
+           "children": [],
+           "lang": "Limburgish",
+           "match": false,
+           "raw_term": "vröndj",
+           "term": "vröndj",
+           "variants": null
+          }
+         ],
+         "lang": "Middle Dutch",
+         "match": false,
+         "raw_term": "vrient",
+         "term": "vrient",
+         "variants": null
+        }
+       ],
+       "lang": "Old Dutch",
+       "match": false,
+       "raw_term": "friunt, frient",
+       "term": "friunt",
+       "variants": 2
+      },
+      {
+       "children": [
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "Alemannic German",
+           "match": false,
+           "raw_term": "Fründ",
+           "term": "Fründ",
+           "variants": null
+          },
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "Cimbrian",
+             "match": false,
+             "raw_term": "vròint, bròint",
+             "term": "vròint",
+             "variants": 2
+            }
+           ],
+           "lang": "Bavarian",
+           "match": false,
+           "raw_term": "Freind",
+           "term": "Freind",
+           "variants": null
+          },
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "Hunsrik",
+             "match": false,
+             "raw_term": "Freind",
+             "term": "Freind",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Luxembourgish",
+             "match": false,
+             "raw_term": "Frënd",
+             "term": "Frënd",
+             "variants": null
+            }
+           ],
+           "lang": "Central Franconian",
+           "match": false,
+           "raw_term": "Frönd, Frönk, Vrönk, Fründ, Frind, Frend, Freind",
+           "term": "Frönd",
+           "variants": 7
+          },
+          {
+           "children": [],
+           "lang": "German",
+           "match": false,
+           "raw_term": "Freund",
+           "term": "Freund",
+           "variants": null
+          },
+          {
+           "children": [],
+           "lang": "Vilamovian",
+           "match": false,
+           "raw_term": "fraeind, frajnd",
+           "term": "fraeind",
+           "variants": 2
+          },
+          {
+           "children": [],
+           "lang": "Volhynian German",
+           "match": false,
+           "raw_term": null,
+           "term": null,
+           "variants": null
+          },
+          {
+           "children": [],
+           "lang": "Yiddish",
+           "match": false,
+           "raw_term": "פֿרײַנד",
+           "term": "פֿרײַנד",
+           "variants": null
+          }
+         ],
+         "lang": "Middle High German",
+         "match": false,
+         "raw_term": "vriunt, vrünt, vrunt, vrūnt",
+         "term": "vriunt",
+         "variants": 4
+        }
+       ],
+       "lang": "Old High German",
+       "match": false,
+       "raw_term": "friunt",
+       "term": "friunt",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-West Germanic",
+     "match": false,
+     "raw_term": "*friund",
+     "term": "friund",
+     "variants": null
+    },
+    {
+     "children": [],
+     "lang": "Old Norse",
+     "match": false,
+     "raw_term": "fríandi, frjándi",
+     "term": "fríandi",
+     "variants": 2
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Icelandic",
+       "match": false,
+       "raw_term": "frændi",
+       "term": "frændi",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Faroese",
+       "match": false,
+       "raw_term": "frændi",
+       "term": "frændi",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Norn",
+       "match": false,
+       "raw_term": "frend",
+       "term": "frend",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Norwegian Nynorsk",
+       "match": false,
+       "raw_term": "frende",
+       "term": "frende",
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Swedish",
+         "match": false,
+         "raw_term": "frände",
+         "term": "frände",
+         "variants": null
+        }
+       ],
+       "lang": "Old Swedish",
+       "match": false,
+       "raw_term": "frænde",
+       "term": "frænde",
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Norwegian Bokmål",
+         "match": false,
+         "raw_term": "frende",
+         "term": "frende",
+         "variants": null
+        }
+       ],
+       "lang": "Danish",
+       "match": false,
+       "raw_term": "frænde",
+       "term": "frænde",
+       "variants": null
+      }
+     ],
+     "lang": "Old Norse",
+     "match": false,
+     "raw_term": "frændi",
+     "term": "frændi",
+     "variants": null
+    },
+    {
+     "children": [],
+     "lang": "Gothic",
+     "match": false,
+     "raw_term": "𐍆𐍂𐌹𐌾𐍉𐌽𐌳𐍃",
+     "term": "𐍆𐍂𐌹𐌾𐍉𐌽𐌳𐍃",
+     "variants": null
+    }
+   ],
+   "lang": "Proto-Germanic",
+   "match": false,
+   "raw_term": "frijōndz",
+   "term": "frijōndz",
+   "variants": null
+  },
+  "truncated": false
+ },
+ "mother": {
+  "root_lang": "Proto-Indo-European",
+  "root_raw": "méh₂tēr",
+  "shown_nodes": 92,
+  "total_nodes": 92,
+  "tree": {
+   "children": [
+    {
+     "children": [],
+     "lang": "Proto-Albanian",
+     "match": false,
+     "raw_term": "*māter",
+     "term": "māter",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Old Armenian",
+       "match": false,
+       "raw_term": "մայր, մաւր",
+       "term": "մայր",
+       "variants": 2
+      }
+     ],
+     "lang": "Armenian",
+     "match": false,
+     "raw_term": null,
+     "term": null,
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Latgalian",
+         "match": false,
+         "raw_term": "muote",
+         "term": "muote",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Latvian",
+         "match": false,
+         "raw_term": "mãte, māt",
+         "term": "mãte",
+         "variants": 2
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "unknown",
+           "match": false,
+           "raw_term": "móteris, mótina",
+           "term": "móteris",
+           "variants": 2
+          }
+         ],
+         "lang": "Lithuanian",
+         "match": false,
+         "raw_term": "mótė, motė̃",
+         "term": "mótė",
+         "variants": 2
+        },
+        {
+         "children": [],
+         "lang": "Samogitian",
+         "match": false,
+         "raw_term": "muotīna",
+         "term": "muotīna",
+         "variants": null
+        }
+       ],
+       "lang": "East Baltic",
+       "match": false,
+       "raw_term": null,
+       "term": null,
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Old Prussian",
+         "match": false,
+         "raw_term": "mūti",
+         "term": "mūti",
+         "variants": null
+        }
+       ],
+       "lang": "West Baltic",
+       "match": false,
+       "raw_term": null,
+       "term": null,
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Proto-Slavic",
+       "match": false,
+       "raw_term": "*màti",
+       "term": "màti",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Balto-Slavic",
+     "match": false,
+     "raw_term": "*mā́ˀtē",
+     "term": "mā́ˀtē",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Welsh",
+         "match": false,
+         "raw_term": "modrydaf",
+         "term": "modrydaf",
+         "variants": null
+        }
+       ],
+       "lang": "Brythonic",
+       "match": false,
+       "raw_term": null,
+       "term": null,
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Irish",
+         "match": false,
+         "raw_term": "máthair",
+         "term": "máthair",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Manx",
+         "match": false,
+         "raw_term": "moir",
+         "term": "moir",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Scottish Gaelic",
+         "match": false,
+         "raw_term": "màthair",
+         "term": "màthair",
+         "variants": null
+        }
+       ],
+       "lang": "Old Irish",
+       "match": false,
+       "raw_term": "máthir",
+       "term": "máthir",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Celtiberian",
+       "match": false,
+       "raw_term": "matrubos",
+       "term": "matrubos",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Gaulish",
+       "match": false,
+       "raw_term": "matir",
+       "term": "matir",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Celtic",
+     "match": false,
+     "raw_term": "*mātīr",
+     "term": "mātīr",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Australian Kriol",
+               "match": false,
+               "raw_term": "motha",
+               "term": "motha",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Japanese",
+               "match": false,
+               "raw_term": "マザー",
+               "term": "マザー",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Korean",
+               "match": false,
+               "raw_term": "마더",
+               "term": "마더",
+               "variants": null
+              }
+             ],
+             "lang": "English",
+             "match": true,
+             "raw_term": "mother, mither",
+             "term": "mother",
+             "variants": 2
+            },
+            {
+             "children": [],
+             "lang": "Scots",
+             "match": false,
+             "raw_term": "mither, medder, midder, moder, moeder, mideer, mother",
+             "term": "mither",
+             "variants": 7
+            },
+            {
+             "children": [],
+             "lang": "Yola",
+             "match": false,
+             "raw_term": "moodher, moother, moothar",
+             "term": "moodher",
+             "variants": 3
+            }
+           ],
+           "lang": "Middle English",
+           "match": false,
+           "raw_term": "moder",
+           "term": "moder",
+           "variants": null
+          }
+         ],
+         "lang": "Old English",
+         "match": false,
+         "raw_term": "mōdor, mōdur, mōder, mōddor",
+         "term": "mōdor",
+         "variants": 4
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "North Frisian",
+           "match": false,
+           "raw_term": null,
+           "term": null,
+           "variants": null
+          },
+          {
+           "children": [],
+           "lang": "Saterland Frisian",
+           "match": false,
+           "raw_term": "Múur, Mour, Mouer",
+           "term": "Múur",
+           "variants": 3
+          },
+          {
+           "children": [],
+           "lang": "West Frisian",
+           "match": false,
+           "raw_term": "moer",
+           "term": "moer",
+           "variants": null
+          }
+         ],
+         "lang": "Old Frisian",
+         "match": false,
+         "raw_term": "mōder",
+         "term": "mōder",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "Low German",
+             "match": false,
+             "raw_term": "Moder, Moor",
+             "term": "Moder",
+             "variants": 2
+            }
+           ],
+           "lang": "Middle Low German",
+           "match": false,
+           "raw_term": "mōder",
+           "term": "mōder",
+           "variants": null
+          }
+         ],
+         "lang": "Old Saxon",
+         "match": false,
+         "raw_term": "mōdar",
+         "term": "mōdar",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Afrikaans",
+               "match": false,
+               "raw_term": "moeder",
+               "term": "moeder",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Negerhollands",
+               "match": false,
+               "raw_term": "muder, moeder",
+               "term": "muder",
+               "variants": 2
+              },
+              {
+               "children": [],
+               "lang": "Papiamentu",
+               "match": false,
+               "raw_term": "moer",
+               "term": "moer",
+               "variants": null
+              }
+             ],
+             "lang": "Dutch",
+             "match": false,
+             "raw_term": "moeder, moer",
+             "term": "moeder",
+             "variants": 2
+            },
+            {
+             "children": [],
+             "lang": "Limburgish",
+             "match": false,
+             "raw_term": "moder",
+             "term": "moder",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Zealandic",
+             "match": false,
+             "raw_term": "moeder",
+             "term": "moeder",
+             "variants": null
+            }
+           ],
+           "lang": "Middle Dutch",
+           "match": false,
+           "raw_term": "moeder",
+           "term": "moeder",
+           "variants": null
+          }
+         ],
+         "lang": "Old Dutch",
+         "match": false,
+         "raw_term": "muoder",
+         "term": "muoder",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Swabian",
+               "match": false,
+               "raw_term": "Muadr, Mudder, Muddr, Muadar, Muddar",
+               "term": "Muadr",
+               "variants": 5
+              },
+              {
+               "children": [],
+               "lang": "Walser",
+               "match": false,
+               "raw_term": "muater, möter",
+               "term": "muater",
+               "variants": 2
+              }
+             ],
+             "lang": "Alemannic German",
+             "match": false,
+             "raw_term": "Mueter, Muetter, Mueder",
+             "term": "Mueter",
+             "variants": 3
+            },
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Cimbrian",
+               "match": false,
+               "raw_term": "muatar, muutar",
+               "term": "muatar",
+               "variants": 2
+              }
+             ],
+             "lang": "Bavarian",
+             "match": false,
+             "raw_term": "muatar, Muada, mueter, muiter",
+             "term": "muatar",
+             "variants": 4
+            },
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Hunsrik",
+               "match": false,
+               "raw_term": "Mutter",
+               "term": "Mutter",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Luxembourgish",
+               "match": false,
+               "raw_term": "Mudder",
+               "term": "Mudder",
+               "variants": null
+              }
+             ],
+             "lang": "Central Franconian",
+             "match": false,
+             "raw_term": "Modder, Motter",
+             "term": "Modder",
+             "variants": 2
+            },
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Upper Saxon German",
+               "match": false,
+               "raw_term": "Muddor",
+               "term": "Muddor",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Vilamovian",
+               "match": false,
+               "raw_term": "mütter",
+               "term": "mütter",
+               "variants": null
+              }
+             ],
+             "lang": "East Central German",
+             "match": false,
+             "raw_term": null,
+             "term": null,
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "East Franconian",
+             "match": false,
+             "raw_term": "Motter",
+             "term": "Motter",
+             "variants": null
+            },
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Central Franconian",
+               "match": false,
+               "raw_term": "Motter",
+               "term": "Motter",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Norwegian Nynorsk",
+               "match": false,
+               "raw_term": "muttern",
+               "term": "muttern",
+               "variants": null
+              }
+             ],
+             "lang": "German",
+             "match": false,
+             "raw_term": "Mutter, Mueter, Muetter, Muoter, Muotter, Muter",
+             "term": "Mutter",
+             "variants": 6
+            },
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Pennsylvania German",
+               "match": false,
+               "raw_term": "Mudder",
+               "term": "Mudder",
+               "variants": null
+              }
+             ],
+             "lang": "Rhine Franconian",
+             "match": false,
+             "raw_term": "Modder, Mudder, Morrer, Murrer",
+             "term": "Modder",
+             "variants": 4
+            },
+            {
+             "children": [],
+             "lang": "Yiddish",
+             "match": false,
+             "raw_term": "מוטער",
+             "term": "מוטער",
+             "variants": null
+            }
+           ],
+           "lang": "Middle High German",
+           "match": false,
+           "raw_term": "muoter",
+           "term": "muoter",
+           "variants": null
+          }
+         ],
+         "lang": "Old High German",
+         "match": false,
+         "raw_term": "muoter",
+         "term": "muoter",
+         "variants": null
+        }
+       ],
+       "lang": "Proto-West Germanic",
+       "match": false,
+       "raw_term": "*mōder",
+       "term": "mōder",
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Icelandic",
+         "match": false,
+         "raw_term": "móðir",
+         "term": "móðir",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Faroese",
+         "match": false,
+         "raw_term": "móðir",
+         "term": "móðir",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Norwegian",
+         "match": false,
+         "raw_term": "mor, moder",
+         "term": "mor",
+         "variants": 2
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "Swedish",
+           "match": false,
+           "raw_term": "moder, mor",
+           "term": "moder",
+           "variants": 2
+          }
+         ],
+         "lang": "Old Swedish",
+         "match": false,
+         "raw_term": "mōþir",
+         "term": "mōþir",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Scanian",
+         "match": false,
+         "raw_term": "moðer",
+         "term": "moðer",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "Danish",
+           "match": false,
+           "raw_term": "mor, moder",
+           "term": "mor",
+           "variants": 2
+          }
+         ],
+         "lang": "Old Danish",
+         "match": false,
+         "raw_term": "mothær",
+         "term": "mothær",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Gutnish",
+         "match": false,
+         "raw_term": "mor, moder",
+         "term": "mor",
+         "variants": 2
+        }
+       ],
+       "lang": "Old Norse",
+       "match": false,
+       "raw_term": "móðir",
+       "term": "móðir",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Germanic",
+     "match": false,
+     "raw_term": "*mōdēr",
+     "term": "mōdēr",
+     "variants": null
+    },
+    {
+     "children": [],
+     "lang": "Proto-Hellenic",
+     "match": false,
+     "raw_term": "*mā́tēr",
+     "term": "mā́tēr",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Sanskrit",
+         "match": false,
+         "raw_term": "मा॒तृ",
+         "term": "मा॒तृ",
+         "variants": null
+        }
+       ],
+       "lang": "Proto-Indo-Aryan",
+       "match": false,
+       "raw_term": "*máHtā",
+       "term": "máHtā",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Proto-Iranian",
+       "match": false,
+       "raw_term": "*máHtā",
+       "term": "máHtā",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Indo-Iranian",
+     "match": false,
+     "raw_term": "*máHtā",
+     "term": "máHtā",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Faliscan",
+       "match": false,
+       "raw_term": "𐌌𐌀𐌕𐌄",
+       "term": "𐌌𐌀𐌕𐌄",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Latin",
+       "match": false,
+       "raw_term": "māter",
+       "term": "māter",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Oscan",
+       "match": false,
+       "raw_term": "𐌌𐌀𐌀𐌕𐌓𐌄𐌝𐌔",
+       "term": "𐌌𐌀𐌀𐌕𐌓𐌄𐌝𐌔",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "South Picene",
+       "match": false,
+       "raw_term": "𐌌𐌀𐌕𐌄𐌓𐌄𐌑𐌇",
+       "term": "𐌌𐌀𐌕𐌄𐌓𐌄𐌑𐌇",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Umbrian",
+       "match": false,
+       "raw_term": "𐌌𐌀𐌕𐌓𐌄𐌔",
+       "term": "𐌌𐌀𐌕𐌓𐌄𐌔",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Italic",
+     "match": false,
+     "raw_term": "*mātēr",
+     "term": "mātēr",
+     "variants": null
+    },
+    {
+     "children": [],
+     "lang": "Messapic",
+     "match": false,
+     "raw_term": "𐌌𐌀𐌕𐌖𐌓𐌀, 𐌌𐌀𐌕𐌉𐌓𐌀",
+     "term": "𐌌𐌀𐌕𐌖𐌓𐌀",
+     "variants": 2
+    },
+    {
+     "children": [],
+     "lang": "Phrygian",
+     "match": false,
+     "raw_term": "ματαρ",
+     "term": "ματαρ",
+     "variants": null
+    },
+    {
+     "children": [],
+     "lang": "Proto-Tocharian",
+     "match": false,
+     "raw_term": "*mācer",
+     "term": "mācer",
+     "variants": null
+    }
+   ],
+   "lang": "Proto-Indo-European",
+   "match": false,
+   "raw_term": "méh₂tēr",
+   "term": "méh₂tēr",
+   "variants": null
+  },
+  "truncated": false
+ },
+ "night": {
+  "root_lang": "Proto-Indo-European",
+  "root_raw": "nókʷts",
+  "shown_nodes": 94,
+  "total_nodes": 94,
+  "tree": {
+   "children": [
+    {
+     "children": [],
+     "lang": "Proto-Albanian",
+     "match": false,
+     "raw_term": "*naktā",
+     "term": "naktā",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Hittite",
+       "match": false,
+       "raw_term": "𒉈𒆪𒊻",
+       "term": "𒉈𒆪𒊻",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Anatolian",
+     "match": false,
+     "raw_term": null,
+     "term": null,
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Latgalian",
+         "match": false,
+         "raw_term": "nakts",
+         "term": "nakts",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Latvian",
+         "match": false,
+         "raw_term": "nakts",
+         "term": "nakts",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Lithuanian",
+         "match": false,
+         "raw_term": "nakti̇̀s",
+         "term": "nakti̇̀s",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Samogitian",
+         "match": false,
+         "raw_term": "naktės",
+         "term": "naktės",
+         "variants": null
+        }
+       ],
+       "lang": "East Baltic",
+       "match": false,
+       "raw_term": null,
+       "term": null,
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Old Prussian",
+         "match": false,
+         "raw_term": "nackt",
+         "term": "nackt",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Sudovian",
+         "match": false,
+         "raw_term": "nakt",
+         "term": "nakt",
+         "variants": null
+        }
+       ],
+       "lang": "West Baltic",
+       "match": false,
+       "raw_term": null,
+       "term": null,
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Proto-Slavic",
+       "match": false,
+       "raw_term": "*nòťь",
+       "term": "nòťь",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Balto-Slavic",
+     "match": false,
+     "raw_term": "*náktis",
+     "term": "náktis",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Gaulish",
+       "match": false,
+       "raw_term": "nox",
+       "term": "nox",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Celtic",
+     "match": false,
+     "raw_term": "*noxs",
+     "term": "noxs",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Cameroon Pidgin",
+               "match": false,
+               "raw_term": "nét, náyt",
+               "term": "nét",
+               "variants": 2
+              },
+              {
+               "children": [],
+               "lang": "Guyanese Creole English",
+               "match": false,
+               "raw_term": "nɛt, nait",
+               "term": "nɛt",
+               "variants": 2
+              },
+              {
+               "children": [],
+               "lang": "Jamaican Creole",
+               "match": false,
+               "raw_term": "nait",
+               "term": "nait",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Krio",
+               "match": false,
+               "raw_term": "nɛt",
+               "term": "nɛt",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Maroon Spirit Language",
+               "match": false,
+               "raw_term": "net",
+               "term": "net",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Pichinglis",
+               "match": false,
+               "raw_term": "net, nait",
+               "term": "net",
+               "variants": 2
+              },
+              {
+               "children": [],
+               "lang": "Pijin",
+               "match": false,
+               "raw_term": "naet",
+               "term": "naet",
+               "variants": null
+              },
+              {
+               "children": [
+                {
+                 "children": [],
+                 "lang": "Aukan",
+                 "match": false,
+                 "raw_term": "neti",
+                 "term": "neti",
+                 "variants": null
+                },
+                {
+                 "children": [],
+                 "lang": "Saramaccan",
+                 "match": false,
+                 "raw_term": "ndéti",
+                 "term": "ndéti",
+                 "variants": null
+                }
+               ],
+               "lang": "Sranan Tongo",
+               "match": false,
+               "raw_term": "neti",
+               "term": "neti",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Tok Pisin",
+               "match": false,
+               "raw_term": "nait",
+               "term": "nait",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Korean",
+               "match": false,
+               "raw_term": "나이트",
+               "term": "나이트",
+               "variants": null
+              }
+             ],
+             "lang": "English",
+             "match": true,
+             "raw_term": "night, nite, neet",
+             "term": "night",
+             "variants": 3
+            },
+            {
+             "children": [],
+             "lang": "Geordie",
+             "match": false,
+             "raw_term": "neet",
+             "term": "neet",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Scots",
+             "match": false,
+             "raw_term": "nicht, neicht",
+             "term": "nicht",
+             "variants": 2
+            },
+            {
+             "children": [],
+             "lang": "Yola",
+             "match": false,
+             "raw_term": "neeght, nieght, nyeght",
+             "term": "neeght",
+             "variants": 3
+            }
+           ],
+           "lang": "Middle English",
+           "match": false,
+           "raw_term": "nyght, naht, night, nighte, niȝt, niht, nyghte, nyȝt, nyȝte, nyhte",
+           "term": "nyght",
+           "variants": 10
+          }
+         ],
+         "lang": "Old English",
+         "match": false,
+         "raw_term": "niht, næht, neaht, nieht, neht, nyht",
+         "term": "niht",
+         "variants": 6
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "North Frisian",
+           "match": false,
+           "raw_term": null,
+           "term": null,
+           "variants": null
+          },
+          {
+           "children": [],
+           "lang": "Saterland Frisian",
+           "match": false,
+           "raw_term": "Noacht",
+           "term": "Noacht",
+           "variants": null
+          },
+          {
+           "children": [],
+           "lang": "West Frisian",
+           "match": false,
+           "raw_term": "nacht",
+           "term": "nacht",
+           "variants": null
+          }
+         ],
+         "lang": "Old Frisian",
+         "match": false,
+         "raw_term": "nacht",
+         "term": "nacht",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Dutch Low Saxon",
+               "match": false,
+               "raw_term": "nacht",
+               "term": "nacht",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "German Low German",
+               "match": false,
+               "raw_term": "Nacht",
+               "term": "Nacht",
+               "variants": null
+              }
+             ],
+             "lang": "Low German",
+             "match": false,
+             "raw_term": null,
+             "term": null,
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Plautdietsch",
+             "match": false,
+             "raw_term": "Nacht",
+             "term": "Nacht",
+             "variants": null
+            }
+           ],
+           "lang": "Middle Low German",
+           "match": false,
+           "raw_term": "nacht",
+           "term": "nacht",
+           "variants": null
+          }
+         ],
+         "lang": "Old Saxon",
+         "match": false,
+         "raw_term": "naht, nacht",
+         "term": "naht",
+         "variants": 2
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Afrikaans",
+               "match": false,
+               "raw_term": "nag",
+               "term": "nag",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Negerhollands",
+               "match": false,
+               "raw_term": "nacht, nagt",
+               "term": "nacht",
+               "variants": 2
+              }
+             ],
+             "lang": "Dutch",
+             "match": false,
+             "raw_term": "nacht",
+             "term": "nacht",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Limburgish",
+             "match": false,
+             "raw_term": "nach",
+             "term": "nach",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "West Flemish",
+             "match": false,
+             "raw_term": "nacht",
+             "term": "nacht",
+             "variants": null
+            }
+           ],
+           "lang": "Middle Dutch",
+           "match": false,
+           "raw_term": "nacht",
+           "term": "nacht",
+           "variants": null
+          }
+         ],
+         "lang": "Old Dutch",
+         "match": false,
+         "raw_term": "naht",
+         "term": "naht",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Alsatian",
+               "match": false,
+               "raw_term": "Nàcht",
+               "term": "Nàcht",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Swabian",
+               "match": false,
+               "raw_term": "Nachd",
+               "term": "Nachd",
+               "variants": null
+              }
+             ],
+             "lang": "Alemannic German",
+             "match": false,
+             "raw_term": null,
+             "term": null,
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Bavarian",
+             "match": false,
+             "raw_term": null,
+             "term": null,
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "German",
+             "match": false,
+             "raw_term": "Nacht",
+             "term": "Nacht",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Pennsylvania German",
+             "match": false,
+             "raw_term": "Nacht",
+             "term": "Nacht",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Hunsrik",
+             "match": false,
+             "raw_term": "Nacht, naacht",
+             "term": "Nacht",
+             "variants": 2
+            },
+            {
+             "children": [],
+             "lang": "Luxembourgish",
+             "match": false,
+             "raw_term": "Nuecht, Nuet",
+             "term": "Nuecht",
+             "variants": 2
+            },
+            {
+             "children": [],
+             "lang": "Vilamovian",
+             "match": false,
+             "raw_term": "naocht",
+             "term": "naocht",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Yiddish",
+             "match": false,
+             "raw_term": "נאַכט",
+             "term": "נאַכט",
+             "variants": null
+            }
+           ],
+           "lang": "Middle High German",
+           "match": false,
+           "raw_term": "naht",
+           "term": "naht",
+           "variants": null
+          }
+         ],
+         "lang": "Old High German",
+         "match": false,
+         "raw_term": "naht",
+         "term": "naht",
+         "variants": null
+        }
+       ],
+       "lang": "Proto-West Germanic",
+       "match": false,
+       "raw_term": "*naht",
+       "term": "naht",
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Icelandic",
+         "match": false,
+         "raw_term": "nátt, nótt",
+         "term": "nátt",
+         "variants": 2
+        },
+        {
+         "children": [],
+         "lang": "Faroese",
+         "match": false,
+         "raw_term": "nátt",
+         "term": "nátt",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Norwegian Nynorsk",
+         "match": false,
+         "raw_term": "natt, nått, nott, nótt, nætt, nat",
+         "term": "natt",
+         "variants": 6
+        },
+        {
+         "children": [],
+         "lang": "Elfdalian",
+         "match": false,
+         "raw_term": "ną̊t",
+         "term": "ną̊t",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "Swedish",
+           "match": false,
+           "raw_term": "natt",
+           "term": "natt",
+           "variants": null
+          }
+         ],
+         "lang": "Old Swedish",
+         "match": false,
+         "raw_term": "nāt",
+         "term": "nāt",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "Norwegian Bokmål",
+             "match": false,
+             "raw_term": "natt",
+             "term": "natt",
+             "variants": null
+            }
+           ],
+           "lang": "Danish",
+           "match": false,
+           "raw_term": "nat",
+           "term": "nat",
+           "variants": null
+          },
+          {
+           "children": [],
+           "lang": "Scanian",
+           "match": false,
+           "raw_term": "nøtt",
+           "term": "nøtt",
+           "variants": null
+          }
+         ],
+         "lang": "Old Danish",
+         "match": false,
+         "raw_term": "nāt",
+         "term": "nāt",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Gutnish",
+         "match": false,
+         "raw_term": "nat",
+         "term": "nat",
+         "variants": null
+        }
+       ],
+       "lang": "Old Norse",
+       "match": false,
+       "raw_term": "nátt, nǫ́tt, nótt",
+       "term": "nátt",
+       "variants": 3
+      },
+      {
+       "children": [],
+       "lang": "Gothic",
+       "match": false,
+       "raw_term": "𐌽𐌰𐌷𐍄𐍃",
+       "term": "𐌽𐌰𐌷𐍄𐍃",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Proto-Samic",
+       "match": false,
+       "raw_term": "*nākcë",
+       "term": "nākcë",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Germanic",
+     "match": false,
+     "raw_term": "*nahts",
+     "term": "nahts",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Ancient Greek",
+       "match": false,
+       "raw_term": "νύξ",
+       "term": "νύξ",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Hellenic",
+     "match": false,
+     "raw_term": "*nukts",
+     "term": "nukts",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Sanskrit",
+         "match": false,
+         "raw_term": "नक्त्, नक्त॑म्, नक्ति॑",
+         "term": "नक्त्",
+         "variants": 3
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "Pali",
+           "match": false,
+           "raw_term": "natta",
+           "term": "natta",
+           "variants": null
+          },
+          {
+           "children": [],
+           "lang": "Bengali",
+           "match": false,
+           "raw_term": "নক্ত",
+           "term": "নক্ত",
+           "variants": null
+          },
+          {
+           "children": [],
+           "lang": "Telugu",
+           "match": false,
+           "raw_term": "నక్తము",
+           "term": "నక్తము",
+           "variants": null
+          }
+         ],
+         "lang": "Sanskrit",
+         "match": false,
+         "raw_term": "नक्त॑",
+         "term": "नक्त॑",
+         "variants": null
+        }
+       ],
+       "lang": "Proto-Indo-Aryan",
+       "match": false,
+       "raw_term": "*nákts",
+       "term": "nákts",
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Younger Avestan",
+         "match": false,
+         "raw_term": "𐬎𐬞𐬀⸱𐬥𐬀𐬑𐬙𐬎𐬭𐬎𐬱𐬎",
+         "term": "𐬎𐬞𐬀⸱𐬥𐬀𐬑𐬙𐬎𐬭𐬎𐬱𐬎",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Northern Kurdish",
+         "match": false,
+         "raw_term": "nixte, nûtek",
+         "term": "nixte",
+         "variants": 2
+        },
+        {
+         "children": [],
+         "lang": "Wakhi",
+         "match": false,
+         "raw_term": "naɣ̌d",
+         "term": "naɣ̌d",
+         "variants": null
+        }
+       ],
+       "lang": "Proto-Iranian",
+       "match": false,
+       "raw_term": "*náxts",
+       "term": "náxts",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Indo-Iranian",
+     "match": false,
+     "raw_term": "*nákts",
+     "term": "nákts",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Latin",
+       "match": false,
+       "raw_term": "nox",
+       "term": "nox",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Italic",
+     "match": false,
+     "raw_term": "*nokts",
+     "term": "nokts",
+     "variants": null
+    }
+   ],
+   "lang": "Proto-Indo-European",
+   "match": false,
+   "raw_term": "nókʷts",
+   "term": "nókʷts",
+   "variants": null
+  },
+  "truncated": false
+ },
+ "water": {
+  "root_lang": "Proto-Indo-European",
+  "root_raw": "wódr̥",
+  "shown_nodes": 90,
+  "total_nodes": 90,
+  "tree": {
+   "children": [
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Albanian",
+       "match": false,
+       "raw_term": "ujë",
+       "term": "ujë",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Albanian",
+     "match": false,
+     "raw_term": "*udrjā",
+     "term": "udrjā",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Hittite",
+       "match": false,
+       "raw_term": "𒉿𒀀𒋻",
+       "term": "𒉿𒀀𒋻",
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Luwian",
+       "match": false,
+       "raw_term": "𒉿𒀀𒅈𒊭",
+       "term": "𒉿𒀀𒅈𒊭",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Anatolian",
+     "match": false,
+     "raw_term": null,
+     "term": null,
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Latgalian",
+         "match": false,
+         "raw_term": "iudiņs",
+         "term": "iudiņs",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Latvian",
+         "match": false,
+         "raw_term": "ūdens",
+         "term": "ūdens",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Lithuanian",
+         "match": false,
+         "raw_term": "vanduõ",
+         "term": "vanduõ",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Samogitian",
+         "match": false,
+         "raw_term": "ondou",
+         "term": "ondou",
+         "variants": null
+        }
+       ],
+       "lang": "East Baltic",
+       "match": false,
+       "raw_term": null,
+       "term": null,
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Old Prussian",
+         "match": false,
+         "raw_term": "wundan, wunda, unds",
+         "term": "wundan",
+         "variants": 3
+        }
+       ],
+       "lang": "West Baltic",
+       "match": false,
+       "raw_term": null,
+       "term": null,
+       "variants": null
+      },
+      {
+       "children": [],
+       "lang": "Proto-Slavic",
+       "match": false,
+       "raw_term": "*vodà",
+       "term": "vodà",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Balto-Slavic",
+     "match": false,
+     "raw_term": "*wandō",
+     "term": "wandō",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "English",
+           "match": false,
+           "raw_term": "whiskey",
+           "term": "whiskey",
+           "variants": null
+          }
+         ],
+         "lang": "Irish",
+         "match": false,
+         "raw_term": "uisce, uisge",
+         "term": "uisce",
+         "variants": 2
+        },
+        {
+         "children": [],
+         "lang": "Manx",
+         "match": false,
+         "raw_term": "ushtey",
+         "term": "ushtey",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "English",
+           "match": false,
+           "raw_term": "whisky",
+           "term": "whisky",
+           "variants": null
+          }
+         ],
+         "lang": "Scottish Gaelic",
+         "match": false,
+         "raw_term": "uisge",
+         "term": "uisge",
+         "variants": null
+        }
+       ],
+       "lang": "Old Irish",
+       "match": false,
+       "raw_term": "uisce, huisce, husque, uisque, usce, usque",
+       "term": "uisce",
+       "variants": 6
+      }
+     ],
+     "lang": "Proto-Celtic",
+     "match": false,
+     "raw_term": "*udenskyos",
+     "term": "udenskyos",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "English",
+             "match": true,
+             "raw_term": "water",
+             "term": "water",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Geordie",
+             "match": false,
+             "raw_term": "watter, wetter",
+             "term": "watter",
+             "variants": 2
+            },
+            {
+             "children": [],
+             "lang": "Scots",
+             "match": false,
+             "raw_term": "watter",
+             "term": "watter",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Yola",
+             "match": false,
+             "raw_term": "waudher, wadher, wather",
+             "term": "waudher",
+             "variants": 3
+            }
+           ],
+           "lang": "Middle English",
+           "match": false,
+           "raw_term": "water, watere, watir, waterre",
+           "term": "water",
+           "variants": 4
+          }
+         ],
+         "lang": "Old English",
+         "match": false,
+         "raw_term": "wæter",
+         "term": "wæter",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "North Frisian",
+           "match": false,
+           "raw_term": null,
+           "term": null,
+           "variants": null
+          },
+          {
+           "children": [],
+           "lang": "Saterland Frisian",
+           "match": false,
+           "raw_term": "Woater",
+           "term": "Woater",
+           "variants": null
+          },
+          {
+           "children": [],
+           "lang": "West Frisian",
+           "match": false,
+           "raw_term": "wetter",
+           "term": "wetter",
+           "variants": null
+          }
+         ],
+         "lang": "Old Frisian",
+         "match": false,
+         "raw_term": "weter, water, wetir",
+         "term": "weter",
+         "variants": 3
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "Dutch Low Saxon",
+             "match": false,
+             "raw_term": "water",
+             "term": "water",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "German Low German",
+             "match": false,
+             "raw_term": "Water",
+             "term": "Water",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Plautdietsch",
+             "match": false,
+             "raw_term": "Wota",
+             "term": "Wota",
+             "variants": null
+            }
+           ],
+           "lang": "Middle Low German",
+           "match": false,
+           "raw_term": "wāter",
+           "term": "wāter",
+           "variants": null
+          }
+         ],
+         "lang": "Old Saxon",
+         "match": false,
+         "raw_term": "watar",
+         "term": "watar",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Afrikaans",
+               "match": false,
+               "raw_term": "water",
+               "term": "water",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Javindo",
+               "match": false,
+               "raw_term": "water",
+               "term": "water",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Negerhollands",
+               "match": false,
+               "raw_term": "watu, water, waeter",
+               "term": "watu",
+               "variants": 3
+              },
+              {
+               "children": [],
+               "lang": "Petjo",
+               "match": false,
+               "raw_term": "watter",
+               "term": "watter",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Skepi Creole Dutch",
+               "match": false,
+               "raw_term": "water",
+               "term": "water",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Sranan Tongo",
+               "match": false,
+               "raw_term": "watra",
+               "term": "watra",
+               "variants": null
+              }
+             ],
+             "lang": "Dutch",
+             "match": false,
+             "raw_term": "water",
+             "term": "water",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Limburgish",
+             "match": false,
+             "raw_term": "water",
+             "term": "water",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "West Flemish",
+             "match": false,
+             "raw_term": "woater",
+             "term": "woater",
+             "variants": null
+            }
+           ],
+           "lang": "Middle Dutch",
+           "match": false,
+           "raw_term": "wāter",
+           "term": "wāter",
+           "variants": null
+          }
+         ],
+         "lang": "Old Dutch",
+         "match": false,
+         "raw_term": "watar, water, watir",
+         "term": "watar",
+         "variants": 3
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "Alemannic German",
+             "match": false,
+             "raw_term": "Wasser, Wâser",
+             "term": "Wasser",
+             "variants": 2
+            },
+            {
+             "children": [],
+             "lang": "Bavarian",
+             "match": false,
+             "raw_term": "Wåsser, Wossa",
+             "term": "Wåsser",
+             "variants": 2
+            },
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Hunsrik",
+               "match": false,
+               "raw_term": "Wasser",
+               "term": "Wasser",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Luxembourgish",
+               "match": false,
+               "raw_term": "Waasser",
+               "term": "Waasser",
+               "variants": null
+              },
+              {
+               "children": [],
+               "lang": "Transylvanian Saxon",
+               "match": false,
+               "raw_term": "Wåsser, Wosser, Wauesser",
+               "term": "Wåsser",
+               "variants": 3
+              }
+             ],
+             "lang": "Central Franconian",
+             "match": false,
+             "raw_term": "Wasser, Waßer",
+             "term": "Wasser",
+             "variants": 2
+            },
+            {
+             "children": [],
+             "lang": "East Central German",
+             "match": false,
+             "raw_term": null,
+             "term": null,
+             "variants": null
+            },
+            {
+             "children": [
+              {
+               "children": [],
+               "lang": "Unserdeutsch",
+               "match": false,
+               "raw_term": "Wasser",
+               "term": "Wasser",
+               "variants": null
+              }
+             ],
+             "lang": "German",
+             "match": false,
+             "raw_term": "Wasser",
+             "term": "Wasser",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Rhine Franconian",
+             "match": false,
+             "raw_term": "Wasser",
+             "term": "Wasser",
+             "variants": null
+            },
+            {
+             "children": [],
+             "lang": "Vilamovian",
+             "match": false,
+             "raw_term": "wosser, woser",
+             "term": "wosser",
+             "variants": 2
+            },
+            {
+             "children": [],
+             "lang": "Yiddish",
+             "match": false,
+             "raw_term": "וואַסער",
+             "term": "וואַסער",
+             "variants": null
+            }
+           ],
+           "lang": "Middle High German",
+           "match": false,
+           "raw_term": "waȥȥer",
+           "term": "waȥȥer",
+           "variants": null
+          }
+         ],
+         "lang": "Old High German",
+         "match": false,
+         "raw_term": "waȥȥar, waȥar, waȥȥer, wasȥer",
+         "term": "waȥȥar",
+         "variants": 4
+        }
+       ],
+       "lang": "Proto-West Germanic",
+       "match": false,
+       "raw_term": "*watar",
+       "term": "watar",
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Icelandic",
+         "match": false,
+         "raw_term": "vatn",
+         "term": "vatn",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Faroese",
+         "match": false,
+         "raw_term": "vatn",
+         "term": "vatn",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Norn",
+         "match": false,
+         "raw_term": "vatn",
+         "term": "vatn",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "Norwegian Bokmål",
+           "match": false,
+           "raw_term": "vatn, vass-",
+           "term": "vatn",
+           "variants": 2
+          }
+         ],
+         "lang": "Norwegian Nynorsk",
+         "match": false,
+         "raw_term": "vatn, vats-, vass-",
+         "term": "vatn",
+         "variants": 3
+        },
+        {
+         "children": [],
+         "lang": "Elfdalian",
+         "match": false,
+         "raw_term": "wattn",
+         "term": "wattn",
+         "variants": null
+        },
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "Swedish",
+           "match": false,
+           "raw_term": "vatten, vattu-",
+           "term": "vatten",
+           "variants": 2
+          }
+         ],
+         "lang": "Old Swedish",
+         "match": false,
+         "raw_term": "vatn, vatu-",
+         "term": "vatn",
+         "variants": 2
+        },
+        {
+         "children": [
+          {
+           "children": [
+            {
+             "children": [],
+             "lang": "Norwegian Bokmål",
+             "match": false,
+             "raw_term": "vann",
+             "term": "vann",
+             "variants": null
+            }
+           ],
+           "lang": "Danish",
+           "match": false,
+           "raw_term": "vand",
+           "term": "vand",
+           "variants": null
+          }
+         ],
+         "lang": "Old Danish",
+         "match": false,
+         "raw_term": "watn, wan, wand",
+         "term": "watn",
+         "variants": 3
+        },
+        {
+         "children": [],
+         "lang": "Scanian",
+         "match": false,
+         "raw_term": "vann",
+         "term": "vann",
+         "variants": null
+        },
+        {
+         "children": [],
+         "lang": "Gutnish",
+         "match": false,
+         "raw_term": "vattn",
+         "term": "vattn",
+         "variants": null
+        }
+       ],
+       "lang": "Old Norse",
+       "match": false,
+       "raw_term": "vatn, vatr",
+       "term": "vatn",
+       "variants": 2
+      },
+      {
+       "children": [],
+       "lang": "Gothic",
+       "match": false,
+       "raw_term": "𐍅𐌰𐍄𐍉",
+       "term": "𐍅𐌰𐍄𐍉",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Germanic",
+     "match": false,
+     "raw_term": "*watōr",
+     "term": "watōr",
+     "variants": null
+    },
+    {
+     "children": [],
+     "lang": "Proto-Hellenic",
+     "match": false,
+     "raw_term": "*údōr",
+     "term": "údōr",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [
+        {
+         "children": [
+          {
+           "children": [],
+           "lang": "Sanskrit",
+           "match": false,
+           "raw_term": "वार्, उदन्",
+           "term": "वार्",
+           "variants": 2
+          }
+         ],
+         "lang": "Vedic Sanskrit",
+         "match": false,
+         "raw_term": "वार् ~ उद्नः",
+         "term": "वार् ~ उद्नः",
+         "variants": null
+        }
+       ],
+       "lang": "Proto-Indo-Aryan",
+       "match": false,
+       "raw_term": null,
+       "term": null,
+       "variants": null
+      },
+      {
+       "children": [
+        {
+         "children": [],
+         "lang": "Avestan",
+         "match": false,
+         "raw_term": "𐬬𐬁𐬭",
+         "term": "𐬬𐬁𐬭",
+         "variants": null
+        }
+       ],
+       "lang": "Proto-Indo-Iranian",
+       "match": false,
+       "raw_term": null,
+       "term": null,
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Indo-Iranian",
+     "match": false,
+     "raw_term": "*wáHr̥",
+     "term": "wáHr̥",
+     "variants": null
+    },
+    {
+     "children": [
+      {
+       "children": [],
+       "lang": "Umbrian",
+       "match": false,
+       "raw_term": "𐌖𐌕𐌖𐌓",
+       "term": "𐌖𐌕𐌖𐌓",
+       "variants": null
+      }
+     ],
+     "lang": "Proto-Italic",
+     "match": false,
+     "raw_term": "*udōr",
+     "term": "udōr",
+     "variants": null
+    },
+    {
+     "children": [],
+     "lang": "Phrygian",
+     "match": false,
+     "raw_term": "βέδυ",
+     "term": "βέδυ",
+     "variants": null
+    },
+    {
+     "children": [],
+     "lang": "Proto-Tocharian",
+     "match": false,
+     "raw_term": "*wär",
+     "term": "wär",
+     "variants": null
+    }
+   ],
+   "lang": "Proto-Indo-European",
+   "match": false,
+   "raw_term": "wódr̥",
+   "term": "wódr̥",
+   "variants": null
+  },
+  "truncated": false
+ }
+}
