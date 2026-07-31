@@ -1683,6 +1683,87 @@ referring to "issue #14" stay meaningful.
     fact is the shape of issue #16, and any relations feature should read one
     of them, not grow a third path.
 
+27. **The 2026-07-30/31 session — audit, refactor, and the backend collapse.**
+    One long session. Recorded as a whole because the individual fixes only
+    make sense together: nearly every one came from asking *why* a word would
+    break rather than accepting that it did.
+
+    **THE THEME, and the thing worth carrying forward.** The four-backend
+    cascade was not filling gaps — it was MASKING DATABASE BUGS. Every time a
+    word looked like it needed the legacy stack, the database turned out to
+    already know the answer and something was stopping it:
+
+        lose / start        `derived` from an English stage was not counted
+                            as native descent, only `inherited`
+        obvious / cautious  `la:obvius` stored verbatim as an English term
+        chuckled / hikers   a purely NATIVE component scored zero and was
+                            rejected, so the word lost its evidence
+        narrate / cute      a bare-root stub's PIE citation was never
+                            surfaced by DbResolver at all
+
+    Two of those were masked with WRONG answers: `chuckled` read French and
+    `fondling` Latin; both are Germanic. **When a word only resolves via a
+    fallback, suspect the layer beneath it first.**
+
+    **Bugs fixed, each with its own commit and tests:**
+    - Typographic apostrophes. `don’t` read as the verb "to don clothing",
+      `won’t` as the past tense of `win` — silently WRONG, not Unknown, and
+      `’` is what Word, Google Docs and iOS emit.
+    - `about` gave half its weight to Unknown: its parts are OLD ENGLISH
+      (`on`, `būtan`) and were being looked up as modern English words.
+    - `late` displayed as "en + let" (Joe's report). A `+` directive in a
+      template's first argument shifted the language code into the parts list.
+    - 16 of 92 `corrections.py` entries were not reaching the output — the
+      table lived inside the legacy backends. **Three of issue #18's six
+      "deliberate judgment calls" (`tag`, `auto`, `package`) were never
+      judgment calls.**
+    - `:af`, a DSL directive, rendered as a component chip.
+    - Issue #19 closed at build time: 225,788 words stopped halving their
+      origin. Issue #16 closed: the tree honours a correction without a
+      parallel table. Issue #24 narrowed then fixed by consensus (below).
+
+    **The affix consensus, which is the neatest fix of the session.**
+    Wiktionary marks the same morpheme inconsistently — `active` records `ive`
+    unmarked, `massive` marked, `creative` as `-ive`. One entry cannot say;
+    the whole dump can, and it separates cleanly (`ness` 7529/7533,
+    `ive` 345/348 vs `man` 574/1072, `ball` 2/287). A 95% threshold marks
+    `ive` and leaves `man` and `ship` alone, which is what keeps `craftsman`
+    splitting per Joe's ruling. 1,179 morphemes, 1,715 nodes.
+
+    **Rejected on measurement — do not re-derive these:**
+    - Dropping formation parts with no database entry, on the theory that a
+      morpheme has no entry and a real word does. FALSE: it discards
+      `āhuacatl` and `mōlli` from `guacamole`, `pixel` from `voxel`.
+    - Looking an affix component up by its hyphenated spelling
+      (`phono` → `phono-`) so its own etymology could be followed. It fixed
+      `phonograph` and made `lithology` French — a suffix's own history is
+      not the word's history — and regressed `movie` to a native claim.
+    - A third spelling rule for the affix/component split (leading hyphens
+      only), which cost 52 hand-verified compound splits. That makes five
+      rejected approaches to this one problem now on record.
+    - Converting `descendants.py`'s pipeline to the typed model: measured
+      7.1x slower on the 27,255-node `*erþō` tree, for no gain in clarity.
+
+    **Refactor.** Worst function 163 lines → 10; over-20-line runtime
+    functions 38 → 22; max nesting 6 → 5. `export_browser.py` deleted after
+    verifying three ways that it was dead. The recurring smell throughout was
+    a multi-argument constructor repeated 2–3 times and kept in step by hand —
+    which is how the `taxicab` and `outdoors` bugs got in.
+
+    **What made it safe.** Golden masters added FIRST: 99 words × three modes
+    × tree shape, plus seven descendant trees. They pin that answers do not
+    CHANGE, not that they are correct. They caught five real changes that
+    would otherwise have shipped unnoticed — including `as` reading Latin when
+    its own correction said Germanic, and `narrate` losing its Deepest Root,
+    which my own measurement had missed because I was only testing Direct
+    Source.
+
+    **Features.** The Shakespeare aside (191 words) generalised into
+    `annotations.py`: coinage (109 words, 18 coiners), calque (2,437, with
+    Joe's own plain-English explanation of what a calque is), formation
+    (673,240 edges) and era (curated language dates). One module, one render
+    loop; a fifth kind is one function.
+
 ---
 
 ## Appendix — the data-file build notes, as written before the 2026-07-27 cleanup

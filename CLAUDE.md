@@ -180,13 +180,22 @@ analyzer (`resolver.DbResolver`) and the Word Search tree
 structurally unable to disagree.
 
 Everything below this section that describes `convert_wikt.py` /
-`wikt_words.json` / `etymology_trees.json` as **the** pipeline is now
-**historical**. Those files still exist and are still consulted, but only as
-lower-priority gap-fillers beneath the database. **Measured 2026-07-27**: on
-the legacy stack's OWN vocabulary the database answers 97.9% alone, and the
-old stack still rescues ~2% (`nepotistic`, `dependant`, `doldrums`, `doggie`)
-— so they stay. (An earlier claim of "151 words per 150,000" understated it
-by an order of magnitude.)
+`wikt_words.json` / `etymology_trees.json` as **the** pipeline is
+**historical**.
+
+**COLLAPSED TO ONE BACKEND, 2026-07-31.** `default_resolver()` now returns
+`ChainResolver([DbResolver()])`, with `corrections.py` overruling it where a
+human has verified otherwise. The three file-backed gap-fillers
+(`WiktextractResolver`, `WiktionaryResolver`, `EtyResolver`) are out of the
+stack — the classes remain in `resolver.py`, referenced by nothing, pending a
+separate deletion commit along with their ~78MB of JSON.
+
+The cost was measured five times and shrank every time — 22 → 12 → 8 → 4 → 3
+prose words — because each apparent loss turned out to be a DATABASE bug, not
+missing data. **The fallbacks were masking defects rather than filling gaps**,
+and two of them masked with wrong answers (`chuckled` read French, `fondling`
+Latin; both are Germanic). That finding is the most useful thing to carry
+forward: when a word only resolves via a fallback, suspect the database first.
 
 **`HISTORY.md` holds the full narrative of every known issue** — what was
 tried, what failed, and why. It is deliberately NOT loaded into context. Read
@@ -197,16 +206,26 @@ Read `etymology_schema.sql` for the table design and the reasoning behind each
 table. See known issue #18 for what changed and why, and #19 for the one real
 regression it introduced (derivational suffixes counted as component words).
 
-    python test_units.py                # fast logic checks, ~1s -- run constantly
+    python -m pytest tests/ -q          # 312 checks, ~10s -- NEW work goes here
+    python test_units.py                # 402 legacy checks, ~1s, no database
     python scripts/verify.py            # is the database good? ~40s, 5 lines out
-    powershell -File scripts/build.ps1  # rebuild + verify, ~10 min
+    powershell -File scripts/build.ps1  # rebuild + verify, ~22 min
 
-    python -m coverage run --source=. --omit="scripts/*,build_*.py,convert_*.py,fetch_*.py,export_*.py,test_*.py" test_units.py
-    python -m coverage run -a --source=. --omit="scripts/*,build_*.py,convert_*.py,fetch_*.py,export_*.py,test_*.py" test_regression.py
-    python -m coverage report --sort=cover     # 85% as of 2026-07-27
+**TWO test systems, deliberately** (Joe's instruction, 2026-07-31). `tests/`
+is pytest and is where new work goes, under strict red/green/refactor. The
+three root-level suites are scripts using a `check(label, condition)` helper
+and RUN ON IMPORT — which is why pytest is pointed at `tests/` by path, and
+must stay that way or collection executes the whole legacy suite.
 
-`ETYMOLOGY_DB=0` disables the new layer entirely and falls back to the old
-file-backed stack — use it to isolate whether a problem is in the database.
+**`tests/test_golden_master.py` is the safety net for any refactor**: 99 words
+× three modes × tree shape, plus `test_descendants_golden.py` for the downward
+tree. They pin that answers do not CHANGE, not that they are correct. They
+caught five real changes this week that would otherwise have shipped blind.
+Regenerate deliberately with `python tests/test_golden_master.py --update` and
+say in the commit which answers moved and why.
+
+`ETYMOLOGY_DB=0` no longer does anything useful — there is no old stack to
+fall back to.
 
 **Still true and still load-bearing**: rules 1–3 above; "cognates/doublets are
 siblings, not ancestors"; corrections must propagate to every feature; verify
@@ -214,13 +233,18 @@ against real sources rather than guessing.
 
 ## Current state (working, tested)
 
-- **Coverage on ordinary prose: ~98%** of tokens classified, across
-  narrative, news, technical, literary and casual registers (measured
-  2026-07-27). Dictionary-wide it is lower and the difference is real, not a
-  contradiction — see known issue #4.
-- **`etymology.db` is the answer to "where is this word from".** 1,380,567
-  headwords, 428,722 with their own etymology. Everything else on disk is a
-  gap-filler beneath it.
+- **Coverage on ordinary prose: ~98%** of tokens classified. Re-measured
+  2026-07-31 on the 347-paragraph corpus: **49 unique Unknown words of 3,244,
+  26 of them real gaps** (was 58/35 that morning, and 139/105 in the
+  2026-07-24 record). Dictionary-wide is lower and the difference is real —
+  see known issue #4. On 2,000 truly random dictionary words: **70.6%
+  resolved, 29.0% Unknown, 0.4% Other**.
+- **`etymology.db` is the ONLY answer to "where is this word from"**, with
+  `corrections.py` overruling it where a human has verified otherwise.
+  1,380,567 headwords, 428,722 with their own etymology.
+- **Test suites**: 312 pytest (`tests/`) + 402 legacy unit checks + 141/144
+  regression. The three regression failures are deliberate and are Joe's
+  judgment calls: `critical`, `free`, and the `muskrat` compound split.
 - Verified continuously by `scripts/verify.py`'s known-word panel:
   `skill`→Norse, `table`→French, `sky`→Norse, `egg`/`anger`/`knife`/`they`/
   `them`/`law`→Norse, `beef`/`government`/`justice`/`army`→French,
@@ -276,7 +300,12 @@ scope limits that still bind — are in `HISTORY.md`'s appendix.
 | `linguistics.py` | **Leaf module, imports nothing project-local.** The one answer to "is this an English stage / a proto-language / an affix", and the depth ordering. If you are about to write `lang.startswith("Proto-")` anywhere, import it from here (issue #23) |
 | `palette.py` | Bucket → colour slot, proto shades, sub-language shades, `THEME_CSS`. Values are CVD-validated — moving them is fine, changing them is not |
 | `word_trees.py` | Word → renderable etymology tree: lookup, fallback, glosses, Wiktionary links, diagram layout. Six public functions; everything else private. Uses `shared_resolver()` |
-| `test_units.py` | Fast logic suite (276 checks, ~1s, no database). Run after every edit — `test_regression.py` is the slow answer-correctness one |
+| `test_units.py` | Fast legacy logic suite (402 checks, ~1s, no database). Run after every edit — `test_regression.py` is the slow answer-correctness one |
+| `tests/` | **pytest, where new work goes** (312 checks). Holds both golden masters |
+| `annotations.py` | **Leaf module.** Side notes about a word — coinage, calque, formation, era. Returns `Note` records with NO bucket and NO share, so nothing here can move a percentage. A fifth kind is one collector function |
+| `coinages.py` / `build_coinages.py` | Who coined a word (109 words, 18 people, Wiktionary CC BY-SA). Extend the roster by adding a line to `COINERS` |
+| `shakespeare.py` / `build_shakespeare_words.py` | 191 words attributed to Shakespeare. Says "popularized by", never "invented by" — the OED figure is about first ATTESTATION, not invention |
+| `tree_model.py` | **Leaf module.** `TreeNode` (upward) and `DescendantNode` (downward) — two types, because the shapes genuinely differ. Absorbs the branches-vs-children asymmetry that was hand-written in five places |
 | `wiktextract_dump.py` | `stream_english_entries(path)` — the one loop that reads the dump. Three build scripts had each hand-rolled it |
 | `HISTORY.md` | Full narrative of every known issue. **Not** loaded into context; read on demand |
 
@@ -341,6 +370,38 @@ Adding a data source = one new class with `resolve()`, added to the list in
   code→family). Not yet wired into anything; earmarked as the code→name
   lookup for issue #10's Piece 2 (Reconstruction pages use codes like
   `gem-pro`/`ine-pro`, not the full names etymology-db already gives us).
+
+## Where to pick up (written 2026-07-31, end of the audit session)
+
+Nothing is half-finished; everything below is a fresh start.
+
+**Waiting on Joe, not on work:**
+1. **Delete the collapsed backends for real.** `WiktextractResolver`,
+   `WiktionaryResolver` and `EtyResolver` are still in `resolver.py`,
+   referenced by nothing. Removing them plus `wikt_words.json` (59MB),
+   `wiktextract_words.json` (19MB), `convert_wikt.py`, `convert_wiktextract.py`
+   and `fetch_reconstructions.py` is one easily-reverted commit. Left standing
+   deliberately so the collapse can be used for a while first.
+2. **Issue #25** — the random-scan findings, documented for his decision.
+3. **148MB of generated JSON is tracked in git.** Most of it disappears with
+   item 1.
+
+**Real work, in the order I would do it:**
+4. **The `word_relation` table is 711,053 rows and NO feature reads it** —
+   `derived_term` 478,619, `synonym` 46,903, `antonym` 19,186. That is the
+   answer to Joe's "see everything that descended from THIS word" (issue #26),
+   and it is a much larger dataset than the proto-rooted descendant trees.
+5. **`cautious`** still reads through `cauti(on)` — the parenthetical
+   component-term parse, deliberately left because `(Digitalis) lanata` is a
+   real taxonomic name and no regex separates them.
+6. `tree_corrections.py` is now entirely redundant (all 15 entries are in
+   `corrections.py`); it survives only because `build_etymology_trees.py`
+   bakes it in. Both go with item 1.
+
+**Landmine to know about:** bare affix spellings resolve as unrelated foreign
+words — `ly`→Vietnamese, `ment`→Korean, `er`→Turkish, `ous`→Hawaiian. Inert
+today because of `ety_node.is_affix`, and a live trap for any new code that
+treats a formation part as a word without checking that flag.
 
 ## Known issues
 
