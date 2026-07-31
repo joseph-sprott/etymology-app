@@ -34,6 +34,14 @@ def test_a_flagged_word_can_explain_itself():
     assert note and "Shakespeare" in note
 
 
+def test_a_multi_word_entry_survives_the_build():
+    # The curated list is whitespace-split, so a PHRASE cannot live in it.
+    # `out-paramour the Turk` is the only entry in Wiktionary's own
+    # CC BY-SA "coined by William Shakespeare" category that the dump scan
+    # missed, and it needs its own path (2026-07-31).
+    assert shakespeare.is_shakespearean("out-paramour the Turk")
+
+
 def test_a_curated_word_has_no_note_but_is_still_flagged():
     # The curated lists give no sentence, only the word. The UI must cope
     # with that rather than assume every entry can explain itself.

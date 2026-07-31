@@ -3,7 +3,7 @@
   "wiktextract dump",
   "curated published lists"
  ],
- "count": 190,
+ "count": 191,
  "words": {
   "academe": {
    "note": null,
@@ -554,6 +554,10 @@
    "source": "wiktionary"
   },
   "olympian": {
+   "note": null,
+   "source": "curated"
+  },
+  "out-paramour the turk": {
    "note": null,
    "source": "curated"
   },

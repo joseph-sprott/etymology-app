@@ -123,13 +123,24 @@ summit swagger torture tranquil undress unreal varied vaulting worthless zany
 grovel
 """.split()
 
+# Multi-word entries, which the whitespace split above cannot carry.
+# From Wiktionary's own CC BY-SA category "English terms coined by William
+# Shakespeare" -- checked 2026-07-31, and this is the ONLY one of its 20
+# members the dump scan did not already find. The rest of the open ecosystem
+# (Wikipedia's ~120 attributed IDIOMS) is deliberately not imported: the
+# analyzer tokenizes text into single words, so a phrase can never match a
+# token, and the entries would be unreachable clutter.
+CURATED_PHRASES = [
+    "out-paramour the Turk",
+]
+
 
 def build() -> Dict[str, dict]:
     scriptlib.require_file(scriptlib.ENGLISH_DUMP,
                            "the kaikki English extract is needed for the "
                            "Wiktionary-sourced half")
     words = from_dump(scriptlib.ENGLISH_DUMP)
-    words.update(from_curated(CURATED, words))
+    words.update(from_curated(CURATED + CURATED_PHRASES, words))
     return words
 
 
