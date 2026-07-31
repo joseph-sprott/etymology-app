@@ -416,6 +416,13 @@ class Db:
         through the most foreign languages is the one that answers "where is
         this word from" -- `bagpipe` follows `pipe` to Latin, not `bag`.
 
+        A part with NO foreign step still answers, though. Ranking on foreign
+        count alone scored a purely native component at zero and rejected it,
+        so `chuckled` (-> chuck, Middle English), `fondling` (-> fond) and
+        `hikers` (-> hike) lost their evidence and reported a miss -- while
+        each base resolves Germanic on its own. The longest line wins among
+        equals, so native descent propagates instead of being discarded.
+
         Bound affixes are skipped, but `or parts` keeps them as a last resort:
         a word made ONLY of affixes still has to answer, and `geology` is
         geo- + -logy, so falling back to them is what lets it reach Greek
@@ -425,12 +432,13 @@ class Db:
                  if c.rel == "formed_from" and c.term]
         candidates = [p for p in parts if not _is_bound(p)] or parts
         best_line: List[Node] = []
-        best_foreign = 0
+        best_rank = (0, 0)
         for part in candidates:
             sub = self._lineage(self.entry(part.term), depth - 1, seen)
             foreign = sum(1 for n in sub if n.lang not in ENGLISH_STAGES)
-            if foreign > best_foreign:
-                best_line, best_foreign = sub, foreign
+            rank = (foreign, len(sub))
+            if rank > best_rank:
+                best_line, best_rank = sub, rank
         return best_line
 
     # ------------------------------------------------------------- facts
