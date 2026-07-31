@@ -1,0 +1,2741 @@
+{
+ "about": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [
+    [
+     "on",
+     "Germanic"
+    ],
+    [
+     "būtan",
+     "Germanic"
+    ],
+    [
+     "be",
+     "Germanic"
+    ],
+    [
+     "ūtan",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [
+    [
+     "on",
+     "Germanic"
+    ],
+    [
+     "būtan",
+     "Germanic"
+    ],
+    [
+     "be",
+     "Germanic"
+    ],
+    [
+     "ūtan",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [
+    [
+     "on",
+     "Germanic"
+    ],
+    [
+     "būtan",
+     "Germanic"
+    ],
+    [
+     "be",
+     "Germanic"
+    ],
+    [
+     "ūtan",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "algebra": {
+  "direct": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Medieval Latin"
+  },
+  "influence": {
+   "bucket": "Semitic",
+   "depth_lang": "Semitic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Arabic"
+  },
+  "root": {
+   "bucket": "Semitic",
+   "depth_lang": "Arabic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Arabic"
+  }
+ },
+ "and": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "anger": {
+  "direct": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "army": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Medieval Latin"
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  }
+ },
+ "as": {
+  "direct": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": null
+  }
+ },
+ "auto": {
+  "direct": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "New Latin"
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "root": {
+   "bucket": "Greek",
+   "depth_lang": "Ancient Greek",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Ancient Greek"
+  }
+ },
+ "back": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "bagpipe": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [
+    [
+     "bag",
+     "Norse"
+    ],
+    [
+     "pipe",
+     "French"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Old French"
+  },
+  "influence": {
+   "bucket": "Romance (other)",
+   "depth_lang": "Romance (other)",
+   "parts": [
+    [
+     "bag",
+     "Norse"
+    ],
+    [
+     "pipe",
+     "Romance (other)"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Portuguese"
+  },
+  "root": {
+   "bucket": "Romance (other)",
+   "depth_lang": "Portuguese",
+   "parts": [
+    [
+     "bag",
+     "Norse"
+    ],
+    [
+     "pipe",
+     "Romance (other)"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Portuguese"
+  }
+ },
+ "basketball": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [
+    [
+     "basket",
+     "French"
+    ],
+    [
+     "ball",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Anglo-Norman"
+  },
+  "influence": {
+   "bucket": "Celtic",
+   "depth_lang": "Celtic",
+   "parts": [
+    [
+     "basket",
+     "Celtic"
+    ],
+    [
+     "ball",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Proto-Celtic"
+  },
+  "root": {
+   "bucket": "Other",
+   "depth_lang": "qfa-sub",
+   "parts": [
+    [
+     "basket",
+     "Other"
+    ],
+    [
+     "ball",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "qfa-sub"
+  }
+ },
+ "beautiful": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Anglo-Norman"
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Vulgar Latin"
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  }
+ },
+ "became": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "because": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  },
+  "influence": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  },
+  "root": {
+   "bucket": "French",
+   "depth_lang": "Old French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  }
+ },
+ "beef": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Anglo-Norman"
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Proto-Italic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Italic"
+  }
+ },
+ "biology": {
+  "direct": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "New Latin"
+  },
+  "influence": {
+   "bucket": "Greek",
+   "depth_lang": "Greek",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Ancient Greek"
+  },
+  "root": {
+   "bucket": "Greek",
+   "depth_lang": "Ancient Greek",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Ancient Greek"
+  }
+ },
+ "blackbird": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [
+    [
+     "black",
+     "Germanic"
+    ],
+    [
+     "bird",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [
+    [
+     "black",
+     "Germanic"
+    ],
+    [
+     "bird",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [
+    [
+     "black",
+     "Germanic"
+    ],
+    [
+     "bird",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "brother": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "bull": {
+  "direct": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "businesswoman": {
+  "direct": {
+   "bucket": "Compound",
+   "depth_lang": null,
+   "parts": [
+    [
+     "business",
+     "Germanic"
+    ],
+    [
+     "wīf",
+     "Germanic"
+    ],
+    [
+     "mann",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Compound",
+   "depth_lang": null,
+   "parts": [
+    [
+     "business",
+     "Germanic"
+    ],
+    [
+     "wīf",
+     "Germanic"
+    ],
+    [
+     "mann",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Compound",
+   "depth_lang": null,
+   "parts": [
+    [
+     "business",
+     "Germanic"
+    ],
+    [
+     "wīf",
+     "Germanic"
+    ],
+    [
+     "mann",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": null
+  }
+ },
+ "can": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "canines": {
+  "direct": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  }
+ },
+ "careful": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "coffee": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Dutch"
+  },
+  "influence": {
+   "bucket": "Turkic",
+   "depth_lang": "Turkic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Ottoman Turkish"
+  },
+  "root": {
+   "bucket": "Semitic",
+   "depth_lang": "Arabic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Arabic"
+  }
+ },
+ "computer": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "French"
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  }
+ },
+ "consistency": {
+  "direct": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [
+    [
+     "consistent",
+     "Latin"
+    ],
+    [
+     "consistence",
+     "French"
+    ],
+    [
+     "consist",
+     "French"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [
+    [
+     "consistent",
+     "Latin"
+    ],
+    [
+     "consistence",
+     "French"
+    ],
+    [
+     "consist",
+     "Latin"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [
+    [
+     "consistent",
+     "Latin"
+    ],
+    [
+     "consistence",
+     "French"
+    ],
+    [
+     "consist",
+     "Latin"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Latin"
+  }
+ },
+ "could": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "cover": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Late Latin"
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  }
+ },
+ "craftsman": {
+  "direct": {
+   "bucket": "Compound",
+   "depth_lang": null,
+   "parts": [
+    [
+     "crafts",
+     "Germanic"
+    ],
+    [
+     "man",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Compound",
+   "depth_lang": null,
+   "parts": [
+    [
+     "crafts",
+     "Germanic"
+    ],
+    [
+     "man",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Compound",
+   "depth_lang": null,
+   "parts": [
+    [
+     "crafts",
+     "Germanic"
+    ],
+    [
+     "man",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": null
+  }
+ },
+ "cute": {
+  "direct": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "PIE",
+   "depth_lang": "Proto-Indo-European",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Indo-European"
+  }
+ },
+ "darkness": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-West Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  }
+ },
+ "die": {
+  "direct": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "disagree": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Anglo-Norman"
+  },
+  "influence": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  },
+  "root": {
+   "bucket": "French",
+   "depth_lang": "Old French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  }
+ },
+ "egg": {
+  "direct": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "father": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "PIE",
+   "depth_lang": "Proto-Germanic (from PIE)",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Indo-European"
+  }
+ },
+ "free": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "generate": {
+  "direct": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [
+    [
+     "generō",
+     "Unknown"
+    ],
+    [
+     "genus",
+     "Latin"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [
+    [
+     "generō",
+     "Unknown"
+    ],
+    [
+     "genus",
+     "Latin"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [
+    [
+     "generō",
+     "Unknown"
+    ],
+    [
+     "genus",
+     "Latin"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Latin"
+  }
+ },
+ "geology": {
+  "direct": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "influence": {
+   "bucket": "Greek",
+   "depth_lang": "Greek",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Ancient Greek"
+  },
+  "root": {
+   "bucket": "Greek",
+   "depth_lang": "Ancient Greek",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Ancient Greek"
+  }
+ },
+ "government": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  },
+  "influence": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  },
+  "root": {
+   "bucket": "French",
+   "depth_lang": "Old French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  }
+ },
+ "happiness": {
+  "direct": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "influence": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "root": {
+   "bucket": "Norse",
+   "depth_lang": "Old Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  }
+ },
+ "held": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "hidden": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "hurricane": {
+  "direct": {
+   "bucket": "Romance (other)",
+   "depth_lang": "Romance (other)",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Spanish"
+  },
+  "influence": {
+   "bucket": "Caribbean",
+   "depth_lang": "Caribbean",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Taino"
+  },
+  "root": {
+   "bucket": "Caribbean",
+   "depth_lang": "Taino",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Taino"
+  }
+ },
+ "intrude": {
+  "direct": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  }
+ },
+ "justice": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Proto-Italic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Italic"
+  }
+ },
+ "knife": {
+  "direct": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "late": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "law": {
+  "direct": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "lithology": {
+  "direct": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  }
+ },
+ "look": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-West Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  }
+ },
+ "low": {
+  "direct": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "mile": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  }
+ },
+ "mindset": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [
+    [
+     "mind",
+     "Germanic"
+    ],
+    [
+     "set",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [
+    [
+     "mind",
+     "Germanic"
+    ],
+    [
+     "set",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [
+    [
+     "mind",
+     "Germanic"
+    ],
+    [
+     "set",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "mountainside": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [
+    [
+     "mountain",
+     "French"
+    ],
+    [
+     "side",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Anglo-Norman"
+  },
+  "influence": {
+   "bucket": "Other",
+   "depth_lang": "Other",
+   "parts": [
+    [
+     "mountain",
+     "Other"
+    ],
+    [
+     "side",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "la-eme"
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [
+    [
+     "mountain",
+     "Latin"
+    ],
+    [
+     "side",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Latin"
+  }
+ },
+ "movie": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Latin (from PIE)",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": null
+  }
+ },
+ "muskrat": {
+  "direct": {
+   "bucket": "Indigenous American",
+   "depth_lang": "Indigenous American",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Algonquian"
+  },
+  "influence": {
+   "bucket": "Indigenous American",
+   "depth_lang": "Indigenous American",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Algonquian"
+  },
+  "root": {
+   "bucket": "Indigenous American",
+   "depth_lang": "Algonquian",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Algonquian"
+  }
+ },
+ "narrate": {
+  "direct": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "PIE",
+   "depth_lang": "Proto-Indo-European",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Indo-European"
+  }
+ },
+ "night": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "outdoorsman": {
+  "direct": {
+   "bucket": "Compound",
+   "depth_lang": null,
+   "parts": [
+    [
+     "out",
+     "Germanic"
+    ],
+    [
+     "doors",
+     "Germanic"
+    ],
+    [
+     "outdoor#Adjective",
+     "Unknown"
+    ],
+    [
+     "man",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Compound",
+   "depth_lang": null,
+   "parts": [
+    [
+     "out",
+     "Germanic"
+    ],
+    [
+     "doors",
+     "Germanic"
+    ],
+    [
+     "outdoor#Adjective",
+     "Unknown"
+    ],
+    [
+     "man",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Compound",
+   "depth_lang": null,
+   "parts": [
+    [
+     "out",
+     "Germanic"
+    ],
+    [
+     "doors",
+     "Germanic"
+    ],
+    [
+     "outdoor#Adjective",
+     "Unknown"
+    ],
+    [
+     "man",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": null
+  }
+ },
+ "overactive": {
+  "direct": {
+   "bucket": "Compound",
+   "depth_lang": null,
+   "parts": [
+    [
+     "over",
+     "Germanic"
+    ],
+    [
+     "act",
+     "French"
+    ],
+    [
+     "ive",
+     "Unknown"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Compound",
+   "depth_lang": null,
+   "parts": [
+    [
+     "over",
+     "Germanic"
+    ],
+    [
+     "act",
+     "Latin"
+    ],
+    [
+     "ive",
+     "Unknown"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Compound",
+   "depth_lang": null,
+   "parts": [
+    [
+     "over",
+     "Germanic"
+    ],
+    [
+     "act",
+     "Latin"
+    ],
+    [
+     "ive",
+     "Unknown"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": null
+  }
+ },
+ "peacemaker": {
+  "direct": {
+   "bucket": "Compound",
+   "depth_lang": null,
+   "parts": [
+    [
+     "peace",
+     "French"
+    ],
+    [
+     "maker",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Compound",
+   "depth_lang": null,
+   "parts": [
+    [
+     "peace",
+     "French"
+    ],
+    [
+     "maker",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Compound",
+   "depth_lang": null,
+   "parts": [
+    [
+     "peace",
+     "Latin"
+    ],
+    [
+     "maker",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": null
+  }
+ },
+ "phonograph": {
+  "direct": {
+   "bucket": "Greek",
+   "depth_lang": "Ancient Greek (to 1453)",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Greek",
+   "depth_lang": "Ancient Greek (to 1453)",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Greek",
+   "depth_lang": "Ancient Greek (to 1453)",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": null
+  }
+ },
+ "photograph": {
+  "direct": {
+   "bucket": "Greek",
+   "depth_lang": "Greek",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Greek",
+   "depth_lang": "Greek",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Greek",
+   "depth_lang": "Ancient Greek",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": null
+  }
+ },
+ "physiologist": {
+  "direct": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  }
+ },
+ "preview": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Anglo-Norman"
+  },
+  "influence": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  },
+  "root": {
+   "bucket": "French",
+   "depth_lang": "Old French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  }
+ },
+ "professional": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Anglo-Norman"
+  },
+  "influence": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  }
+ },
+ "quartz": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "German"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Middle High German"
+  },
+  "root": {
+   "bucket": "Slavic",
+   "depth_lang": "Proto-Slavic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Slavic"
+  }
+ },
+ "quickly": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "ran": {
+  "direct": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "reggae": {
+  "direct": {
+   "bucket": "Caribbean",
+   "depth_lang": "Caribbean",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Jamaican Creole"
+  },
+  "influence": {
+   "bucket": "Caribbean",
+   "depth_lang": "Caribbean",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Jamaican Creole"
+  },
+  "root": {
+   "bucket": "Caribbean",
+   "depth_lang": "Jamaican Creole",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Jamaican Creole"
+  }
+ },
+ "rewrite": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "robot": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "German"
+  },
+  "influence": {
+   "bucket": "Other",
+   "depth_lang": "Other",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "zlw"
+  },
+  "root": {
+   "bucket": "Other",
+   "depth_lang": "zlw",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "zlw"
+  }
+ },
+ "said": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "sandal": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "root": {
+   "bucket": "Greek",
+   "depth_lang": "Ancient Greek",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Ancient Greek"
+  }
+ },
+ "semi": {
+  "direct": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "PIE",
+   "depth_lang": "Proto-Indo-European",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Indo-European"
+  }
+ },
+ "she": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "skill": {
+  "direct": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "sky": {
+  "direct": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "sugar": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Middle English",
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Middle English",
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Middle English",
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  }
+ },
+ "table": {
+  "direct": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  },
+  "influence": {
+   "bucket": "French",
+   "depth_lang": "French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  },
+  "root": {
+   "bucket": "French",
+   "depth_lang": "Old French",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old French"
+  }
+ },
+ "tag": {
+  "direct": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "influence": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "root": {
+   "bucket": "Norse",
+   "depth_lang": "Old Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  }
+ },
+ "tea": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Dutch"
+  },
+  "influence": {
+   "bucket": "East Asian",
+   "depth_lang": "East Asian",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Chinese"
+  },
+  "root": {
+   "bucket": "Other",
+   "depth_lang": "Proto-Sino-Tibetan",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Sino-Tibetan"
+  }
+ },
+ "th": {
+  "direct": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  }
+ },
+ "the": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Old English",
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Old English",
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Old English",
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  }
+ },
+ "them": {
+  "direct": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "influence": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "root": {
+   "bucket": "Norse",
+   "depth_lang": "Old Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  }
+ },
+ "they": {
+  "direct": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "trust": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Old English",
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Old English",
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Old English",
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  }
+ },
+ "undo": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-West Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  }
+ },
+ "unhappy": {
+  "direct": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "influence": {
+   "bucket": "Norse",
+   "depth_lang": "Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  },
+  "root": {
+   "bucket": "Norse",
+   "depth_lang": "Old Norse",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Old Norse"
+  }
+ },
+ "unheard": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "upside": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [
+    [
+     "up",
+     "Germanic"
+    ],
+    [
+     "side",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [
+    [
+     "up",
+     "Germanic"
+    ],
+    [
+     "side",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [
+    [
+     "up",
+     "Germanic"
+    ],
+    [
+     "side",
+     "Germanic"
+    ]
+   ],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "vitamin": {
+  "direct": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "influence": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  },
+  "root": {
+   "bucket": "Latin",
+   "depth_lang": "Latin",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Latin"
+  }
+ },
+ "washing": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-West Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  }
+ },
+ "water": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "went": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "what": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "with": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "wolves": {
+  "direct": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-West Germanic"
+  },
+  "influence": {
+   "bucket": "Germanic",
+   "depth_lang": "Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  },
+  "root": {
+   "bucket": "Germanic",
+   "depth_lang": "Proto-Germanic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Proto-Germanic"
+  }
+ },
+ "zero": {
+  "direct": {
+   "bucket": "Other",
+   "depth_lang": "Other",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "es-ear"
+  },
+  "influence": {
+   "bucket": "Semitic",
+   "depth_lang": "Semitic",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Arabic"
+  },
+  "root": {
+   "bucket": "Indo-Iranian",
+   "depth_lang": "Sanskrit",
+   "parts": [],
+   "resolved": true,
+   "specific_lang": "Sanskrit"
+  }
+ },
+ "zoophysiologist": {
+  "direct": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "influence": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  },
+  "root": {
+   "bucket": "Unknown",
+   "depth_lang": null,
+   "parts": [],
+   "resolved": false,
+   "specific_lang": null
+  }
+ }
+}

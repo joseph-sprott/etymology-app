@@ -922,9 +922,11 @@ class ChainResolver(Resolver):
                 fallback = r
         return best_stub or fallback or Resolution(word, [], None, None, self.name)
 
-    def resolve(self, word: str) -> Resolution:
-        r = self._try(word)
-        # A chain whose only entries are bucket "Unknown" was never a real
+    def _has_usable_chain(self, r: Resolution) -> bool:
+        """
+        Does this result carry a chain that actually answers anything?
+
+        A chain whose FIRST entry is bucket "Unknown" was never a real
         # answer -- found 2026-07-24 (issue #17) while auditing ALL 743
         # compounds.py entries after widening convert_wikt.py's inheritance
         # patches: "bathrobe"/"bathtub"/"bluebird" (none touched by today's
@@ -942,8 +944,36 @@ class ChainResolver(Resolver):
         # EtyResolver chain that mixes Unknown with real buckets in an
         # undeduped order -- an `any()` check called it "real" while Direct
         # Source mode still displayed the Unknown entry sitting at position 0.
-        has_real_chain = bool(r.chain) and r.chain[0].bucket != "Unknown"
-        # Hand-verified compounds.py wins over an AUTO-INHERITED chain
+        """
+        return bool(r.chain) and r.chain[0].bucket != "Unknown"
+
+    def _is_trustworthy(self, r: Resolution) -> bool:
+        """
+        Can this result be returned immediately, without trying other forms?
+
+        Three ways it cannot, each a real bug this guard exists to stop:
+          * a bare `has_root` STUB (`prox_kind == "root"`) is a deepest-root
+            citation with no donor edge of its own. `computer` showed Direct
+            Source == PIE, impossible in principle, because its own entry was
+            a stub while the real French/Latin chain sat under `compute`.
+          * a CASE-FALLBACK match is a same-spelling-different-case
+            coincidence. `went` has no lowercase entry and fell through to the
+            surname `Went`, which is also native-Germanic and so looked right
+            for the wrong reason; `ran` fell through to the Japanese-related
+            `Ran`, which has a real chain and so had to be excluded by the
+            flag rather than by chainlessness.
+          * no usable chain at all.
+        """
+        return (self._has_usable_chain(r)
+                and r.prox_kind != "root"
+                and not r.case_fallback)
+
+    def _prefers_hand_verified_split(self, word: str, r: Resolution) -> bool:
+        """
+        Should `compounds.py`'s hand-verified split beat the answer we have?
+
+        Only ever for a word IN that table, and only when the answer is not
+        the word's own genuine data. Hand-verified compounds.py wins over an AUTO-INHERITED chain
         # specifically -- also found 2026-07-24, auditing the same 743
         # entries: widening convert_wikt.py's inheritance patches gave 147 of
         # them a real chain for the first time, but for a genuine two-
@@ -977,13 +1007,45 @@ class ChainResolver(Resolver):
         # compounds. Joe's call this session: the 742 entries win. So a word in
         # that table whose database answer carries no parts falls through to
         # the split below -- it is the exact case the table exists for.
-        prefer_compound = (word.lower() in COMPOUND_SPLITS
-                            and (r.inherited_from is not None
-                                 or r.prox_kind == "root"
-                                 or r.affix_collapsed))
-        if has_real_chain and r.prox_kind != "root" and not r.case_fallback and not prefer_compound:
-            return r  # a confirmed chain with a real donor edge is trustworthy immediately
-        # Either no chain yet, or `r` is a bare has_root STUB (prox_kind ==
+        """
+        if word.lower() not in COMPOUND_SPLITS:
+            return False
+        return (r.inherited_from is not None
+                or r.prox_kind == "root"
+                or r.affix_collapsed)
+
+    def _as_answer_for(self, word: str, found: Resolution,
+                       candidate: str) -> Resolution:
+        """
+        Re-badge another surface form's result as this word's answer.
+
+        `inherited_from` records which word's data actually produced it --
+        `found`'s own source if that word was itself answered by inheritance,
+        so a multi-hop answer still points at the TRUE origin rather than one
+        hop back. `word_trees.resolve_tree` relies on this to show the same
+        data the analyzer used without re-deriving which candidate won.
+        """
+        return Resolution(word, found.chain, found.english_stage_iso,
+                          found.english_stage_lang, found.source,
+                          root_lang=found.root_lang, root_pie=found.root_pie,
+                          prox_kind=found.prox_kind, root_term=found.root_term,
+                          inherited_from=found.inherited_from or candidate)
+
+    def _retry_other_forms(self, word: str, own: Resolution) -> Optional[Resolution]:
+        """
+        Try inflected and stemmed forms of the word. None if none does better.
+
+        Reached whenever the word's own result is not trustworthy -- see
+        `_is_trustworthy` for the three reasons. A real match on a different
+        surface form beats a case coincidence or a thin stub.
+
+        Returns None (rather than a split) for a word in `compounds.py`: the
+        hand-verified split wins, and it is applied by the caller. `outdoors`
+        only resolves via this loop -- stemming to `outdoor`, which inherits
+        from `door` -- so the caller's own `_prefers_hand_verified_split`
+        check, computed from the word's OWN result, never sees it.
+        """
+        # Either no chain yet, or `own` is a bare has_root STUB (prox_kind ==
         # "root" -- the word's own raw entry has nothing but a root pointer,
         # no real derived_from/borrowed_from/inherited_from edge of its own).
         # Caught 2026-07-23 (Joe: "computer" showed Direct Source == PIE,
@@ -1017,75 +1079,68 @@ class ChainResolver(Resolver):
         # makes the first check skip ANY case-fallback match, chain or not,
         # so it always reaches this retry loop -- same logic below, just
         # reachable for a chain-having case-fallback match too now.
-        for cand in inflection_candidates(word.lower()) + _stem_candidates(word.lower()):
-            r2 = self._try(cand)
-            if r2.chain and r2.prox_kind != "root":
-                # A retry-loop match is BY CONSTRUCTION never the word's own
-                # direct data (`cand` is always a different surface form,
-                # reached only because the word's own lookup already failed)
-                # -- so the same `prefer_compound` reasoning above applies
-                # unconditionally here too, added 2026-07-24 (issue #17):
-                # "outdoors" only resolves this way (stemming to "outdoor",
-                # which itself inherits from "door"), so the top-of-function
-                # `prefer_compound` (computed from the word's OWN `_try()`
-                # result, empty here) never saw it. Checked directly here
-                # instead of trying to thread one shared flag through both
-                # shapes.
-                if word.lower() in COMPOUND_SPLITS:
-                    break
-                return Resolution(word, r2.chain, r2.english_stage_iso,
-                                   r2.english_stage_lang, r2.source,
-                                   root_lang=r2.root_lang, root_pie=r2.root_pie,
-                                   prox_kind=r2.prox_kind, root_term=r2.root_term,
-                                   # Propagate whichever word's data actually
-                                   # produced this answer -- `cand`'s own data
-                                   # if it's a direct hit, or reuse r2's own
-                                   # inherited_from if `cand` was ITSELF
-                                   # answered via inheritance, so the chain
-                                   # always points at the true underlying
-                                   # source, not just one hop back. See
-                                   # Resolution.inherited_from's docstring --
-                                   # this is what lets app.py's resolve_tree()
-                                   # find the SAME real data the analyzer used
-                                   # without re-deriving which candidate won.
-                                   inherited_from=r2.inherited_from or cand)
-            if (not r.chain or r.case_fallback) and r2.english_stage_iso is not None:
-                if word.lower() in COMPOUND_SPLITS:
-                    break
-                return Resolution(word, r2.chain, r2.english_stage_iso,
-                                   r2.english_stage_lang, r2.source,
-                                   root_lang=r2.root_lang, root_pie=r2.root_pie,
-                                   prox_kind=r2.prox_kind, root_term=r2.root_term,
-                                   inherited_from=r2.inherited_from or cand)
-        if has_real_chain and not prefer_compound:
-            return r  # thin has_root stub or case-fallback match, but the best answer we actually have
-        # Still nothing (or a hand-verified compound was preferred over an
-        # auto-inherited chain, see `prefer_compound` above): try a known
-        # two-word compound split (compounds.py),
-        # or an auto-detected one (convert_wikt.py's _extract_auto_compounds,
-        # 2026-07-24 -- words whose only data was a bare PIE-root stub, but
-        # whose raw entry ALSO recorded a compound_of/blend_of split into
-        # two-or-more parts that each independently resolve). Hand-verified
-        # COMPOUND_SPLITS is checked first and wins on any overlap. Only
-        # reached after every real resolution path above has already failed,
-        # so a word that resolves on its own -- even a compound like
-        # "understand" -- is never touched by this. Recurses through
-        # self.resolve() for each part (not self._try()) so a part that's
-        # ITSELF a known compound (e.g. "outdoorsman" -> "outdoors"+"man",
-        # where "outdoors" -> "out"+"doors") resolves correctly too; nested
-        # compound_parts are flattened into one flat list so the UI shows a
-        # simple row of component words, not a nested tree.
-        split = COMPOUND_SPLITS.get(word.lower()) or self.auto_compounds.get(word.lower()) or self.auto_compounds.get(word)
-        if split:
-            flat: List[Resolution] = []
-            for part in split:
-                pr = self.resolve(part)
-                if pr.compound_parts:
-                    flat.extend(pr.compound_parts)
-                else:
-                    flat.append(pr)
-            return Resolution(word, [], None, None, self.name, compound_parts=flat)
-        return r
+        is_hand_verified = word.lower() in COMPOUND_SPLITS
+        wants_native = not own.chain or own.case_fallback
+        for candidate in (inflection_candidates(word.lower())
+                          + _stem_candidates(word.lower())):
+            found = self._try(candidate)
+            has_donor = found.chain and found.prox_kind != "root"
+            is_native = found.english_stage_iso is not None
+            if not (has_donor or (wants_native and is_native)):
+                continue
+            if is_hand_verified:
+                return None
+            return self._as_answer_for(word, found, candidate)
+        return None
+
+    def resolve(self, word: str) -> Resolution:
+        """
+        The full cascade, in order: own data, other forms, then a known split.
+
+        Each step is one named question, because the order between them is
+        load-bearing and every reordering has previously shipped a bug.
+        """
+        own = self._try(word)
+        prefer_split = self._prefers_hand_verified_split(word, own)
+        if self._is_trustworthy(own) and not prefer_split:
+            return own
+        retried = self._retry_other_forms(word, own)
+        if retried is not None:
+            return retried
+        if self._has_usable_chain(own) and not prefer_split:
+            return own  # a thin stub or case match, but the best we actually have
+        return self._split_into_parts(word) or own
+
+    def _split_into_parts(self, word: str) -> Optional[Resolution]:
+        """
+        A known two-word compound shown as its components, or None.
+
+        Only reached after every real resolution path has failed, so a word
+        that resolves on its own -- even a real compound like `understand` --
+        is never touched. That is `compounds.py`'s own documented design rule.
+
+        Two sources, hand-verified first and winning on any overlap:
+        `compounds.py`'s COMPOUND_SPLITS, and the auto-detected
+        compound_of/blend_of splits from `convert_wikt._extract_auto_compounds`
+        (words whose only data was a bare PIE-root stub but whose raw entry
+        also recorded a split whose parts each independently resolve).
+
+        Recurses through `self.resolve` for each part, NOT `self._try`, so a
+        part that is itself a known compound resolves too -- `outdoorsman` ->
+        `outdoors` + `man`, where `outdoors` -> `out` + `doors`. Nested parts
+        are FLATTENED into one list so the UI shows a simple row of components
+        rather than a tree.
+        """
+        split = (COMPOUND_SPLITS.get(word.lower())
+                 or self.auto_compounds.get(word.lower())
+                 or self.auto_compounds.get(word))
+        if not split:
+            return None
+        flat: List[Resolution] = []
+        for part in split:
+            resolved = self.resolve(part)
+            flat.extend(resolved.compound_parts or [resolved])
+        return Resolution(word, [], None, None, self.name, compound_parts=flat)
 
 
 _SHARED: Optional[Resolver] = None
