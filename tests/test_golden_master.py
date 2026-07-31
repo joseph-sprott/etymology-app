@@ -62,13 +62,23 @@ WORDS = [
 ]
 
 
-def _tree_shape(node):
-    """Language/term/reltype skeleton of a tree, order preserved."""
-    if not node:
-        return None
-    return {"lang": node.get("lang"), "term": node.get("term"),
-            "branches": [_tree_shape(b) for b in
-                         (node.get("branches") or node.get("children") or [])]}
+def _tree_shape(raw):
+    """
+    Language/term skeleton of a tree, order preserved.
+
+    Reads through `TreeNode` rather than re-spelling the branches-vs-children
+    traversal, which was hand-written in five places before `tree_model`
+    existed.
+    """
+    from tree_model import TreeNode
+
+    def shape(node):
+        if node is None:
+            return None
+        return {"lang": node.lang, "term": node.term,
+                "branches": [shape(c) for c in node.children]}
+
+    return shape(TreeNode.from_dict(raw))
 
 
 def _snapshot():

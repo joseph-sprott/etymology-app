@@ -37,21 +37,13 @@ def _tree_buckets(word):
     `bucket_for_name("Norse")` does not recognise a bucket as a language and
     would otherwise report a correct tree as contradicting itself.
     """
-    tree = word_trees.resolve_tree(word)
-    if not tree:
+    from tree_model import TreeNode
+
+    node = TreeNode.from_dict(word_trees.resolve_tree(word))
+    if node is None:
         return set()
-    langs = set()
-
-    def walk(node):
-        langs.add(node.get("lang"))
-        for child in node.get("branches") or node.get("children") or []:
-            walk(child)
-
-    walk(tree)
     found = set()
-    for lang in langs:
-        if not lang:
-            continue
+    for lang in node.languages():
         found.add(lang)
         found.add(bucket_for_name(lang))
     return found

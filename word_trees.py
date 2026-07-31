@@ -35,6 +35,7 @@ from palette import PROTO_SLUGS, bucket_slug
 from linguistics import depth_hint as _depth_hint
 from corrections import WORD_CORRECTIONS
 from resolver import shared_resolver
+from tree_model import TreeNode
 import sys
 
 # The shared word database, when it has been built. The TREE and the ANALYZER
@@ -108,23 +109,12 @@ def _is_bare_root_tree(tree):
     """
     Does this tree actually say anything, or is it a stub wearing branches?
 
-    A childless BOUND AFFIX counts for as little as a bare root pointer, and
-    for the same reason: `-ie` is not where `movie` came from. Wiktionary's
-    entry for `movie` is `{{suffix|en|""|ie}}` -- the base word is an empty
-    string in the source -- so its stored tree is the ending plus a root
-    citation and nothing else. Without this the tree returned that, while the
-    analyzer (via a `corrections.py` entry) said French/Latin: the two
-    features disagreeing about one word, which is issue #16 (every feature
-    must read from one shared source) and exactly the `intrude` complaint.
-    Added 2026-07-30, once `ety_node.is_affix` made "is this a real component"
-    a fact rather than a guess.
+    The rule lives on `TreeNode.is_stub`; this wrapper keeps the name the rest
+    of this module already uses. See that method for why a childless bound
+    affix counts for no more than a bare root pointer (`movie`).
     """
-    branches = (tree or {}).get("branches") or []
-    if not branches:
-        return True
-    return all(not b.get("children")
-               and (b.get("reltype") in _ROOT_ONLY_RELS or b.get("is_affix"))
-               for b in branches)
+    node = TreeNode.from_dict(tree)
+    return node is None or node.is_stub()
 
 
 # etymology_db's relation names -> the reltype vocabulary this module and the
@@ -382,16 +372,11 @@ def _honour_correction(word, tree, depth):
     if fix is None or depth > 5:
         return tree
     wanted = fix.get("p")
-    langs = set()
-
-    def walk(node):
-        langs.add(node.get("lang"))
-        for child in node.get("branches") or node.get("children") or []:
-            walk(child)
-
-    walk(tree)
-    for lang in langs:
-        if lang and (lang == wanted or bucket_for_name(lang) == wanted):
+    # A correction's chain holds BUCKET names, a tree node holds a LANGUAGE
+    # name, so both readings count -- `bucket_for_name("Norse")` does not
+    # recognise a bucket as a language.
+    for lang in TreeNode.from_dict(tree).languages():
+        if lang == wanted or bucket_for_name(lang) == wanted:
             return tree
     # `_synthesized_tree`, NOT `_tree_via_resolver_chain`: that one first tries
     # the word's CAPITALIZED entry, which for `calypso` is Calypso the Greek
