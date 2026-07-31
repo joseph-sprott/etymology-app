@@ -1,0 +1,353 @@
+{
+ "coiners": [
+  "Benjamin Franklin",
+  "Buckminster Fuller",
+  "Charles Darwin",
+  "Douglas Adams",
+  "George Orwell",
+  "Isaac Asimov",
+  "J. R. R. Tolkien",
+  "Jeremy Bentham",
+  "John Milton",
+  "Jonathan Swift",
+  "Lewis Carroll",
+  "Michael Faraday",
+  "Murray Gell-Mann",
+  "Richard Dawkins",
+  "Samuel Taylor Coleridge",
+  "Thomas Carlyle",
+  "William Gibson",
+  "William Shakespeare"
+ ],
+ "count": 109,
+ "source": "en.wiktionary.org Category:English coinages (CC BY-SA)",
+ "words": {
+  "all animals are equal, but some animals are more equal than others": {
+   "coiner": "George Orwell"
+  },
+  "all the world's a stage": {
+   "coiner": "William Shakespeare"
+  },
+  "artificial selection": {
+   "coiner": "Charles Darwin"
+  },
+  "bandersnatch": {
+   "coiner": "Lewis Carroll"
+  },
+  "battery": {
+   "coiner": "Benjamin Franklin"
+  },
+  "beggar description": {
+   "coiner": "William Shakespeare"
+  },
+  "bitter cold": {
+   "coiner": "William Shakespeare"
+  },
+  "borogove": {
+   "coiner": "Lewis Carroll"
+  },
+  "brevity is the soul of wit": {
+   "coiner": "William Shakespeare"
+  },
+  "cold fish": {
+   "coiner": "William Shakespeare"
+  },
+  "comedy of errors": {
+   "coiner": "William Shakespeare"
+  },
+  "compunctious": {
+   "coiner": "William Shakespeare"
+  },
+  "concestor": {
+   "coiner": "Richard Dawkins"
+  },
+  "crimethink": {
+   "coiner": "George Orwell"
+  },
+  "cyberdeck": {
+   "coiner": "William Gibson"
+  },
+  "cyberspace": {
+   "coiner": "William Gibson"
+  },
+  "daniel come to judgement": {
+   "coiner": "William Shakespeare"
+  },
+  "deontology": {
+   "coiner": "Jeremy Bentham"
+  },
+  "designoid": {
+   "coiner": "Richard Dawkins"
+  },
+  "dogs of war": {
+   "coiner": "William Shakespeare"
+  },
+  "double-plus-good": {
+   "coiner": "George Orwell"
+  },
+  "double-plus-ungood": {
+   "coiner": "George Orwell"
+  },
+  "doubleplus-": {
+   "coiner": "George Orwell"
+  },
+  "doublethink": {
+   "coiner": "George Orwell"
+  },
+  "duckspeak": {
+   "coiner": "George Orwell"
+  },
+  "dwarrow": {
+   "coiner": "J. R. R. Tolkien"
+  },
+  "dymaxion": {
+   "coiner": "Buckminster Fuller"
+  },
+  "eightfold way": {
+   "coiner": "Murray Gell-Mann"
+  },
+  "electrode": {
+   "coiner": "Michael Faraday"
+  },
+  "electrolyte": {
+   "coiner": "Michael Faraday"
+  },
+  "electrolyze": {
+   "coiner": "Michael Faraday"
+  },
+  "endian": {
+   "coiner": "Jonathan Swift"
+  },
+  "eucatastrophe": {
+   "coiner": "J. R. R. Tolkien"
+  },
+  "extended phenotype": {
+   "coiner": "Richard Dawkins"
+  },
+  "facecrime": {
+   "coiner": "George Orwell"
+  },
+  "first law of robotics": {
+   "coiner": "Isaac Asimov"
+  },
+  "frabjous": {
+   "coiner": "Lewis Carroll"
+  },
+  "frankenstein complex": {
+   "coiner": "Isaac Asimov"
+  },
+  "frumious": {
+   "coiner": "Lewis Carroll"
+  },
+  "galactographic": {
+   "coiner": "Isaac Asimov"
+  },
+  "galactography": {
+   "coiner": "Isaac Asimov"
+  },
+  "galaxywide": {
+   "coiner": "Isaac Asimov"
+  },
+  "glossopoeia": {
+   "coiner": "J. R. R. Tolkien"
+  },
+  "gluon": {
+   "coiner": "Murray Gell-Mann"
+  },
+  "goodthink": {
+   "coiner": "George Orwell"
+  },
+  "goodthinkful": {
+   "coiner": "George Orwell"
+  },
+  "haemony": {
+   "coiner": "John Milton"
+  },
+  "harmonica": {
+   "coiner": "Benjamin Franklin"
+  },
+  "heroarchy": {
+   "coiner": "Thomas Carlyle"
+  },
+  "hoist by one's own petard": {
+   "coiner": "William Shakespeare"
+  },
+  "houyhnhnm": {
+   "coiner": "Jonathan Swift"
+  },
+  "jabberwock": {
+   "coiner": "Lewis Carroll"
+  },
+  "killingry": {
+   "coiner": "Buckminster Fuller"
+  },
+  "life-dinner principle": {
+   "coiner": "Richard Dawkins"
+  },
+  "livingry": {
+   "coiner": "Buckminster Fuller"
+  },
+  "longfather": {
+   "coiner": "J. R. R. Tolkien"
+  },
+  "manxome": {
+   "coiner": "Lewis Carroll"
+  },
+  "meme": {
+   "coiner": "Richard Dawkins"
+  },
+  "memory hole": {
+   "coiner": "George Orwell"
+  },
+  "miranda": {
+   "coiner": "William Shakespeare"
+  },
+  "mithril": {
+   "coiner": "J. R. R. Tolkien"
+  },
+  "moonstruck": {
+   "coiner": "John Milton"
+  },
+  "more equal": {
+   "coiner": "George Orwell"
+  },
+  "more honored in the breach": {
+   "coiner": "William Shakespeare"
+  },
+  "natural selection": {
+   "coiner": "Charles Darwin"
+  },
+  "newspeak": {
+   "coiner": "George Orwell"
+  },
+  "nucleus": {
+   "coiner": "Michael Faraday"
+  },
+  "oldspeak": {
+   "coiner": "George Orwell"
+  },
+  "out-paramour the turk": {
+   "coiner": "William Shakespeare"
+  },
+  "pandemonium": {
+   "coiner": "John Milton"
+  },
+  "panopticon": {
+   "coiner": "Jeremy Bentham"
+  },
+  "perinormal": {
+   "coiner": "Richard Dawkins"
+  },
+  "plus-": {
+   "coiner": "George Orwell"
+  },
+  "positronic": {
+   "coiner": "Isaac Asimov"
+  },
+  "primrose path": {
+   "coiner": "William Shakespeare"
+  },
+  "prolefeed": {
+   "coiner": "George Orwell"
+  },
+  "quark": {
+   "coiner": "Murray Gell-Mann"
+  },
+  "robopsychologist": {
+   "coiner": "Isaac Asimov"
+  },
+  "robopsychology": {
+   "coiner": "Isaac Asimov"
+  },
+  "robotic": {
+   "coiner": "Isaac Asimov"
+  },
+  "roboticist": {
+   "coiner": "Isaac Asimov"
+  },
+  "robotics": {
+   "coiner": "Isaac Asimov"
+  },
+  "second law of robotics": {
+   "coiner": "Isaac Asimov"
+  },
+  "selfish gene": {
+   "coiner": "Richard Dawkins"
+  },
+  "slings and arrows": {
+   "coiner": "William Shakespeare"
+  },
+  "slithy": {
+   "coiner": "Lewis Carroll"
+  },
+  "snark": {
+   "coiner": "Lewis Carroll"
+  },
+  "snicker-snack": {
+   "coiner": "Lewis Carroll"
+  },
+  "so long, and thanks for all the fish": {
+   "coiner": "Douglas Adams"
+  },
+  "staggerment": {
+   "coiner": "J. R. R. Tolkien"
+  },
+  "star-crossed": {
+   "coiner": "William Shakespeare"
+  },
+  "struldbrug": {
+   "coiner": "Jonathan Swift"
+  },
+  "suspension of disbelief": {
+   "coiner": "Samuel Taylor Coleridge"
+  },
+  "tensegrity": {
+   "coiner": "Buckminster Fuller"
+  },
+  "thereby hangs a tale": {
+   "coiner": "William Shakespeare"
+  },
+  "third law of robotics": {
+   "coiner": "Isaac Asimov"
+  },
+  "thoughtcrime": {
+   "coiner": "George Orwell"
+  },
+  "three laws of robotics": {
+   "coiner": "Isaac Asimov"
+  },
+  "to the manner born": {
+   "coiner": "William Shakespeare"
+  },
+  "tulgey": {
+   "coiner": "Lewis Carroll"
+  },
+  "uffish": {
+   "coiner": "Lewis Carroll"
+  },
+  "ultimate boeing 747 gambit": {
+   "coiner": "Richard Dawkins"
+  },
+  "unperson": {
+   "coiner": "George Orwell"
+  },
+  "utilitarian": {
+   "coiner": "Jeremy Bentham"
+  },
+  "vorpal": {
+   "coiner": "Lewis Carroll"
+  },
+  "what's in a name": {
+   "coiner": "William Shakespeare"
+  },
+  "with bated breath": {
+   "coiner": "William Shakespeare"
+  },
+  "zark": {
+   "coiner": "Douglas Adams"
+  },
+  "zeerust": {
+   "coiner": "Douglas Adams"
+  }
+ }
+}

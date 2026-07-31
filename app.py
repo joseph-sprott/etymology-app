@@ -25,7 +25,7 @@ from word_trees import (resolve_tree, build_diagram, node_slug,
 from resolver import shared_resolver
 import descendants
 import inflections
-import shakespeare
+import annotations
 import word_info
 
 app = Flask(__name__)
@@ -123,12 +123,12 @@ def build_word_card(word):
     # 2026-07-30: "I dont want it to be in the language bucket or whatever,
     # just something on the side"). `shakespeare` is a leaf module that knows
     # nothing about buckets, so this cannot move a percentage.
-    bard = shakespeare.is_shakespearean(word)
-    if not (pos or gloss or lineage or bard):
+    notes = annotations.for_word(word)
+    if not (pos or gloss or lineage or notes):
         return None
     return {"pos": pos, "gloss": gloss, "lineage": lineage,
             "defined_by": base, "inherited_from": res.inherited_from,
-            "shakespeare": bard, "shakespeare_note": shakespeare.note(word)}
+            "notes": notes}
 
 
 def _dedupe_keep_order(per_word):
@@ -477,13 +477,15 @@ PAGE = """
       </span>
       {%- endif %}
       {%- if card and card.inherited_from %}<span class="wc-note">via {{ card.inherited_from }}</span>{% endif %}
-      {#- An ASIDE, never part of the origin answer: it sits below the lineage
-          and carries its own colour, so it cannot be mistaken for a bucket. -#}
-      {%- if card and card.shakespeare %}
-      <span class="wc-bard">&#127917; popularized by Shakespeare
-        {%- if card.shakespeare_note %}<span class="wc-bard-note">{{ card.shakespeare_note }}</span>{% endif %}
+      {#- ASIDES, never part of the origin answer: they sit below the lineage
+          and carry their own colour, so they cannot be mistaken for a bucket.
+          One loop for every kind -- adding a fifth is a collector function in
+          `annotations.py`, not another block here. -#}
+      {%- for note in (card.notes if card else []) %}
+      <span class="wc-bard">{{ note.icon|safe }} {{ note.text }}
+        {%- if note.detail %}<span class="wc-bard-note">{{ note.detail }}</span>{% endif %}
       </span>
-      {%- endif %}
+      {%- endfor %}
       {%- if note %}<span class="wc-note">{{ note }}</span>{% endif %}
       <span class="wc-cta">click to search &rarr;</span>
       {#- Straight to the source, for checking an answer against Wiktionary
@@ -658,11 +660,11 @@ PAGE = """
         {%- endif %}</p>
       {#- The same aside the analyzer's hover card shows. Both features read
           one leaf module, so they cannot disagree about a word (issue #16). -#}
-      {%- if bard %}
-      <p class="wc-bard">&#127917; popularized by Shakespeare
-        {%- if bard_note %}<span class="wc-bard-note">{{ bard_note }}</span>{% endif %}
+      {%- for note in word_notes %}
+      <p class="wc-bard">{{ note.icon|safe }} {{ note.text }}
+        {%- if note.detail %}<span class="wc-bard-note">{{ note.detail }}</span>{% endif %}
       </p>
-      {%- endif %}
+      {%- endfor %}
       {% if tree %}
         {% if tree_view == 'diagram' %}
           {% set d = build_diagram(tree) %}
@@ -1063,8 +1065,7 @@ def index():
                                    collapse_duplicates=collapse_duplicates,
                                    word_sort=word_sort, word_rows=word_rows,
                                    tree_word=tree_word, tree=tree, tree_view=tree_view,
-                                   bard=shakespeare.is_shakespearean(tree_word),
-                                   bard_note=shakespeare.note(tree_word),
+                                   word_notes=annotations.for_word(tree_word),
                                    info=info, word_cards=word_cards,
                                    bucket_slug=bucket_slug, root_slug=root_slug,
                                    node_slug=node_slug, bucket_breakdown=bucket_language_breakdown,

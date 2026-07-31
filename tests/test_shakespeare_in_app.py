@@ -15,16 +15,23 @@ import app
 import shakespeare
 
 
+def _kinds(card):
+    return {n.kind for n in (card or {}).get("notes", [])}
+
+
 def test_the_card_flags_a_shakespeare_word():
+    # The card carries a general `notes` list as of 2026-07-31 -- coinage,
+    # calque, formation and era all ride the same channel, so a new kind needs
+    # no new card field.
     card = app.build_word_card("assassination")
     assert card is not None
-    assert card["shakespeare"] is True
+    assert "coinage" in _kinds(card)
 
 
 def test_an_ordinary_word_is_not_flagged():
     card = app.build_word_card("table")
     assert card is not None
-    assert card["shakespeare"] is False
+    assert "coinage" not in _kinds(card)
 
 
 def test_the_flag_does_not_disturb_the_origin_answer():
